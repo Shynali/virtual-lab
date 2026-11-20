@@ -1,0 +1,68 @@
+/* Зертхана бетін сайттың ішіне (iframe) қосу скрипті.
+   Тек ?embed=1 болғанда іске қосылады. Жұмысты ата-бетке жібереді, жауапты қабылдайды. */
+(function () {
+  var qs = new URLSearchParams(location.search);
+  if (qs.get("embed") !== "1") return;
+  var lang = qs.get("lang") === "ru" ? "ru" : "kk";
+  var L = {
+    kk: { empty: "Алдымен күнделіктегі сұрақтарға жауап жаз.", sending: "Жіберілуде…", sent: "Жұмыс мұғалімге жіберілді! Мұғалім пікірін өз бетіңнен көресің.", fail: "Жіберу мүмкін болмады. Интернетті тексеріп, қайта көр.", send: "Мұғалімге жіберу", resend: "Қайта жіберу" },
+    ru: { empty: "Сначала ответь на вопросы журнала.", sending: "Отправка…", sent: "Работа отправлена учителю! Отзыв учителя появится на твоей странице.", fail: "Не удалось отправить. Проверь интернет и попробуй снова.", send: "Отправить учителю", resend: "Отправить ещё раз" }
+  };
+  function setLang(l) {
+    lang = l;
+    var b = document.getElementById(l === "ru" ? "l-ru" : "l-kk");
+    if (b) b.click();
+    var s = document.getElementById("send");
+    if (s) s.textContent = L[lang].send;
+  }
+  function post(msg) { try { parent.postMessage(msg, "*"); } catch (e) {} }
+  function journal() {
+    var out = [];
+    document.querySelectorAll("textarea").forEach(function (t) {
+      var lab = t.closest("label"), sp = lab && lab.querySelector("span");
+      out.push({ q: sp ? sp.textContent.trim() : "", a: t.value.trim() });
+    });
+    return out;
+  }
+  function msgEl() {
+    var s = document.getElementById("send"), sec = s && s.closest("section");
+    return sec ? sec.querySelector(".msg") : null;
+  }
+  function show(text, good) { var m = msgEl(); if (m) { m.textContent = text; m.className = "msg " + (good ? "ok" : "bad"); } }
+
+  function init() {
+    var css = document.createElement("style");
+    css.textContent = ".note,.lang{display:none!important}body{background:transparent!important}.wrap{padding:8px!important}";
+    document.head.appendChild(css);
+    var old = document.getElementById("send");
+    if (old) {
+      var btn = old.cloneNode(true); old.parentNode.replaceChild(btn, old);
+      btn.addEventListener("click", function () {
+        var j = journal();
+        if (!j.length || j.some(function (x) { return !x.a; })) { show(L[lang].empty, false); return; }
+        btn.disabled = true; show(L[lang].sending, true);
+        var h = document.querySelector("h1");
+        post({ type: "labSubmit", answers: j, title: h ? h.textContent.trim() : "" });
+      });
+    }
+    setLang(lang);
+    window.addEventListener("message", function (e) {
+      var d = e.data || {};
+      if (d.type === "labResult") {
+        var b = document.getElementById("send"); if (b) { b.disabled = false; if (d.ok) b.textContent = L[lang].resend; }
+        show(d.ok ? L[lang].sent : (d.text || L[lang].fail), !!d.ok);
+      }
+      if (d.type === "labLang") setLang(d.lang === "ru" ? "ru" : "kk");
+      if (d.type === "labPrefill" && Array.isArray(d.answers)) {
+        var tas = document.querySelectorAll("textarea");
+        d.answers.forEach(function (x, i) { if (tas[i] && !tas[i].value) tas[i].value = x.a || ""; });
+      }
+    });
+    var last = 0;
+    function report() { var h = Math.ceil(document.documentElement.scrollHeight); if (Math.abs(h - last) > 4) { last = h; post({ type: "labHeight", h: h }); } }
+    if (window.ResizeObserver) new ResizeObserver(report).observe(document.body);
+    setInterval(report, 800); report();
+    post({ type: "labReady" });
+  }
+  if (document.readyState === "loading") document.addEventListener("DOMContentLoaded", init); else init();
+})();

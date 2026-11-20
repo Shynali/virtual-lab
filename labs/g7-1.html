@@ -1,0 +1,268 @@
+<!DOCTYPE html>
+<html lang="kk">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Қоспа және қосылыс</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans:wght@400;600;700&family=Noto+Serif:wght@600;700&display=swap" rel="stylesheet">
+<style>
+/* VOICE: calm school lab workbook, clear and encouraging (grade 7)
+   IDEA: a workbench sheet — four samples (iron, sulfur, their mixture, iron sulfide) tested side by side
+   PICTURE: watch glasses under a magnet, beakers of water, tubes over flames; the mixture separates, the compound does not
+   COLOUR and TYPE: white sheet on deep lab-teal; iron grey, sulfur yellow, sulfide black; Noto Serif + Noto Sans
+   LAYOUT: steps left, scene right (sticky) with view switch; stacks on phones */
+:root{color-scheme:light dark;
+--bg:light-dark(#0f4c5c,#0a2d36);--sheet:light-dark(#ffffff,#13202a);--ink:light-dark(#10131a,#e7edf2);
+--mute:light-dark(#566170,#9fb0bf);--line:light-dark(#d5dde5,#2b3d4b);--soft:light-dark(#eef5f7,#182a35);
+--acc:light-dark(#0f4c5c,#5cc2d6);--ok:light-dark(#12733a,#4ade80);--bad:light-dark(#b91c1c,#f87171);
+--warn:light-dark(#fff4d6,#3a2f12);--glass:light-dark(#f7fbfd,#1d2f3b);--glassline:light-dark(#8aa1b1,#6c8597)}
+:root[data-theme=light]{color-scheme:light}:root[data-theme=dark]{color-scheme:dark}
+*{box-sizing:border-box;min-width:0}
+body{margin:0;background:var(--bg);color:var(--ink);font:16px/1.55 "Noto Sans",system-ui,sans-serif;overflow-x:clip}
+.wrap{max-width:1240px;margin:0 auto;padding:clamp(14px,3vw,36px) max(3vw,12px)}
+header{display:flex;flex-wrap:wrap;gap:12px;align-items:flex-end;justify-content:space-between;color:#fff;margin-bottom:18px}
+header small{display:block;opacity:.8;font-size:14px}
+h1{font:700 clamp(24px,3.6vw,38px)/1.08 "Noto Serif",Georgia,serif;margin:2px 0 0;text-wrap:balance;max-width:26ch}
+.lang{display:flex;background:rgba(255,255,255,.14);border-radius:999px;padding:4px}
+.lang button{border:0;background:none;color:#fff;font:600 15px "Noto Sans";padding:8px 16px;border-radius:999px;cursor:pointer;min-height:40px}
+.lang button.on{background:#fff;color:#0f4c5c}
+.sheet{background:var(--sheet);border-radius:18px;box-shadow:0 18px 40px rgba(0,0,0,.25);padding:clamp(16px,2.6vw,30px)}
+.note{font-size:13px;color:var(--mute);margin:0 0 10px}
+.goal{margin:0 0 6px;max-width:70ch}
+.reag{margin:0 0 16px;color:var(--mute);font-size:15px;max-width:70ch}
+.safety{display:flex;gap:12px;align-items:center;flex-wrap:wrap;background:var(--warn);border-radius:12px;padding:12px 14px;margin-bottom:18px}
+.safety p{margin:0;flex:1 1 260px;font-weight:600}
+.safety label{flex-direction:row;align-items:center;gap:8px;color:var(--ink);font-weight:600;cursor:pointer}
+.grid{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1.05fr);gap:clamp(16px,3vw,36px);align-items:start}
+.step{border-top:1px solid var(--line);padding:14px 0}
+.step:first-child{border-top:0;padding-top:0}
+.step.off{opacity:.45;pointer-events:none}
+h2{font:700 19px/1.2 "Noto Serif",Georgia,serif;margin:0 0 6px}
+.hint{color:var(--mute);font-size:15px;margin:0 0 8px}
+label{font-size:14px;color:var(--mute);display:flex;flex-direction:column;gap:4px}
+textarea,select{font:16px "Noto Sans";color:var(--ink);background:var(--sheet);border:1.5px solid var(--line);border-radius:10px;padding:10px 12px;width:100%}
+textarea:focus,select:focus,button:focus-visible{outline:3px solid color-mix(in srgb,var(--acc) 45%,transparent);outline-offset:1px}
+.ok{border-color:var(--ok)!important}.bad{border-color:var(--bad)!important}
+textarea{min-height:76px;resize:vertical}
+.btns{display:flex;flex-wrap:wrap;gap:8px;margin-top:8px}
+.btn{border:0;border-radius:10px;padding:10px 14px;font:600 15px "Noto Sans";cursor:pointer;min-height:44px;background:var(--acc);color:light-dark(#fff,#08202a)}
+.btn.done{background:var(--soft);color:var(--ok)}
+.btn:disabled{opacity:.45;cursor:not-allowed}.btn.done:disabled{opacity:1}
+.msg{margin-top:8px;font-size:15px;min-height:1.4em}
+.msg.ok{color:var(--ok)}.msg.bad{color:var(--bad)}
+.board{position:sticky;top:12px}
+.seg{display:flex;background:var(--soft);border-radius:10px;padding:4px;gap:4px;margin-bottom:10px}
+.seg button{flex:1;border:0;background:none;color:var(--ink);font:600 14px "Noto Sans";padding:8px 10px;border-radius:8px;cursor:pointer;min-height:40px}
+.seg button.on{background:var(--sheet);box-shadow:0 1px 4px rgba(0,0,0,.15)}
+.seg button:disabled{opacity:.4;cursor:default}
+.rackbox{background:var(--soft);border-radius:16px;padding:10px}
+.rackbox svg{display:block;width:100%;height:auto}
+.mag{transition:transform 1.2s ease}
+.glow{animation:glow 1.4s ease-in-out 2;transform-box:fill-box}
+@keyframes glow{50%{fill:#f97316}}
+.flame{animation:flick .25s ease-in-out infinite alternate;transform-box:fill-box;transform-origin:bottom center}
+@keyframes flick{to{transform:scaleY(1.12) scaleX(.94)}}
+@media(prefers-reduced-motion:reduce){.mag{transition:none}.glow,.flame{animation:none}}
+.scroll{overflow-x:auto}
+table{width:100%;border-collapse:collapse;font-size:14px;min-width:620px}
+th,td{padding:5px;border-bottom:1px solid var(--line);text-align:left;vertical-align:middle}
+th{font-size:13px;color:var(--mute);font-weight:600}
+td:first-child{font-weight:600;font-size:13px;width:110px}
+td select{padding:6px;font-size:13px}
+.eq{display:flex;flex-wrap:wrap;align-items:center;gap:8px;font:600 17px "Noto Sans";margin-bottom:10px}
+.eq select{width:auto;padding:6px 8px;font:600 15px "Noto Sans"}
+.q{margin-bottom:10px}
+@media(max-width:860px){.grid{grid-template-columns:minmax(0,1fr)}.board{position:static;order:-1}}
+</style>
+</head>
+<body>
+<div class="wrap">
+<header>
+  <div><small data-i="lab"></small><h1 data-i="title"></h1></div>
+  <div class="lang" role="group" aria-label="Тіл"><button id="l-kk" class="on">Қазақша</button><button id="l-ru">Русский</button></div>
+</header>
+<div class="sheet">
+  <p class="note" data-i="demo"></p>
+  <p class="goal" data-i="goal"></p>
+  <p class="reag" data-i="reag"></p>
+  <div class="safety">
+    <svg width="34" height="34" viewBox="0 0 34 34" aria-hidden="true"><path d="M17 3 32 30H2Z" fill="#f59e0b"/><rect x="15.5" y="11" width="3" height="11" rx="1.5" fill="#fff"/><circle cx="17" cy="26" r="1.8" fill="#fff"/></svg>
+    <p data-i="safe"></p>
+    <label><input type="checkbox" id="goggles" style="width:22px;height:22px"><span data-i="safeok"></span></label>
+  </div>
+  <div class="grid">
+    <div>
+      <section class="step" id="st1"><h2 data-i="s1"></h2><p class="hint" data-i="s1h"></p>
+        <div class="btns"><button class="btn" data-b="look" data-i="blook"></button></div></section>
+      <section class="step" id="st2"><h2 data-i="s2"></h2><p class="hint" data-i="s2h"></p>
+        <div class="btns"><button class="btn" data-b="take" data-i="btake"></button><button class="btn" data-b="mix" data-i="bmix"></button></div></section>
+      <section class="step" id="st3"><h2 data-i="s3"></h2><p class="hint" data-i="s3h"></p>
+        <div class="btns"><button class="btn" data-b="mag" data-i="bmag"></button></div></section>
+      <section class="step" id="st4"><h2 data-i="s4"></h2><p class="hint" data-i="s4h"></p>
+        <div class="btns"><button class="btn" data-b="water" data-i="bwater"></button></div></section>
+      <section class="step" id="st5"><h2 data-i="s5"></h2><p class="hint" data-i="s5h"></p>
+        <div class="btns"><button class="btn" data-b="heat" data-i="bheat"></button></div>
+        <div class="msg" id="mx" aria-live="polite"></div></section>
+      <section class="step" id="st6"><h2 data-i="s6"></h2><p class="hint" data-i="s6h"></p>
+        <div class="scroll"><table><thead><tr><th data-i="cprop"></th><th>Fe</th><th>S</th><th data-i="cmix"></th><th>FeS</th></tr></thead><tbody id="tbl"></tbody></table></div>
+        <div class="btns"><button class="btn" id="chk6" data-i="check"></button></div>
+        <div class="msg" id="m6" aria-live="polite"></div></section>
+      <section class="step" id="st7"><h2 data-i="s7"></h2><p class="hint" data-i="s7h"></p>
+        <div class="eq" id="weq"></div>
+        <div class="btns"><button class="btn" id="chk7" data-i="check"></button></div>
+        <div class="msg" id="m7" aria-live="polite"></div></section>
+      <section class="step" id="st8"><h2 data-i="s8"></h2>
+        <div id="qs"></div>
+        <div class="btns"><button class="btn" id="send" data-i="send"></button></div>
+        <div class="msg" id="m8" aria-live="polite"></div></section>
+    </div>
+    <div class="board">
+      <div class="seg" id="seg"><button data-v="dish" class="on" data-i="vdish"></button><button data-v="water" data-i="vwater"></button><button data-v="heat" data-i="vheat"></button></div>
+      <div class="rackbox"><svg id="scene" viewBox="0 0 560 400" aria-label="scene"></svg></div>
+    </div>
+  </div>
+</div>
+</div>
+<script>
+{
+const T={
+kk:{lab:"7-сынып · 1-зертханалық жұмыс",title:"Заттардың қоспалары мен олардың қосылыстарын салыстыру",demo:"Үлгі нұсқа: тіркелу және жұмысты мұғалімге жіберу толық сайтта қосылады.",
+goal:"Мақсаты: темір мен күкірттің қоспасын және олардың қосылысын (темір(II) сульфидін) салыстырып, қоспа мен қосылыстың айырмашылығын анықтау.",
+reag:"Реактивтер: темір ұнтағы, күкірт, темір(II) сульфиді, су. Құрал-жабдықтар: тұрғы, магнит, сынауық, стақан, шыны таяқша, сынауық ұстатқыш, спиртшам, шпатель, кәрлен табақша.",
+safe:"Қыздырғыш құралдармен жұмыс жасау ережесін сақта. Сынауықты қыздырғанда аузын ешкімге қаратпа.",safeok:"Ережені оқыдым",
+s1:"1-қадам. Үлгілерді қара",s1h:"Темір, күкірт және темір(II) сульфидінің үлгілерін мұқият қарап, түсіне назар аудар.",blook:"Үлгілерді қарау",
+s2:"2-қадам. Қоспа дайында",s2h:"Күкірт пен темірдің әрқайсысынан бір бөліктен шпательмен алып, стақанға сал. Қоспаны шыны таяқшамен араластыр.",btake:"Fe мен S-ті стақанға салу",bmix:"Шыны таяқшамен араластыру",
+s3:"3-қадам. Магнитпен әсер ет",s3h:"Таза заттарға және дайындалған қоспаға магнитпен әсер ет.",bmag:"Магнитті жақындату",
+s4:"4-қадам. Су қос",s4h:"Әр үлгіге су қосып, араластыр да, біраз уақыт тұндыр.",bwater:"Су қосып, тұндыру",
+s5:"5-қадам. Қыздыр",s5h:"Қауіпсіздік ережелерін сақтай отырып, әр үлгіні сынауықта қыздыр.",bheat:"Үлгілерді қыздыру",
+heated:"Қоспа қызарып жанды да, қара түсті жаңа зат түзілді. Бақылауларыңды кестеге жаз.",
+s6:"6-қадам. Кестені толтыр",s6h:"Таза заттар және темір-күкіртті қоспаның салыстырмалы сипаттамалары.",cprop:"Сипаттамасы",cmix:"Қоспа",
+props:["Заттың құрамы","Түсі","Тығыздығы","Суда ерігіштігі","Магнитке тартылуы","Сумен бөлу","Қыздырғанда өзгеруі"],
+opt:[["—","Бір элемент","Екі заттың қоспасы","Бір күрделі зат (қосылыс)"],["—","Сұр","Сары","Сұр-сары (дақтары бар)","Қара-сұр"],["—","Жоғары (ауыр)","Төмен (жеңіл)","Құрамдас бөліктері әртүрлі"],["—","Ериді","Ерімейді"],["—","Тартылады","Тартылмайды","Темір бөлігі тартылады"],["—","Түбіне батады","Беткі қабатта қалқиды (сумен шыланбайды)","Бөлінеді: S қалқиды, Fe батады","Бөлінбейді, түбіне батады"],["—","Көзге көрінетін өзгеріс жоқ","Балқиды","Қызарып, жаңа зат түзіледі"]],
+check:"Тексеру",ok6:"Кесте дұрыс толтырылды!",bad6:"Қате ұяшықтар бар: ",
+s7:"7-қадам. Реакция теңдеуін сөзбен жаз",s7h:"Қоспаны қыздырғанда қандай реакция жүрді?",ok7:"Дұрыс! Темір мен күкірт әрекеттесіп, жаңа зат — темір(II) сульфиді түзілді.",bad7:"Тағы бір ойлан.",
+w:["темір","күкірт","темір(II) сульфиді","су","оттек"],
+s8:"8-қадам. Сұрақтарға жауап бер",qq:["Темір мен күкіртті араластырғаннан кейін пайда болған қоспада темір мен күкірт өз қасиеттерін сақтай ма?","Темір(II) сульфидін физикалық тәсілдермен жай заттарға бөлуге бола ма?","Темір(II) сульфиді (FeS) — күрделі зат. Оның құрамындағы темір мен күкірт өздерінің бастапқы қасиеттерін сақтай ма? Жауаптарыңды түсіндір."],
+send:"Мұғалімге жіберу",sent:"Үлгіде жіберу әлі жұмыс істемейді. Толық сайтта жұмыс мұғалімнің бетіне түседі.",empty:"Алдымен барлық сұраққа жауап бер.",
+vdish:"Табақшалар",vwater:"Суда",vheat:"Қыздыру",n:["Темір","Күкірт","Қоспа","FeS"],beaker:"стақан"},
+ru:{lab:"7 класс · Лабораторная работа №1",title:"Сравнение смесей веществ и их соединений",demo:"Демо-версия: регистрация и отправка работы учителю появятся в полной версии сайта.",
+goal:"Цель: сравнить смесь железа и серы с их соединением (сульфидом железа(II)) и определить, чем смесь отличается от соединения.",
+reag:"Реактивы: порошок железа, сера, сульфид железа(II), вода. Оборудование: штатив, магнит, пробирка, стакан, стеклянная палочка, держатель для пробирок, спиртовка, шпатель, фарфоровая чашка.",
+safe:"Соблюдай правила работы с нагревательными приборами. При нагревании не направляй пробирку ни на кого.",safeok:"Правила прочитаны",
+s1:"Шаг 1. Рассмотри образцы",s1h:"Внимательно рассмотри образцы железа, серы и сульфида железа(II), обрати внимание на цвет.",blook:"Рассмотреть образцы",
+s2:"Шаг 2. Приготовь смесь",s2h:"Возьми шпателем по одной части серы и железа, положи в стакан. Перемешай смесь стеклянной палочкой.",btake:"Положить Fe и S в стакан",bmix:"Перемешать палочкой",
+s3:"Шаг 3. Подействуй магнитом",s3h:"Подействуй магнитом на чистые вещества и на приготовленную смесь.",bmag:"Поднести магнит",
+s4:"Шаг 4. Добавь воду",s4h:"Добавь к каждому образцу воду, перемешай и дай отстояться.",bwater:"Добавить воду и отстоять",
+s5:"Шаг 5. Нагрей",s5h:"Соблюдая правила техники безопасности, нагрей каждый образец в пробирке.",bheat:"Нагреть образцы",
+heated:"Смесь раскалилась, и образовалось новое вещество чёрного цвета. Запиши наблюдения в таблицу.",
+s6:"Шаг 6. Заполни таблицу",s6h:"Сравнительная характеристика чистых веществ и смеси железа и серы.",cprop:"Характеристика",cmix:"Смесь",
+props:["Состав вещества","Цвет","Плотность","Растворимость в воде","Притяжение магнитом","Разделение водой","Изменение при нагревании"],
+opt:[["—","Один элемент","Смесь двух веществ","Одно сложное вещество (соединение)"],["—","Серый","Жёлтый","Серо-жёлтый (с вкраплениями)","Чёрно-серый"],["—","Высокая (тяжёлое)","Низкая (лёгкое)","Компоненты разные"],["—","Растворяется","Не растворяется"],["—","Притягивается","Не притягивается","Притягивается железо"],["—","Опускается на дно","Плавает на поверхности (не смачивается)","Разделяется: S всплывает, Fe тонет","Не разделяется, тонет"],["—","Видимых изменений нет","Плавится","Раскаляется, образуется новое вещество"]],
+check:"Проверить",ok6:"Таблица заполнена верно!",bad6:"Есть ошибки в ячейках: ",
+s7:"Шаг 7. Запиши уравнение реакции словами",s7h:"Какая реакция произошла при нагревании смеси?",ok7:"Верно! Железо и сера прореагировали, образовалось новое вещество — сульфид железа(II).",bad7:"Подумай ещё.",
+w:["железо","сера","сульфид железа(II)","вода","кислород"],
+s8:"Шаг 8. Ответь на вопросы",qq:["Сохраняют ли железо и сера свои свойства в смеси, полученной после их перемешивания?","Можно ли разделить сульфид железа(II) физическими способами на простые вещества?","Сульфид железа(II) (FeS) — сложное вещество. Сохраняют ли железо и сера в его составе свои исходные свойства? Объясни ответы."],
+send:"Отправить учителю",sent:"В демо-версии отправка пока не работает. В полной версии работа попадёт на страницу учителя.",empty:"Сначала ответь на все вопросы.",
+vdish:"Чашки",vwater:"В воде",vheat:"Нагревание",n:["Железо","Сера","Смесь","FeS"],beaker:"стакан"}};
+let lang="kk",view="dish";const S={look:0,take:0,mix:0,mag:0,water:0,heat:0};
+let done6=false,done7=false;const tv={},qa={},wv={};
+const $=id=>document.getElementById(id),t=k=>T[lang][k];
+const XC=[75,205,335,465];
+const FE="#8a9097",SU="#facc15",FS="#27272a";
+function pts(cx,cy,n,rx,ry,seed,fn){let s="";for(let k=0;k<n;k++){const a=((k*137.5+seed)%360)*Math.PI/180,r=Math.sqrt(((k*53+seed)%97)/97);s+=fn(cx+Math.cos(a)*r*rx,cy+Math.sin(a)*r*ry,k)}return s}
+function sample(i,cx,cy,rx,ry,mode){ // mode: dish|magnetized
+  if(i===0)return mode==="mag"?"":pts(cx,cy,60,rx,ry,3,(x,y)=>`<circle cx="${x}" cy="${y}" r="1.6" fill="${FE}"/>`);
+  if(i===1)return pts(cx,cy,55,rx,ry,7,(x,y)=>`<circle cx="${x}" cy="${y}" r="2.2" fill="${SU}" stroke="#ca8a04" stroke-width=".4"/>`);
+  if(i===2){if(!S.mix)return S.take?pts(cx-rx/2,cy,26,rx/2.4,ry,3,(x,y)=>`<circle cx="${x}" cy="${y}" r="1.6" fill="${FE}"/>`)+pts(cx+rx/2,cy,24,rx/2.4,ry,7,(x,y)=>`<circle cx="${x}" cy="${y}" r="2.2" fill="${SU}"/>`):"";
+    return pts(cx,cy,30,rx,ry,11,(x,y)=>`<circle cx="${x}" cy="${y}" r="2.2" fill="${SU}"/>`)+(mode==="mag"?"":pts(cx,cy,34,rx,ry,5,(x,y)=>`<circle cx="${x}" cy="${y}" r="1.6" fill="${FE}"/>`))}
+  return pts(cx,cy,14,rx,ry,9,(x,y,k)=>`<path d="M${x-4} ${y}l3 -3 4 1 1 3 -3 3 -4 -1Z" fill="${FS}"/>`);
+}
+function sceneDish(){
+  let h="";const cy=250;
+  XC.forEach((cx,i)=>{const show=S.look&&(i!==2||S.take);
+    h+=`<ellipse cx="${cx}" cy="${cy+6}" rx="56" ry="16" fill="light-dark(#e2e8ec,#22343f)"/><ellipse cx="${cx}" cy="${cy}" rx="56" ry="18" fill="light-dark(#fdfdfd,#2a3d49)" stroke="var(--glassline)" stroke-width="2"/>`;
+    if(show)h+=sample(i,cx,cy,40,10,S.mag?"mag":"dish");
+    h+=`<text x="${cx}" y="${cy+44}" text-anchor="middle" font-size="14" font-weight="700" fill="var(--ink)">${t("n")[i]}</text>`;
+    // magnet
+    if(S.mag){const att=i===0||i===2;
+      h+=`<g class="mag"><path d="M${cx-22} 60V120a22 22 0 0 0 44 0V60" fill="none" stroke="#dc2626" stroke-width="14"/><rect x="${cx-29}" y="52" width="14" height="16" fill="#cbd5e1"/><rect x="${cx+15}" y="52" width="14" height="16" fill="#cbd5e1"/>`;
+      if(att)h+=pts(cx-22,58,22,8,6,1,(x,y)=>`<circle cx="${x}" cy="${y-4}" r="1.6" fill="${FE}"/>`)+pts(cx+22,58,22,8,6,2,(x,y)=>`<circle cx="${x}" cy="${y-4}" r="1.6" fill="${FE}"/>`);
+      h+=`</g>`;}
+  });
+  if(S.take&&!S.mag)h+=`<text x="${XC[2]}" y="${150}" text-anchor="middle" font-size="12" fill="var(--mute)">${S.mix?"":"Fe + S"}</text>`;
+  if(!S.look)h+=`<text x="280" y="140" text-anchor="middle" font-size="15" fill="var(--mute)">…</text>`;
+  return h;
+}
+function sceneWater(){
+  let h="";const top=110,bot=300,w=96;
+  XC.forEach((cx,i)=>{const x=cx-w/2;
+    h+=`<clipPath id="bw${i}"><rect x="${x}" y="${top}" width="${w}" height="${bot-top}" rx="10"/></clipPath><g clip-path="url(#bw${i})"><rect x="${x}" y="${top}" width="${w}" height="${bot-top}" fill="var(--glass)"/><rect x="${x}" y="${bot-120}" width="${w}" height="120" fill="rgba(160,205,235,.45)"/>`;
+    const surf=bot-120;
+    if(i===0)h+=pts(cx,bot-8,60,38,5,3,(a,b)=>`<circle cx="${a}" cy="${b}" r="1.6" fill="${FE}"/>`);
+    if(i===1)h+=pts(cx,surf+4,50,40,3,7,(a,b)=>`<circle cx="${a}" cy="${b}" r="2.2" fill="${SU}"/>`);
+    if(i===2)h+=pts(cx,surf+4,28,40,3,11,(a,b)=>`<circle cx="${a}" cy="${b}" r="2.2" fill="${SU}"/>`)+pts(cx,bot-8,34,38,5,5,(a,b)=>`<circle cx="${a}" cy="${b}" r="1.6" fill="${FE}"/>`);
+    if(i===3)h+=pts(cx,bot-10,12,32,5,9,(a,b)=>`<path d="M${a-4} ${b}l3 -3 4 1 1 3 -3 3 -4 -1Z" fill="${FS}"/>`);
+    h+=`</g><path d="M${x} ${top-4}V${bot-10}q0 10 10 10H${x+w-10}q10 0 10 -10V${top-4}" fill="none" stroke="var(--glassline)" stroke-width="2.4"/>`;
+    h+=`<text x="${cx}" y="${bot+24}" text-anchor="middle" font-size="14" font-weight="700" fill="var(--ink)">${t("n")[i]}</text>`});
+  return h;
+}
+function sceneHeat(){
+  let h="";const W=40,TOP=70,BOT=250;
+  XC.forEach((cx,i)=>{const x=cx-W/2;
+    h+=`<clipPath id="th${i}"><rect x="${x}" y="${TOP}" width="${W}" height="${BOT-TOP}" rx="${W/2}"/><rect x="${x}" y="${TOP}" width="${W}" height="${(BOT-TOP)/2}"/></clipPath><g clip-path="url(#th${i})"><rect x="${x}" y="${TOP}" width="${W}" height="${BOT-TOP}" fill="var(--glass)"/>`;
+    if(i===0)h+=pts(cx,BOT-10,40,14,6,3,(a,b)=>`<circle cx="${a}" cy="${b}" r="1.6" fill="${FE}"/>`);
+    if(i===1)h+=`<rect x="${x}" y="${BOT-22}" width="${W}" height="22" fill="#b45309"/><rect x="${x}" y="${BOT-22}" width="${W}" height="4" fill="#f59e0b"/>`;
+    if(i===2)h+=`<rect class="glow" x="${x}" y="${BOT-24}" width="${W}" height="24" fill="${FS}"/>`;
+    if(i===3)h+=pts(cx,BOT-10,10,12,5,9,(a,b)=>`<path d="M${a-4} ${b}l3 -3 4 1 1 3 -3 3 -4 -1Z" fill="${FS}"/>`);
+    h+=`</g><path d="M${x} ${TOP-6}V${BOT-W/2}a${W/2} ${W/2} 0 0 0 ${W} 0V${TOP-6}" fill="none" stroke="var(--glassline)" stroke-width="2.2"/>`;
+    h+=`<path class="flame" d="M${cx-9} 312Q${cx-12} 290 ${cx} 266Q${cx+12} 290 ${cx+9} 312Z" fill="#fb923c"/><path d="M${cx-24} 340Q${cx-26} 314 ${cx} 312Q${cx+26} 314 ${cx+24} 340Z" style="fill:light-dark(#dbe7ee,#2b3f4c)" stroke="var(--glassline)"/>`;
+    h+=`<text x="${cx}" y="${362}" text-anchor="middle" font-size="14" font-weight="700" fill="var(--ink)">${t("n")[i]}</text>`});
+  return h;
+}
+function render(){
+  if(view==="water"&&!S.water)view="dish";if(view==="heat"&&!S.heat)view="dish";
+  $("scene").innerHTML=view==="dish"?sceneDish():view==="water"?sceneWater():sceneHeat();
+  document.querySelectorAll("#seg button").forEach(b=>{b.classList.toggle("on",b.dataset.v===view);b.disabled=(b.dataset.v==="water"&&!S.water)||(b.dataset.v==="heat"&&!S.heat)});
+}
+const DEP={take:"look",mix:"take",mag:"mix",water:"mag",heat:"water"};
+function renderSteps(){
+  const g=$("goggles").checked;
+  ["st1","st2","st3","st4","st5"].forEach((id,k)=>$(id).classList.toggle("off",!g||(k>0&&!S[["look","mix","mag","water"][k-1]])));
+  document.querySelectorAll("[data-b]").forEach(b=>{const k=b.dataset.b,done=!!S[k],en=!DEP[k]||S[DEP[k]];b.disabled=done||!en;b.classList.toggle("done",done)});
+  $("st6").classList.toggle("off",!S.heat);$("st7").classList.toggle("off",!done6);$("st8").classList.toggle("off",!done7);
+}
+// answers [row][col]
+const ANS=[[1,1,2,3],[1,2,3,4],[1,2,3,1],[2,2,2,2],[1,2,3,2],[1,2,3,4],[1,2,3,1]];
+function opts(arr,v){return arr.map((s,i)=>`<option value="${i||""}" ${String(v||"")===String(i||"")?"selected":""}>${s}</option>`).join("")}
+function renderTable(){$("tbl").innerHTML=t("props").map((p,r)=>`<tr><td>${p}</td>${[0,1,2,3].map(c=>`<td><select data-r="${r}" data-c="${c}">${opts(t("opt")[r],tv[r+"_"+c])}</select></td>`).join("")}</tr>`).join("")}
+function wsel(id){return `<select id="${id}"><option value="">?</option>${t("w").map((w,i)=>`<option value="${i+1}" ${wv[id]==i+1?"selected":""}>${w}</option>`).join("")}</select>`}
+function renderEq(){$("weq").innerHTML=`${wsel("w1")} + ${wsel("w2")} <span>→(t°)</span> ${wsel("w3")}`}
+function renderQs(){$("qs").innerHTML=t("qq").map((q,i)=>`<div class="q"><label><span>${i+1}. ${q}</span><textarea data-q="${i}">${qa[i]||""}</textarea></label></div>`).join("")}
+function applyLang(){
+  document.documentElement.lang=lang;
+  document.querySelectorAll("[data-i]").forEach(el=>{const v=T[lang][el.dataset.i];if(typeof v==="string")el.textContent=v});
+  $("l-kk").classList.toggle("on",lang==="kk");$("l-ru").classList.toggle("on",lang==="ru");
+  document.querySelectorAll(".msg").forEach(m=>m.textContent="");
+  render();renderSteps();renderTable();renderEq();renderQs();
+}
+function msg(id,text,ok){const m=$(id);m.textContent=text;m.className="msg "+(ok?"ok":"bad")}
+$("l-kk").onclick=()=>{lang="kk";applyLang()};$("l-ru").onclick=()=>{lang="ru";applyLang()};
+$("goggles").onchange=renderSteps;
+$("seg").onclick=e=>{const b=e.target.closest("button");if(!b||b.disabled)return;view=b.dataset.v;render()};
+document.querySelector(".grid").addEventListener("click",e=>{const b=e.target.closest("[data-b]");if(!b||b.disabled)return;const k=b.dataset.b;S[k]=1;
+  view=k==="water"?"water":k==="heat"?"heat":"dish";render();renderSteps();if(k==="heat")msg("mx",t("heated"),true)});
+$("tbl").addEventListener("change",e=>{const el=e.target;if(el.dataset.r==null)return;tv[el.dataset.r+"_"+el.dataset.c]=el.value;el.classList.remove("ok","bad")});
+$("chk6").onclick=()=>{let bad=0;document.querySelectorAll("#tbl select").forEach(s=>{const ok=s.value===String(ANS[s.dataset.r][s.dataset.c]);s.classList.toggle("ok",ok);s.classList.toggle("bad",!ok);if(!ok)bad++});
+  done6=!bad;renderSteps();done6?msg("m6",t("ok6"),true):msg("m6",t("bad6")+bad+".",false)};
+$("weq").addEventListener("change",e=>{if(e.target.id)wv[e.target.id]=e.target.value;e.target.classList.remove("ok","bad")});
+$("chk7").onclick=()=>{const a=$("w1").value,b=$("w2").value,c=$("w3").value,ok=((a==="1"&&b==="2")||(a==="2"&&b==="1"))&&c==="3";
+  ["w1","w2","w3"].forEach(id=>$(id).className=ok?"ok":"bad");done7=ok;renderSteps();ok?msg("m7",t("ok7"),true):msg("m7",t("bad7"),false)};
+$("qs").addEventListener("input",e=>{const q=e.target.dataset.q;if(q!=null)qa[q]=e.target.value});
+$("send").onclick=()=>{const f=t("qq").every((_,i)=>(qa[i]||"").trim());msg("m8",f?t("sent"):t("empty"),f)};
+applyLang();
+}
+</script>
+<script src="../embed.js"></script>
+</body>
+</html>

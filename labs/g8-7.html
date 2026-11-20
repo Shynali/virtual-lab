@@ -1,0 +1,272 @@
+<!DOCTYPE html>
+<html lang="kk">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Қышқылдардың қасиеттері</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans:wght@400;600;700&family=Noto+Serif:wght@600;700&display=swap" rel="stylesheet">
+<style>
+/* VOICE: calm school lab workbook, clear and encouraging
+   IDEA: a workbench sheet — a rack of six tubes, one per reaction of an acid
+   PICTURE: indicator turning pink, zinc fizzing beside quiet copper, black CuO turning to blue solution, crimson fading, soda fizzing
+   COLOUR and TYPE: white sheet on deep lab-teal; indicator and copper-salt colours; Noto Serif + Noto Sans
+   LAYOUT: steps left, rack right (sticky); stacks on phones */
+:root{color-scheme:light dark;
+--bg:light-dark(#0f4c5c,#0a2d36);--sheet:light-dark(#ffffff,#13202a);--ink:light-dark(#10131a,#e7edf2);
+--mute:light-dark(#566170,#9fb0bf);--line:light-dark(#d5dde5,#2b3d4b);--soft:light-dark(#eef5f7,#182a35);
+--acc:light-dark(#0f4c5c,#5cc2d6);--ok:light-dark(#12733a,#4ade80);--bad:light-dark(#b91c1c,#f87171);
+--warn:light-dark(#fff4d6,#3a2f12);--glass:light-dark(#f7fbfd,#1d2f3b);--glassline:light-dark(#8aa1b1,#6c8597)}
+:root[data-theme=light]{color-scheme:light}:root[data-theme=dark]{color-scheme:dark}
+*{box-sizing:border-box;min-width:0}
+body{margin:0;background:var(--bg);color:var(--ink);font:16px/1.55 "Noto Sans",system-ui,sans-serif;overflow-x:clip}
+.wrap{max-width:1240px;margin:0 auto;padding:clamp(14px,3vw,36px) max(3vw,12px)}
+header{display:flex;flex-wrap:wrap;gap:12px;align-items:flex-end;justify-content:space-between;color:#fff;margin-bottom:18px}
+header small{display:block;opacity:.8;font-size:14px}
+h1{font:700 clamp(24px,3.6vw,38px)/1.08 "Noto Serif",Georgia,serif;margin:2px 0 0;text-wrap:balance;max-width:24ch}
+.lang{display:flex;background:rgba(255,255,255,.14);border-radius:999px;padding:4px}
+.lang button{border:0;background:none;color:#fff;font:600 15px "Noto Sans";padding:8px 16px;border-radius:999px;cursor:pointer;min-height:40px}
+.lang button.on{background:#fff;color:#0f4c5c}
+.sheet{background:var(--sheet);border-radius:18px;box-shadow:0 18px 40px rgba(0,0,0,.25);padding:clamp(16px,2.6vw,30px)}
+.note{font-size:13px;color:var(--mute);margin:0 0 10px}
+.goal{margin:0 0 6px;max-width:70ch}
+.reag{margin:0 0 16px;color:var(--mute);font-size:15px;max-width:70ch}
+.safety{display:flex;gap:12px;align-items:center;flex-wrap:wrap;background:var(--warn);border-radius:12px;padding:12px 14px;margin-bottom:18px}
+.safety p{margin:0;flex:1 1 260px;font-weight:600}
+.safety label{flex-direction:row;align-items:center;gap:8px;color:var(--ink);font-weight:600;cursor:pointer}
+.grid{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1.1fr);gap:clamp(16px,3vw,36px);align-items:start}
+.step{border-top:1px solid var(--line);padding:14px 0}
+.step:first-child{border-top:0;padding-top:0}
+.step.off{opacity:.45;pointer-events:none}
+h2{font:700 19px/1.2 "Noto Serif",Georgia,serif;margin:0 0 6px}
+.hint{color:var(--mute);font-size:15px;margin:0 0 8px}
+label{font-size:14px;color:var(--mute);display:flex;flex-direction:column;gap:4px}
+textarea,select,input{font:16px "Noto Sans";color:var(--ink);background:var(--sheet);border:1.5px solid var(--line);border-radius:10px;padding:10px 12px;width:100%}
+textarea:focus,select:focus,input:focus,button:focus-visible{outline:3px solid color-mix(in srgb,var(--acc) 45%,transparent);outline-offset:1px}
+.ok{border-color:var(--ok)!important}.bad{border-color:var(--bad)!important}
+textarea{min-height:76px;resize:vertical}
+.btns{display:flex;flex-wrap:wrap;gap:8px;margin-top:8px}
+.btn{border:0;border-radius:10px;padding:10px 14px;font:600 15px "Noto Sans";cursor:pointer;min-height:44px;background:var(--acc);color:light-dark(#fff,#08202a)}
+.btn.done{background:var(--soft);color:var(--ok)}
+.btn:disabled{opacity:.45;cursor:not-allowed}.btn.done:disabled{opacity:1}
+.seg{display:inline-flex;background:var(--soft);border-radius:10px;padding:4px;gap:4px}
+.seg button{border:0;background:none;color:var(--ink);font:600 15px "Noto Sans";padding:8px 14px;border-radius:8px;cursor:pointer;min-height:40px}
+.seg button.on{background:var(--sheet);box-shadow:0 1px 4px rgba(0,0,0,.15)}
+.seg button:disabled{cursor:default}
+.msg{margin-top:8px;font-size:15px;min-height:1.4em}
+.msg.ok{color:var(--ok)}.msg.bad{color:var(--bad)}
+.board{position:sticky;top:12px}
+.rackbox{background:var(--soft);border-radius:16px;padding:10px}
+.rackbox svg{display:block;width:100%;height:auto}
+.fill{transition:fill 2s ease}
+.solid{transition:opacity 2s ease}
+.bub{animation:rise var(--d) linear infinite;animation-delay:var(--dl);opacity:0}
+@keyframes rise{0%{transform:translateY(0);opacity:0}10%{opacity:.95}100%{transform:translateY(-80px);opacity:0}}
+.flame{animation:flick .25s ease-in-out infinite alternate;transform-box:fill-box;transform-origin:bottom center}
+@keyframes flick{to{transform:scaleY(1.12) scaleX(.94)}}
+@media(prefers-reduced-motion:reduce){.bub,.flame{animation:none;opacity:.8}}
+table{width:100%;border-collapse:collapse;font-size:15px}
+th,td{padding:6px;border-bottom:1px solid var(--line);text-align:left;vertical-align:middle}
+th{font-size:13px;color:var(--mute);font-weight:600}
+td select{padding:8px;font-size:15px}
+.eq{display:flex;flex-wrap:wrap;align-items:center;gap:6px;font:600 17px "Noto Serif",serif;margin-bottom:10px}
+.eq input{width:46px;padding:6px;text-align:center;font:600 16px "Noto Sans"}
+.eq label{flex-direction:row;align-items:center;gap:6px;font:600 15px "Noto Sans";color:var(--ink)}
+.eq label input{width:22px;height:22px}
+.q{margin-bottom:10px}
+@media(max-width:860px){.grid{grid-template-columns:minmax(0,1fr)}.board{position:static;order:-1}}
+@media(max-width:600px){.stack thead{display:none}.stack tr{display:grid;gap:4px;padding-block:10px}.stack td{border:0;padding:0}.stack td:first-child{font-weight:600}}
+</style>
+</head>
+<body>
+<div class="wrap">
+<header>
+  <div><small data-i="lab"></small><h1 data-i="title"></h1></div>
+  <div class="lang" role="group" aria-label="Тіл"><button id="l-kk" class="on">Қазақша</button><button id="l-ru">Русский</button></div>
+</header>
+<div class="sheet">
+  <p class="note" data-i="demo"></p>
+  <p class="goal" data-i="goal"></p>
+  <p class="reag" data-i="reag"></p>
+  <div class="safety">
+    <svg width="34" height="34" viewBox="0 0 34 34" aria-hidden="true"><path d="M17 3 32 30H2Z" fill="#f59e0b"/><rect x="15.5" y="11" width="3" height="11" rx="1.5" fill="#fff"/><circle cx="17" cy="26" r="1.8" fill="#fff"/></svg>
+    <p data-i="safe"></p>
+    <label><input type="checkbox" id="goggles" style="width:22px;height:22px"><span data-i="safeok"></span></label>
+  </div>
+  <div class="grid">
+    <div>
+      <section class="step" id="st0">
+        <h2 data-i="s0"></h2>
+        <p class="hint" data-i="s0h"></p>
+        <div class="seg" id="acid"><button data-a="HCl" class="on">HCl</button><button data-a="H2SO4">H₂SO₄</button></div>
+      </section>
+      <section class="step" id="st1"><h2 data-i="s1"></h2><p class="hint" data-i="s1h"></p>
+        <div class="btns"><button class="btn" data-b="a1" data-i="bacid"></button><button class="btn" data-b="mo" data-i="bmo"></button></div></section>
+      <section class="step" id="st2"><h2 data-i="s2"></h2><p class="hint" data-i="s2h"></p>
+        <div class="btns"><button class="btn" data-b="a2" data-i="bacid2"></button><button class="btn" data-b="zn" data-i="bzn"></button><button class="btn" data-b="cu" data-i="bcu"></button></div></section>
+      <section class="step" id="st3"><h2 data-i="s3"></h2><p class="hint" data-i="s3h"></p>
+        <div class="btns"><button class="btn" data-b="cuo" data-i="bcuo"></button><button class="btn" data-b="a3" data-i="bacid"></button><button class="btn" data-b="heat" data-i="bheat"></button></div></section>
+      <section class="step" id="st4"><h2 data-i="s4"></h2><p class="hint" data-i="s4h"></p>
+        <div class="btns"><button class="btn" data-b="naoh" data-i="bnaoh"></button><button class="btn" data-b="ph" data-i="bph"></button><button class="btn" data-b="drop" id="bdrop"></button></div></section>
+      <section class="step" id="st5"><h2 data-i="s5"></h2><p class="hint" data-i="s5h"></p>
+        <div class="btns"><button class="btn" data-b="soda" data-i="bsoda"></button><button class="btn" data-b="a5" data-i="bacid"></button></div>
+        <div class="msg" id="mx" aria-live="polite"></div></section>
+      <section class="step" id="st6"><h2 data-i="s6"></h2><p class="hint" data-i="s6h"></p>
+        <table class="stack"><thead><tr><th data-i="cexp"></th><th data-i="cobs"></th></tr></thead><tbody id="tbl"></tbody></table>
+        <div class="btns"><button class="btn" id="chk6" data-i="check"></button></div>
+        <div class="msg" id="m6" aria-live="polite"></div></section>
+      <section class="step" id="st7"><h2 data-i="s7"></h2><p class="hint" data-i="s7h"></p>
+        <div id="eqs"></div>
+        <div class="btns"><button class="btn" id="chk7" data-i="check"></button></div>
+        <div class="msg" id="m7" aria-live="polite"></div></section>
+      <section class="step" id="st8"><h2 data-i="s8"></h2>
+        <div class="q"><label><span data-i="q1"></span><textarea id="a1"></textarea></label></div>
+        <div class="q"><label><span data-i="q2"></span><textarea id="a2"></textarea></label></div>
+        <div class="btns"><button class="btn" id="send" data-i="send"></button></div>
+        <div class="msg" id="m8" aria-live="polite"></div></section>
+    </div>
+    <div class="board"><div class="rackbox"><svg id="rack" viewBox="0 0 600 410" aria-label="rack"></svg></div></div>
+  </div>
+</div>
+</div>
+<script>
+{
+const T={
+kk:{lab:"7-зертханалық тәжірибе",title:"Қышқылдардың қасиеттерін зерттеу",demo:"Үлгі нұсқа: тіркелу және жұмысты мұғалімге жіберу толық сайтта қосылады.",
+goal:"Мақсаты: қышқылдардың индикаторларға, металдарға, металл оксидтеріне, негіздерге және тұздарға әсерін зерттеу.",
+reag:"Реактивтер: тұз қышқылы, күкірт қышқылы, натрий гидроксиді, натрий карбонаты, фенолфталеин, мырыш, мыс, мыс(II) оксиді, метилоранж (немесе лакмус). Құрал-жабдықтар: сынауық, сынауық тұрғысы, сынауық ұстағыш, қыздырғыш, қалақша.",
+safe:"Қышқылдармен сақ жұмыс істе: қорғау көзілдірігін ки. Сынауықты қыздырғанда ұстағышқа мұқият бекіт, аузын өзіңе және көршіңе қаратпа.",safeok:"Көзілдірікті кидім",
+s0:"Қышқылды таңда",s0h:"Барлық тәжірибеде осы қышқыл қолданылады. Тәжірибе басталған соң өзгертуге болмайды.",
+s1:"1-тәжірибе. Қышқыл ерітінділерінің ортасын анықтау",s1h:"Сынауыққа аздап қышқыл құйып, 2–3 тамшы метилоранж тамыз.",
+bacid:"Қышқыл құю",bmo:"Метилоранж тамызу",
+s2:"2-тәжірибе. Қышқылдардың металдармен әрекеттесуі",s2h:"Екі сынауыққа қышқыл құй. Біріншісіне мырыш түйіршіктерін, екіншісіне мыс сымдарын сал.",
+bacid2:"Екі сынауыққа қышқыл құю",bzn:"Мырыш салу",bcu:"Мыс салу",
+s3:"3-тәжірибе. Қышқылдардың металл оксидтерімен әрекеттесуі",s3h:"Сынауыққа мыс(II) оксидінің ұнтағын салып, үстіне қышқыл құй. Сынауықты ұстағышқа бекітіп, мұқият қыздыр.",
+bcuo:"CuO ұнтағын салу",bheat:"Мұқият қыздыру",
+s4:"4-тәжірибе. Қышқылдардың негіздермен әрекеттесуі",s4h:"Сынауыққа 2–3 мл NaOH құйып, 1–2 тамшы фенолфталеин тамыз. Ерітінді түссізденгенше қышқылды тамшылатып қос.",
+bnaoh:"NaOH құю",bph:"Фенолфталеин тамызу",bdrop:"Қышқылды тамшылату",
+s5:"5-тәжірибе. Қышқылдардың тұздармен әрекеттесуі",s5h:"Сынауыққа натрий карбонатының ерітіндісін құйып, оған қышқыл қос.",bsoda:"Na₂CO₃ ерітіндісін құю",
+alldone:"Бес тәжірибе де жүргізілді. Бақылауларыңды жаз.",
+s6:"Бақылауларыңды жаз",s6h:"Әр сынауықта не байқадың?",cexp:"Тәжірибе",cobs:"Бақылау",
+rows:["1. Қышқыл + метилоранж","2. Қышқыл + мырыш","2. Қышқыл + мыс","3. Қышқыл + CuO, қыздыру","4. NaOH + фенолфталеин + қышқыл","5. Na₂CO₃ + қышқыл"],
+o1:["—","Метилоранж қызғылт-қызыл түске боялды","Метилоранж сары түске боялды","Түсі өзгерген жоқ"],
+o2:["—","Газ (сутек) бөлінді","Өзгеріс жоқ"],
+o3:["—","Қара ұнтақ еріп, ерітінді көгілдір түске боялды","Газ бөлінді","Өзгеріс жоқ"],
+o4:["—","Таңқурай түс жойылды, ерітінді түссізденді","Ақ тұнба түзілді","Ерітінді көгерді"],
+o5:["—","Газ (көмірқышқыл газы) бөлінді","Тұнба түзілді","Өзгеріс жоқ"],
+check:"Тексеру",ok6:"Дұрыс бақыладың!",bad6:"Мына жолдарда қате бар: ",
+s7:"Реакция теңдеулері",s7h:"Коэффициенттерді жаз (1 болса да). Реакция жүрмесе, белгіле.",none:"Реакция жүрмейді",
+ok7:"Теңдеулер дұрыс!",bad7:"Мына теңдеулерде қате бар: ",
+s8:"Зертхана журналы",q1:"Қышқылдардың жалпы қасиеттерін ата. Мыс неге қышқылмен әрекеттеспеді?",q2:"Қорытынды",
+send:"Мұғалімге жіберу",sent:"Үлгіде жіберу әлі жұмыс істемейді. Толық сайтта жұмыс мұғалімнің бетіне түседі.",empty:"Алдымен журналдың барлық сұрағына жауап бер."},
+ru:{lab:"Лабораторный опыт №7",title:"Исследование свойств кислот",demo:"Демо-версия: регистрация и отправка работы учителю появятся в полной версии сайта.",
+goal:"Цель: изучить действие кислот на индикаторы, металлы, оксиды металлов, основания и соли.",
+reag:"Реактивы: соляная кислота, серная кислота, гидроксид натрия, карбонат натрия, фенолфталеин, цинк, медь, оксид меди(II), метилоранж (или лакмус). Оборудование: пробирки, штатив, держатель для пробирок, нагреватель, шпатель.",
+safe:"Осторожно с кислотами: надень защитные очки. При нагревании надёжно закрепи пробирку в держателе и не направляй её отверстие на себя и соседа.",safeok:"Очки надеты",
+s0:"Выбери кислоту",s0h:"Эта кислота используется во всех опытах. После начала опыта её нельзя изменить.",
+s1:"Опыт 1. Определение среды растворов кислот",s1h:"Налей в пробирку немного кислоты и добавь 2–3 капли метилоранжа.",
+bacid:"Прилить кислоту",bmo:"Добавить метилоранж",
+s2:"Опыт 2. Взаимодействие кислот с металлами",s2h:"Налей кислоту в две пробирки. В первую положи гранулы цинка, во вторую — медную проволоку.",
+bacid2:"Налить кислоту в две пробирки",bzn:"Положить цинк",bcu:"Положить медь",
+s3:"Опыт 3. Взаимодействие кислот с оксидами металлов",s3h:"Насыпь в пробирку порошок оксида меди(II) и прилей кислоту. Закрепи пробирку в держателе и осторожно нагрей.",
+bcuo:"Насыпать CuO",bheat:"Осторожно нагреть",
+s4:"Опыт 4. Взаимодействие кислот с основаниями",s4h:"Налей в пробирку 2–3 мл NaOH и добавь 1–2 капли фенолфталеина. По каплям добавляй кислоту до обесцвечивания.",
+bnaoh:"Налить NaOH",bph:"Добавить фенолфталеин",bdrop:"Добавить каплю кислоты",
+s5:"Опыт 5. Взаимодействие кислот с солями",s5h:"Налей в пробирку раствор карбоната натрия и добавь кислоту.",bsoda:"Налить раствор Na₂CO₃",
+alldone:"Все пять опытов проведены. Запиши наблюдения.",
+s6:"Запиши наблюдения",s6h:"Что ты наблюдал в каждой пробирке?",cexp:"Опыт",cobs:"Наблюдение",
+rows:["1. Кислота + метилоранж","2. Кислота + цинк","2. Кислота + медь","3. Кислота + CuO, нагревание","4. NaOH + фенолфталеин + кислота","5. Na₂CO₃ + кислота"],
+o1:["—","Метилоранж стал розово-красным","Метилоранж стал жёлтым","Цвет не изменился"],
+o2:["—","Выделился газ (водород)","Изменений нет"],
+o3:["—","Чёрный порошок растворился, раствор стал голубым","Выделился газ","Изменений нет"],
+o4:["—","Малиновая окраска исчезла, раствор обесцветился","Выпал белый осадок","Раствор посинел"],
+o5:["—","Выделился газ (углекислый газ)","Выпал осадок","Изменений нет"],
+check:"Проверить",ok6:"Наблюдения верны!",bad6:"Ошибки в строках: ",
+s7:"Уравнения реакций",s7h:"Расставь коэффициенты (пиши и 1). Если реакция не идёт, отметь это.",none:"Реакция не идёт",
+ok7:"Уравнения верны!",bad7:"Ошибки в уравнениях: ",
+s8:"Лабораторный журнал",q1:"Перечисли общие свойства кислот. Почему медь не реагировала с кислотой?",q2:"Вывод",
+send:"Отправить учителю",sent:"В демо-версии отправка пока не работает. В полной версии работа попадёт на страницу учителя.",empty:"Сначала ответь на все вопросы журнала."}};
+let lang="kk",acid="HCl";const S={a1:0,mo:0,a2:0,zn:0,cu:0,cuo:0,a3:0,heat:0,naoh:0,ph:0,drop:0,soda:0,a5:0};
+let done6=false,done7=false;const tv={},ev={};
+const $=id=>document.getElementById(id),t=k=>T[lang][k];
+const X=[24,120,216,312,408,504],W=50,TOP=90,BOT=320;
+const AN=()=>acid==="HCl"?"HCl":"H₂SO₄";
+function bubbles(x,n,dur){let s="";for(let k=0;k<n;k++){const cx=x+10+(k*31)%30,d=(dur*(.8+(k%5)/10)).toFixed(2);s+=`<circle class="bub" cx="${cx}" cy="${BOT-22}" r="${1.8+(k%3)}" fill="#fff" stroke="#9fb7c7" style="--d:${d}s;--dl:${(-k*dur/n).toFixed(2)}s"/>`}return s}
+function tube(i,{liq=0,col="rgba(200,228,242,.5)",from,inner="",label="",sub=""}){
+  const x=X[i];let h=`<clipPath id="c${i}"><rect x="${x}" y="${TOP}" width="${W}" height="${BOT-TOP}" rx="${W/2}"/><rect x="${x}" y="${TOP}" width="${W}" height="${(BOT-TOP)/2}"/></clipPath><g clip-path="url(#c${i})"><rect x="${x}" y="${TOP}" width="${W}" height="${BOT-TOP}" fill="var(--glass)"/>`;
+  if(liq)h+=`<rect class="fill" x="${x}" y="${BOT-liq}" width="${W}" height="${liq}" fill="${from||col}" data-to="${col}"/>`;
+  h+=inner+`</g><path d="M${x} ${TOP-8}V${BOT-W/2}a${W/2} ${W/2} 0 0 0 ${W} 0V${TOP-8}" fill="none" stroke="var(--glassline)" stroke-width="2.2"/><rect x="${x-4}" y="${TOP-12}" width="${W+8}" height="6" rx="3" fill="var(--glassline)"/>`;
+  h+=`<text x="${x+W/2}" y="${BOT+24}" text-anchor="middle" font-size="14" font-weight="700" fill="var(--ink)">${label}</text><text x="${x+W/2}" y="${BOT+40}" text-anchor="middle" font-size="11" fill="var(--mute)">${sub}</text>`;
+  return h;
+}
+function render(){
+  const ac="rgba(200,228,242,.5)";let h="";
+  // 1 indicator
+  h+=tube(0,{liq:S.a1?70:0,col:S.mo?"rgba(244,63,94,.6)":ac,from:S.mo?"rgba(251,146,60,.6)":ac,label:"1",sub:S.mo?"+ м/о":""});
+  // 2a Zn
+  let zi="";if(S.zn){[[X[1]+14,BOT-12],[X[1]+30,BOT-10],[X[1]+22,BOT-24]].forEach(([a,b])=>zi+=`<ellipse cx="${a}" cy="${b}" rx="8" ry="6" fill="#9aa6b2" stroke="#6b7785"/>`);if(S.a2)zi+=bubbles(X[1],14,1.4)}
+  h+=tube(1,{liq:S.a2?80:0,inner:zi,label:"2",sub:S.zn?"Zn":""});
+  let ci="";if(S.cu)ci+=`<path d="M${X[2]+14} ${BOT-6}C${X[2]+20} ${BOT-60} ${X[2]+34} ${BOT-40} ${X[2]+30} ${BOT-110}" stroke="#c8733a" stroke-width="4" fill="none" stroke-linecap="round"/>`;
+  h+=tube(2,{liq:S.a2?80:0,inner:ci,label:"2",sub:S.cu?"Cu":""});
+  // 3 CuO
+  const blue=acid==="HCl"?"rgba(45,170,170,.6)":"rgba(37,99,235,.55)";
+  let oi="";if(S.cuo)oi+=`<g class="solid" opacity="${S.heat?0:1}">${Array.from({length:16},(_,k)=>`<circle cx="${X[3]+10+(k*29)%30}" cy="${BOT-6-(k*7)%10}" r="${2.5+(k%2)}" fill="#1f2937"/>`).join("")}</g>`;
+  h+=tube(3,{liq:S.a3?80:0,col:S.heat?blue:ac,from:ac,inner:oi,label:"3",sub:S.cuo?"CuO":""});
+  // 4 neutralization
+  const lvl=[1,.6,.35,.15,0][Math.min(S.drop,4)],crim=`rgba(219,39,119,${(0.6*lvl).toFixed(2)})`;
+  h+=tube(4,{liq:S.naoh?70+S.drop*6:0,col:S.ph?(lvl?crim:ac):ac,label:"4",sub:S.ph?"+ ф/ф":""});
+  // 5 soda
+  h+=tube(5,{liq:S.soda?(S.a5?90:60):0,inner:S.a5?bubbles(X[5],16,1.1):"",label:"5",sub:S.soda?"Na₂CO₃":""});
+  h+=`<rect x="12" y="${BOT-80}" width="576" height="10" rx="4" style="fill:light-dark(#b7c4cd,#3a4b57)" opacity=".7"/>`;
+  h+=`<text x="300" y="34" text-anchor="middle" font-size="15" font-weight="700" fill="var(--acc)">${AN()}</text>`;
+  $("rack").innerHTML=h;
+  requestAnimationFrame(()=>requestAnimationFrame(()=>document.querySelectorAll("#rack [data-to]").forEach(r=>r.setAttribute("fill",r.dataset.to))));
+}
+const DEP={mo:"a1",zn:"a2",cu:"a2",a3:"cuo",heat:"a3",ph:"naoh",drop:"ph",a5:"soda"};
+function allDone(){return S.mo&&S.zn&&S.cu&&S.heat&&S.drop>=4&&S.a5}
+function renderSteps(){
+  const g=$("goggles").checked,started=Object.values(S).some(Boolean);
+  ["st0","st1","st2","st3","st4","st5"].forEach(id=>$(id).classList.toggle("off",!g));
+  document.querySelectorAll("#acid button").forEach(b=>{b.classList.toggle("on",b.dataset.a===acid);b.disabled=started});
+  document.querySelectorAll("[data-b]").forEach(b=>{const k=b.dataset.b,done=k==="drop"?S.drop>=4:!!S[k],en=!DEP[k]||S[DEP[k]];b.disabled=done||!en;b.classList.toggle("done",done)});
+  $("bdrop").textContent=t("bdrop")+(S.ph?` (${Math.min(S.drop,4)}/4)`:"");
+  $("st6").classList.toggle("off",!allDone());$("st7").classList.toggle("off",!done6);$("st8").classList.toggle("off",!done7);
+}
+const ANS=["1","1","2","1","1","1"],OK=["o1","o2","o2","o3","o4","o5"];
+function opts(arr,v){return arr.map((s,i)=>`<option value="${i||""}" ${String(v||"")===String(i||"")?"selected":""}>${s}</option>`).join("")}
+function renderTable(){$("tbl").innerHTML=t("rows").map((r,i)=>`<tr><td>${r}</td><td><select data-r="${i}">${opts(t(OK[i]),tv[i])}</select></td></tr>`).join("")}
+const EQ={HCl:[["Zn + ",{k:"2"},"HCl → ZnCl₂ + H₂↑"],["CuO + ",{k:"2"},"HCl → CuCl₂ + H₂O"],["NaOH + ",{k:"1"},"HCl → NaCl + H₂O"],["Na₂CO₃ + ",{k:"2"},"HCl → ",{k:"2"},"NaCl + H₂O + CO₂↑"]],
+H2SO4:[["Zn + ",{k:"1"},"H₂SO₄ → ZnSO₄ + H₂↑"],["CuO + ",{k:"1"},"H₂SO₄ → CuSO₄ + H₂O"],[{k:"2"},"NaOH + H₂SO₄ → Na₂SO₄ + ",{k:"2"},"H₂O"],["Na₂CO₃ + ",{k:"1"},"H₂SO₄ → Na₂SO₄ + H₂O + CO₂↑"]]};
+function renderEqs(){
+  let h="";EQ[acid].forEach((e,i)=>{let j=0;h+=`<div class="eq">`+e.map(p=>typeof p==="string"?p:`<input id="e${i}_${j}" data-a="${p.k}" inputmode="numeric" value="${ev[`e${i}_${j++}`]||""}" aria-label="k">`).join("")+`</div>`;
+    if(i===0)h+=`<div class="eq">Cu + ${AN()} → <label><input type="checkbox" id="cuno" ${ev.cuno?"checked":""}>${t("none")}</label></div>`});
+  $("eqs").innerHTML=h;
+}
+function applyLang(){
+  document.documentElement.lang=lang;
+  document.querySelectorAll("[data-i]").forEach(el=>{const v=T[lang][el.dataset.i];if(typeof v==="string")el.textContent=v});
+  $("l-kk").classList.toggle("on",lang==="kk");$("l-ru").classList.toggle("on",lang==="ru");
+  document.querySelectorAll(".msg").forEach(m=>m.textContent="");
+  render();renderSteps();renderTable();renderEqs();
+}
+function msg(id,text,ok){const m=$(id);m.textContent=text;m.className="msg "+(ok?"ok":"bad")}
+$("l-kk").onclick=()=>{lang="kk";applyLang()};$("l-ru").onclick=()=>{lang="ru";applyLang()};
+$("goggles").onchange=renderSteps;
+$("acid").onclick=e=>{const b=e.target.closest("button");if(!b||b.disabled)return;acid=b.dataset.a;render();renderSteps();renderEqs()};
+document.querySelector(".grid").addEventListener("click",e=>{const b=e.target.closest("[data-b]");if(!b||b.disabled)return;const k=b.dataset.b;
+  if(k==="drop")S.drop++;else S[k]=1;render();renderSteps();if(allDone())msg("mx",t("alldone"),true)});
+$("tbl").addEventListener("change",e=>{const r=e.target.dataset.r;if(r==null)return;tv[r]=e.target.value;e.target.classList.remove("ok","bad")});
+$("chk6").onclick=()=>{const bad=[];document.querySelectorAll("#tbl select").forEach(s=>{const ok=s.value===ANS[s.dataset.r];s.classList.toggle("ok",ok);s.classList.toggle("bad",!ok);if(!ok)bad.push(Number(s.dataset.r)+1)});
+  done6=!bad.length;renderSteps();done6?msg("m6",t("ok6"),true):msg("m6",t("bad6")+bad.join(", ")+".",false)};
+const evIn=e=>{const el=e.target;if(el.id==="cuno")ev.cuno=el.checked;else if(el.id)ev[el.id]=el.value;el.classList.remove("ok","bad")};
+$("eqs").addEventListener("input",evIn);$("eqs").addEventListener("change",evIn);
+$("chk7").onclick=()=>{const bad=new Set();document.querySelectorAll("#eqs input[data-a]").forEach(el=>{const ok=el.value.trim()===el.dataset.a;el.classList.remove("ok","bad");el.classList.add(ok?"ok":"bad");if(!ok)bad.add(Number(el.id.split("_")[0].slice(1))+1)});
+  const cu=$("cuno").checked;$("cuno").parentElement.style.color=cu?"var(--ok)":"var(--bad)";if(!cu)bad.add("Cu");
+  done7=!bad.size;renderSteps();done7?msg("m7",t("ok7"),true):msg("m7",t("bad7")+[...bad].join(", ")+".",false)};
+$("send").onclick=()=>{const f=["a1","a2"].every(id=>$(id).value.trim());msg("m8",f?t("sent"):t("empty"),f)};
+applyLang();
+}
+</script>
+<script src="../embed.js"></script>
+</body>
+</html>

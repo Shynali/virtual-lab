@@ -1,0 +1,209 @@
+<!DOCTYPE html>
+<html lang="kk">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Полимерлену реакциясы</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans:wght@400;600;700&family=Noto+Serif:wght@600;700&display=swap" rel="stylesheet">
+<style>
+/* VOICE: calm school lab workbook, clear and encouraging (grade 7)
+   IDEA: a workbench sheet — two twin tubes, acid and alkali, each with an aluminium granule
+   PICTURE: both tubes starting slowly, then fizzing hard once the oxide film is gone: aluminium reacts with both
+   COLOUR and TYPE: white sheet on deep lab-teal; the universal-indicator rainbow; Noto Serif + Noto Sans
+   LAYOUT: steps left, scene right (sticky) with view switch; stacks on phones */
+:root{color-scheme:light dark;
+--bg:light-dark(#0f4c5c,#0a2d36);--sheet:light-dark(#ffffff,#13202a);--ink:light-dark(#10131a,#e7edf2);
+--mute:light-dark(#566170,#9fb0bf);--line:light-dark(#d5dde5,#2b3d4b);--soft:light-dark(#eef5f7,#182a35);
+--acc:light-dark(#0f4c5c,#5cc2d6);--ok:light-dark(#12733a,#4ade80);--bad:light-dark(#b91c1c,#f87171);
+--warn:light-dark(#fff4d6,#3a2f12);--glass:light-dark(#f7fbfd,#1d2f3b);--glassline:light-dark(#8aa1b1,#6c8597)}
+:root[data-theme=light]{color-scheme:light}:root[data-theme=dark]{color-scheme:dark}
+*{box-sizing:border-box;min-width:0}
+body{margin:0;background:var(--bg);color:var(--ink);font:16px/1.55 "Noto Sans",system-ui,sans-serif;overflow-x:clip}
+.wrap{max-width:1240px;margin:0 auto;padding:clamp(14px,3vw,36px) max(3vw,12px)}
+header{display:flex;flex-wrap:wrap;gap:12px;align-items:flex-end;justify-content:space-between;color:#fff;margin-bottom:18px}
+header small{display:block;opacity:.8;font-size:14px}
+h1{font:700 clamp(24px,3.6vw,38px)/1.08 "Noto Serif",Georgia,serif;margin:2px 0 0;text-wrap:balance;max-width:26ch}
+.lang{display:flex;background:rgba(255,255,255,.14);border-radius:999px;padding:4px}
+.lang button{border:0;background:none;color:#fff;font:600 15px "Noto Sans";padding:8px 16px;border-radius:999px;cursor:pointer;min-height:40px}
+.lang button.on{background:#fff;color:#0f4c5c}
+.sheet{background:var(--sheet);border-radius:18px;box-shadow:0 18px 40px rgba(0,0,0,.25);padding:clamp(16px,2.6vw,30px)}
+.note{font-size:13px;color:var(--mute);margin:0 0 10px}
+.goal{margin:0 0 6px;max-width:70ch}
+.reag{margin:0 0 16px;color:var(--mute);font-size:15px;max-width:70ch}
+.safety{display:flex;gap:12px;align-items:center;flex-wrap:wrap;background:var(--warn);border-radius:12px;padding:12px 14px;margin-bottom:18px}
+.safety p{margin:0;flex:1 1 260px;font-weight:600}
+.safety label{flex-direction:row;align-items:center;gap:8px;color:var(--ink);font-weight:600;cursor:pointer}
+.grid{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1.05fr);gap:clamp(16px,3vw,36px);align-items:start}
+.step{border-top:1px solid var(--line);padding:14px 0}
+.step:first-child{border-top:0;padding-top:0}
+.step.off{opacity:.45;pointer-events:none}
+h2{font:700 19px/1.2 "Noto Serif",Georgia,serif;margin:0 0 6px}
+.hint{color:var(--mute);font-size:15px;margin:0 0 8px}
+label{font-size:14px;color:var(--mute);display:flex;flex-direction:column;gap:4px}
+textarea,select{font:16px "Noto Sans";color:var(--ink);background:var(--sheet);border:1.5px solid var(--line);border-radius:10px;padding:10px 12px;width:100%}
+textarea:focus,select:focus,button:focus-visible{outline:3px solid color-mix(in srgb,var(--acc) 45%,transparent);outline-offset:1px}
+.ok{border-color:var(--ok)!important}.bad{border-color:var(--bad)!important}
+textarea{min-height:76px;resize:vertical}
+.btns{display:flex;flex-wrap:wrap;gap:8px;margin-top:8px}
+.btn{border:0;border-radius:10px;padding:10px 14px;font:600 15px "Noto Sans";cursor:pointer;min-height:44px;background:var(--acc);color:light-dark(#fff,#08202a)}
+.btn.done{background:var(--soft);color:var(--ok)}
+.btn:disabled{opacity:.45;cursor:not-allowed}.btn.done:disabled{opacity:1}
+.msg{margin-top:8px;font-size:15px;min-height:1.4em}
+.msg.ok{color:var(--ok)}.msg.bad{color:var(--bad)}
+.board{position:sticky;top:12px}
+.seg{display:flex;background:var(--soft);border-radius:10px;padding:4px;gap:4px;margin-bottom:10px}
+.seg button{flex:1;border:0;background:none;color:var(--ink);font:600 14px "Noto Sans";padding:8px 10px;border-radius:8px;cursor:pointer;min-height:40px}
+.seg button.on{background:var(--sheet);box-shadow:0 1px 4px rgba(0,0,0,.15)}
+.seg button:disabled{opacity:.4;cursor:default}
+.rackbox{background:var(--soft);border-radius:16px;padding:10px}
+.rackbox svg{display:block;width:100%;height:auto}
+.mag{transition:transform 1.2s ease}
+.glow{animation:glow 1.4s ease-in-out 2;transform-box:fill-box}
+@keyframes glow{50%{fill:#f97316}}
+.flame{animation:flick .25s ease-in-out infinite alternate;transform-box:fill-box;transform-origin:bottom center}
+@keyframes flick{to{transform:scaleY(1.12) scaleX(.94)}}
+@media(prefers-reduced-motion:reduce){.mag{transition:none}.glow,.flame{animation:none}}
+.scroll{overflow-x:auto}
+.seg{display:flex;background:var(--soft);border-radius:10px;padding:4px;gap:4px;margin-bottom:10px;flex-wrap:wrap}
+.seg button{flex:1;border:0;background:none;color:var(--ink);font:600 14px "Noto Sans";padding:8px 10px;border-radius:8px;cursor:pointer;min-height:40px}
+.seg button.on{background:var(--sheet);box-shadow:0 1px 4px rgba(0,0,0,.15)}
+.brown{transition:opacity 2s ease}.pk{transition:fill 1.6s ease}.ca{transition:transform 4s ease-in-out,opacity 6s ease;transform-box:fill-box;transform-origin:center}.water{animation:fall2 .6s linear infinite}@keyframes fall2{from{transform:translateY(-10px);opacity:.9}to{transform:translateY(30px);opacity:.2}}.eq input{width:44px;padding:6px;text-align:center;font:600 16px "Noto Sans";border:1.5px solid var(--line);border-radius:8px;background:var(--sheet);color:var(--ink)}
+.tray{display:flex;flex-wrap:wrap;gap:8px;margin-top:10px}
+.tray small{width:100%;font-weight:700;color:var(--mute);font-size:13px;margin-top:4px}
+.chip{border:2px solid var(--line);background:var(--sheet);color:var(--ink);border-radius:999px;padding:6px 12px;font:600 14px "Noto Sans";cursor:pointer;min-height:40px}
+.chip.sel{border-color:var(--acc);background:var(--soft)}.chip.done{color:var(--ok)}.chip:disabled{opacity:.4;cursor:default}
+.scroll{overflow-x:auto}td select{padding:6px;font-size:13px}td input{width:70px;padding:6px;text-align:right;font:600 15px "Noto Sans";color:var(--ink);background:var(--sheet);border:1.5px solid var(--line);border-radius:8px}
+.two{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:0 18px}@media(max-width:600px){.two{grid-template-columns:minmax(0,1fr)}}
+.bub{animation:rise var(--d) linear infinite;animation-delay:var(--dl);opacity:0}
+@keyframes rise{0%{transform:translateY(0);opacity:0}10%{opacity:.95}100%{transform:translateY(-80px);opacity:0}}
+.smoke{animation:smoke 2.6s ease-out infinite;opacity:0;transform-box:fill-box;transform-origin:center}
+@keyframes smoke{0%{transform:translateY(0) scale(.6);opacity:0}20%{opacity:.6}100%{transform:translateY(-70px) scale(1.4);opacity:0}}
+@media(prefers-reduced-motion:reduce){.bub,.smoke{animation:none;opacity:.6}}
+table{width:100%;border-collapse:collapse;font-size:14px}
+th,td{padding:5px;border-bottom:1px solid var(--line);text-align:left;vertical-align:middle}
+th{font-size:13px;color:var(--mute);font-weight:600}
+td:first-child{font-weight:600;font-size:14px}
+td select{padding:6px;font-size:13px}
+.eq{display:flex;flex-wrap:wrap;align-items:center;gap:8px;font:600 17px "Noto Sans";margin-bottom:10px}
+.eq select{width:auto;padding:6px 8px;font:600 15px "Noto Sans"}
+.q{margin-bottom:10px}
+.toblue{animation:toblue 3.2s ease forwards}@keyframes toblue{from{fill:rgba(200,228,242,.55)}to{fill:#4f9cf5}}
+.shrink{animation:shrink 4.5s ease forwards;transform-box:fill-box;transform-origin:center bottom}@keyframes shrink{to{transform:scale(.15);opacity:.2}}
+.liq{transition:fill-opacity 2s ease}
+.fade{animation:fade 2.6s ease forwards}@keyframes fade{to{opacity:0}}
+.stir{animation:stir .5s ease-in-out 5;transform-box:fill-box;transform-origin:top center}@keyframes stir{50%{transform:rotate(9deg)}}
+@media(max-width:860px){.grid{grid-template-columns:minmax(0,1fr)}.board{position:static;order:-1}}
+</style>
+</head>
+<body>
+<div class="wrap">
+<header>
+  <div><small data-i="lab"></small><h1 data-i="title"></h1></div>
+  <div class="lang" role="group" aria-label="Тіл"><button id="l-kk" class="on">Қазақша</button><button id="l-ru">Русский</button></div>
+</header>
+<div class="sheet">
+  <p class="note" data-i="demo"></p>
+  <p class="goal" data-i="goal"></p>
+  <p class="reag" data-i="reag"></p>
+  <div class="safety">
+    <svg width="34" height="34" viewBox="0 0 34 34" aria-hidden="true"><path d="M17 3 32 30H2Z" fill="#f59e0b"/><rect x="15.5" y="11" width="3" height="11" rx="1.5" fill="#fff"/><circle cx="17" cy="26" r="1.8" fill="#fff"/></svg>
+    <p data-i="safe"></p>
+    <label><input type="checkbox" id="goggles" style="width:22px;height:22px"><span data-i="safeok"></span></label>
+  </div>
+  <div class="grid">
+    <div>
+      <section class="step" id="st1"><h2 data-i="e1"></h2><p class="hint" data-i="e1h"></p>
+        <div class="btns"><button class="btn" data-b="mma" data-i="bmma"></button><button class="btn" data-b="bpo" data-i="bbpo"></button><button class="btn" data-b="cond" data-i="bcond"></button><button class="btn" data-b="bath" data-i="bbath"></button></div>
+        <div class="msg" id="m1" aria-live="polite"></div></section>
+      <section class="step" id="st2"><h2 data-i="e2"></h2><p class="hint" data-i="e2h"></p>
+        <div class="btns"><button class="btn" data-b="on" data-i="bon"></button><button class="btn" data-b="tilt" data-i="btilt"></button></div>
+        <div class="msg" id="m2" aria-live="polite"></div></section>
+      <section class="step" id="st3"><h2 data-i="s3"></h2><p class="hint" data-i="s3h"></p>
+        <div id="qs"></div>
+        <div class="btns"><button class="btn" id="chk" data-i="check"></button></div>
+        <div class="msg" id="m3" aria-live="polite"></div></section>
+      <section class="step" id="st4"><h2 data-i="s4"></h2>
+        <div class="q"><label><span data-i="q1"></span><textarea id="a1"></textarea></label></div>
+        <div class="q"><label><span data-i="q2"></span><textarea id="a2"></textarea></label></div>
+        <div class="btns"><button class="btn" id="send" data-i="send"></button></div>
+        <div class="msg" id="m4" aria-live="polite"></div></section>
+    </div>
+    <div class="board"><div class="rackbox"><svg id="scene" viewBox="0 0 560 440" aria-label="scene"></svg></div></div>
+  </div>
+</div>
+</div>
+<script>
+{
+const T={
+kk:{lab:"11-сынып · 9-зертханалық жұмыс",title:"Полимерлену реакциясы",demo:"Үлгі нұсқа: тіркелу және жұмысты мұғалімге жіберу толық сайтта қосылады.",
+goal:"Мақсаты: метилметакрилаттан бензоил пероксидінің қатысуымен полиметилметакрилат (органикалық шыны) алу.",
+reag:"Реактивтер: метилметакрилат, бензоил пероксиді. Құрал-жабдықтар: сынауық, кері ауа тоңазытқышы, су моншасы, электрпеші, термометр, металл тұрғы.",
+safe:"Қыздырғыш құралдармен, қышқылдармен жұмыс істеу ережесін сақта. Метилметакрилаттың иісі өткір — тартпа шкафта жұмыс істе.",safeok:"Ережені оқыдым",
+e1:"Қондырғыны жинау",e1h:"Сынауыққа 2 мл метилметакрилат құйып, 30 мг бензоил пероксидін C₁₄H₁₀O₄ қос. Сынауықты кері ауа тоңазытқышымен бекітіп, оны су моншасына орнат.",
+bmma:"2 мл метилметакрилат құю",bbpo:"30 мг бензоил пероксидін қосу",bcond:"Кері ауа тоңазытқышымен бекіту",bbath:"Су моншасына орнату",
+e2:"Полимерлену",e2h:"Электрпешті қосып, су моншасын қайнау температурасына (95–98 °C) дейін қыздыр. Полимерлену реакциясының ұзақтығы шамамен 9–10 мин. Нәтижесін тексеру үшін сынауықты еңкейтіп көр.",
+bon:"Электрпешті қосу",btilt:"Сынауықты еңкейтіп тексеру",run1:"Су қызып жатыр…",run2:"Полимерлену жүріп жатыр: масса біртіндеп қоюлануда…",run3:"Реакция аяқталды: шыны тәрізді мөлдір қатты масса түзілді.",tiltm:"Сынауықты еңкейткенде масса ақпайды — ол қатты полимер (органикалық шыны).",
+s3:"Сұрақтар",s3h:"Бақылауыңа сүйеніп, жауапты таңда.",
+qs:[["Реакцияның мономері:",["—","Метилметакрилат CH₂=C(CH₃)–COOCH₃","Этилен","Бензоил пероксиді"],"1"],["Бензоил пероксидінің рөлі:",["—","Бастамашы (инициатор) — бос радикалдар түзеді","Еріткіш","Мономер"],"1"],["Түзілген полимердің аты:",["—","Полиметилметакрилат (органикалық шыны)","Полиэтилен","Капрон"],"1"],["Бұл реакция түрі:",["—","Радикалдық полимерлену (қосылу)","Поликонденсация","Гидролиз"],"1"],["Кері ауа тоңазытқышы не үшін қажет?",["—","Ұшқыш мономердің буы суып, қайта сынауыққа ағуы үшін","Сынауықты суыту үшін","Ауа кіргізу үшін"],"1"],["Полимерлену реакциясының теңдеуі:",["—","n CH₂=C(CH₃)COOCH₃ → [–CH₂–C(CH₃)(COOCH₃)–]ₙ","CH₂=CH₂ + H₂ → C₂H₆","C₆H₁₂O₆ → 2C₂H₅OH + 2CO₂"],"1"]],
+check:"Тексеру",ok:"Барлығы дұрыс! Бензоил пероксиді ыдырағанда түзілген радикалдар метилметакрилаттың қос байланысын үзіп, ұзын тізбекті полимер — органикалық шыныны түзеді.",bad:"Қате жауаптар саны: ",
+s4:"Қорытынды",q1:"Полимерлену реакциясының мәнін түсіндір: мономер, бастамашы, полимер.",q2:"Полиметилметакрилат (органикалық шыны) қай жерлерде қолданылады?",
+send:"Мұғалімге жіберу",sent:"Үлгіде жіберу әлі жұмыс істемейді. Толық сайтта жұмыс мұғалімнің бетіне түседі.",empty:"Алдымен сұрақтарға жауап бер.",min:"мин",st:["сұйық","тұтқыр","қатты"],hp:"электрпеші",th:"термометр",cnd:"кері тоңазытқыш"},
+ru:{lab:"11 класс · Лабораторная работа №9",title:"Реакция полимеризации",demo:"Демо-версия: регистрация и отправка работы учителю появятся в полной версии сайта.",
+goal:"Цель: получить полиметилметакрилат (органическое стекло) из метилметакрилата в присутствии пероксида бензоила.",
+reag:"Реактивы: метилметакрилат, пероксид бензоила. Оборудование: пробирка, обратный воздушный холодильник, водяная баня, электроплитка, термометр, металлический штатив.",
+safe:"Соблюдай правила работы с нагревательными приборами и кислотами. У метилметакрилата резкий запах — работай в вытяжном шкафу.",safeok:"Правила прочитаны",
+e1:"Сборка установки",e1h:"Налей в пробирку 2 мл метилметакрилата и добавь 30 мг пероксида бензоила C₁₄H₁₀O₄. Закрепи пробирку с обратным воздушным холодильником и помести её в водяную баню.",
+bmma:"Налить 2 мл метилметакрилата",bbpo:"Добавить 30 мг пероксида бензоила",bcond:"Закрепить с обратным холодильником",bbath:"Поместить в водяную баню",
+e2:"Полимеризация",e2h:"Включи электроплитку и нагрей водяную баню до кипения (95–98 °C). Продолжительность реакции полимеризации около 9–10 мин. Чтобы проверить результат, наклони пробирку.",
+bon:"Включить электроплитку",btilt:"Наклонить пробирку",run1:"Вода нагревается…",run2:"Идёт полимеризация: масса постепенно густеет…",run3:"Реакция закончилась: образовалась прозрачная стеклообразная твёрдая масса.",tiltm:"При наклоне пробирки масса не течёт — это твёрдый полимер (органическое стекло).",
+s3:"Вопросы",s3h:"Опираясь на наблюдения, выбери ответ.",
+qs:[["Мономер реакции:",["—","Метилметакрилат CH₂=C(CH₃)–COOCH₃","Этилен","Пероксид бензоила"],"1"],["Роль пероксида бензоила:",["—","Инициатор — образует свободные радикалы","Растворитель","Мономер"],"1"],["Название образовавшегося полимера:",["—","Полиметилметакрилат (органическое стекло)","Полиэтилен","Капрон"],"1"],["Тип этой реакции:",["—","Радикальная полимеризация (присоединение)","Поликонденсация","Гидролиз"],"1"],["Зачем нужен обратный воздушный холодильник?",["—","Чтобы пары летучего мономера охлаждались и стекали обратно в пробирку","Чтобы охлаждать пробирку","Чтобы впускать воздух"],"1"],["Уравнение реакции полимеризации:",["—","n CH₂=C(CH₃)COOCH₃ → [–CH₂–C(CH₃)(COOCH₃)–]ₙ","CH₂=CH₂ + H₂ → C₂H₆","C₆H₁₂O₆ → 2C₂H₅OH + 2CO₂"],"1"]],
+check:"Проверить",ok:"Всё верно! Радикалы, образующиеся при распаде пероксида бензоила, разрывают двойную связь метилметакрилата, и образуется длинноцепной полимер — органическое стекло.",bad:"Неверных ответов: ",
+s4:"Вывод",q1:"Объясни суть реакции полимеризации: мономер, инициатор, полимер.",q2:"Где применяется полиметилметакрилат (органическое стекло)?",
+send:"Отправить учителю",sent:"В демо-версии отправка пока не работает. В полной версии работа попадёт на страницу учителя.",empty:"Сначала ответь на вопросы.",min:"мин",st:["жидкость","вязкая","твёрдая"],hp:"электроплитка",th:"термометр",cnd:"обратный холодильник"}};
+let lang="kk",ok=false,temp=22,tmin=0,run=false,tilted=false;const S={mma:0,bpo:0,cond:0,bath:0,on:0,tilt:0};const qv={};
+const $=id=>document.getElementById(id),t=k=>T[lang][k];
+function bub(x,W,y,n,dur){let s="";for(let k=0;k<n;k++){const cx=x+7+(k*11)%(W-14),d=(dur*(.8+(k%5)/10)).toFixed(2);s+=`<circle class="bub" cx="${cx}" cy="${y}" r="${1.6+(k%3)}" fill="#fff" stroke="#9fb7c7" style="--d:${d}s;--dl:${(-k*dur/n).toFixed(2)}s"/>`}return s}
+function render(){let h="";const inB=S.bath,ty=S.tilt?-150:inB?0:-110;
+  h+=`<rect x="40" y="415" width="300" height="12" rx="3" fill="#64748b"/><rect x="70" y="40" width="8" height="377" fill="#94a3b8"/>`;
+  // hotplate
+  h+=`<path d="M150 400l12-40h196l12 40z" fill="#cbd5e1" stroke="#64748b" stroke-width="2"/><rect x="170" y="350" width="180" height="12" rx="3" fill="${S.on?"#ef4444":"#475569"}"/><circle cx="185" cy="382" r="6" fill="#334155"/><circle cx="335" cy="382" r="6" fill="#334155"/><text x="260" y="436" text-anchor="middle" font-size="11" fill="var(--mute)">${t("hp")}</text>`;
+  // water bath beaker
+  h+=`<path d="M190 210v128q0 12 12 12h116q12 0 12-12V210" fill="var(--glass)" stroke="var(--glassline)" stroke-width="2.5"/><rect x="192" y="245" width="136" height="103" fill="rgba(191,219,254,.55)"/>`;if(S.on&&temp>90)h+=bub(195,130,345,14,.9);
+  // test tube with condenser
+  const tx=232,W=36,TOP=150+ty,BOT=320+ty,lv=S.mma?44:0;const g=`<g transform="${S.tilt?`rotate(-60 ${tx+W/2} ${BOT-20})`:""}">`;
+  const stc=tmin>=9?2:tmin>=4?1:0,lc=stc===2?"rgba(165,200,240,.95)":stc===1?"rgba(253,246,214,.9)":"rgba(254,249,231,.8)";
+  h+=g+`<clipPath id="tt"><rect x="${tx}" y="${TOP}" width="${W}" height="${BOT-TOP}" rx="${W/2}"/><rect x="${tx}" y="${TOP}" width="${W}" height="${(BOT-TOP)/2}"/></clipPath><g clip-path="url(#tt)"><rect x="${tx}" y="${TOP}" width="${W}" height="${BOT-TOP}" fill="var(--glass)"/>${lv?(S.tilt&&stc<2?`<path d="M${tx} ${BOT-lv}h${W}v${lv}h-${W}z" fill="${lc}"/>`:`<rect x="${tx}" y="${BOT-lv}" width="${W}" height="${lv}" fill="${lc}"/>`):""}${S.bpo?[0,1,2,3].map(k=>`<circle cx="${tx+8+k*7}" cy="${BOT-8-(k%2)*5}" r="2.4" fill="#fff" stroke="#cbd5e1"/>`).join(""):""}${stc===2?`<path d="M${tx+8} ${BOT-lv+6}l6 30" stroke="#fff" stroke-width="3" opacity=".8"/>`:""}</g><path d="M${tx} ${TOP-6}V${BOT-W/2}a${W/2} ${W/2} 0 0 0 ${W} 0V${TOP-6}" fill="none" stroke="var(--glassline)" stroke-width="2.4"/>`;
+  if(S.cond)h+=`<rect x="${tx+4}" y="${TOP-10}" width="${W-8}" height="14" rx="3" fill="#3f3f46"/><rect x="${tx+W/2-4}" y="${TOP-130}" width="8" height="122" fill="rgba(200,228,242,.85)" stroke="var(--glassline)"/>`;h+=`</g>`;
+  if(S.cond&&!S.tilt)h+=`<rect x="78" y="${TOP+10}" width="${tx-78+4}" height="8" fill="#94a3b8"/><rect x="${tx-6}" y="${TOP+4}" width="${W+12}" height="20" rx="4" fill="none" stroke="#64748b" stroke-width="3"/>`;
+  // thermometer
+  if(inB){h+=`<rect x="292" y="140" width="10" height="200" rx="5" fill="#f8fafc" stroke="#94a3b8"/><circle cx="297" cy="336" r="8" fill="#ef4444"/><rect x="295" y="${336-(temp-10)*1.8}" width="4" height="${(temp-10)*1.8}" fill="#ef4444"/><text x="312" y="160" font-size="14" font-weight="700" fill="var(--ink)">${Math.round(temp)} °C</text><text x="312" y="176" font-size="11" fill="var(--mute)">${t("th")}</text>`}
+  if(S.on){h+=`<text x="430" y="70" text-anchor="middle" font-size="30" font-weight="700" fill="var(--acc)">${tmin.toFixed(0)} ${t("min")}</text><text x="430" y="100" text-anchor="middle" font-size="15" font-weight="700" fill="var(--ink)">${t("st")[stc]}</text>`;[0,1,2].forEach(k=>h+=`<rect x="${370+k*42}" y="112" width="38" height="10" rx="4" fill="${k<=stc?"#0f766e":"var(--line)"}"/>`)}
+  if(S.cond&&!S.tilt)h+=`<text x="${tx+W/2+14}" y="${TOP-100}" font-size="11" fill="var(--mute)">${t("cnd")}</text>`;
+  $("scene").innerHTML=h}
+function opts(arr,v){return arr.map((s,i)=>`<option value="${i||""}" ${String(v||"")===String(i||"")?"selected":""}>${s}</option>`).join("")}
+function renderQ(){$("qs").innerHTML=t("qs").map((q,i)=>`<label style="margin-top:6px"><span>${q[0]}</span><select data-q="${i}">${opts(q[1],qv[i])}</select></label>`).join("")}
+function renderSteps(){const g=$("goggles").checked;$("st1").classList.toggle("off",!g);$("st2").classList.toggle("off",!(g&&S.bath));
+  const ORD=["mma","bpo","cond","bath","on"];document.querySelectorAll("[data-b]").forEach(b=>{const k=b.dataset.b;let en;const i=ORD.indexOf(k);if(i>=0)en=i===0||S[ORD[i-1]];else en=tmin>=10&&!run;b.disabled=!!S[k]||!en||run;b.classList.toggle("done",!!S[k])});
+  $("st3").classList.toggle("off",!S.tilt);$("st4").classList.toggle("off",!ok)}
+function applyLang(){document.documentElement.lang=lang;
+  document.querySelectorAll("[data-i]").forEach(el=>{const v=T[lang][el.dataset.i];if(typeof v==="string")el.textContent=v});
+  $("l-kk").classList.toggle("on",lang==="kk");$("l-ru").classList.toggle("on",lang==="ru");
+  document.querySelectorAll(".msg").forEach(m=>m.textContent="");render();renderQ();renderSteps()}
+function msg(id,text,okk){const m=$(id);m.textContent=text;m.className="msg "+(okk?"ok":"bad")}
+$("l-kk").onclick=()=>{lang="kk";applyLang()};$("l-ru").onclick=()=>{lang="ru";applyLang()};
+$("goggles").onchange=renderSteps;
+document.querySelector(".grid").addEventListener("click",e=>{const b=e.target.closest("[data-b]");if(!b||b.disabled)return;const k=b.dataset.b;S[k]=1;
+  if(k==="on"){run=true;msg("m2",t("run1"),true);const iv=setInterval(()=>{if(temp<96){temp=Math.min(96,temp+6)}else{tmin=Math.min(10,tmin+0.5);msg("m2",tmin>=10?t("run3"):t("run2"),true)}render();if(tmin>=10){clearInterval(iv);run=false;renderSteps()}},180);renderSteps();return}
+  if(k==="tilt")msg("m2",t("tiltm"),true);render();renderSteps()});
+document.querySelector(".grid").addEventListener("change",e=>{const s=e.target;if(s.dataset.q!=null){qv[s.dataset.q]=s.value;s.className=""}});
+$("chk").onclick=()=>{let bad=0;document.querySelectorAll("[data-q]").forEach(s=>{const g=s.value===t("qs")[s.dataset.q][2];s.className=g?"ok":"bad";if(!g)bad++});
+  ok=!bad;renderSteps();ok?msg("m3",t("ok"),true):msg("m3",t("bad")+bad+".",false)};
+$("send").onclick=()=>{const f=$("a1").value.trim()&&$("a2").value.trim();msg("m4",f?t("sent"):t("empty"),!!f)};
+applyLang();
+}
+</script>
+<script src="../embed.js"></script>
+</body>
+</html>

@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="kk">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Виртуалды химия зертханасы</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans:wght@400;600;700&family=Noto+Serif:wght@600;700&display=swap" rel="stylesheet">
+<style>
+:root{color-scheme:light;--bg:#0f4c5c;--sheet:#fff;--ink:#10131a;--mute:#566170;--line:#d5dde5;--soft:#eef5f7;--acc:#0f4c5c;--ok:#12733a;--bad:#b91c1c;--warn:#fff4d6;--new:#f59e0b}
+*{box-sizing:border-box;min-width:0}
+body{margin:0;background:var(--bg);color:var(--ink);font:16px/1.55 "Noto Sans",system-ui,sans-serif;overflow-x:clip}
+.wrap{max-width:1240px;margin:0 auto;padding:clamp(12px,3vw,32px) max(3vw,12px)}
+header{display:flex;flex-wrap:wrap;gap:12px;align-items:center;justify-content:space-between;color:#fff;margin-bottom:16px}
+.brand{display:flex;align-items:center;gap:12px}
+.brand b{font:700 clamp(20px,3vw,28px)/1.1 "Noto Serif",Georgia,serif}
+.brand small{display:block;opacity:.8;font-size:13px}
+.hright{display:flex;gap:10px;align-items:center;flex-wrap:wrap}
+.who{font-size:14px;opacity:.9;text-align:right}
+.lang{display:flex;background:rgba(255,255,255,.14);border-radius:999px;padding:4px}
+.lang button{border:0;background:none;color:#fff;font:600 14px "Noto Sans";padding:7px 14px;border-radius:999px;cursor:pointer;min-height:38px}
+.lang button.on{background:#fff;color:#0f4c5c}
+.hbtn{border:1.5px solid rgba(255,255,255,.5);background:none;color:#fff;font:600 14px "Noto Sans";padding:7px 14px;border-radius:999px;cursor:pointer;min-height:38px}
+.sheet{background:var(--sheet);border-radius:18px;box-shadow:0 18px 40px rgba(0,0,0,.25);padding:clamp(16px,2.6vw,30px)}
+.demo{background:var(--warn);border-radius:12px;padding:10px 14px;margin-bottom:14px;font-size:14px}
+h1{font:700 clamp(22px,3vw,32px)/1.15 "Noto Serif",Georgia,serif;margin:0 0 6px}
+h2{font:700 20px/1.2 "Noto Serif",Georgia,serif;margin:18px 0 8px}
+h3{font:700 16px/1.3 "Noto Sans";margin:14px 0 6px}
+.mute{color:var(--mute);font-size:14px}
+.auth{max-width:560px;margin:0 auto}
+label{display:flex;flex-direction:column;gap:4px;font-size:14px;color:var(--mute);margin-bottom:10px}
+input,select,textarea{font:16px "Noto Sans";color:var(--ink);background:#fff;border:1.5px solid var(--line);border-radius:10px;padding:10px 12px;width:100%}
+input:focus,select:focus,textarea:focus,button:focus-visible{outline:3px solid rgba(15,76,92,.35);outline-offset:1px}
+textarea{min-height:80px;resize:vertical}
+.row{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:0 14px}
+.btn{border:0;border-radius:10px;padding:11px 18px;font:600 15px "Noto Sans";cursor:pointer;min-height:44px;background:var(--acc);color:#fff}
+.btn.ghost{background:var(--soft);color:var(--ink)}
+.btn.small{padding:7px 12px;min-height:36px;font-size:14px}
+.btn.danger{background:#fee2e2;color:var(--bad)}
+.btn.okb{background:#dcfce7;color:var(--ok)}
+.btn:disabled{opacity:.5;cursor:wait}
+.btns{display:flex;flex-wrap:wrap;gap:8px;margin-top:8px}
+.link{background:none;border:0;color:var(--acc);font:600 15px "Noto Sans";cursor:pointer;padding:6px 0;text-decoration:underline}
+.msg{margin:10px 0;font-size:15px;min-height:1.4em}.msg.ok{color:var(--ok)}.msg.bad{color:var(--bad)}
+.classes{display:grid;grid-template-columns:auto repeat(8,minmax(0,1fr));gap:6px;align-items:center;margin:6px 0 12px}
+.classes b{font-size:14px}
+.classes label{margin:0;flex-direction:row;justify-content:center;align-items:center;gap:0;background:var(--soft);border-radius:8px;padding:6px 0;color:var(--ink);font-weight:600;cursor:pointer}
+.classes input{width:16px;height:16px;margin-right:4px}
+.tabs{display:flex;gap:6px;flex-wrap:wrap;border-bottom:1px solid var(--line);margin-bottom:14px}
+.tabs button{border:0;background:none;font:600 15px "Noto Sans";padding:10px 14px;cursor:pointer;color:var(--mute);border-bottom:3px solid transparent;min-height:44px}
+.tabs button.on{color:var(--acc);border-bottom-color:var(--acc)}
+.tabs .cnt{background:var(--new);color:#fff;border-radius:999px;padding:1px 7px;font-size:12px;margin-left:4px}
+.labs{display:grid;grid-template-columns:repeat(auto-fill,minmax(250px,1fr));gap:12px}
+.lab{border:1.5px solid var(--line);border-radius:14px;padding:14px;cursor:pointer;background:#fff;text-align:left;font:inherit;color:inherit;display:flex;flex-direction:column;gap:8px;min-height:120px}
+.lab:hover{border-color:var(--acc)}
+.lab .n{font:700 13px "Noto Sans";color:var(--mute)}
+.lab .t{font-weight:600;line-height:1.3}
+.badge{display:inline-block;font:600 12px "Noto Sans";padding:3px 9px;border-radius:999px;background:var(--soft);color:var(--mute);margin-top:auto;align-self:flex-start}
+.badge.sent{background:#dbeafe;color:#1d4ed8}.badge.fb{background:#dcfce7;color:var(--ok)}.badge.new{background:#fef3c7;color:#92400e}
+.labbar{display:flex;align-items:center;gap:12px;flex-wrap:wrap;margin-bottom:10px}
+.frame{width:100%;border:0;border-radius:14px;display:block;min-height:600px;background:var(--bg)}
+.fbbox{background:#ecfdf5;border:1.5px solid #86efac;border-radius:14px;padding:12px 14px;margin-bottom:12px}
+.fbbox b{color:var(--ok)}
+.tbl{width:100%;border-collapse:collapse;font-size:15px}
+.tbl th,.tbl td{padding:8px 6px;border-bottom:1px solid var(--line);text-align:left;vertical-align:top}
+.tbl th{font-size:13px;color:var(--mute);font-weight:600}
+.scroll{overflow-x:auto}
+.filters{display:flex;gap:10px;flex-wrap:wrap;margin-bottom:10px}
+.filters label{margin:0;min-width:160px}
+.sub{border:1.5px solid var(--line);border-radius:14px;padding:12px 14px;margin-bottom:12px}
+.sub.nofb{border-color:#fcd34d;background:#fffbeb}
+.qa{margin:6px 0;font-size:15px}.qa i{display:block;color:var(--mute);font-style:normal;font-size:13px}
+.qa div{white-space:pre-wrap}
+.temp{background:var(--warn);border-radius:10px;padding:10px 12px;margin:8px 0;font-weight:600}
+.loading{opacity:.6;pointer-events:none}
+.empty{color:var(--mute);padding:20px 0}
+@media(max-width:600px){.row{grid-template-columns:minmax(0,1fr)}.classes{grid-template-columns:auto repeat(4,minmax(0,1fr))}.who{text-align:left}}
+</style>
+</head>
+<body>
+<div class="wrap">
+<header>
+  <div class="brand"><svg width="40" height="40" viewBox="0 0 40 40" aria-hidden="true"><path d="M15 4h10M17 4v11L7 33a3 3 0 0 0 2.6 4.5h20.8A3 3 0 0 0 33 33L23 15V4" fill="none" stroke="#fff" stroke-width="2.4" stroke-linejoin="round"/><path d="M11 27h18l3 6H8z" fill="#5cc2d6"/></svg>
+    <div><b id="appTitle">Виртуалды химия зертханасы</b><small id="appSub"></small></div></div>
+  <div class="hright"><div class="who" id="who"></div>
+    <div class="lang"><button id="l-kk" class="on">Қаз</button><button id="l-ru">Рус</button></div>
+    <button class="hbtn" id="logout" hidden></button></div>
+</header>
+<div class="sheet" id="app"><p class="mute">…</p></div>
+</div>
+<script src="config.js"></script>
+<script src="core.js"></script>
+<script src="labs.js"></script>
+<script src="app.js"></script>
+</body>
+</html>

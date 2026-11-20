@@ -1,0 +1,301 @@
+<!DOCTYPE html>
+<html lang="kk">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Металдар мен қышқылдар</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans:wght@400;600;700&family=Noto+Serif:wght@600;700&display=swap" rel="stylesheet">
+<style>
+/* VOICE: calm school lab workbook, clear and encouraging
+   IDEA: a workbench sheet — three test tubes with metal granules under the activity series
+   PICTURE: tubes where hydrogen bubbles rise fast on zinc, slowly on iron, not at all on copper
+   COLOUR and TYPE: white sheet on deep lab-teal; metal colours (zinc grey, iron dark, copper orange); Noto Serif + Noto Sans
+   LAYOUT: steps left, tubes right (sticky); stacks on phones as title, tubes, steps */
+:root{color-scheme:light dark;
+--bg:light-dark(#0f4c5c,#0a2d36);--sheet:light-dark(#ffffff,#13202a);--ink:light-dark(#10131a,#e7edf2);
+--mute:light-dark(#566170,#9fb0bf);--line:light-dark(#d5dde5,#2b3d4b);--soft:light-dark(#eef5f7,#182a35);
+--acc:light-dark(#0f4c5c,#5cc2d6);--ok:light-dark(#12733a,#4ade80);--bad:light-dark(#b91c1c,#f87171);
+--warn:light-dark(#fff4d6,#3a2f12);--glass:light-dark(#f7fbfd,#1d2f3b);--glassline:light-dark(#8aa1b1,#6c8597)}
+:root[data-theme=light]{color-scheme:light}:root[data-theme=dark]{color-scheme:dark}
+*{box-sizing:border-box;min-width:0}
+body{margin:0;background:var(--bg);color:var(--ink);font:16px/1.55 "Noto Sans",system-ui,sans-serif;overflow-x:clip}
+.wrap{max-width:1240px;margin:0 auto;padding:clamp(14px,3vw,36px) max(3vw,12px)}
+header{display:flex;flex-wrap:wrap;gap:12px;align-items:flex-end;justify-content:space-between;color:#fff;margin-bottom:18px}
+header small{display:block;opacity:.8;font-size:14px}
+h1{font:700 clamp(24px,3.6vw,38px)/1.08 "Noto Serif",Georgia,serif;margin:2px 0 0;text-wrap:balance;max-width:24ch}
+.lang{display:flex;background:rgba(255,255,255,.14);border-radius:999px;padding:4px}
+.lang button{border:0;background:none;color:#fff;font:600 15px "Noto Sans";padding:8px 16px;border-radius:999px;cursor:pointer;min-height:40px}
+.lang button.on{background:#fff;color:#0f4c5c}
+.sheet{background:var(--sheet);border-radius:18px;box-shadow:0 18px 40px rgba(0,0,0,.25);padding:clamp(16px,2.6vw,30px)}
+.note{font-size:13px;color:var(--mute);margin:0 0 10px}
+.goal{margin:0 0 6px;max-width:70ch}
+.reag{margin:0 0 16px;color:var(--mute);font-size:15px;max-width:70ch}
+.safety{display:flex;gap:12px;align-items:center;flex-wrap:wrap;background:var(--warn);border-radius:12px;padding:12px 14px;margin-bottom:18px}
+.safety p{margin:0;flex:1 1 260px;font-weight:600}
+.safety label{flex-direction:row;align-items:center;gap:8px;color:var(--ink);font-weight:600;cursor:pointer}
+.safety input{width:22px;height:22px}
+.grid{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:clamp(16px,3vw,36px);align-items:start}
+.step{border-top:1px solid var(--line);padding:16px 0}
+.step:first-child{border-top:0;padding-top:0}
+.step.off{opacity:.45;pointer-events:none}
+h2{font:700 20px/1.2 "Noto Serif",Georgia,serif;margin:0 0 6px}
+.hint{color:var(--mute);font-size:15px;margin:0 0 12px}
+label{font-size:14px;color:var(--mute);display:flex;flex-direction:column;gap:4px}
+input,textarea,select{font:16px "Noto Sans";color:var(--ink);background:var(--sheet);border:1.5px solid var(--line);border-radius:10px;padding:10px 12px;width:100%}
+input:focus,textarea:focus,select:focus,button:focus-visible{outline:3px solid color-mix(in srgb,var(--acc) 45%,transparent);outline-offset:1px}
+.ok{border-color:var(--ok)!important}.bad{border-color:var(--bad)!important}
+textarea{min-height:76px;resize:vertical}
+.btns{display:flex;flex-wrap:wrap;gap:10px;margin-top:12px}
+.btn{border:0;border-radius:10px;padding:11px 18px;font:600 15px "Noto Sans";cursor:pointer;min-height:44px;background:var(--acc);color:light-dark(#fff,#08202a)}
+.btn.ghost{background:var(--soft);color:var(--ink)}
+.btn:disabled{opacity:.45;cursor:not-allowed}
+.seg{display:inline-flex;background:var(--soft);border-radius:10px;padding:4px;gap:4px}
+.seg button{border:0;background:none;color:var(--ink);font:600 15px "Noto Sans";padding:8px 14px;border-radius:8px;cursor:pointer;min-height:40px}
+.seg button.on{background:var(--sheet);box-shadow:0 1px 4px rgba(0,0,0,.15)}
+.msg{margin-top:10px;font-size:15px;min-height:1.5em}
+.msg.ok{color:var(--ok)}.msg.bad{color:var(--bad)}
+.board{position:sticky;top:12px}
+.series{background:var(--soft);border-radius:14px;padding:10px 12px;margin-bottom:12px}
+.series small{display:block;color:var(--mute);font-size:13px;margin-bottom:6px}
+.srow{display:flex;flex-wrap:wrap;gap:4px}
+.srow span{font:700 14px "Noto Sans";padding:4px 7px;border-radius:6px;background:var(--sheet);border:1px solid var(--line)}
+.srow span.h{background:#fde68a;color:#10131a;border-color:#f59e0b}
+.srow span.m{outline:2px solid var(--acc)}
+.rackbox{background:var(--soft);border-radius:16px;padding:10px}
+.rackbox svg{display:block;width:100%;height:auto;max-width:520px;margin:0 auto}
+.tube{cursor:pointer}
+.liq{transition:height 1s ease,y 1s ease,fill 5s ease}
+.bub{animation:rise var(--d) linear infinite;animation-delay:var(--dl);opacity:0}
+@keyframes rise{0%{transform:translateY(0);opacity:0}10%{opacity:.95}100%{transform:translateY(var(--h));opacity:0}}
+@media(prefers-reduced-motion:reduce){.bub{animation:none;opacity:.8}.liq{transition:none}}
+.tray{display:flex;gap:10px;justify-content:center;flex-wrap:wrap;margin-top:12px}
+.chip{display:flex;align-items:center;gap:8px;border:2px solid var(--line);background:var(--sheet);color:var(--ink);border-radius:999px;padding:6px 16px 6px 6px;font:600 15px "Noto Sans";cursor:pointer;min-height:48px}
+.chip i{width:30px;height:30px;border-radius:50%;display:grid;place-items:center;font:700 12px "Noto Sans";font-style:normal;color:#fff}
+.chip.sel{border-color:var(--acc);background:var(--soft)}
+.chip:disabled{opacity:.4;cursor:default}
+table{width:100%;border-collapse:collapse;font-size:15px}
+th,td{padding:6px;border-bottom:1px solid var(--line);text-align:left;vertical-align:middle}
+th{font-size:13px;color:var(--mute);font-weight:600}
+td select{padding:8px}
+.eq{display:flex;flex-wrap:wrap;align-items:center;gap:6px;font:600 17px "Noto Serif",serif;margin-bottom:10px}
+.eq input{width:50px;padding:6px;text-align:center;font:600 16px "Noto Sans"}
+.eq select{width:auto;padding:6px 8px;font:600 16px "Noto Sans"}
+.eq label{flex-direction:row;align-items:center;gap:6px;font:600 15px "Noto Sans";color:var(--ink)}
+.eq label input{width:22px;height:22px}
+.q{margin-bottom:10px}
+@media(max-width:860px){.grid{grid-template-columns:minmax(0,1fr)}.board{position:static;order:-1}}
+@media(max-width:600px){.stack thead{display:none}.stack tr{display:grid;padding-block:8px}.stack td{border:0;padding:3px 0}}
+</style>
+</head>
+<body>
+<div class="wrap">
+<header>
+  <div><small data-i="lab"></small><h1 data-i="title"></h1></div>
+  <div class="lang" role="group" aria-label="Тіл"><button id="l-kk" class="on">Қазақша</button><button id="l-ru">Русский</button></div>
+</header>
+<div class="sheet">
+  <p class="note" data-i="demo"></p>
+  <p class="goal" data-i="goal"></p>
+  <p class="reag" data-i="reag"></p>
+  <div class="safety">
+    <svg width="34" height="34" viewBox="0 0 34 34" aria-hidden="true"><path d="M17 3 32 30H2Z" fill="#f59e0b"/><rect x="15.5" y="11" width="3" height="11" rx="1.5" fill="#fff"/><circle cx="17" cy="26" r="1.8" fill="#fff"/></svg>
+    <p data-i="safe"></p>
+    <label><input type="checkbox" id="goggles"><span data-i="safeok"></span></label>
+  </div>
+  <div class="grid">
+    <div>
+      <section class="step" id="st1">
+        <h2 data-i="s1"></h2>
+        <p class="hint" data-i="s1h"></p>
+        <div class="msg" id="m1" aria-live="polite"></div>
+      </section>
+      <section class="step" id="st2">
+        <h2 data-i="s2"></h2>
+        <p class="hint" data-i="s2h"></p>
+        <table class="stack"><thead><tr><th data-i="metal"></th><th data-i="pred"></th></tr></thead><tbody id="ptbl"></tbody></table>
+        <div class="btns"><button class="btn" id="chk2" data-i="save"></button></div>
+        <div class="msg" id="m2" aria-live="polite"></div>
+      </section>
+      <section class="step" id="st3">
+        <h2 data-i="s3"></h2>
+        <p class="hint" data-i="s3h"></p>
+        <div class="seg" id="acid"><button data-a="HCl" class="on">HCl</button><button data-a="H2SO4">H₂SO₄</button></div>
+        <div class="btns"><button class="btn" id="pour" data-i="pourbtn"></button></div>
+        <div class="msg" id="m3" aria-live="polite"></div>
+      </section>
+      <section class="step" id="st4">
+        <h2 data-i="s4"></h2>
+        <p class="hint" data-i="s4h"></p>
+        <table class="stack"><thead><tr><th data-i="metal"></th><th data-i="obs"></th></tr></thead><tbody id="otbl"></tbody></table>
+        <div class="btns"><button class="btn" id="chk4" data-i="check"></button></div>
+        <div class="msg" id="m4" aria-live="polite"></div>
+      </section>
+      <section class="step" id="st5">
+        <h2 data-i="s5"></h2>
+        <p class="hint" data-i="s5h"></p>
+        <div id="eqs"></div>
+        <div class="btns"><button class="btn" id="chk5" data-i="check"></button></div>
+        <div class="msg" id="m5" aria-live="polite"></div>
+      </section>
+      <section class="step" id="st6">
+        <h2 data-i="s6"></h2>
+        <div class="q"><label><span data-i="q1"></span><textarea id="a1"></textarea></label></div>
+        <div class="q"><label><span data-i="q2"></span><textarea id="a2"></textarea></label></div>
+        <div class="btns"><button class="btn" id="send" data-i="send"></button></div>
+        <div class="msg" id="m6" aria-live="polite"></div>
+      </section>
+    </div>
+    <div class="board">
+      <div class="series"><small data-i="series"></small><div class="srow" id="srow"></div></div>
+      <div class="rackbox"><svg id="rack" viewBox="0 0 480 360" aria-label="tubes"></svg></div>
+      <div class="tray" id="tray"></div>
+    </div>
+  </div>
+</div>
+</div>
+<script>
+{
+const T={
+kk:{lab:"3-зертханалық тәжірибе",title:"Металдардың қышқыл ерітінділерімен әрекеттесуі",demo:"Үлгі нұсқа: тіркелу және жұмысты мұғалімге жіберу толық сайтта қосылады.",
+goal:"Мақсаты: металдардың кернеулік қатарындағы орнына қарай олардың қышқылдармен әрекеттесу мүмкіндігін болжап, тәжірибе арқылы тексеру.",
+reag:"Реактивтер: мыс, мырыш, темір; тұз немесе күкірт қышқылының ерітінділері. Құрал-жабдықтар: сынауықтар, сынауық ұстағыш.",
+safe:"Қышқылдармен сақ жұмыс істе: қорғау көзілдірігін ки, қышқыл теріге тисе, көп сумен жу.",safeok:"Көзілдірікті кидім",
+series:"Металдардың кернеулік қатары (сутекке дейінгі металдар қышқылдан сутекті ығыстырады)",
+s1:"1-қадам. Металдарды сынауықтарға сал",s1h:"Төмендегі металды таңдап, бос сынауықты бас. Үш сынауыққа мырыш, темір және мыс түйірлерін сал.",
+placed:"Барлық металдар сынауықтарға салынды.",
+s2:"2-қадам. Болжам жаса",s2h:"Кернеулік қатарына қарап, әр металдың қышқылмен әрекеттесетінін болжа.",
+metal:"Металл",pred:"Болжам",obs:"Бақылау",save:"Болжамды сақтау",saved:"Болжам сақталды. Енді тексеріп көр!",fill:"Барлық жолды толтыр.",
+popt:["— таңда —","Реакция жүреді","Реакция жүрмейді"],
+s3:"3-қадам. Қышқыл құй",s3h:"Қышқылды таңда да, әр сынауыққа 2 мл құй. Сынауықтарды мұқият бақыла.",
+pourbtn:"Әр сынауыққа 2 мл қышқыл құю",poured:"Қышқыл құйылды. Сынауықтарда не болып жатыр?",
+s4:"4-қадам. Бақылауыңды жаз",s4h:"Әр сынауықта реакция қалай жүріп жатқанын таңда.",
+oopt:["— таңда —","Газ қарқынды бөлінеді","Газ баяу бөлінеді","Өзгеріс жоқ"],check:"Тексеру",
+ok4:"Дұрыс бақыладың!",bad4:"Сынауықтарға тағы бір қара: ",predok:" Болжамың толық расталды.",predbad:" Болжамыңмен салыстыр: {m} үшін болжам расталмады.",
+s5:"5-қадам. Реакция теңдеулері",s5h:"Коэффициентті жаз (1 болса да) және түзілетін тұзды таңда. Реакция жүрмесе, белгіле.",
+none:"Реакция жүрмейді",ok5:"Теңдеулер дұрыс!",bad5:"Мына теңдеуде қате бар: ",
+s6:"6-қадам. Зертхана журналы",q1:"Байқаған құбылысты түсіндір: неге мырыш пен темір әрекеттесті, ал мыс әрекеттеспеді? Неге мырыш темірге қарағанда тезірек әрекеттесті?",q2:"Қорытынды",
+send:"Мұғалімге жіберу",sent:"Үлгіде жіберу әлі жұмыс істемейді. Толық сайтта жұмыс мұғалімнің бетіне түседі.",empty:"Алдымен журналдың барлық сұрағына жауап бер.",
+Zn:"Мырыш",Fe:"Темір",Cu:"Мыс",pick:"Металды таңда"},
+ru:{lab:"Лабораторный опыт №3",title:"Взаимодействие металлов с растворами кислот",demo:"Демо-версия: регистрация и отправка работы учителю появятся в полной версии сайта.",
+goal:"Цель: по положению металлов в ряду напряжений предсказать, реагируют ли они с кислотами, и проверить это на опыте.",
+reag:"Реактивы: медь, цинк, железо; растворы соляной или серной кислоты. Оборудование: пробирки, держатель для пробирок.",
+safe:"Осторожно с кислотами: надень защитные очки; если кислота попала на кожу, промой большим количеством воды.",safeok:"Очки надеты",
+series:"Электрохимический ряд напряжений металлов (металлы до водорода вытесняют водород из кислот)",
+s1:"Шаг 1. Помести металлы в пробирки",s1h:"Выбери металл внизу и нажми на пустую пробирку. Положи в три пробирки гранулы цинка, железа и меди.",
+placed:"Все металлы помещены в пробирки.",
+s2:"Шаг 2. Сделай прогноз",s2h:"По ряду напряжений предскажи, будет ли каждый металл реагировать с кислотой.",
+metal:"Металл",pred:"Прогноз",obs:"Наблюдение",save:"Сохранить прогноз",saved:"Прогноз сохранён. Теперь проверь!",fill:"Заполни все строки.",
+popt:["— выбери —","Реакция идёт","Реакция не идёт"],
+s3:"Шаг 3. Прилей кислоту",s3h:"Выбери кислоту и прилей по 2 мл в каждую пробирку. Внимательно наблюдай.",
+pourbtn:"Прилить по 2 мл кислоты",poured:"Кислота прилита. Что происходит в пробирках?",
+s4:"Шаг 4. Запиши наблюдения",s4h:"Выбери, как идёт реакция в каждой пробирке.",
+oopt:["— выбери —","Газ выделяется бурно","Газ выделяется медленно","Изменений нет"],check:"Проверить",
+ok4:"Наблюдения верны!",bad4:"Посмотри ещё раз на пробирки: ",predok:" Твой прогноз полностью подтвердился.",predbad:" Сравни с прогнозом: для металла {m} прогноз не подтвердился.",
+s5:"Шаг 5. Уравнения реакций",s5h:"Напиши коэффициент (пиши и 1) и выбери образующуюся соль. Если реакция не идёт, отметь это.",
+none:"Реакция не идёт",ok5:"Уравнения верны!",bad5:"Ошибка в уравнении: ",
+s6:"Шаг 6. Лабораторный журнал",q1:"Объясни наблюдения: почему цинк и железо реагировали, а медь нет? Почему цинк реагировал быстрее железа?",q2:"Вывод",
+send:"Отправить учителю",sent:"В демо-версии отправка пока не работает. В полной версии работа попадёт на страницу учителя.",empty:"Сначала ответь на все вопросы журнала.",
+Zn:"Цинк",Fe:"Железо",Cu:"Медь",pick:"Выбери металл"}};
+const M={Zn:{col:"#9aa6b2",dark:"#6b7785",rate:2,bub:16,dur:1.4},Fe:{col:"#5b6168",dark:"#3b4046",rate:1,bub:5,dur:2.8},Cu:{col:"#c8733a",dark:"#9a4f20",rate:0,bub:0,dur:0}};
+const SALT={HCl:{Zn:["ZnCl₂","ZnCl","ZnCl₃"],Fe:["FeCl₂","FeCl₃","FeCl"]},H2SO4:{Zn:["ZnSO₄","Zn₂SO₄","Zn(SO₄)₂"],Fe:["FeSO₄","Fe₂(SO₄)₃","Fe(SO₄)₂"]}};
+const SERIES=["Li","K","Ca","Na","Mg","Al","Zn","Fe","Ni","Sn","Pb","(H₂)","Cu","Hg","Ag","Pt","Au"];
+let lang="kk",sel=null,acid="HCl",phase=0,done2=false,done4=false,done5=false;
+const tubes=[null,null,null],pred={},obs={},eqv={};
+const $=id=>document.getElementById(id),t=k=>T[lang][k];
+const X=[70,210,350],W=60,TOP=60,BOT=300,LIQ=110;
+function metalBlob(x,m,seed){let s="";const pts=[[x+16,BOT-14,11],[x+34,BOT-12,10],[x+25,BOT-28,9],[x+44,BOT-26,7]];
+  pts.forEach(([cx,cy,r],i)=>{s+=`<ellipse cx="${cx}" cy="${cy}" rx="${r}" ry="${r*.8}" fill="${M[m].col}" stroke="${M[m].dark}" stroke-width="1.5"/><ellipse cx="${cx-r/3}" cy="${cy-r/3}" rx="${r/3}" ry="${r/4}" fill="#fff" opacity=".35"/>`});return s}
+function bubbles(x,m){if(phase<1||!M[m].rate)return"";let s="";const n=M[m].bub;
+  for(let i=0;i<n;i++){const cx=x+10+((i*37)%40),r=2+((i*13)%3),d=(M[m].dur*(0.8+((i*7)%5)/10)).toFixed(2),dl=(-(i*M[m].dur/n)).toFixed(2);
+    s+=`<circle class="bub" cx="${cx}" cy="${BOT-30}" r="${r}" fill="#fff" stroke="light-dark(#9fb7c7,#7fa0b4)" style="--d:${d}s;--dl:${dl}s;--h:-${LIQ-20}px"/>`}return s}
+function liqCol(m){if(phase<1)return"rgba(190,220,235,.0)";if(m==="Fe")return"rgba(160,205,150,.55)";return"rgba(200,228,242,.5)"}
+function renderRack(){
+  let h="";
+  tubes.forEach((m,i)=>{const x=X[i],lh=phase>=1?LIQ:0;
+    h+=`<g class="tube" data-i="${i}"><clipPath id="c${i}"><rect x="${x}" y="${TOP}" width="${W}" height="${BOT-TOP}" rx="${W/2}"/><rect x="${x}" y="${TOP}" width="${W}" height="${(BOT-TOP)/2}"/></clipPath>
+    <g clip-path="url(#c${i})"><rect x="${x}" y="${TOP}" width="${W}" height="${BOT-TOP}" fill="var(--glass)"/>
+    <rect class="liq" x="${x}" y="${BOT-lh}" width="${W}" height="${lh}" fill="${m?liqCol(m):"transparent"}"/>
+    ${m?metalBlob(x,m):""}${m?bubbles(x,m):""}</g>
+    <path d="M${x} ${TOP-8}V${BOT-W/2}a${W/2} ${W/2} 0 0 0 ${W} 0V${TOP-8}" fill="none" stroke="var(--glassline)" stroke-width="2.5"/>
+    <rect x="${x-5}" y="${TOP-12}" width="${W+10}" height="7" rx="3" fill="var(--glassline)"/>
+    <rect x="${x+8}" y="${TOP+10}" width="5" height="${BOT-TOP-60}" rx="2" fill="#fff" opacity=".45"/>
+    <text x="${x+W/2}" y="${TOP-22}" text-anchor="middle" font-size="14" font-weight="700" fill="var(--mute)">${i+1}</text>
+    <text x="${x+W/2}" y="${BOT+34}" text-anchor="middle" font-size="15" font-weight="700" fill="var(--ink)">${m?m:"—"}</text>
+    ${phase>=1&&m?`<text x="${x+W/2}" y="${BOT+52}" text-anchor="middle" font-size="12" fill="var(--mute)">${acid==="HCl"?"HCl":"H₂SO₄"}</text>`:""}</g>`});
+  h+=`<rect x="40" y="${BOT-80}" width="400" height="12" rx="4" style="fill:light-dark(#b7c4cd,#3a4b57)" opacity=".7"/>`;
+  $("rack").innerHTML=h;
+}
+function renderTray(){
+  $("tray").innerHTML=Object.keys(M).map(m=>`<button class="chip${sel===m?" sel":""}" data-m="${m}" ${tubes.includes(m)?"disabled":""}><i style="background:${M[m].col};color:${m==="Zn"?"#10131a":"#fff"}">${m}</i>${t(m)}</button>`).join("");
+  $("tray").style.display=phase>=1?"none":"flex";
+}
+function renderSeries(){$("srow").innerHTML=SERIES.map(s=>`<span class="${s==="(H₂)"?"h":["Zn","Fe","Cu"].includes(s)?"m":""}">${s}</span>`).join("")}
+function opts(arr,v){return arr.map((s,i)=>`<option value="${i||""}" ${String(v||"")===String(i||"")?"selected":""}>${s}</option>`).join("")}
+function order(){return tubes.filter(Boolean)}
+function renderTables(){
+  $("ptbl").innerHTML=order().map(m=>`<tr><td><b>${m}</b> — ${t(m)}</td><td><select data-p="${m}" ${done2?"disabled":""}>${opts(t("popt"),pred[m])}</select></td></tr>`).join("");
+  $("otbl").innerHTML=order().map(m=>`<tr><td><b>${m}</b> — ${t(m)}</td><td><select data-o="${m}" ${done4?"disabled":""}>${opts(t("oopt"),obs[m])}</select></td></tr>`).join("");
+}
+function renderEqs(){
+  const a=acid==="HCl"?"HCl":"H₂SO₄";
+  $("eqs").innerHTML=["Zn","Fe","Cu"].map(m=>{const e=eqv[m]||{};
+    if(m==="Cu")return`<div class="eq" data-eq="Cu">Cu + ${a} → <label><input type="checkbox" id="cuno" ${e.no?"checked":""}>${t("none")}</label></div>`;
+    return`<div class="eq" data-eq="${m}">${m} + <input id="k${m}" inputmode="numeric" value="${e.k||""}" aria-label="k"> ${a} → <select id="s${m}"><option value="">?</option>${SALT[acid][m].map((s,i)=>`<option value="${i+1}" ${String(e.s)===String(i+1)?"selected":""}>${s}</option>`).join("")}</select> + H₂↑</div>`}).join("");
+}
+function renderSteps(){
+  const g=$("goggles").checked;
+  $("st1").classList.toggle("off",!g);
+  $("st2").classList.toggle("off",order().length<3);
+  $("st3").classList.toggle("off",!done2);$("pour").disabled=phase>=1;
+  document.querySelectorAll("#acid button").forEach(b=>{b.classList.toggle("on",b.dataset.a===acid);b.disabled=phase>=1});
+  $("st4").classList.toggle("off",phase<1);
+  $("st5").classList.toggle("off",!done4);
+  $("st6").classList.toggle("off",!done5);
+}
+function applyLang(){
+  document.documentElement.lang=lang;
+  document.querySelectorAll("[data-i]").forEach(el=>{const v=T[lang][el.dataset.i];if(typeof v==="string")el.textContent=v});
+  $("l-kk").classList.toggle("on",lang==="kk");$("l-ru").classList.toggle("on",lang==="ru");
+  document.querySelectorAll(".msg").forEach(m=>m.textContent="");
+  renderAll();
+}
+function renderAll(){renderSeries();renderRack();renderTray();renderTables();renderEqs();renderSteps()}
+function msg(id,text,ok){const m=$(id);m.textContent=text;m.className="msg "+(ok?"ok":"bad")}
+
+$("l-kk").onclick=()=>{lang="kk";applyLang()};$("l-ru").onclick=()=>{lang="ru";applyLang()};
+$("goggles").onchange=renderSteps;
+$("tray").onclick=e=>{const b=e.target.closest(".chip");if(!b||b.disabled)return;sel=sel===b.dataset.m?null:b.dataset.m;renderTray()};
+$("rack").addEventListener("click",e=>{
+  const g=e.target.closest(".tube");if(!g||phase>=1||!$("goggles").checked)return;const i=Number(g.dataset.i);
+  if(tubes[i]&&!sel){tubes[i]=null}else if(sel&&!tubes[i]){tubes[i]=sel;sel=null}else return;
+  done2=false;renderAll();if(order().length===3)msg("m1",t("placed"),true);else $("m1").textContent="";
+});
+$("ptbl").addEventListener("change",e=>{if(e.target.dataset.p)pred[e.target.dataset.p]=e.target.value});
+$("otbl").addEventListener("change",e=>{if(e.target.dataset.o){obs[e.target.dataset.o]=e.target.value;e.target.classList.remove("ok","bad")}});
+$("chk2").onclick=()=>{if(order().some(m=>!pred[m])){msg("m2",t("fill"),false);return}done2=true;msg("m2",t("saved"),true);renderTables();renderSteps()};
+$("acid").onclick=e=>{const b=e.target.closest("button");if(!b||phase>=1)return;acid=b.dataset.a;renderSteps();renderEqs()};
+$("pour").onclick=()=>{phase=1;msg("m3",t("poured"),true);renderRack();renderTray();renderSteps();renderEqs()};
+$("chk4").onclick=()=>{
+  const want={Zn:"1",Fe:"2",Cu:"3"},bad=[];
+  document.querySelectorAll("#otbl select").forEach(s=>{const m=s.dataset.o,ok=s.value===want[m];s.classList.toggle("ok",ok);s.classList.toggle("bad",!ok);if(!ok)bad.push(m)});
+  if(bad.length){msg("m4",t("bad4")+bad.join(", ")+".",false);return}
+  done4=true;const pw={Zn:"1",Fe:"1",Cu:"2"},miss=["Zn","Fe","Cu"].filter(m=>pred[m]!==pw[m]);
+  msg("m4",t("ok4")+(miss.length?t("predbad").replace("{m}",miss.join(", ")):t("predok")),true);renderTables();renderSteps();
+};
+const eqIn=e=>{const d=e.target.closest(".eq");if(!d)return;const m=d.dataset.eq;eqv[m]=eqv[m]||{};
+  if(m==="Cu")eqv.Cu.no=$("cuno").checked;else{eqv[m].k=$("k"+m).value;eqv[m].s=$("s"+m).value}e.target.classList.remove("ok","bad")};
+$("eqs").addEventListener("input",eqIn);$("eqs").addEventListener("change",eqIn);
+$("chk5").onclick=()=>{
+  const kWant=acid==="HCl"?"2":"1",bad=[];
+  for(const m of["Zn","Fe"]){const k=$("k"+m),s=$("s"+m),kOk=k.value.trim()===kWant,sOk=s.value==="1";k.className=kOk?"ok":"bad";s.className=sOk?"ok":"bad";if(!kOk||!sOk)bad.push(m)}
+  const cu=$("cuno").checked;$("cuno").parentElement.style.color=cu?"var(--ok)":"var(--bad)";if(!cu)bad.push("Cu");
+  done5=!bad.length;renderSteps();done5?msg("m5",t("ok5"),true):msg("m5",t("bad5")+bad.join(", ")+".",false);
+};
+$("send").onclick=()=>{const f=["a1","a2"].every(id=>$(id).value.trim());msg("m6",f?t("sent"):t("empty"),f)};
+applyLang();
+}
+</script>
+<script src="../embed.js"></script>
+</body>
+</html>

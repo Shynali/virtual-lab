@@ -1,0 +1,216 @@
+<!DOCTYPE html>
+<html lang="kk">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>ДНҚ моделі</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans:wght@400;600;700&family=Noto+Serif:wght@600;700&display=swap" rel="stylesheet">
+<style>
+/* VOICE: calm school lab workbook, clear and encouraging (grade 7)
+   IDEA: a workbench sheet — two twin tubes, acid and alkali, each with an aluminium granule
+   PICTURE: both tubes starting slowly, then fizzing hard once the oxide film is gone: aluminium reacts with both
+   COLOUR and TYPE: white sheet on deep lab-teal; the universal-indicator rainbow; Noto Serif + Noto Sans
+   LAYOUT: steps left, scene right (sticky) with view switch; stacks on phones */
+:root{color-scheme:light dark;
+--bg:light-dark(#0f4c5c,#0a2d36);--sheet:light-dark(#ffffff,#13202a);--ink:light-dark(#10131a,#e7edf2);
+--mute:light-dark(#566170,#9fb0bf);--line:light-dark(#d5dde5,#2b3d4b);--soft:light-dark(#eef5f7,#182a35);
+--acc:light-dark(#0f4c5c,#5cc2d6);--ok:light-dark(#12733a,#4ade80);--bad:light-dark(#b91c1c,#f87171);
+--warn:light-dark(#fff4d6,#3a2f12);--glass:light-dark(#f7fbfd,#1d2f3b);--glassline:light-dark(#8aa1b1,#6c8597)}
+:root[data-theme=light]{color-scheme:light}:root[data-theme=dark]{color-scheme:dark}
+*{box-sizing:border-box;min-width:0}
+body{margin:0;background:var(--bg);color:var(--ink);font:16px/1.55 "Noto Sans",system-ui,sans-serif;overflow-x:clip}
+.wrap{max-width:1240px;margin:0 auto;padding:clamp(14px,3vw,36px) max(3vw,12px)}
+header{display:flex;flex-wrap:wrap;gap:12px;align-items:flex-end;justify-content:space-between;color:#fff;margin-bottom:18px}
+header small{display:block;opacity:.8;font-size:14px}
+h1{font:700 clamp(24px,3.6vw,38px)/1.08 "Noto Serif",Georgia,serif;margin:2px 0 0;text-wrap:balance;max-width:26ch}
+.lang{display:flex;background:rgba(255,255,255,.14);border-radius:999px;padding:4px}
+.lang button{border:0;background:none;color:#fff;font:600 15px "Noto Sans";padding:8px 16px;border-radius:999px;cursor:pointer;min-height:40px}
+.lang button.on{background:#fff;color:#0f4c5c}
+.sheet{background:var(--sheet);border-radius:18px;box-shadow:0 18px 40px rgba(0,0,0,.25);padding:clamp(16px,2.6vw,30px)}
+.note{font-size:13px;color:var(--mute);margin:0 0 10px}
+.goal{margin:0 0 6px;max-width:70ch}
+.reag{margin:0 0 16px;color:var(--mute);font-size:15px;max-width:70ch}
+.safety{display:flex;gap:12px;align-items:center;flex-wrap:wrap;background:var(--warn);border-radius:12px;padding:12px 14px;margin-bottom:18px}
+.safety p{margin:0;flex:1 1 260px;font-weight:600}
+.safety label{flex-direction:row;align-items:center;gap:8px;color:var(--ink);font-weight:600;cursor:pointer}
+.grid{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1.05fr);gap:clamp(16px,3vw,36px);align-items:start}
+.step{border-top:1px solid var(--line);padding:14px 0}
+.step:first-child{border-top:0;padding-top:0}
+.step.off{opacity:.45;pointer-events:none}
+h2{font:700 19px/1.2 "Noto Serif",Georgia,serif;margin:0 0 6px}
+.hint{color:var(--mute);font-size:15px;margin:0 0 8px}
+label{font-size:14px;color:var(--mute);display:flex;flex-direction:column;gap:4px}
+textarea,select{font:16px "Noto Sans";color:var(--ink);background:var(--sheet);border:1.5px solid var(--line);border-radius:10px;padding:10px 12px;width:100%}
+textarea:focus,select:focus,button:focus-visible{outline:3px solid color-mix(in srgb,var(--acc) 45%,transparent);outline-offset:1px}
+.ok{border-color:var(--ok)!important}.bad{border-color:var(--bad)!important}
+textarea{min-height:76px;resize:vertical}
+.btns{display:flex;flex-wrap:wrap;gap:8px;margin-top:8px}
+.btn{border:0;border-radius:10px;padding:10px 14px;font:600 15px "Noto Sans";cursor:pointer;min-height:44px;background:var(--acc);color:light-dark(#fff,#08202a)}
+.btn.done{background:var(--soft);color:var(--ok)}
+.btn:disabled{opacity:.45;cursor:not-allowed}.btn.done:disabled{opacity:1}
+.msg{margin-top:8px;font-size:15px;min-height:1.4em}
+.msg.ok{color:var(--ok)}.msg.bad{color:var(--bad)}
+.board{position:sticky;top:12px}
+.seg{display:flex;background:var(--soft);border-radius:10px;padding:4px;gap:4px;margin-bottom:10px}
+.seg button{flex:1;border:0;background:none;color:var(--ink);font:600 14px "Noto Sans";padding:8px 10px;border-radius:8px;cursor:pointer;min-height:40px}
+.seg button.on{background:var(--sheet);box-shadow:0 1px 4px rgba(0,0,0,.15)}
+.seg button:disabled{opacity:.4;cursor:default}
+.rackbox{background:var(--soft);border-radius:16px;padding:10px}
+.rackbox svg{display:block;width:100%;height:auto}
+.mag{transition:transform 1.2s ease}
+.glow{animation:glow 1.4s ease-in-out 2;transform-box:fill-box}
+@keyframes glow{50%{fill:#f97316}}
+.flame{animation:flick .25s ease-in-out infinite alternate;transform-box:fill-box;transform-origin:bottom center}
+@keyframes flick{to{transform:scaleY(1.12) scaleX(.94)}}
+@media(prefers-reduced-motion:reduce){.mag{transition:none}.glow,.flame{animation:none}}
+.scroll{overflow-x:auto}
+.seg{display:flex;background:var(--soft);border-radius:10px;padding:4px;gap:4px;margin-bottom:10px;flex-wrap:wrap}
+.seg button{flex:1;border:0;background:none;color:var(--ink);font:600 14px "Noto Sans";padding:8px 10px;border-radius:8px;cursor:pointer;min-height:40px}
+.seg button.on{background:var(--sheet);box-shadow:0 1px 4px rgba(0,0,0,.15)}
+.brown{transition:opacity 2s ease}.pk{transition:fill 1.6s ease}.ca{transition:transform 4s ease-in-out,opacity 6s ease;transform-box:fill-box;transform-origin:center}.water{animation:fall2 .6s linear infinite}@keyframes fall2{from{transform:translateY(-10px);opacity:.9}to{transform:translateY(30px);opacity:.2}}.eq input{width:44px;padding:6px;text-align:center;font:600 16px "Noto Sans";border:1.5px solid var(--line);border-radius:8px;background:var(--sheet);color:var(--ink)}
+.tray{display:flex;flex-wrap:wrap;gap:8px;margin-top:10px}
+.tray small{width:100%;font-weight:700;color:var(--mute);font-size:13px;margin-top:4px}
+.chip{border:2px solid var(--line);background:var(--sheet);color:var(--ink);border-radius:999px;padding:6px 12px;font:600 14px "Noto Sans";cursor:pointer;min-height:40px}
+.chip.sel{border-color:var(--acc);background:var(--soft)}.chip.done{color:var(--ok)}.chip:disabled{opacity:.4;cursor:default}
+.scroll{overflow-x:auto}td select{padding:6px;font-size:13px}td input{width:70px;padding:6px;text-align:right;font:600 15px "Noto Sans";color:var(--ink);background:var(--sheet);border:1.5px solid var(--line);border-radius:8px}
+.two{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:0 18px}@media(max-width:600px){.two{grid-template-columns:minmax(0,1fr)}}
+.bub{animation:rise var(--d) linear infinite;animation-delay:var(--dl);opacity:0}
+@keyframes rise{0%{transform:translateY(0);opacity:0}10%{opacity:.95}100%{transform:translateY(-80px);opacity:0}}
+.smoke{animation:smoke 2.6s ease-out infinite;opacity:0}
+@keyframes smoke{0%{transform:translateY(0) scale(.6);opacity:0}20%{opacity:.6}100%{transform:translateY(-70px) scale(1.4);opacity:0}}
+@media(prefers-reduced-motion:reduce){.bub,.smoke{animation:none;opacity:.6}}
+table{width:100%;border-collapse:collapse;font-size:14px}
+th,td{padding:5px;border-bottom:1px solid var(--line);text-align:left;vertical-align:middle}
+th{font-size:13px;color:var(--mute);font-weight:600}
+td:first-child{font-weight:600;font-size:14px}
+td select{padding:6px;font-size:13px}
+.eq{display:flex;flex-wrap:wrap;align-items:center;gap:8px;font:600 17px "Noto Sans";margin-bottom:10px}
+.eq select{width:auto;padding:6px 8px;font:600 15px "Noto Sans"}
+.q{margin-bottom:10px}
+.pop{animation:pop .45s ease}@keyframes pop{0%{transform:scale(.3)}70%{transform:scale(1.12)}}.pop{transform-box:fill-box;transform-origin:center}
+.ball{cursor:pointer}.ball:focus-visible{outline:3px solid var(--acc)}
+input[type=range]{width:100%;accent-color:var(--acc);height:32px}.rng{display:flex;align-items:center;gap:12px;margin-top:6px}
+.cpick{cursor:pointer}.cpick:hover circle:first-child{stroke:#16a34a;stroke-width:4}
+.hpick{cursor:pointer}.hpick:hover circle:first-child{stroke:#16a34a;stroke-width:4}
+.fade{animation:fade 2.6s ease forwards}@keyframes fade{to{opacity:0}}
+.stir{animation:stir .5s ease-in-out 5;transform-box:fill-box;transform-origin:top center}@keyframes stir{50%{transform:rotate(9deg)}}
+@media(max-width:860px){.grid{grid-template-columns:minmax(0,1fr)}.board{position:static;order:-1}}
+</style>
+</head>
+<body>
+<div class="wrap">
+<header>
+  <div><small data-i="lab"></small><h1 data-i="title"></h1></div>
+  <div class="lang" role="group" aria-label="Тіл"><button id="l-kk" class="on">Қазақша</button><button id="l-ru">Русский</button></div>
+</header>
+<div class="sheet">
+  <p class="note" data-i="demo"></p>
+  <p class="goal" data-i="goal"></p>
+  <p class="reag" data-i="reag"></p>
+  <div class="grid">
+    <div>
+      <section class="step" id="st1"><h2 data-i="e1"></h2><p class="hint" data-i="e1h"></p>
+        <div class="two"><label><span data-i="ls"></span><select id="ns"></select></label><label><span data-i="lp"></span><select id="np"></select></label></div>
+        <label style="margin-top:6px"><span data-i="lb"></span><select id="nb"></select></label>
+        <div class="btns"><button class="btn" id="b1" data-i="bprep"></button></div>
+        <div class="msg" id="m1" aria-live="polite"></div></section>
+      <section class="step" id="st2"><h2 data-i="e2"></h2><p class="hint" data-i="e2h"></p>
+        <div id="pairs" style="display:flex;flex-wrap:wrap;gap:8px"></div>
+        <div class="btns"><button class="btn" id="b2" data-i="check"></button></div>
+        <div class="msg" id="m2" aria-live="polite"></div></section>
+      <section class="step" id="st3"><h2 data-i="e3"></h2><p class="hint" data-i="e3h"></p>
+        <div class="btns"><button class="btn" id="b3" data-i="btwist"></button></div>
+        <div class="rng"><span data-i="lrot" style="font-size:14px;color:var(--mute)"></span><input type="range" id="rot" min="0" max="360" value="0" disabled></div>
+        <div class="msg" id="m3" aria-live="polite"></div></section>
+      <section class="step" id="st4"><h2 data-i="s4"></h2><p class="hint" data-i="s4h"></p>
+        <div id="qs"></div>
+        <div class="btns"><button class="btn" id="chk" data-i="check"></button></div>
+        <div class="msg" id="m4" aria-live="polite"></div></section>
+      <section class="step" id="st5"><h2 data-i="s5"></h2>
+        <div class="q"><label><span data-i="q1"></span><textarea id="a1"></textarea></label></div>
+        <div class="btns"><button class="btn" id="send" data-i="send"></button></div>
+        <div class="msg" id="m5" aria-live="polite"></div></section>
+    </div>
+    <div class="board"><div class="rackbox"><svg id="scene" viewBox="0 0 560 440" aria-label="scene"></svg></div></div>
+  </div>
+</div>
+</div>
+<script>
+{
+const T={
+kk:{lab:"11-сынып · 8-зертханалық жұмыс",title:"Дезоксирибонуклеин қышқылының моделін жасау",demo:"Үлгі нұсқа: тіркелу және жұмысты мұғалімге жіберу толық сайтта қосылады.",
+goal:"Мақсаты: пенопласт шарлардан ДНҚ қос оралмасының моделін жасап, азотты негіздердің комплементарлық жұптасуын түсіну.",
+reag:"Зертханалық құрал-жабдықтар: пенопластан жасалған кішкене шарлар, ине-жіп, бояу, тіс тазалайтын шилер.",
+e1:"Шарларды дайындау",e1h:"Пенопласт шарларды алты түске боя: қант, фосфат тобы және төрт азотты негіз (цитозин, гуанин, тимин, аденин). Әр тізбекте 15 шар — қант пен фосфат кезектесіп келеді, ал тізбек қанттан басталып, қантпен аяқталады.",
+ls:"Қантты бейнелейтін шарлар:",lp:"Фосфат тобын бейнелейтін шарлар:",lb:"Азотты негіздерге неше түс керек?",bprep:"Шарларды дайындау",
+ok1:"Дұрыс! Екі тізбекте 16 қант және 14 фосфат шары (әр тізбекте 8 қант + 7 фосфат = 15), азотты негіздерге 4 түс.",bad1:"Әр тізбектегі 15 шар қант–фосфат–қант… кезектесіп, қанттан басталып қантпен аяқталатынын ескер.",
+e2:"Азотты негіздерді жұптастыру",e2h:"Цитозин гуанинмен, ал тимин аденинмен жұптасады. Бірінші тізбектегі әр негізге екінші тізбектен комплементарлы негізді таңда.",
+ok2:"Дұрыс! Азотты негіздер комплементарлы жұптасты: A–T, G–C. Шилер қанттарға бекітілді.",bad2:"Кейбір жұптар қате. Есіңде болсын: A ↔ T, G ↔ C.",
+e3:"Қос оралма",e3h:"Азотты негіздер бекітілгеннен кейін модельді майыстырып бұра. Сонда ДНҚ-ның қос оралмасын анық көресің.",btwist:"Қос оралмаға бұрау",lrot:"Айналдыру",m3:"ДНҚ қос оралмасы дайын: екі полинуклеотид тізбегі азотты негіздер арасындағы сутектік байланыстар арқылы ұсталып тұр.",
+legend:["қант","фосфат","A","T","G","C"],
+s4:"Сұрақтар",s4h:"Модельге қарап, жауапты таңда.",
+qs:[["Аденин қай негізбен жұптасады?",["—","Тимин","Гуанин","Цитозин"],"1"],["Гуанин мен цитозин арасында неше сутектік байланыс бар?",["—","3","2","1"],"1"],["ДНҚ тізбегінің «қаңқасы» тұрады:",["—","Дезоксирибоза мен фосфат қалдықтарының кезектесуінен","Тек азотты негіздерден","Аминқышқылдарынан"],"1"],["Егер ДНҚ-да 20% аденин болса, тимин қанша?",["—","20%","30%","80%"],"1"],["Неге әр тізбекте қант шарлары фосфаттан көп?",["—","Тізбек қанттан басталып, қантпен аяқталады","Қант ауыр","Фосфат ериді"],"1"]],
+check:"Тексеру",ok:"Барлығы дұрыс! ДНҚ — қос оралма: қант-фосфат қаңқасы сыртта, комплементарлы азотты негіздер (A–T, G–C) ішінде сутектік байланыстармен ұсталады.",bad:"Қате жауаптар саны: ",
+s5:"Қорытынды",q1:"ДНҚ молекуласының құрылысын сипатта. Комплементарлық ұстанымы неде?",
+send:"Мұғалімге жіберу",sent:"Үлгіде жіберу әлі жұмыс істемейді. Толық сайтта жұмыс мұғалімнің бетіне түседі.",empty:"Алдымен сұраққа жауап бер."},
+ru:{lab:"11 класс · Лабораторная работа №8",title:"Изготовление модели дезоксирибонуклеиновой кислоты",demo:"Демо-версия: регистрация и отправка работы учителю появятся в полной версии сайта.",
+goal:"Цель: изготовить из шариков пенопласта модель двойной спирали ДНК и понять комплементарное спаривание азотистых оснований.",
+reag:"Оборудование: маленькие шарики из пенопласта, иголка с ниткой, краски, зубочистки.",
+e1:"Подготовка шариков",e1h:"Окрась шарики пенопласта в шесть цветов: сахар, фосфатная группа и четыре азотистых основания (цитозин, гуанин, тимин, аденин). В каждой цепи 15 шариков — сахар и фосфат чередуются, цепь начинается и заканчивается сахаром.",
+ls:"Шариков-сахаров:",lp:"Шариков-фосфатов:",lb:"Сколько цветов нужно для азотистых оснований?",bprep:"Подготовить шарики",
+ok1:"Верно! В двух цепях 16 сахаров и 14 фосфатов (в каждой цепи 8 сахаров + 7 фосфатов = 15), для азотистых оснований 4 цвета.",bad1:"Учти, что в каждой цепи 15 шариков чередуются сахар–фосфат–сахар… и цепь начинается и заканчивается сахаром.",
+e2:"Спаривание азотистых оснований",e2h:"Цитозин спаривается с гуанином, а тимин — с аденином. Подбери к каждому основанию первой цепи комплементарное основание второй цепи.",
+ok2:"Верно! Азотистые основания спарены комплементарно: A–T, G–C. Зубочистки прикреплены к сахарам.",bad2:"Некоторые пары неверны. Помни: A ↔ T, G ↔ C.",
+e3:"Двойная спираль",e3h:"После закрепления азотистых оснований изогни и закрути модель. Тогда ты чётко увидишь двойную спираль ДНК.",btwist:"Закрутить в двойную спираль",lrot:"Поворот",m3:"Двойная спираль ДНК готова: две полинуклеотидные цепи удерживаются водородными связями между азотистыми основаниями.",
+legend:["сахар","фосфат","A","T","G","C"],
+s4:"Вопросы",s4h:"Посмотри на модель и выбери ответ.",
+qs:[["С каким основанием спаривается аденин?",["—","С тимином","С гуанином","С цитозином"],"1"],["Сколько водородных связей между гуанином и цитозином?",["—","3","2","1"],"1"],["«Остов» цепи ДНК состоит:",["—","Из чередующихся остатков дезоксирибозы и фосфата","Только из азотистых оснований","Из аминокислот"],"1"],["Если в ДНК 20% аденина, сколько тимина?",["—","20%","30%","80%"],"1"],["Почему в каждой цепи сахаров больше, чем фосфатов?",["—","Цепь начинается и заканчивается сахаром","Сахар тяжелее","Фосфат растворяется"],"1"]],
+check:"Проверить",ok:"Всё верно! ДНК — двойная спираль: сахарофосфатный остов снаружи, комплементарные азотистые основания (A–T, G–C) внутри удерживаются водородными связями.",bad:"Неверных ответов: ",
+s5:"Вывод",q1:"Опиши строение молекулы ДНК. В чём состоит принцип комплементарности?",
+send:"Отправить учителю",sent:"В демо-версии отправка пока не работает. В полной версии работа попадёт на страницу учителя.",empty:"Сначала ответь на вопрос."}};
+const SEQ=["A","G","C","T","T","A","C","G"],COMP={A:"T",T:"A",G:"C",C:"G"},COL={A:"#ef4444",T:"#facc15",G:"#22c55e",C:"#3b82f6"};
+const NUM=["—","4","7","8","14","15","16","30"];
+let lang="kk",ok=false,f1=false,f2=false,f3=false,tw=0,rot=0;const pick=Array(8).fill("");const qv={},sv={};
+const $=id=>document.getElementById(id),t=k=>T[lang][k];
+function render(){let h="";const L=t("legend"),LC=["#f8fafc","#94a3b8",COL.A,COL.T,COL.G,COL.C];
+  L.forEach((n,i)=>{h+=`<circle cx="${30+i*88}" cy="20" r="8" fill="${LC[i]}" stroke="#64748b"/><text x="${43+i*88}" y="25" font-size="13" fill="var(--ink)">${n}</text>`});
+  if(!f1){$("scene").innerHTML=h;return}
+  const cx=280,R=f2||f3?110:110,y0=60,dy=44,items=[];
+  const pos=(i,s,half)=>{const th=(tw*(i+(half?.5:0))*36+(tw>0?rot:0))*Math.PI/180+(s?Math.PI:0);return[cx+R*Math.cos(th)*(s?1:1),y0+(i+(half?.5:0))*dy,R*Math.sin(th)]};
+  const ball=(p,r,fill,lab,tc)=>`<circle cx="${p[0].toFixed(1)}" cy="${p[1].toFixed(1)}" r="${(r*(1+p[2]/600)).toFixed(1)}" fill="${fill}" stroke="#475569" stroke-width="1.5"/>${lab?`<text x="${p[0].toFixed(1)}" y="${(p[1]+4).toFixed(1)}" text-anchor="middle" font-size="10" font-weight="700" fill="${tc||"#111"}">${lab}</text>`:""}`;
+  for(let s=0;s<2;s++)for(let i=0;i<8;i++){const S=pos(i,s,false);items.push([S[2],ball(S,13,"#f8fafc","")]);
+    if(i<7){const P=pos(i,s,true),N=pos(i+1,s,false);items.push([Math.min(S[2],P[2])-1,`<line x1="${S[0].toFixed(1)}" y1="${S[1].toFixed(1)}" x2="${P[0].toFixed(1)}" y2="${P[1].toFixed(1)}" stroke="#64748b" stroke-width="3"/>`]);items.push([Math.min(N[2],P[2])-1,`<line x1="${P[0].toFixed(1)}" y1="${P[1].toFixed(1)}" x2="${N[0].toFixed(1)}" y2="${N[1].toFixed(1)}" stroke="#64748b" stroke-width="3"/>`]);items.push([P[2],ball(P,10,"#94a3b8","")])}}
+  for(let i=0;i<8;i++){const A=pos(i,0,false),B=pos(i,1,false),M=[(A[0]+B[0])/2,(A[1]+B[1])/2,(A[2]+B[2])/2];const b1=SEQ[i],b2=f2?COMP[b1]:pick[i];
+    items.push([Math.min(A[2],M[2])-.5,`<line x1="${A[0].toFixed(1)}" y1="${A[1].toFixed(1)}" x2="${M[0].toFixed(1)}" y2="${M[1].toFixed(1)}" stroke="${COL[b1]}" stroke-width="9" stroke-linecap="round"/>`]);
+    if(b2)items.push([Math.min(B[2],M[2])-.5,`<line x1="${M[0].toFixed(1)}" y1="${M[1].toFixed(1)}" x2="${B[0].toFixed(1)}" y2="${B[1].toFixed(1)}" stroke="${COL[b2]}" stroke-width="9" stroke-linecap="round"/>`]);
+    if(tw<0.05){items.push([99,`<text x="${(A[0]+M[0])/2}" y="${A[1]-8}" text-anchor="middle" font-size="11" font-weight="700" fill="var(--ink)">${b1}</text>`]);if(b2)items.push([99,`<text x="${(B[0]+M[0])/2}" y="${B[1]-8}" text-anchor="middle" font-size="11" font-weight="700" fill="var(--ink)">${b2}</text>`])}}
+  items.sort((p,q)=>p[0]-q[0]);h+=items.map(x=>x[1]).join("");$("scene").innerHTML=h}
+function opts(arr,v){return arr.map((s,i)=>`<option value="${i||""}" ${String(v||"")===String(i||"")?"selected":""}>${s}</option>`).join("")}
+function renderPairs(){$("pairs").innerHTML=SEQ.map((b,i)=>`<label style="width:auto"><span style="font-weight:700;color:${COL[b]}">${i+1}. ${b} –</span><select data-p="${i}" style="width:70px">${["","A","T","G","C"].map(x=>`<option value="${x}" ${pick[i]===x?"selected":""}>${x||"—"}</option>`).join("")}</select></label>`).join("")}
+function renderQ(){["ns","np"].forEach(id=>$(id).innerHTML=opts(NUM,sv[id]));$("nb").innerHTML=opts(["—","2","4","6"],sv.nb);renderPairs();
+  $("qs").innerHTML=t("qs").map((q,i)=>`<label style="margin-top:6px"><span>${q[0]}</span><select data-q="${i}">${opts(q[1],qv[i])}</select></label>`).join("")}
+function renderSteps(){$("st2").classList.toggle("off",!f1);$("st3").classList.toggle("off",!f2);$("st4").classList.toggle("off",!f3);$("st5").classList.toggle("off",!ok);
+  [["b1",f1],["b2",f2],["b3",f3]].forEach(([b,f])=>{$(b).disabled=f;$(b).classList.toggle("done",f)});$("rot").disabled=!f3}
+function applyLang(){document.documentElement.lang=lang;
+  document.querySelectorAll("[data-i]").forEach(el=>{const v=T[lang][el.dataset.i];if(typeof v==="string")el.textContent=v});
+  $("l-kk").classList.toggle("on",lang==="kk");$("l-ru").classList.toggle("on",lang==="ru");
+  document.querySelectorAll(".msg").forEach(m=>m.textContent="");render();renderQ();renderSteps()}
+function msg(id,text,okk){const m=$(id);m.textContent=text;m.className="msg "+(okk?"ok":"bad")}
+$("l-kk").onclick=()=>{lang="kk";applyLang()};$("l-ru").onclick=()=>{lang="ru";applyLang()};
+["ns","np","nb"].forEach(id=>$(id).onchange=e=>{sv[id]=e.target.value;e.target.className=""});
+$("b1").onclick=()=>{const A={ns:"6",np:"4",nb:"2"};let bad=0;for(const k in A){const g=$(k).value===A[k];$(k).className=g?"ok":"bad";if(!g)bad++}f1=!bad;f1?msg("m1",t("ok1"),true):msg("m1",t("bad1"),false);render();renderSteps()};
+$("pairs").addEventListener("change",e=>{const s=e.target;if(s.dataset.p!=null){pick[+s.dataset.p]=s.value;s.className="";render()}});
+$("b2").onclick=()=>{let bad=0;document.querySelectorAll("[data-p]").forEach(s=>{const g=s.value===COMP[SEQ[+s.dataset.p]];s.className=g?"ok":"bad";if(!g)bad++});f2=!bad;f2?msg("m2",t("ok2"),true):msg("m2",t("bad2"),false);render();renderSteps()};
+$("b3").onclick=()=>{$("b3").disabled=true;const iv=setInterval(()=>{tw=Math.min(1,tw+0.05);render();if(tw>=1){clearInterval(iv);f3=true;msg("m3",t("m3"),true);renderSteps()}},60)};
+$("rot").oninput=e=>{rot=+e.target.value;render()};
+document.querySelector("#qs").addEventListener("change",e=>{const s=e.target;if(s.dataset.q!=null){qv[s.dataset.q]=s.value;s.className=""}});
+$("chk").onclick=()=>{let bad=0;document.querySelectorAll("[data-q]").forEach(s=>{const g=s.value===t("qs")[s.dataset.q][2];s.className=g?"ok":"bad";if(!g)bad++});
+  ok=!bad;renderSteps();ok?msg("m4",t("ok"),true):msg("m4",t("bad")+bad+".",false)};
+$("send").onclick=()=>{const f=$("a1").value.trim();msg("m5",f?t("sent"):t("empty"),!!f)};
+applyLang();
+}
+</script>
+<script src="../embed.js"></script>
+</body>
+</html>

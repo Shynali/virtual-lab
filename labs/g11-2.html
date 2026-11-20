@@ -1,0 +1,247 @@
+<!DOCTYPE html>
+<html lang="kk">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Карбон қышқылының алынуы және қасиеттері</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans:wght@400;600;700&family=Noto+Serif:wght@600;700&display=swap" rel="stylesheet">
+<style>
+/* VOICE: calm school lab workbook, clear and encouraging (grade 7)
+   IDEA: a workbench sheet — two twin tubes, acid and alkali, each with an aluminium granule
+   PICTURE: both tubes starting slowly, then fizzing hard once the oxide film is gone: aluminium reacts with both
+   COLOUR and TYPE: white sheet on deep lab-teal; the universal-indicator rainbow; Noto Serif + Noto Sans
+   LAYOUT: steps left, scene right (sticky) with view switch; stacks on phones */
+:root{color-scheme:light dark;
+--bg:light-dark(#0f4c5c,#0a2d36);--sheet:light-dark(#ffffff,#13202a);--ink:light-dark(#10131a,#e7edf2);
+--mute:light-dark(#566170,#9fb0bf);--line:light-dark(#d5dde5,#2b3d4b);--soft:light-dark(#eef5f7,#182a35);
+--acc:light-dark(#0f4c5c,#5cc2d6);--ok:light-dark(#12733a,#4ade80);--bad:light-dark(#b91c1c,#f87171);
+--warn:light-dark(#fff4d6,#3a2f12);--glass:light-dark(#f7fbfd,#1d2f3b);--glassline:light-dark(#8aa1b1,#6c8597)}
+:root[data-theme=light]{color-scheme:light}:root[data-theme=dark]{color-scheme:dark}
+*{box-sizing:border-box;min-width:0}
+body{margin:0;background:var(--bg);color:var(--ink);font:16px/1.55 "Noto Sans",system-ui,sans-serif;overflow-x:clip}
+.wrap{max-width:1240px;margin:0 auto;padding:clamp(14px,3vw,36px) max(3vw,12px)}
+header{display:flex;flex-wrap:wrap;gap:12px;align-items:flex-end;justify-content:space-between;color:#fff;margin-bottom:18px}
+header small{display:block;opacity:.8;font-size:14px}
+h1{font:700 clamp(24px,3.6vw,38px)/1.08 "Noto Serif",Georgia,serif;margin:2px 0 0;text-wrap:balance;max-width:26ch}
+.lang{display:flex;background:rgba(255,255,255,.14);border-radius:999px;padding:4px}
+.lang button{border:0;background:none;color:#fff;font:600 15px "Noto Sans";padding:8px 16px;border-radius:999px;cursor:pointer;min-height:40px}
+.lang button.on{background:#fff;color:#0f4c5c}
+.sheet{background:var(--sheet);border-radius:18px;box-shadow:0 18px 40px rgba(0,0,0,.25);padding:clamp(16px,2.6vw,30px)}
+.note{font-size:13px;color:var(--mute);margin:0 0 10px}
+.goal{margin:0 0 6px;max-width:70ch}
+.reag{margin:0 0 16px;color:var(--mute);font-size:15px;max-width:70ch}
+.safety{display:flex;gap:12px;align-items:center;flex-wrap:wrap;background:var(--warn);border-radius:12px;padding:12px 14px;margin-bottom:18px}
+.safety p{margin:0;flex:1 1 260px;font-weight:600}
+.safety label{flex-direction:row;align-items:center;gap:8px;color:var(--ink);font-weight:600;cursor:pointer}
+.grid{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1.05fr);gap:clamp(16px,3vw,36px);align-items:start}
+.step{border-top:1px solid var(--line);padding:14px 0}
+.step:first-child{border-top:0;padding-top:0}
+.step.off{opacity:.45;pointer-events:none}
+h2{font:700 19px/1.2 "Noto Serif",Georgia,serif;margin:0 0 6px}
+.hint{color:var(--mute);font-size:15px;margin:0 0 8px}
+label{font-size:14px;color:var(--mute);display:flex;flex-direction:column;gap:4px}
+textarea,select{font:16px "Noto Sans";color:var(--ink);background:var(--sheet);border:1.5px solid var(--line);border-radius:10px;padding:10px 12px;width:100%}
+textarea:focus,select:focus,button:focus-visible{outline:3px solid color-mix(in srgb,var(--acc) 45%,transparent);outline-offset:1px}
+.ok{border-color:var(--ok)!important}.bad{border-color:var(--bad)!important}
+textarea{min-height:76px;resize:vertical}
+.btns{display:flex;flex-wrap:wrap;gap:8px;margin-top:8px}
+.btn{border:0;border-radius:10px;padding:10px 14px;font:600 15px "Noto Sans";cursor:pointer;min-height:44px;background:var(--acc);color:light-dark(#fff,#08202a)}
+.btn.done{background:var(--soft);color:var(--ok)}
+.btn:disabled{opacity:.45;cursor:not-allowed}.btn.done:disabled{opacity:1}
+.msg{margin-top:8px;font-size:15px;min-height:1.4em}
+.msg.ok{color:var(--ok)}.msg.bad{color:var(--bad)}
+.board{position:sticky;top:12px}
+.seg{display:flex;background:var(--soft);border-radius:10px;padding:4px;gap:4px;margin-bottom:10px}
+.seg button{flex:1;border:0;background:none;color:var(--ink);font:600 14px "Noto Sans";padding:8px 10px;border-radius:8px;cursor:pointer;min-height:40px}
+.seg button.on{background:var(--sheet);box-shadow:0 1px 4px rgba(0,0,0,.15)}
+.seg button:disabled{opacity:.4;cursor:default}
+.rackbox{background:var(--soft);border-radius:16px;padding:10px}
+.rackbox svg{display:block;width:100%;height:auto}
+.mag{transition:transform 1.2s ease}
+.glow{animation:glow 1.4s ease-in-out 2;transform-box:fill-box}
+@keyframes glow{50%{fill:#f97316}}
+.flame{animation:flick .25s ease-in-out infinite alternate;transform-box:fill-box;transform-origin:bottom center}
+@keyframes flick{to{transform:scaleY(1.12) scaleX(.94)}}
+@media(prefers-reduced-motion:reduce){.mag{transition:none}.glow,.flame{animation:none}}
+.scroll{overflow-x:auto}
+.seg{display:flex;background:var(--soft);border-radius:10px;padding:4px;gap:4px;margin-bottom:10px;flex-wrap:wrap}
+.seg button{flex:1;border:0;background:none;color:var(--ink);font:600 14px "Noto Sans";padding:8px 10px;border-radius:8px;cursor:pointer;min-height:40px}
+.seg button.on{background:var(--sheet);box-shadow:0 1px 4px rgba(0,0,0,.15)}
+.brown{transition:opacity 2s ease}.pk{transition:fill 1.6s ease}.ca{transition:transform 4s ease-in-out,opacity 6s ease;transform-box:fill-box;transform-origin:center}.water{animation:fall2 .6s linear infinite}@keyframes fall2{from{transform:translateY(-10px);opacity:.9}to{transform:translateY(30px);opacity:.2}}.eq input{width:44px;padding:6px;text-align:center;font:600 16px "Noto Sans";border:1.5px solid var(--line);border-radius:8px;background:var(--sheet);color:var(--ink)}
+.tray{display:flex;flex-wrap:wrap;gap:8px;margin-top:10px}
+.tray small{width:100%;font-weight:700;color:var(--mute);font-size:13px;margin-top:4px}
+.chip{border:2px solid var(--line);background:var(--sheet);color:var(--ink);border-radius:999px;padding:6px 12px;font:600 14px "Noto Sans";cursor:pointer;min-height:40px}
+.chip.sel{border-color:var(--acc);background:var(--soft)}.chip.done{color:var(--ok)}.chip:disabled{opacity:.4;cursor:default}
+.scroll{overflow-x:auto}td select{padding:6px;font-size:13px}td input{width:70px;padding:6px;text-align:right;font:600 15px "Noto Sans";color:var(--ink);background:var(--sheet);border:1.5px solid var(--line);border-radius:8px}
+.two{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:0 18px}@media(max-width:600px){.two{grid-template-columns:minmax(0,1fr)}}
+.bub{animation:rise var(--d) linear infinite;animation-delay:var(--dl);opacity:0}
+@keyframes rise{0%{transform:translateY(0);opacity:0}10%{opacity:.95}100%{transform:translateY(-80px);opacity:0}}
+.smoke{animation:smoke 2.6s ease-out infinite;opacity:0;transform-box:fill-box;transform-origin:center}
+@keyframes smoke{0%{transform:translateY(0) scale(.6);opacity:0}20%{opacity:.6}100%{transform:translateY(-70px) scale(1.4);opacity:0}}
+@media(prefers-reduced-motion:reduce){.bub,.smoke{animation:none;opacity:.6}}
+table{width:100%;border-collapse:collapse;font-size:14px}
+th,td{padding:5px;border-bottom:1px solid var(--line);text-align:left;vertical-align:middle}
+th{font-size:13px;color:var(--mute);font-weight:600}
+td:first-child{font-weight:600;font-size:14px}
+td select{padding:6px;font-size:13px}
+.eq{display:flex;flex-wrap:wrap;align-items:center;gap:8px;font:600 17px "Noto Sans";margin-bottom:10px}
+.eq select{width:auto;padding:6px 8px;font:600 15px "Noto Sans"}
+.q{margin-bottom:10px}
+.toblue{animation:toblue 3.2s ease forwards}@keyframes toblue{from{fill:rgba(200,228,242,.55)}to{fill:#4f9cf5}}
+.shrink{animation:shrink 4.5s ease forwards;transform-box:fill-box;transform-origin:center bottom}@keyframes shrink{to{transform:scale(.15);opacity:.2}}
+.liq{transition:fill-opacity 2s ease}
+.fade{animation:fade 2.6s ease forwards}@keyframes fade{to{opacity:0}}
+.stir{animation:stir .5s ease-in-out 5;transform-box:fill-box;transform-origin:top center}@keyframes stir{50%{transform:rotate(9deg)}}
+@media(max-width:860px){.grid{grid-template-columns:minmax(0,1fr)}.board{position:static;order:-1}}
+</style>
+</head>
+<body>
+<div class="wrap">
+<header>
+  <div><small data-i="lab"></small><h1 data-i="title"></h1></div>
+  <div class="lang" role="group" aria-label="Тіл"><button id="l-kk" class="on">Қазақша</button><button id="l-ru">Русский</button></div>
+</header>
+<div class="sheet">
+  <p class="note" data-i="demo"></p>
+  <p class="goal" data-i="goal"></p>
+  <p class="reag" data-i="reag"></p>
+  <div class="safety">
+    <svg width="34" height="34" viewBox="0 0 34 34" aria-hidden="true"><path d="M17 3 32 30H2Z" fill="#f59e0b"/><rect x="15.5" y="11" width="3" height="11" rx="1.5" fill="#fff"/><circle cx="17" cy="26" r="1.8" fill="#fff"/></svg>
+    <p data-i="safe"></p>
+    <label><input type="checkbox" id="goggles" style="width:22px;height:22px"><span data-i="safeok"></span></label>
+  </div>
+  <div class="grid">
+    <div>
+      <section class="step" id="st1"><h2 data-i="e1"></h2><p class="hint" data-i="e1h"></p>
+        <div class="btns"><button class="btn" data-b="salt" data-i="bsalt"></button><button class="btn" data-b="acid" data-i="bacid"></button><button class="btn" data-b="cork" data-i="bcork"></button><button class="btn" data-b="heat" data-i="bheat"></button><button class="btn" data-b="dil" data-i="bdil"></button></div>
+        <div class="msg" id="m1" aria-live="polite"></div></section>
+      <section class="step" id="st2"><h2 data-i="e2"></h2><p class="hint" data-i="e2h"></p>
+        <div class="btns"><button class="btn" data-b="mg" data-i="bmg"></button><button class="btn" data-b="zn" data-i="bzn"></button></div>
+        <div class="msg" id="m2" aria-live="polite"></div></section>
+      <section class="step" id="st3"><h2 data-i="e3"></h2><p class="hint" data-i="e3h"></p>
+        <div class="btns"><button class="btn" data-b="naoh" data-i="bnaoh"></button><button class="btn" data-b="drop" id="bdrop"></button></div>
+        <div class="msg" id="m3" aria-live="polite"></div></section>
+      <section class="step" id="st4"><h2 data-i="e4"></h2><p class="hint" data-i="e4h"></p>
+        <div class="btns"><button class="btn" data-b="mix" data-i="bmix"></button><button class="btn" data-b="bath" data-i="bbath"></button><button class="btn" data-b="water" data-i="bwater"></button></div>
+        <div class="msg" id="m4" aria-live="polite"></div></section>
+      <section class="step" id="st5"><h2 data-i="s5"></h2><p class="hint" data-i="s5h"></p>
+        <div id="qs"></div>
+        <div id="eqs" style="margin-top:12px"></div>
+        <div class="btns"><button class="btn" id="chk" data-i="check"></button></div>
+        <div class="msg" id="m5" aria-live="polite"></div></section>
+      <section class="step" id="st6"><h2 data-i="s6"></h2>
+        <div class="q"><label><span data-i="q1"></span><textarea id="a1"></textarea></label></div>
+        <div class="q"><label><span data-i="q2"></span><textarea id="a2"></textarea></label></div>
+        <div class="btns"><button class="btn" id="send" data-i="send"></button></div>
+        <div class="msg" id="m6" aria-live="polite"></div></section>
+    </div>
+    <div class="board">
+      <div class="seg" role="group"><button id="v1" class="on" data-i="v1"></button><button id="v2" data-i="v2"></button><button id="v3" data-i="v3"></button></div>
+      <div class="rackbox"><svg id="scene" viewBox="0 0 560 420" aria-label="scene"></svg></div></div>
+  </div>
+</div>
+</div>
+<script>
+{
+const T={
+kk:{lab:"11-сынып · 2-зертханалық жұмыс",title:"Карбон қышқылының алынуы және қасиеттері",demo:"Үлгі нұсқа: тіркелу және жұмысты мұғалімге жіберу толық сайтта қосылады.",
+goal:"Мақсаты: натрий ацетатынан сірке қышқылын алып, оның металдармен, негізбен және спиртпен әрекеттесуін зерттеу.",
+reag:"Реактивтер: натрий ацетаты, концентрлі күкірт қышқылы, сірке қышқылы, натрий гидроксиді, фенолфталеин ерітінділері, магний жаңқалары, мырыш түйірлері, изоамил спирті, су. Құрал-жабдықтар: сынауықтар, тұрғы, газөткізгіш түтікті тығын, спиртшам, су моншасы, асбест, шыны түтікті тоңазытқыш.",
+safe:"Концентрлі күкірт қышқылымен өте сақ бол. Сірке қышқылының буын иіскеме. Қорғау көзілдірігін ки.",safeok:"Ережені оқыдым",
+e1:"Сірке қышқылын алу",e1h:"Сынауыққа 3 г натрий ацетатының кристалдарын салып, үстіне 3 мл концентрлі күкірт қышқылын құй. Сынауықты газ жүретін түтігі бар тығынмен бекітіп, екінші ұшын бос сынауыққа батыр. Қоспаны абайлап қыздыр. 2–3 мл қышқыл жиналғанда қыздыруды тоқтат. Алынған қышқылды сумен жартылай араластыр.",
+bsalt:"3 г CH₃COONa салу",bacid:"3 мл конц. H₂SO₄ құю",bcork:"Тығынмен бекіту",bheat:"Абайлап қыздыру",bdil:"Сумен жартылай араластыру",heatm:"Қабылдағыш сынауыққа өткір иісті сұйықтық — сірке қышқылы жиналуда…",heat2:"2–3 мл сірке қышқылы жиналды. Қыздыру тоқтатылды.",dilm:"Сірке қышқылының ерітіндісі дайын — оны бірнеше бөлікке бөл.",
+e2:"1-тәжірибе. Сірке қышқылының металдармен әрекеттесуі",e2h:"Екі сынауыққа 1 мл-ден сірке қышқылын құй. Біреуіне магний, екіншісіне мырыш түйірін сал. Газдың бөліну жылдамдығына көңіл аудар.",bmg:"Магний жаңқасын салу",bzn:"Мырыш түйірін салу",mgm:"Магний бетінен газ қарқынды бөлінуде.",znm:"Мырыш бетінен газ баяу бөлінуде.",
+e3:"2-тәжірибе. Сірке қышқылының негіздермен әрекеттесуі",e3h:"Сынауыққа 1–1,5 мл натрий гидроксидінің ерітіндісін құйып, оған бірнеше тамшы фенолфталеин тамыз. Ерітінді түссізденгенше сірке қышқылын қос.",bnaoh:"NaOH + фенолфталеин",bdrop:"Сірке қышқылын тамызу",phm:"Ерітінді таңқурай түске боялды.",d1:"Түсі әлсіреп барады…",d2:"Ерітінді түссізденді — бейтараптану жүрді.",
+e4:"3-тәжірибе. Сірке қышқылының спирттермен әрекеттесуі",e4h:"Сынауыққа 2 мл сірке қышқылын құйып, үстіне 2 мл изоамил спиртін қос. Абайлап 1 мл концентрлі күкірт қышқылын тамыз. Сынауықты ұзын шыны түтігі бар тоңазытқыш тығынмен тығында. Қоспаны су моншасында абайлап қыздыр. Салқындағаннан кейін бірнеше тамшы су қос.",
+bmix:"CH₃COOH + C₅H₁₁OH + H₂SO₄",bbath:"Су моншасында қыздыру",bwater:"Салқындатып, су қосу",bathm:"Қыздырылуда…",waterm:"Суда ерімейтін, алмұрт иісі бар май тәрізді тамшылар пайда болды — сірке қышқылының изоамил эфирі.",
+v1:"Алу",v2:"1–2-тәжірибе",v3:"3-тәжірибе",
+s5:"Бақылаулар мен теңдеулер",s5h:"Жауапты таңда да, теңдеулердегі коэффициенттерді қой (1 болса, бос қалдыруға болады).",
+qs:[["Қай металмен реакция жылдамырақ жүрді?",["—","Магниймен","Мырышпен","Бірдей"],"1"],["Сірке қышқылы негізбен әрекеттескенде түзіледі:",["—","Тұз (натрий ацетаты) және су","Эфир және су","Сутек"],"1"],["Қышқыл мен спирттен эфир түзілу реакциясы аталады:",["—","Этерификация","Гидролиз","Полимерлену"],"1"],["Этерификациядағы күкірт қышқылының рөлі:",["—","Катализатор және суды тартып алушы","Тотықсыздандырғыш","Еріткіш"],"1"],["Сірке қышқылының минералды қышқылдарға ұқсас қасиеттері:",["—","Металдармен, негіздермен, тұздармен әрекеттеседі, индикатор түсін өзгертеді","Тек спирттермен әрекеттеседі","Ұқсастығы жоқ"],"1"]],
+check:"Тексеру",ok:"Барлығы дұрыс! Сірке қышқылы — әлсіз қышқыл: минералды қышқылдарға тән қасиеттерді көрсетеді, ал спирттермен күрделі эфирлер түзеді.",bad:"Қате жауаптар саны: ",
+eqm:"Реакция теңдеулері:",
+s6:"Сұрақтар мен тапсырмалар",q1:"Сірке қышқылы магниймен, мырышпен қалай әрекеттеседі? Реакциялардың жүру жылдамдықтарын салыстыр.",q2:"Сірке қышқылының қандай қасиеттері минералды қышқылдарға ұқсайды? Спиртпен әрекеттескенде қандай заттар түзіледі?",
+send:"Мұғалімге жіберу",sent:"Үлгіде жіберу әлі жұмыс істемейді. Толық сайтта жұмыс мұғалімнің бетіне түседі.",empty:"Алдымен сұрақтарға жауап бер.",ester:"эфир (алмұрт иісі)",bathl:"су моншасы"},
+ru:{lab:"11 класс · Лабораторная работа №2",title:"Получение и свойства карбоновой кислоты",demo:"Демо-версия: регистрация и отправка работы учителю появятся в полной версии сайта.",
+goal:"Цель: получить уксусную кислоту из ацетата натрия и исследовать её взаимодействие с металлами, основанием и спиртом.",
+reag:"Реактивы: ацетат натрия, концентрированная серная кислота, растворы уксусной кислоты, гидроксида натрия, фенолфталеина, магниевая стружка, гранулы цинка, изоамиловый спирт, вода. Оборудование: пробирки, штатив, пробка с газоотводной трубкой, спиртовка, водяная баня, асбест, холодильник со стеклянной трубкой.",
+safe:"Будь очень осторожен с концентрированной серной кислотой. Не вдыхай пары уксусной кислоты. Надень защитные очки.",safeok:"Правила прочитаны",
+e1:"Получение уксусной кислоты",e1h:"Насыпь в пробирку 3 г кристаллов ацетата натрия и прилей 3 мл концентрированной серной кислоты. Закрой пробирку пробкой с газоотводной трубкой, второй конец опусти в пустую пробирку. Осторожно нагрей смесь. Когда соберётся 2–3 мл кислоты, прекрати нагревание. Разбавь полученную кислоту водой наполовину.",
+bsalt:"Насыпать 3 г CH₃COONa",bacid:"Прилить 3 мл конц. H₂SO₄",bcork:"Закрыть пробкой",bheat:"Осторожно нагреть",bdil:"Разбавить водой наполовину",heatm:"В приёмнике собирается жидкость с резким запахом — уксусная кислота…",heat2:"Собрано 2–3 мл уксусной кислоты. Нагревание прекращено.",dilm:"Раствор уксусной кислоты готов — раздели его на несколько порций.",
+e2:"Опыт 1. Взаимодействие уксусной кислоты с металлами",e2h:"Налей в две пробирки по 1 мл уксусной кислоты. В одну положи магний, в другую — гранулу цинка. Обрати внимание на скорость выделения газа.",bmg:"Положить магниевую стружку",bzn:"Положить гранулу цинка",mgm:"С поверхности магния бурно выделяется газ.",znm:"С поверхности цинка газ выделяется медленно.",
+e3:"Опыт 2. Взаимодействие уксусной кислоты с основаниями",e3h:"Налей в пробирку 1–1,5 мл раствора гидроксида натрия и добавь несколько капель фенолфталеина. Приливай уксусную кислоту до обесцвечивания раствора.",bnaoh:"NaOH + фенолфталеин",bdrop:"Добавить уксусную кислоту",phm:"Раствор окрасился в малиновый цвет.",d1:"Окраска ослабевает…",d2:"Раствор обесцветился — произошла нейтрализация.",
+e4:"Опыт 3. Взаимодействие уксусной кислоты со спиртами",e4h:"Налей в пробирку 2 мл уксусной кислоты и добавь 2 мл изоамилового спирта. Осторожно добавь 1 мл концентрированной серной кислоты. Закрой пробирку пробкой с длинной стеклянной трубкой (холодильником). Осторожно нагрей смесь на водяной бане. После охлаждения добавь несколько капель воды.",
+bmix:"CH₃COOH + C₅H₁₁OH + H₂SO₄",bbath:"Нагреть на водяной бане",bwater:"Охладить и добавить воду",bathm:"Нагревание…",waterm:"Появились нерастворимые в воде маслянистые капли с запахом груши — изоамиловый эфир уксусной кислоты.",
+v1:"Получение",v2:"Опыты 1–2",v3:"Опыт 3",
+s5:"Наблюдения и уравнения",s5h:"Выбери ответ и расставь коэффициенты (если 1, поле можно оставить пустым).",
+qs:[["С каким металлом реакция шла быстрее?",["—","С магнием","С цинком","Одинаково"],"1"],["При взаимодействии уксусной кислоты с основанием образуются:",["—","Соль (ацетат натрия) и вода","Эфир и вода","Водород"],"1"],["Реакция образования эфира из кислоты и спирта называется:",["—","Этерификация","Гидролиз","Полимеризация"],"1"],["Роль серной кислоты в этерификации:",["—","Катализатор и водоотнимающее средство","Восстановитель","Растворитель"],"1"],["Свойства уксусной кислоты, сходные с минеральными кислотами:",["—","Реагирует с металлами, основаниями, солями, изменяет окраску индикатора","Реагирует только со спиртами","Сходства нет"],"1"]],
+check:"Проверить",ok:"Всё верно! Уксусная кислота — слабая кислота: проявляет свойства, общие с минеральными кислотами, а со спиртами образует сложные эфиры.",bad:"Неверных ответов: ",
+eqm:"Уравнения реакций:",
+s6:"Вопросы и задания",q1:"Как уксусная кислота реагирует с магнием и цинком? Сравни скорости реакций.",q2:"Какие свойства уксусной кислоты сходны с минеральными кислотами? Какие вещества образуются при взаимодействии со спиртом?",
+send:"Отправить учителю",sent:"В демо-версии отправка пока не работает. В полной версии работа попадёт на страницу учителя.",empty:"Сначала ответь на вопросы.",ester:"эфир (запах груши)",bathl:"водяная баня"}};
+let lang="kk",ok=false,view=1,col=0,run=false,bathing=false,drops=0;const S={salt:0,acid:0,cork:0,heat:0,dil:0,mg:0,zn:0,naoh:0,mix:0,bath:0,water:0};const qv={},ev={};
+const $=id=>document.getElementById(id),t=k=>T[lang][k];
+const CLR="rgba(200,228,242,.55)";
+function bub(x,W,y,n,dur){let s="";for(let k=0;k<n;k++){const cx=x+7+(k*11)%(W-14),d=(dur*(.8+(k%5)/10)).toFixed(2);s+=`<circle class="bub" cx="${cx}" cy="${y}" r="${1.6+(k%3)}" fill="#fff" stroke="#9fb7c7" style="--d:${d}s;--dl:${(-k*dur/n).toFixed(2)}s"/>`}return s}
+function tube(x,lab,liq,lh,ex,top,TOP=100,BOT=300){const W=56;let h=`<clipPath id="c${x}${TOP}"><rect x="${x}" y="${TOP}" width="${W}" height="${BOT-TOP}" rx="${W/2}"/><rect x="${x}" y="${TOP}" width="${W}" height="${(BOT-TOP)/2}"/></clipPath><g clip-path="url(#c${x}${TOP})"><rect x="${x}" y="${TOP}" width="${W}" height="${BOT-TOP}" fill="var(--glass)"/>`;
+  if(liq)h+=`<rect x="${x}" y="${BOT-lh}" width="${W}" height="${lh}" style="fill:${liq}"/>`;h+=(ex||"")+`</g><path d="M${x} ${TOP-8}V${BOT-W/2}a${W/2} ${W/2} 0 0 0 ${W} 0V${TOP-8}" fill="none" stroke="var(--glassline)" stroke-width="2.4"/>`;
+  if(lab)h+=`<text x="${x+W/2}" y="${BOT+24}" text-anchor="middle" font-size="13" font-weight="700" fill="var(--ink)">${lab}</text>`;if(top)h+=`<text x="${x+W/2}" y="${TOP-22}" text-anchor="middle" font-size="13" font-weight="700" fill="var(--acc)">${top}</text>`;return h}
+function lamp(cx,tip){return`<path class="flame" d="M${cx} ${tip}c-15 18-17 36-10 50h20c7-14 5-32-10-50z" fill="#f97316" opacity=".9"/><path class="flame" d="M${cx} ${tip+20}c-7 11-8 20-4 30h8c4-10 3-19-4-30z" fill="#fde047"/><rect x="${cx-3}" y="${tip+48}" width="6" height="10" fill="#57534e"/><path d="M${cx-34} ${tip+110}l8-48h52l8 48z" fill="rgba(200,228,242,.6)" stroke="var(--glassline)" stroke-width="2"/><rect x="${cx-10}" y="${tip+56}" width="20" height="8" rx="2" fill="#a8a29e"/>`}
+function v1(){let h=`<rect x="40" y="380" width="300" height="12" rx="3" fill="#64748b"/><rect x="300" y="60" width="8" height="322" fill="#94a3b8"/><rect x="250" y="178" width="58" height="8" rx="3" fill="#94a3b8"/>`;
+  h+=`<g transform="translate(110 250) rotate(-24)"><clipPath id="rt"><rect x="0" y="-20" width="190" height="40" rx="20"/><rect x="40" y="-20" width="150" height="40"/></clipPath><g clip-path="url(#rt)"><rect x="0" y="-20" width="190" height="40" fill="var(--glass)"/>`;
+  if(S.salt)h+=`<rect x="0" y="-20" width="40" height="40" fill="#f1f5f9"/>`;for(let k=0;k<(S.salt?14:0);k++)h+=`<rect x="${4+(k*7)%30}" y="${-14+(k*9)%26}" width="5" height="5" fill="#fff" stroke="#cbd5e1"/>`;
+  if(S.acid)h+=`<rect x="0" y="-20" width="70" height="40" fill="${S.heat?"rgba(214,200,170,.8)":"rgba(226,232,240,.75)"}"/>`;
+  if(run)for(let k=0;k<8;k++)h+=`<circle class="bub" cx="${10+(k*8)%55}" cy="${-8+(k*7)%18}" r="2.4" fill="#fff" style="--d:.9s;--dl:${-k*.1}s;animation-name:rise2"/>`;
+  h+=`</g><path d="M190 -20H20a20 20 0 0 0 0 40H190" fill="none" stroke="var(--glassline)" stroke-width="2.4"/>`;if(S.cork)h+=`<rect x="186" y="-22" width="22" height="44" rx="4" fill="#3f3f46"/>`;h+=`</g>`;
+  h+=tube(405,"CH₃COOH",col>0?CLR:null,col*40,run?`<circle class="bub" cx="433" cy="${300-col*40-6}" r="3" fill="#bfdbfe" style="--d:1.2s;--dl:0s;animation-name:fallD"/>`:"","",220,370);
+  if(S.cork){const mx=110+197*Math.cos(-24*Math.PI/180),my=250+197*Math.sin(-24*Math.PI/180);h+=`<path d="M${mx} ${my}H433V320" fill="none" stroke="#94a3b8" stroke-width="7" stroke-linejoin="round"/>`}
+  if(run)h+=lamp(150,270);else h+=lamp(150,270).replace(/<path class="flame"[^>]*\/>/g,"");
+  return`<style>@keyframes rise2{0%{transform:translate(0,0);opacity:0}20%{opacity:.9}100%{transform:translate(0,-14px);opacity:0}}@keyframes fallD{0%{transform:translateY(-20px);opacity:0}30%{opacity:1}100%{transform:translateY(0);opacity:0}}</style>`+h}
+function v2(){let h="";h+=tube(110,"Mg",S.dil?CLR:null,80,S.mg?`<path d="M122 286l12-8 8 6 10-10" stroke="#9ca3af" stroke-width="4" fill="none"/>`+bub(110,56,288,22,.8):"",S.mg?"H₂↑":"");
+  h+=tube(250,"Zn",S.dil?CLR:null,80,S.zn?`<path d="M266 290q4-12 12-10q10-2 10 8q-2 9-12 8q-10 1-10-6z" fill="#94a3b8" stroke="#64748b"/>`+bub(250,56,284,5,2.4):"",S.zn?"H₂↑":"");
+  const c=!S.naoh?null:drops>=4?CLR:drops>=2?"#f9a8d4":"#db2777";h+=tube(390,"NaOH",c,70+drops*4,"",drops?`CH₃COOH: ${drops}`:"");return h}
+function v3(){let h=`<g transform="translate(0,-50)"><path d="M170 170v180q0 14 14 14h192q14 0 14-14V170" fill="var(--glass)" stroke="var(--glassline)" stroke-width="2.5"/><text x="400" y="360" font-size="12" fill="var(--mute)">${t("bathl")}</text>`;
+  h+=`<rect x="172" y="220" width="216" height="128" fill="rgba(191,219,254,.5)"/>`;if(bathing)h+=bub(180,200,340,14,1.2);
+  let liq=S.mix?(S.water?"rgba(200,228,242,.6)":"rgba(240,230,200,.7)"):null,lh=S.water?110:80,ex="";
+  if(S.water)ex=`<rect x="252" y="${330-lh}" width="56" height="22" fill="#fde68a" opacity=".85"/>`+[0,1,2,3,4].map(k=>`<circle cx="${262+k*9}" cy="${330-lh+12}" r="4" fill="#fcd34d" stroke="#d97706"/>`).join("");
+  h+=tube(252,"",liq,lh,ex,"",120,330);if(S.mix)h+=`<rect x="276" y="40" width="8" height="74" fill="rgba(200,228,242,.8)" stroke="var(--glassline)"/><rect x="262" y="104" width="36" height="16" rx="3" fill="#3f3f46"/>`;
+  if(S.water)h+=`<text x="400" y="${330-lh+14}" font-size="13" font-weight="700" fill="#b45309">← ${t("ester")}</text>`;
+  h+=`</g>`;h+=bathing?lamp(280,305):lamp(280,305).replace(/<path class="flame"[^>]*\/>/g,"");
+  return h}
+function render(){$("scene").innerHTML=view===1?v1():view===2?v2():v3();["v1","v2","v3"].forEach((v,i)=>$(v).classList.toggle("on",view===i+1))}
+function opts(arr,v){return arr.map((s,i)=>`<option value="${i||""}" ${String(v||"")===String(i||"")?"selected":""}>${s}</option>`).join("")}
+const E=[[["k0","2"],"CH₃COONa + ",["k1","1"],"H₂SO₄ → ",["k2","2"],"CH₃COOH + ",["k3","1"],"Na₂SO₄"],[["k4","2"],"CH₃COOH + Mg → (CH₃COO)₂Mg + H₂↑"],[["k5","2"],"CH₃COOH + Zn → (CH₃COO)₂Zn + H₂↑"],[["k6","1"],"CH₃COOH + ",["k7","1"],"NaOH → ",["k8","1"],"CH₃COONa + H₂O"],["CH₃COOH + C₅H₁₁OH ⇌ CH₃COOC₅H₁₁ + ",["k9","1"],"H₂O"]];
+function renderQ(){$("qs").innerHTML=t("qs").map((q,i)=>`<label style="margin-top:6px"><span>${q[0]}</span><select data-q="${i}">${opts(q[1],qv[i])}</select></label>`).join("");
+  $("eqs").innerHTML=`<small style="font-size:13px;color:var(--mute);font-weight:600">${t("eqm")}</small>`+E.map(e=>`<div class="eq">${e.map(p=>typeof p==="string"?p:`<input id="${p[0]}" data-a="${p[1]}" inputmode="numeric" value="${ev[p[0]]||""}">`).join("")}</div>`).join("")}
+function renderSteps(){const g=$("goggles").checked;$("st1").classList.toggle("off",!g);["st2","st3","st4"].forEach(s=>$(s).classList.toggle("off",!(g&&S.dil)));
+  const ORD=["salt","acid","cork","heat","dil"],DEP={drop:"naoh",bath:"mix",water:"bath"};
+  document.querySelectorAll("[data-b]").forEach(b=>{const k=b.dataset.b;let en=true;const i=ORD.indexOf(k);if(i>0)en=!!S[ORD[i-1]]&&!run;if(DEP[k])en=!!S[DEP[k]]&&!bathing;const done=k==="drop"?drops>=4:!!S[k];b.disabled=done||!en;b.classList.toggle("done",done)});
+  $("bdrop").textContent=t("bdrop")+(drops?` (${drops})`:"");
+  $("st5").classList.toggle("off",!(S.mg&&S.zn&&drops>=4&&S.water));$("st6").classList.toggle("off",!ok)}
+function applyLang(){document.documentElement.lang=lang;
+  document.querySelectorAll("[data-i]").forEach(el=>{const v=T[lang][el.dataset.i];if(typeof v==="string")el.textContent=v});
+  $("l-kk").classList.toggle("on",lang==="kk");$("l-ru").classList.toggle("on",lang==="ru");
+  document.querySelectorAll(".msg").forEach(m=>m.textContent="");render();renderQ();renderSteps()}
+function msg(id,text,okk){const m=$(id);m.textContent=text;m.className="msg "+(okk?"ok":"bad")}
+$("l-kk").onclick=()=>{lang="kk";applyLang()};$("l-ru").onclick=()=>{lang="ru";applyLang()};
+[1,2,3].forEach(i=>$("v"+i).onclick=()=>{view=i;render()});
+$("goggles").onchange=renderSteps;
+document.querySelector(".grid").addEventListener("click",e=>{const b=e.target.closest("[data-b]");if(!b||b.disabled)return;const k=b.dataset.b;
+  view=["salt","acid","cork","heat","dil"].includes(k)?1:["mg","zn","naoh","drop"].includes(k)?2:3;
+  if(k==="heat"){S.heat=1;run=true;msg("m1",t("heatm"),true);render();renderSteps();const iv=setInterval(()=>{col=Math.min(1,col+0.1);render();if(col>=1){clearInterval(iv);run=false;msg("m1",t("heat2"),true);render();renderSteps()}},300);return}
+  if(k==="drop"){drops++;msg("m3",drops>=4?t("d2"):t("d1"),true);render();renderSteps();return}
+  if(k==="bath"){S.bath=1;bathing=true;msg("m4",t("bathm"),true);render();renderSteps();setTimeout(()=>{bathing=false;render();renderSteps()},3000);return}
+  S[k]=1;const M={dil:["m1","dilm"],mg:["m2","mgm"],zn:["m2","znm"],naoh:["m3","phm"],water:["m4","waterm"]};if(M[k])msg(M[k][0],t(M[k][1]),true);
+  if(k==="dil"){col=1}render();renderSteps()});
+document.querySelector(".grid").addEventListener("change",e=>{const s=e.target;if(s.dataset.q!=null){qv[s.dataset.q]=s.value;s.className=""}});
+$("eqs").addEventListener("input",e=>{const el=e.target;if(el.id)ev[el.id]=el.value;el.style.borderColor=""});
+$("chk").onclick=()=>{let bad=0;document.querySelectorAll("[data-q]").forEach(s=>{const g=s.value===t("qs")[s.dataset.q][2];s.className=g?"ok":"bad";if(!g)bad++});
+  document.querySelectorAll("#eqs input").forEach(el=>{const v=el.value.trim(),aa=el.dataset.a,g=v===aa||(aa==="1"&&v==="");el.style.borderColor=g?"var(--ok)":"var(--bad)";if(!g)bad++});
+  ok=!bad;renderSteps();ok?msg("m5",t("ok"),true):msg("m5",t("bad")+bad+".",false)};
+$("send").onclick=()=>{const f=$("a1").value.trim()&&$("a2").value.trim();msg("m6",f?t("sent"):t("empty"),!!f)};
+applyLang();
+}
+</script>
+<script src="../embed.js"></script>
+</body>
+</html>

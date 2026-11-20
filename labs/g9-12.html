@@ -1,0 +1,230 @@
+<!DOCTYPE html>
+<html lang="kk">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Аммиак молекуласының моделі</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans:wght@400;600;700&family=Noto+Serif:wght@600;700&display=swap" rel="stylesheet">
+<style>
+/* VOICE: calm school lab workbook, clear and encouraging (grade 7)
+   IDEA: a workbench sheet — two twin tubes, acid and alkali, each with an aluminium granule
+   PICTURE: both tubes starting slowly, then fizzing hard once the oxide film is gone: aluminium reacts with both
+   COLOUR and TYPE: white sheet on deep lab-teal; the universal-indicator rainbow; Noto Serif + Noto Sans
+   LAYOUT: steps left, scene right (sticky) with view switch; stacks on phones */
+:root{color-scheme:light dark;
+--bg:light-dark(#0f4c5c,#0a2d36);--sheet:light-dark(#ffffff,#13202a);--ink:light-dark(#10131a,#e7edf2);
+--mute:light-dark(#566170,#9fb0bf);--line:light-dark(#d5dde5,#2b3d4b);--soft:light-dark(#eef5f7,#182a35);
+--acc:light-dark(#0f4c5c,#5cc2d6);--ok:light-dark(#12733a,#4ade80);--bad:light-dark(#b91c1c,#f87171);
+--warn:light-dark(#fff4d6,#3a2f12);--glass:light-dark(#f7fbfd,#1d2f3b);--glassline:light-dark(#8aa1b1,#6c8597)}
+:root[data-theme=light]{color-scheme:light}:root[data-theme=dark]{color-scheme:dark}
+*{box-sizing:border-box;min-width:0}
+body{margin:0;background:var(--bg);color:var(--ink);font:16px/1.55 "Noto Sans",system-ui,sans-serif;overflow-x:clip}
+.wrap{max-width:1240px;margin:0 auto;padding:clamp(14px,3vw,36px) max(3vw,12px)}
+header{display:flex;flex-wrap:wrap;gap:12px;align-items:flex-end;justify-content:space-between;color:#fff;margin-bottom:18px}
+header small{display:block;opacity:.8;font-size:14px}
+h1{font:700 clamp(24px,3.6vw,38px)/1.08 "Noto Serif",Georgia,serif;margin:2px 0 0;text-wrap:balance;max-width:26ch}
+.lang{display:flex;background:rgba(255,255,255,.14);border-radius:999px;padding:4px}
+.lang button{border:0;background:none;color:#fff;font:600 15px "Noto Sans";padding:8px 16px;border-radius:999px;cursor:pointer;min-height:40px}
+.lang button.on{background:#fff;color:#0f4c5c}
+.sheet{background:var(--sheet);border-radius:18px;box-shadow:0 18px 40px rgba(0,0,0,.25);padding:clamp(16px,2.6vw,30px)}
+.note{font-size:13px;color:var(--mute);margin:0 0 10px}
+.goal{margin:0 0 6px;max-width:70ch}
+.reag{margin:0 0 16px;color:var(--mute);font-size:15px;max-width:70ch}
+.safety{display:flex;gap:12px;align-items:center;flex-wrap:wrap;background:var(--warn);border-radius:12px;padding:12px 14px;margin-bottom:18px}
+.safety p{margin:0;flex:1 1 260px;font-weight:600}
+.safety label{flex-direction:row;align-items:center;gap:8px;color:var(--ink);font-weight:600;cursor:pointer}
+.grid{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1.05fr);gap:clamp(16px,3vw,36px);align-items:start}
+.step{border-top:1px solid var(--line);padding:14px 0}
+.step:first-child{border-top:0;padding-top:0}
+.step.off{opacity:.45;pointer-events:none}
+h2{font:700 19px/1.2 "Noto Serif",Georgia,serif;margin:0 0 6px}
+.hint{color:var(--mute);font-size:15px;margin:0 0 8px}
+label{font-size:14px;color:var(--mute);display:flex;flex-direction:column;gap:4px}
+textarea,select{font:16px "Noto Sans";color:var(--ink);background:var(--sheet);border:1.5px solid var(--line);border-radius:10px;padding:10px 12px;width:100%}
+textarea:focus,select:focus,button:focus-visible{outline:3px solid color-mix(in srgb,var(--acc) 45%,transparent);outline-offset:1px}
+.ok{border-color:var(--ok)!important}.bad{border-color:var(--bad)!important}
+textarea{min-height:76px;resize:vertical}
+.btns{display:flex;flex-wrap:wrap;gap:8px;margin-top:8px}
+.btn{border:0;border-radius:10px;padding:10px 14px;font:600 15px "Noto Sans";cursor:pointer;min-height:44px;background:var(--acc);color:light-dark(#fff,#08202a)}
+.btn.done{background:var(--soft);color:var(--ok)}
+.btn:disabled{opacity:.45;cursor:not-allowed}.btn.done:disabled{opacity:1}
+.msg{margin-top:8px;font-size:15px;min-height:1.4em}
+.msg.ok{color:var(--ok)}.msg.bad{color:var(--bad)}
+.board{position:sticky;top:12px}
+.seg{display:flex;background:var(--soft);border-radius:10px;padding:4px;gap:4px;margin-bottom:10px}
+.seg button{flex:1;border:0;background:none;color:var(--ink);font:600 14px "Noto Sans";padding:8px 10px;border-radius:8px;cursor:pointer;min-height:40px}
+.seg button.on{background:var(--sheet);box-shadow:0 1px 4px rgba(0,0,0,.15)}
+.seg button:disabled{opacity:.4;cursor:default}
+.rackbox{background:var(--soft);border-radius:16px;padding:10px}
+.rackbox svg{display:block;width:100%;height:auto}
+.mag{transition:transform 1.2s ease}
+.glow{animation:glow 1.4s ease-in-out 2;transform-box:fill-box}
+@keyframes glow{50%{fill:#f97316}}
+.flame{animation:flick .25s ease-in-out infinite alternate;transform-box:fill-box;transform-origin:bottom center}
+@keyframes flick{to{transform:scaleY(1.12) scaleX(.94)}}
+@media(prefers-reduced-motion:reduce){.mag{transition:none}.glow,.flame{animation:none}}
+.scroll{overflow-x:auto}
+.seg{display:flex;background:var(--soft);border-radius:10px;padding:4px;gap:4px;margin-bottom:10px;flex-wrap:wrap}
+.seg button{flex:1;border:0;background:none;color:var(--ink);font:600 14px "Noto Sans";padding:8px 10px;border-radius:8px;cursor:pointer;min-height:40px}
+.seg button.on{background:var(--sheet);box-shadow:0 1px 4px rgba(0,0,0,.15)}
+.brown{transition:opacity 2s ease}.pk{transition:fill 1.6s ease}.ca{transition:transform 4s ease-in-out,opacity 6s ease;transform-box:fill-box;transform-origin:center}.water{animation:fall2 .6s linear infinite}@keyframes fall2{from{transform:translateY(-10px);opacity:.9}to{transform:translateY(30px);opacity:.2}}.eq input{width:44px;padding:6px;text-align:center;font:600 16px "Noto Sans";border:1.5px solid var(--line);border-radius:8px;background:var(--sheet);color:var(--ink)}
+.tray{display:flex;flex-wrap:wrap;gap:8px;margin-top:10px}
+.tray small{width:100%;font-weight:700;color:var(--mute);font-size:13px;margin-top:4px}
+.chip{border:2px solid var(--line);background:var(--sheet);color:var(--ink);border-radius:999px;padding:6px 12px;font:600 14px "Noto Sans";cursor:pointer;min-height:40px}
+.chip.sel{border-color:var(--acc);background:var(--soft)}.chip.done{color:var(--ok)}.chip:disabled{opacity:.4;cursor:default}
+.scroll{overflow-x:auto}td select{padding:6px;font-size:13px}td input{width:70px;padding:6px;text-align:right;font:600 15px "Noto Sans";color:var(--ink);background:var(--sheet);border:1.5px solid var(--line);border-radius:8px}
+.two{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:0 18px}@media(max-width:600px){.two{grid-template-columns:minmax(0,1fr)}}
+.bub{animation:rise var(--d) linear infinite;animation-delay:var(--dl);opacity:0}
+@keyframes rise{0%{transform:translateY(0);opacity:0}10%{opacity:.95}100%{transform:translateY(-80px);opacity:0}}
+.smoke{animation:smoke 2.6s ease-out infinite;opacity:0}
+@keyframes smoke{0%{transform:translateY(0) scale(.6);opacity:0}20%{opacity:.6}100%{transform:translateY(-70px) scale(1.4);opacity:0}}
+@media(prefers-reduced-motion:reduce){.bub,.smoke{animation:none;opacity:.6}}
+table{width:100%;border-collapse:collapse;font-size:14px}
+th,td{padding:5px;border-bottom:1px solid var(--line);text-align:left;vertical-align:middle}
+th{font-size:13px;color:var(--mute);font-weight:600}
+td:first-child{font-weight:600;font-size:14px}
+td select{padding:6px;font-size:13px}
+.eq{display:flex;flex-wrap:wrap;align-items:center;gap:8px;font:600 17px "Noto Sans";margin-bottom:10px}
+.eq select{width:auto;padding:6px 8px;font:600 15px "Noto Sans"}
+.q{margin-bottom:10px}
+.pop{animation:pop .45s ease}@keyframes pop{0%{transform:scale(.3)}70%{transform:scale(1.12)}}.pop{transform-box:fill-box;transform-origin:center}
+.ball{cursor:pointer}.ball:focus-visible{outline:3px solid var(--acc)}
+.fade{animation:fade 2.6s ease forwards}@keyframes fade{to{opacity:0}}
+.stir{animation:stir .5s ease-in-out 5;transform-box:fill-box;transform-origin:top center}@keyframes stir{50%{transform:rotate(9deg)}}
+@media(max-width:860px){.grid{grid-template-columns:minmax(0,1fr)}.board{position:static;order:-1}}
+</style>
+</head>
+<body>
+<div class="wrap">
+<header>
+  <div><small data-i="lab"></small><h1 data-i="title"></h1></div>
+  <div class="lang" role="group" aria-label="Тіл"><button id="l-kk" class="on">Қазақша</button><button id="l-ru">Русский</button></div>
+</header>
+<div class="sheet">
+  <p class="note" data-i="demo"></p>
+  <p class="goal" data-i="goal"></p>
+  <p class="reag" data-i="reag"></p>
+  <div class="grid">
+    <div>
+      <section class="step" id="st1"><h2 data-i="e1"></h2><p class="hint" data-i="e1h"></p>
+        <label><span data-i="lval"></span><select id="val"></select></label>
+        <label style="margin-top:8px"><span data-i="lunp"></span><select id="unp"></select></label>
+        <label style="margin-top:8px"><span data-i="lh"></span><select id="hval"></select></label>
+        <label style="margin-top:8px"><span data-i="lform"></span><select id="form"></select></label>
+        <div class="btns"><button class="btn" id="chk1" data-i="check"></button></div>
+        <div class="msg" id="m1" aria-live="polite"></div></section>
+      <section class="step" id="st2"><h2 data-i="e2"></h2><p class="hint" data-i="e2h"></p>
+        <div class="btns"><button class="btn" id="reset" data-i="breset"></button></div>
+        <div class="msg" id="m2" aria-live="polite"></div></section>
+      <section class="step" id="st3"><h2 data-i="e3"></h2><p class="hint" data-i="e3h"></p>
+        <div class="btns"><button class="btn" id="minus">− </button><button class="btn" id="plus">+ N–H</button><button class="btn" id="chk3" data-i="bmodel"></button></div>
+        <div class="msg" id="m3" aria-live="polite"></div></section>
+      <section class="step" id="st4"><h2 data-i="s4"></h2><p class="hint" data-i="s4h"></p>
+        <div id="qs"></div>
+        <div class="btns"><button class="btn" id="chk" data-i="check"></button></div>
+        <div class="msg" id="m4" aria-live="polite"></div></section>
+      <section class="step" id="st5"><h2 data-i="s5"></h2>
+        <div class="q"><label><span data-i="q1"></span><textarea id="a1"></textarea></label></div>
+        <div class="q"><label><span data-i="q2"></span><textarea id="a2"></textarea></label></div>
+        <div class="btns"><button class="btn" id="send" data-i="send"></button></div>
+        <div class="msg" id="m5" aria-live="polite"></div></section>
+    </div>
+    <div class="board">
+      <div class="seg" role="group"><button id="v1" class="on" data-i="vstick"></button><button id="v2" data-i="vfill"></button></div>
+      <div class="rackbox"><svg id="scene" viewBox="0 0 560 420" aria-label="scene"></svg></div></div>
+  </div>
+</div>
+</div>
+<script>
+{
+const T={
+kk:{lab:"9-сынып · 12-зертханалық жұмыс",title:"Аммиак молекуласының моделі",demo:"Үлгі нұсқа: тіркелу және жұмысты мұғалімге жіберу толық сайтта қосылады.",
+goal:"Мақсаты: аммиактың құрылымдық формуласын құрастырып, молекуланың шар-сырық және сфералық модельдерін жасау; атомдар арасындағы байланыс санына назар аудару.",
+reag:"Құрал-жабдықтар: молекулалардың сфералық модельдерін құрастыруға арналған жиынтық (екі түсті шарлар мен сырықтар).",
+e1:"1-қадам. Құрылымдық формула",e1h:"Азот пен сутек атомдарының сыртқы электрондарын еске түсіріп, NH₃ молекуласының құрылымдық формуласын таңда.",
+lval:"Азот атомының сыртқы қабатында неше электрон бар?",lunp:"Азоттың неше жұпталмаған электроны бар?",lh:"Сутек атомының неше электроны бар?",lform:"NH₃ молекуласының құрылымдық формуласы:",
+ok1:"Дұрыс! Азоттың 3 жұпталмаған электроны үш сутек атомының электрондарымен 3 ортақ жұп түзеді. Азотта бір бөлінбеген электрон жұбы қалады.",
+e2:"2-қадам. Шарларды таңда",e2h:"Жиынтықтан екі түсті шар ал: 1 азот атомы (көк, N) және 3 сутек атомы (ақ, H).",breset:"Қайта бастау",
+wrong:"Бұл шар аммиак молекуласына кірмейді.",extraN:"Аммиак молекуласында бір ғана азот атомы бар.",extraH:"Сутек атомы үшеу ғана болуы керек.",
+need:"Таңдалды: N — {n}, H — {h}. Жалғастыр.",got:"Барлық атомдар дайын: 1 N және 3 H. Енді оларды сырықтармен байланыстыр.",
+e3:"3-қадам. Байланыстар",e3h:"«+ N–H» батырмасымен азотты әр сутек атомымен байланыстыр, содан соң модельді тексер.",bmodel:"Модельді тексеру",
+m1b:"Барлық сутек атомдары азотпен байланыспаған.",mtoo:"",m3ok:"Модель дұрыс! Азот үш сутек атомымен үш ковалентті полюсті байланыс түзеді, молекула пішіні — тригоналды пирамида.",
+vstick:"Шар-сырық модель",vfill:"Сфералық (толтырылған) модель",
+s4:"Сұрақтар",s4h:"Модельге қарап, жауапты таңда.",
+qs:[["NH₃ молекуласында неше N–H байланысы бар?",["—","3","1","4"],"1"],["N–H байланысының түрі қандай?",["—","Ковалентті полюсті","Ковалентті полюссіз","Иондық"],"1"],["Ортақ электрон жұптары қай атомға қарай ығысқан?",["—","Азотқа (электртерістілігі жоғары)","Сутекке","Ешқайсысына ығыспайды"],"1"],["Азот атомында неше бөлінбеген электрон жұбы бар?",["—","1","0","3"],"1"],["Аммиак молекуласының пішіні қандай?",["—","Тригоналды пирамида","Сызықты","Жазық үшбұрыш"],"1"]],
+check:"Тексеру",ok:"Барлығы дұрыс! Аммиак молекуласы — пирамида пішінді, байланыстар полюсті, азотта бөлінбеген электрон жұбы бар (H–N–H бұрышы ≈ 107°).",bad:"Қате жауаптар саны: ",
+s5:"Қорытынды",q1:"Аммиак молекуласының электрондық және құрылымдық формулаларын жазып, байланыстың түзілуін түсіндір.",q2:"Аммиак пен азот молекулаларындағы байланыстарды салыстыр (саны, түрі).",
+send:"Мұғалімге жіберу",sent:"Үлгіде жіберу әлі жұмыс істемейді. Толық сайтта жұмыс мұғалімнің бетіне түседі.",empty:"Алдымен сұрақтарға жауап бер.",bonds:"N–H байланыс саны: ",lp:"бөлінбеген жұп"},
+ru:{lab:"9 класс · Лабораторная работа №12",title:"Модель молекулы аммиака",demo:"Демо-версия: регистрация и отправка работы учителю появятся в полной версии сайта.",
+goal:"Цель: составить структурную формулу аммиака, собрать шаростержневую и сферическую модели молекулы; обратить внимание на число связей между атомами.",
+reag:"Оборудование: набор для сборки моделей молекул (шарики двух цветов и стержни).",
+e1:"Шаг 1. Структурная формула",e1h:"Вспомни внешние электроны атомов азота и водорода и выбери структурную формулу молекулы NH₃.",
+lval:"Сколько электронов на внешнем слое атома азота?",lunp:"Сколько у азота неспаренных электронов?",lh:"Сколько электронов у атома водорода?",lform:"Структурная формула молекулы NH₃:",
+ok1:"Верно! 3 неспаренных электрона азота с электронами трёх атомов водорода образуют 3 общие пары. У азота остаётся одна неподелённая электронная пара.",
+e2:"Шаг 2. Выбери шарики",e2h:"Возьми шарики двух цветов: 1 атом азота (синий, N) и 3 атома водорода (белые, H).",breset:"Начать заново",
+wrong:"Этот шарик не входит в молекулу аммиака.",extraN:"В молекуле аммиака только один атом азота.",extraH:"Атомов водорода должно быть только три.",
+need:"Выбрано: N — {n}, H — {h}. Продолжай.",got:"Все атомы готовы: 1 N и 3 H. Теперь соедини их стержнями.",
+e3:"Шаг 3. Связи",e3h:"Кнопкой «+ N–H» соедини азот с каждым атомом водорода, затем проверь модель.",bmodel:"Проверить модель",
+m1b:"Не все атомы водорода связаны с азотом.",mtoo:"",m3ok:"Модель верна! Азот образует с тремя атомами водорода три ковалентные полярные связи, форма молекулы — тригональная пирамида.",
+vstick:"Шаростержневая модель",vfill:"Сферическая (объёмная) модель",
+s4:"Вопросы",s4h:"Посмотри на модель и выбери ответ.",
+qs:[["Сколько связей N–H в молекуле NH₃?",["—","3","1","4"],"1"],["Какой тип у связи N–H?",["—","Ковалентная полярная","Ковалентная неполярная","Ионная"],"1"],["К какому атому смещены общие электронные пары?",["—","К азоту (электроотрицательность выше)","К водороду","Не смещены"],"1"],["Сколько неподелённых электронных пар у атома азота?",["—","1","0","3"],"1"],["Какую форму имеет молекула аммиака?",["—","Тригональная пирамида","Линейная","Плоский треугольник"],"1"]],
+check:"Проверить",ok:"Всё верно! Молекула аммиака имеет форму пирамиды, связи полярные, у азота есть неподелённая электронная пара (угол H–N–H ≈ 107°).",bad:"Неверных ответов: ",
+s5:"Вывод",q1:"Запиши электронную и структурную формулы молекулы аммиака и объясни образование связи.",q2:"Сравни связи в молекулах аммиака и азота (число, тип).",
+send:"Отправить учителю",sent:"В демо-версии отправка пока не работает. В полной версии работа попадёт на страницу учителя.",empty:"Сначала ответь на вопросы.",bonds:"Число связей N–H: ",lp:"неподелённая пара"}};
+const FORM=["—","H–N=H","H–N–H (│H)","H=N–H–H"],VAL=["—","3","5","7"],UNP=["—","1","2","3"],HV=["—","1","2","0"];
+let lang="kk",ok=false,f1=false,f3=false,view=1,picked=[],nb=0,fresh=-1;const qv={},sv={};
+const TRAY=[["N","#2563eb","#fff",0],["H","#f8fafc","#111",1],["O","#dc2626","#fff",2],["H","#f8fafc","#111",3],["N","#2563eb","#fff",4],["H","#f8fafc","#111",5],["C","#1f2937","#fff",6],["H","#f8fafc","#111",7]];
+const $=id=>document.getElementById(id),t=k=>T[lang][k];
+const cnt=s=>picked.filter(id=>TRAY.find(x=>x[3]===id)[0]===s).length;
+function ball(s,cx,cy,r,cls){const N=s==="N";return`<g class="${cls||""}"><circle cx="${cx}" cy="${cy}" r="${r}" fill="${N?"#2563eb":"#f8fafc"}" stroke="${N?"#1e3a8a":"#94a3b8"}" stroke-width="2"/><circle cx="${cx-r*.35}" cy="${cy-r*.35}" r="${r*.28}" fill="#fff" opacity="${N?.35:.9}"/><text x="${cx}" y="${cy+r*.3}" text-anchor="middle" font-size="${r*.75}" font-weight="700" fill="${N?"#fff":"#111"}">${s}</text></g>`}
+const NP=[280,120],HP=[[175,215],[385,215],[300,262]];
+function render(){let h=`<text x="40" y="34" font-size="16" font-weight="700" fill="var(--ink)">NH₃</text>`;
+  const hs=picked.filter(id=>TRAY.find(x=>x[3]===id)[0]==="H"),ns=picked.filter(id=>TRAY.find(x=>x[3]===id)[0]==="N");
+  if(view===1){for(let i=0;i<Math.min(nb,3);i++)h+=`<line x1="${NP[0]}" y1="${NP[1]}" x2="${HP[i][0]}" y2="${HP[i][1]}" stroke="#9ca3af" stroke-width="9" stroke-linecap="round"/>`;
+    if(f3)h+=`<ellipse cx="280" cy="62" rx="15" ry="26" fill="#93c5fd" opacity=".6"/><circle cx="274" cy="56" r="3.5" fill="#1e3a8a"/><circle cx="286" cy="56" r="3.5" fill="#1e3a8a"/><text x="306" y="52" font-size="13" fill="var(--mute)">${t("lp")}</text>`;
+    HP.forEach((p,i)=>{h+=hs[i]!=null?ball("H",p[0],p[1],28,hs[i]===fresh?"pop":""):`<circle cx="${p[0]}" cy="${p[1]}" r="28" fill="none" stroke="var(--glassline)" stroke-dasharray="6 6" stroke-width="2"/>`});
+    h+=ns.length?ball("N",NP[0],NP[1],42,ns[0]===fresh?"pop":""):`<circle cx="${NP[0]}" cy="${NP[1]}" r="42" fill="none" stroke="var(--glassline)" stroke-dasharray="6 6" stroke-width="2"/>`;
+    if(picked.length===4)h+=`<text x="470" y="34" text-anchor="middle" font-size="14" font-weight="600" fill="var(--mute)">${t("bonds")}${nb}</text>`;
+  }else{const C=[280,160],FH=[[222,195],[338,195],[290,222]];FH.slice(0,2).forEach((p,i)=>{if(hs[i]!=null)h+=ball("H",p[0],p[1],38)});
+    if(ns.length)h+=ball("N",C[0],C[1],62);if(hs[2]!=null)h+=ball("H",FH[2][0],FH[2][1],38)}
+  fresh=-1;
+  h+=`<rect x="20" y="300" width="520" height="104" rx="14" style="fill:var(--sheet)" stroke="var(--line)"/>`;
+  TRAY.forEach(([s,c,tc,id],i)=>{const used=picked.includes(id),cx=58+i*63;if(used){h+=`<circle cx="${cx}" cy="352" r="23" fill="none" stroke="var(--line)" stroke-dasharray="4 4"/>`;return}
+    h+=`<g class="ball" data-ball="${id}" tabindex="0" role="button" aria-label="${s}"><circle cx="${cx}" cy="352" r="23" fill="${c}" stroke="#64748b" stroke-width="1.5"/><text x="${cx}" y="358" text-anchor="middle" font-size="16" font-weight="700" fill="${tc}" pointer-events="none">${s}</text></g>`});
+  $("scene").innerHTML=h}
+function opts(arr,v){return arr.map((s,i)=>`<option value="${i||""}" ${String(v||"")===String(i||"")?"selected":""}>${s}</option>`).join("")}
+function renderQ(){$("val").innerHTML=opts(VAL,sv.val);$("unp").innerHTML=opts(UNP,sv.unp);$("hval").innerHTML=opts(HV,sv.hval);$("form").innerHTML=opts(FORM,sv.form);
+  $("qs").innerHTML=t("qs").map((q,i)=>`<label style="margin-top:6px"><span>${q[0]}</span><select data-q="${i}">${opts(q[1],qv[i])}</select></label>`).join("")}
+function renderSteps(){$("st2").classList.toggle("off",!f1);$("st3").classList.toggle("off",picked.length<4);$("st4").classList.toggle("off",!f3);$("st5").classList.toggle("off",!ok);
+  $("plus").disabled=f3||nb>=3;$("minus").disabled=f3||nb===0;$("chk3").disabled=f3;$("chk3").classList.toggle("done",f3);$("reset").disabled=f3;$("chk1").disabled=f1;$("chk1").classList.toggle("done",f1);
+  $("v1").classList.toggle("on",view===1);$("v2").classList.toggle("on",view===2)}
+function applyLang(){document.documentElement.lang=lang;
+  document.querySelectorAll("[data-i]").forEach(el=>{const v=T[lang][el.dataset.i];if(typeof v==="string")el.textContent=v});
+  $("l-kk").classList.toggle("on",lang==="kk");$("l-ru").classList.toggle("on",lang==="ru");
+  document.querySelectorAll(".msg").forEach(m=>m.textContent="");render();renderQ();renderSteps()}
+function msg(id,text,okk){const m=$(id);m.textContent=text;m.className="msg "+(okk?"ok":"bad")}
+$("l-kk").onclick=()=>{lang="kk";applyLang()};$("l-ru").onclick=()=>{lang="ru";applyLang()};
+$("v1").onclick=()=>{view=1;render();renderSteps()};$("v2").onclick=()=>{view=2;render();renderSteps()};
+["val","unp","hval","form"].forEach(id=>$(id).onchange=e=>{sv[id]=e.target.value;e.target.className=""});
+$("chk1").onclick=()=>{const A={val:"2",unp:"3",hval:"1",form:"2"};let bad=0;for(const k in A){const g=$(k).value===A[k];$(k).className=g?"ok":"bad";if(!g)bad++}
+  f1=!bad;f1?msg("m1",t("ok1"),true):msg("m1",t("bad")+bad+".",false);renderSteps()};
+function pick(id){if(!f1||picked.length>=4||f3)return;const s=TRAY.find(x=>x[3]===id)[0];
+  if(s!=="N"&&s!=="H"){msg("m2",t("wrong"),false);return}if(s==="N"&&cnt("N")){msg("m2",t("extraN"),false);return}if(s==="H"&&cnt("H")>=3){msg("m2",t("extraH"),false);return}
+  picked.push(id);fresh=id;msg("m2",picked.length===4?t("got"):t("need").replace("{n}",cnt("N")).replace("{h}",cnt("H")),true);render();renderSteps()}
+$("scene").addEventListener("click",e=>{const g=e.target.closest("[data-ball]");if(g)pick(+g.dataset.ball)});
+$("scene").addEventListener("keydown",e=>{const g=e.target.closest("[data-ball]");if(g&&(e.key==="Enter"||e.key===" ")){e.preventDefault();pick(+g.dataset.ball)}});
+$("reset").onclick=()=>{picked=[];nb=0;$("m2").textContent="";$("m3").textContent="";render();renderSteps()};
+$("plus").onclick=()=>{if(nb<3)nb++;$("m3").textContent="";render();renderSteps()};$("minus").onclick=()=>{if(nb>0)nb--;$("m3").textContent="";render();renderSteps()};
+$("chk3").onclick=()=>{if(nb===3){f3=true;view=1;msg("m3",t("m3ok"),true)}else msg("m3",t("m1b"),false);render();renderSteps()};
+document.querySelector("#qs").addEventListener("change",e=>{const s=e.target;if(s.dataset.q!=null){qv[s.dataset.q]=s.value;s.className=""}});
+$("chk").onclick=()=>{let bad=0;document.querySelectorAll("[data-q]").forEach(s=>{const g=s.value===t("qs")[s.dataset.q][2];s.className=g?"ok":"bad";if(!g)bad++});
+  ok=!bad;renderSteps();ok?msg("m4",t("ok"),true):msg("m4",t("bad")+bad+".",false)};
+$("send").onclick=()=>{const f=$("a1").value.trim()&&$("a2").value.trim();msg("m5",f?t("sent"):t("empty"),!!f)};
+applyLang();
+}
+</script>
+<script src="../embed.js"></script>
+</body>
+</html>

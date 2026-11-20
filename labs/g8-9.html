@@ -1,0 +1,238 @@
+<!DOCTYPE html>
+<html lang="kk">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Тұздардың қасиеттері</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans:wght@400;600;700&family=Noto+Serif:wght@600;700&display=swap" rel="stylesheet">
+<style>
+/* VOICE: calm school lab workbook, clear and encouraging
+   IDEA: a workbench sheet — five tubes, one per reaction of a salt
+   PICTURE: green and blue precipitates, wires coating with iron and copper, white curdy silver chloride
+   COLOUR and TYPE: white sheet on deep lab-teal; indicator and copper-salt colours; Noto Serif + Noto Sans
+   LAYOUT: steps left, rack right (sticky); stacks on phones */
+:root{color-scheme:light dark;
+--bg:light-dark(#0f4c5c,#0a2d36);--sheet:light-dark(#ffffff,#13202a);--ink:light-dark(#10131a,#e7edf2);
+--mute:light-dark(#566170,#9fb0bf);--line:light-dark(#d5dde5,#2b3d4b);--soft:light-dark(#eef5f7,#182a35);
+--acc:light-dark(#0f4c5c,#5cc2d6);--ok:light-dark(#12733a,#4ade80);--bad:light-dark(#b91c1c,#f87171);
+--warn:light-dark(#fff4d6,#3a2f12);--glass:light-dark(#f7fbfd,#1d2f3b);--glassline:light-dark(#8aa1b1,#6c8597)}
+:root[data-theme=light]{color-scheme:light}:root[data-theme=dark]{color-scheme:dark}
+*{box-sizing:border-box;min-width:0}
+body{margin:0;background:var(--bg);color:var(--ink);font:16px/1.55 "Noto Sans",system-ui,sans-serif;overflow-x:clip}
+.wrap{max-width:1240px;margin:0 auto;padding:clamp(14px,3vw,36px) max(3vw,12px)}
+header{display:flex;flex-wrap:wrap;gap:12px;align-items:flex-end;justify-content:space-between;color:#fff;margin-bottom:18px}
+header small{display:block;opacity:.8;font-size:14px}
+h1{font:700 clamp(24px,3.6vw,38px)/1.08 "Noto Serif",Georgia,serif;margin:2px 0 0;text-wrap:balance;max-width:24ch}
+.lang{display:flex;background:rgba(255,255,255,.14);border-radius:999px;padding:4px}
+.lang button{border:0;background:none;color:#fff;font:600 15px "Noto Sans";padding:8px 16px;border-radius:999px;cursor:pointer;min-height:40px}
+.lang button.on{background:#fff;color:#0f4c5c}
+.sheet{background:var(--sheet);border-radius:18px;box-shadow:0 18px 40px rgba(0,0,0,.25);padding:clamp(16px,2.6vw,30px)}
+.note{font-size:13px;color:var(--mute);margin:0 0 10px}
+.goal{margin:0 0 6px;max-width:70ch}
+.reag{margin:0 0 16px;color:var(--mute);font-size:15px;max-width:70ch}
+.safety{display:flex;gap:12px;align-items:center;flex-wrap:wrap;background:var(--warn);border-radius:12px;padding:12px 14px;margin-bottom:18px}
+.safety p{margin:0;flex:1 1 260px;font-weight:600}
+.safety label{flex-direction:row;align-items:center;gap:8px;color:var(--ink);font-weight:600;cursor:pointer}
+.grid{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1.1fr);gap:clamp(16px,3vw,36px);align-items:start}
+.step{border-top:1px solid var(--line);padding:14px 0}
+.step:first-child{border-top:0;padding-top:0}
+.step.off{opacity:.45;pointer-events:none}
+h2{font:700 19px/1.2 "Noto Serif",Georgia,serif;margin:0 0 6px}
+.hint{color:var(--mute);font-size:15px;margin:0 0 8px}
+label{font-size:14px;color:var(--mute);display:flex;flex-direction:column;gap:4px}
+textarea,select,input{font:16px "Noto Sans";color:var(--ink);background:var(--sheet);border:1.5px solid var(--line);border-radius:10px;padding:10px 12px;width:100%}
+textarea:focus,select:focus,input:focus,button:focus-visible{outline:3px solid color-mix(in srgb,var(--acc) 45%,transparent);outline-offset:1px}
+.ok{border-color:var(--ok)!important}.bad{border-color:var(--bad)!important}
+textarea{min-height:76px;resize:vertical}
+.btns{display:flex;flex-wrap:wrap;gap:8px;margin-top:8px}
+.btn{border:0;border-radius:10px;padding:10px 14px;font:600 15px "Noto Sans";cursor:pointer;min-height:44px;background:var(--acc);color:light-dark(#fff,#08202a)}
+.btn.done{background:var(--soft);color:var(--ok)}
+.btn:disabled{opacity:.45;cursor:not-allowed}.btn.done:disabled{opacity:1}
+.seg{display:inline-flex;background:var(--soft);border-radius:10px;padding:4px;gap:4px}
+.seg button{border:0;background:none;color:var(--ink);font:600 15px "Noto Sans";padding:8px 14px;border-radius:8px;cursor:pointer;min-height:40px}
+.seg button.on{background:var(--sheet);box-shadow:0 1px 4px rgba(0,0,0,.15)}
+.seg button:disabled{cursor:default}
+.msg{margin-top:8px;font-size:15px;min-height:1.4em}
+.msg.ok{color:var(--ok)}.msg.bad{color:var(--bad)}
+.board{position:sticky;top:12px}
+.rackbox{background:var(--soft);border-radius:16px;padding:10px}
+.rackbox svg{display:block;width:100%;height:auto}
+.fill{transition:fill 2s ease}
+.solid{transition:opacity 2s ease}.coat{transition:opacity 3.5s ease}
+.bub{animation:rise var(--d) linear infinite;animation-delay:var(--dl);opacity:0}
+@keyframes rise{0%{transform:translateY(0);opacity:0}10%{opacity:.95}100%{transform:translateY(-80px);opacity:0}}
+.flame{animation:flick .25s ease-in-out infinite alternate;transform-box:fill-box;transform-origin:bottom center}
+@keyframes flick{to{transform:scaleY(1.12) scaleX(.94)}}
+@media(prefers-reduced-motion:reduce){.bub,.flame{animation:none;opacity:.8}}
+table{width:100%;border-collapse:collapse;font-size:15px}
+th,td{padding:6px;border-bottom:1px solid var(--line);text-align:left;vertical-align:middle}
+th{font-size:13px;color:var(--mute);font-weight:600}
+td select{padding:8px;font-size:15px}
+.eq{display:flex;flex-wrap:wrap;align-items:center;gap:6px;font:600 17px "Noto Serif",serif;margin-bottom:10px}
+.eq input{width:46px;padding:6px;text-align:center;font:600 16px "Noto Sans"}
+.eq label{flex-direction:row;align-items:center;gap:6px;font:600 15px "Noto Sans";color:var(--ink)}
+.eq label input{width:22px;height:22px}
+.q{margin-bottom:10px}
+@media(max-width:860px){.grid{grid-template-columns:minmax(0,1fr)}.board{position:static;order:-1}}
+@media(max-width:600px){.stack thead{display:none}.stack tr{display:grid;gap:4px;padding-block:10px}.stack td{border:0;padding:0}.stack td:first-child{font-weight:600}}
+</style>
+</head>
+<body>
+<div class="wrap">
+<header>
+  <div><small data-i="lab"></small><h1 data-i="title"></h1></div>
+  <div class="lang" role="group" aria-label="Тіл"><button id="l-kk" class="on">Қазақша</button><button id="l-ru">Русский</button></div>
+</header>
+<div class="sheet">
+  <p class="note" data-i="demo"></p>
+  <p class="goal" data-i="goal"></p>
+  <p class="reag" data-i="reag"></p>
+  <div class="safety">
+    <svg width="34" height="34" viewBox="0 0 34 34" aria-hidden="true"><path d="M17 3 32 30H2Z" fill="#f59e0b"/><rect x="15.5" y="11" width="3" height="11" rx="1.5" fill="#fff"/><circle cx="17" cy="26" r="1.8" fill="#fff"/></svg>
+    <p data-i="safe"></p>
+    <label><input type="checkbox" id="goggles" style="width:22px;height:22px"><span data-i="safeok"></span></label>
+  </div>
+  <div class="grid">
+    <div>
+      <section class="step" id="st1"><h2 data-i="s1"></h2><p class="hint" data-i="s1h"></p>
+        <div class="btns"><button class="btn" data-b="s1" data-i="bs1"></button><button class="btn" data-b="oh" data-i="boh"></button></div></section>
+      <section class="step" id="st2"><h2 data-i="s2"></h2><p class="hint" data-i="s2h"></p>
+        <div class="btns"><button class="btn" data-b="s2" data-i="bs2"></button><button class="btn" data-b="al" data-i="bal"></button><button class="btn" data-b="fe" data-i="bfe"></button></div></section>
+      <section class="step" id="st3"><h2 data-i="s3"></h2><p class="hint" data-i="s3h"></p>
+        <div class="btns"><button class="btn" data-b="s3" data-i="bs3"></button><button class="btn" data-b="ag" data-i="bag"></button></div>
+        <div class="msg" id="mx" aria-live="polite"></div></section>
+      <section class="step" id="st6"><h2 data-i="s6"></h2><p class="hint" data-i="s6h"></p>
+        <table class="stack"><thead><tr><th data-i="cexp"></th><th data-i="cobs"></th></tr></thead><tbody id="tbl"></tbody></table>
+        <div class="btns"><button class="btn" id="chk6" data-i="check"></button></div>
+        <div class="msg" id="m6" aria-live="polite"></div></section>
+      <section class="step" id="st7"><h2 data-i="s7"></h2><p class="hint" data-i="s7h"></p>
+        <div id="eqs"></div>
+        <div class="btns"><button class="btn" id="chk7" data-i="check"></button></div>
+        <div class="msg" id="m7" aria-live="polite"></div></section>
+      <section class="step" id="st8"><h2 data-i="s8"></h2>
+        <div class="q"><label><span data-i="q1"></span><textarea id="a1"></textarea></label></div>
+        <div class="q"><label><span data-i="q2"></span><textarea id="a2"></textarea></label></div>
+        <div class="btns"><button class="btn" id="send" data-i="send"></button></div>
+        <div class="msg" id="m8" aria-live="polite"></div></section>
+    </div>
+    <div class="board"><div class="rackbox"><svg id="rack" viewBox="0 0 600 410" aria-label="rack"></svg></div></div>
+  </div>
+</div>
+</div>
+<script>
+{
+const T={
+kk:{lab:"9-зертханалық тәжірибе",title:"Тұздарды алу және олардың қасиеттері",demo:"Үлгі нұсқа: тіркелу және жұмысты мұғалімге жіберу толық сайтта қосылады.",
+goal:"Мақсаты: тұздардың сілтілермен, металдармен және басқа тұздармен әрекеттесуін зерттеп, нәтижесінде жаңа тұздар алу.",
+reag:"Реактивтер: темір(II) хлориді, мыс(II) хлориді, натрий гидроксиді, күміс нитраты ерітінділері. Құрал-жабдықтар: сынауық, сынауық тұрғысы, болат сым, алюминий сымы.",
+safe:"Сілті мен күміс нитраты теріге тимесін: қорғау көзілдірігін ки. Күміс нитраты теріде қара дақ қалдырады.",safeok:"Көзілдірікті кидім",
+s1:"1-тәжірибе. Тұздардың сілтілермен әрекеттесуі",s1h:"Бірінші сынауыққа 2–3 мл темір(II) хлоридін, екінші сынауыққа 2–3 мл мыс(II) хлоридін құй. Екі сынауықтағы тұз ерітінділеріне 1–2 мл натрий гидроксидін қос.",
+bs1:"FeCl₂ және CuCl₂ құю",boh:"Екеуіне NaOH қосу",
+s2:"2-тәжірибе. Тұздардың металдармен әрекеттесуі",s2h:"Екі сынауыққа тұз ерітінділерін құй: біріншісіне FeCl₂, екіншісіне CuCl₂. Біріншісіне алюминий сымын, екіншісіне болат сымын батыр. Бірнеше минут бақыла.",
+bs2:"FeCl₂ және CuCl₂ құю",bal:"FeCl₂-ге алюминий сымын батыру",bfe:"CuCl₂-ге болат сымын батыру",
+s3:"3-тәжірибе. Тұздардың тұздармен әрекеттесуі",s3h:"Сынауыққа мыс(II) хлоридінің ерітіндісін құй. Үстіне 1–2 тамшы күміс нитратының ерітіндісін тамыз.",
+bs3:"CuCl₂ құю",bag:"AgNO₃ тамызу",
+alldone:"Барлық тәжірибелер жүргізілді. Бақылауларыңды жаз.",
+s6:"Бақылауларыңды жаз",s6h:"Әр сынауықта не байқадың?",cexp:"Тәжірибе",cobs:"Бақылау",
+rows:["1. FeCl₂ + NaOH","1. CuCl₂ + NaOH","2. FeCl₂ + алюминий сымы","2. CuCl₂ + болат сым","3. CuCl₂ + AgNO₃"],
+o1:["—","Жасылдау тұнба түзілді","Көк тұнба түзілді","Ақ ірімшік тәрізді тұнба түзілді","Өзгеріс жоқ"],
+o2:["—","Сымның беті сұр (темір) қабатпен қапталды","Сымның беті қызғылт (мыс) қабатпен қапталды","Өзгеріс жоқ"],
+check:"Тексеру",ok6:"Дұрыс бақыладың!",bad6:"Мына жолдарда қате бар: ",
+s7:"Реакция теңдеулері",s7h:"Коэффициенттерді жаз (1 болса да) немесе өнімді таңда.",
+ok7:"Теңдеулер дұрыс!",bad7:"Мына теңдеулерде қате бар: ",
+s8:"Зертхана журналы",q1:"Тұздар қандай заттармен әрекеттеседі? Неге алюминий темірді, ал темір мысты тұзынан ығыстырды?",q2:"Қорытынды",
+send:"Мұғалімге жіберу",sent:"Үлгіде жіберу әлі жұмыс істемейді. Толық сайтта жұмыс мұғалімнің бетіне түседі.",empty:"Алдымен журналдың барлық сұрағына жауап бер."},
+ru:{lab:"Лабораторный опыт №9",title:"Получение солей и их свойства",demo:"Демо-версия: регистрация и отправка работы учителю появятся в полной версии сайта.",
+goal:"Цель: изучить взаимодействие солей со щелочами, металлами и другими солями и получить при этом новые соли.",
+reag:"Реактивы: растворы хлорида железа(II), хлорида меди(II), гидроксида натрия, нитрата серебра. Оборудование: пробирки, штатив, стальная проволока, алюминиевая проволока.",
+safe:"Не допускай попадания щёлочи и нитрата серебра на кожу: надень защитные очки. Нитрат серебра оставляет на коже чёрные пятна.",safeok:"Очки надеты",
+s1:"Опыт 1. Взаимодействие солей со щелочами",s1h:"В первую пробирку налей 2–3 мл хлорида железа(II), во вторую — 2–3 мл хлорида меди(II). Добавь в обе пробирки по 1–2 мл гидроксида натрия.",
+bs1:"Налить FeCl₂ и CuCl₂",boh:"Добавить NaOH в обе",
+s2:"Опыт 2. Взаимодействие солей с металлами",s2h:"Налей в две пробирки растворы солей: в первую FeCl₂, во вторую CuCl₂. В первую опусти алюминиевую проволоку, во вторую — стальную. Наблюдай несколько минут.",
+bs2:"Налить FeCl₂ и CuCl₂",bal:"Опустить Al-проволоку в FeCl₂",bfe:"Опустить стальную проволоку в CuCl₂",
+s3:"Опыт 3. Взаимодействие солей с солями",s3h:"Налей в пробирку раствор хлорида меди(II). Добавь 1–2 капли раствора нитрата серебра.",
+bs3:"Налить CuCl₂",bag:"Добавить AgNO₃",
+alldone:"Все опыты проведены. Запиши наблюдения.",
+s6:"Запиши наблюдения",s6h:"Что ты наблюдал в каждой пробирке?",cexp:"Опыт",cobs:"Наблюдение",
+rows:["1. FeCl₂ + NaOH","1. CuCl₂ + NaOH","2. FeCl₂ + алюминиевая проволока","2. CuCl₂ + стальная проволока","3. CuCl₂ + AgNO₃"],
+o1:["—","Выпал зеленоватый осадок","Выпал голубой осадок","Выпал белый творожистый осадок","Изменений нет"],
+o2:["—","Проволока покрылась серым налётом (железо)","Проволока покрылась красноватым налётом (медь)","Изменений нет"],
+check:"Проверить",ok6:"Наблюдения верны!",bad6:"Ошибки в строках: ",
+s7:"Уравнения реакций",s7h:"Расставь коэффициенты (пиши и 1) или выбери продукт.",
+ok7:"Уравнения верны!",bad7:"Ошибки в уравнениях: ",
+s8:"Лабораторный журнал",q1:"С какими веществами взаимодействуют соли? Почему алюминий вытеснил железо, а железо — медь из их солей?",q2:"Вывод",
+send:"Отправить учителю",sent:"В демо-версии отправка пока не работает. В полной версии работа попадёт на страницу учителя.",empty:"Сначала ответь на все вопросы журнала."}};
+let lang="kk";const S={s1:0,oh:0,s2:0,al:0,fe:0,s3:0,ag:0};
+let done6=false,done7=false;const tv={},ev={};
+const $=id=>document.getElementById(id),t=k=>T[lang][k];
+const X=[28,140,252,364,476],W=52,TOP=90,BOT=320;
+const FE="rgba(163,214,140,.5)",CU="rgba(45,170,190,.5)";
+function flocs(x,n,col,dark,curd){let s="";for(let k=0;k<n;k++){const a=x+8+(k*23)%(W-16),b=BOT-6-(k*9)%(curd?44:34);s+=`<ellipse cx="${a}" cy="${b}" rx="${(curd?4:5)+(k%3)}" ry="${(curd?4:3.5)+(k%2)}" fill="${col}" stroke="${dark}" stroke-width=".6"/>`}return s}
+function wire(x,metal,coat){const base=metal==="Al"?"#d1d5db":"#6b7280";
+  let s=`<rect x="${x+W/2-3}" y="${TOP-60}" width="6" height="${BOT-TOP+40}" rx="3" fill="${base}" stroke="#4b5563" stroke-width=".8"/>`;
+  s+=`<rect class="coat" x="${x+W/2-4}" y="${BOT-100}" width="8" height="${92}" rx="4" fill="${coat}" opacity="0" data-op="1"/>`;return s}
+function tube(i,{liq=0,col="rgba(200,228,242,.5)",inner="",label="",sub="",extra=""}){
+  const x=X[i];let h=`<clipPath id="c${i}"><rect x="${x}" y="${TOP}" width="${W}" height="${BOT-TOP}" rx="${W/2}"/><rect x="${x}" y="${TOP}" width="${W}" height="${(BOT-TOP)/2}"/></clipPath><g clip-path="url(#c${i})"><rect x="${x}" y="${TOP}" width="${W}" height="${BOT-TOP}" fill="var(--glass)"/>`;
+  if(liq)h+=`<rect class="fill" x="${x}" y="${BOT-liq}" width="${W}" height="${liq}" fill="${col}"/>`;
+  h+=inner+`</g><path d="M${x} ${TOP-8}V${BOT-W/2}a${W/2} ${W/2} 0 0 0 ${W} 0V${TOP-8}" fill="none" stroke="var(--glassline)" stroke-width="2.2"/><rect x="${x-4}" y="${TOP-12}" width="${W+8}" height="6" rx="3" fill="var(--glassline)"/>`+extra;
+  h+=`<text x="${x+W/2}" y="${BOT+24}" text-anchor="middle" font-size="14" font-weight="700" fill="var(--ink)">${label}</text><text x="${x+W/2}" y="${BOT+40}" text-anchor="middle" font-size="11" fill="var(--mute)">${sub}</text>`;
+  return h;
+}
+let coated={al:false,fe:false};
+function render(){
+  let h="";
+  h+=tube(0,{liq:S.s1?(S.oh?90:70):0,col:FE,inner:S.oh?flocs(X[0],18,"#c5d8a4","#7f9a5a"):"",label:"1",sub:S.oh?"Fe(OH)₂":"FeCl₂"});
+  h+=tube(1,{liq:S.s1?(S.oh?90:70):0,col:CU,inner:S.oh?flocs(X[1],18,"#60a5fa","#2563eb"):"",label:"1",sub:S.oh?"Cu(OH)₂":"CuCl₂"});
+  h+=tube(2,{liq:S.s2?90:0,col:FE,label:"2",sub:S.al?"FeCl₂ + Al":"FeCl₂",extra:S.al?wire(X[2],"Al","#3f3f46"):""});
+  h+=tube(3,{liq:S.s2?90:0,col:S.fe?"rgba(110,190,170,.45)":CU,label:"2",sub:S.fe?"CuCl₂ + Fe":"CuCl₂",extra:S.fe?wire(X[3],"Fe","#b4532a"):""});
+  h+=tube(4,{liq:S.s3?(S.ag?84:70):0,col:CU,inner:S.ag?flocs(X[4],16,"#fafafa","#cbd5e1",true):"",label:"3",sub:S.ag?"AgCl↓":"CuCl₂"});
+  h+=`<rect x="14" y="${BOT-80}" width="572" height="10" rx="4" style="fill:light-dark(#b7c4cd,#3a4b57)" opacity=".7"/>`;
+  $("rack").innerHTML=h;
+  const coats=[...document.querySelectorAll("#rack .coat")];
+  const want=coats.map((c,j)=>{const isAl=c.previousElementSibling&&c.previousElementSibling.getAttribute("fill")==="#d1d5db";return isAl?"al":"fe"});
+  coats.forEach((c,j)=>{if(coated[want[j]])c.setAttribute("opacity",.85)});
+  requestAnimationFrame(()=>requestAnimationFrame(()=>coats.forEach((c,j)=>{c.setAttribute("opacity",.85);coated[want[j]]=true})));
+}
+const DEP={oh:"s1",al:"s2",fe:"s2",ag:"s3"};
+function allDone(){return S.oh&&S.al&&S.fe&&S.ag}
+function renderSteps(){
+  const g=$("goggles").checked;
+  ["st1","st2","st3"].forEach(id=>$(id).classList.toggle("off",!g));
+  document.querySelectorAll("[data-b]").forEach(b=>{const k=b.dataset.b,done=!!S[k],en=!DEP[k]||S[DEP[k]];b.disabled=done||!en;b.classList.toggle("done",done)});
+  $("st6").classList.toggle("off",!allDone());$("st7").classList.toggle("off",!done6);$("st8").classList.toggle("off",!done7);
+}
+const ANS=["1","2","1","2","3"],OK=["o1","o1","o2","o2","o1"];
+function opts(arr,v){return arr.map((s,i)=>`<option value="${i||""}" ${String(v||"")===String(i||"")?"selected":""}>${s}</option>`).join("")}
+function renderTable(){$("tbl").innerHTML=t("rows").map((r,i)=>`<tr><td>${r}</td><td><select data-r="${i}">${opts(t(OK[i]),tv[i])}</select></td></tr>`).join("")}
+const EQS=[["FeCl₂ + ",{k:"2"},"NaOH → Fe(OH)₂↓ + ",{k:"2"},"NaCl"],["CuCl₂ + ",{k:"2"},"NaOH → Cu(OH)₂↓ + ",{k:"2"},"NaCl"],[{k:"2"},"Al + ",{k:"3"},"FeCl₂ → ",{k:"2"},"AlCl₃ + ",{k:"3"},"Fe"],["Fe + CuCl₂ → FeCl₂ + ",{s:["Cu","CuCl","Cu₂"]}],["CuCl₂ + ",{k:"2"},"AgNO₃ → ",{k:"2"},"AgCl↓ + Cu(NO₃)₂"]];
+function renderEqs(){
+  $("eqs").innerHTML=EQS.map((e,i)=>{let j=0;return`<div class="eq">`+e.map(p=>{if(typeof p==="string")return p;const id=`e${i}_${j++}`;
+    if(p.k)return`<input id="${id}" data-a="${p.k}" inputmode="numeric" value="${ev[id]||""}" aria-label="k">`;
+    return`<select id="${id}" data-a="1" style="width:auto;padding:6px 8px;font:600 15px 'Noto Sans'"><option value="">?</option>${p.s.map((o,n)=>`<option value="${n+1}" ${ev[id]==n+1?"selected":""}>${o}</option>`).join("")}</select>`}).join("")+`</div>`}).join("");
+}
+function applyLang(){
+  document.documentElement.lang=lang;
+  document.querySelectorAll("[data-i]").forEach(el=>{const v=T[lang][el.dataset.i];if(typeof v==="string")el.textContent=v});
+  $("l-kk").classList.toggle("on",lang==="kk");$("l-ru").classList.toggle("on",lang==="ru");
+  document.querySelectorAll(".msg").forEach(m=>m.textContent="");
+  render();renderSteps();renderTable();renderEqs();
+}
+function msg(id,text,ok){const m=$(id);m.textContent=text;m.className="msg "+(ok?"ok":"bad")}
+$("l-kk").onclick=()=>{lang="kk";applyLang()};$("l-ru").onclick=()=>{lang="ru";applyLang()};
+$("goggles").onchange=renderSteps;
+document.querySelector(".grid").addEventListener("click",e=>{const b=e.target.closest("[data-b]");if(!b||b.disabled)return;S[b.dataset.b]=1;render();renderSteps();if(allDone())msg("mx",t("alldone"),true)});
+$("tbl").addEventListener("change",e=>{const r=e.target.dataset.r;if(r==null)return;tv[r]=e.target.value;e.target.classList.remove("ok","bad")});
+$("chk6").onclick=()=>{const bad=[];document.querySelectorAll("#tbl select").forEach(s=>{const ok=s.value===ANS[s.dataset.r];s.classList.toggle("ok",ok);s.classList.toggle("bad",!ok);if(!ok)bad.push(Number(s.dataset.r)+1)});
+  done6=!bad.length;renderSteps();done6?msg("m6",t("ok6"),true):msg("m6",t("bad6")+bad.join(", ")+".",false)};
+const evIn=e=>{const el=e.target;if(el.id)ev[el.id]=el.value;el.classList.remove("ok","bad")};
+$("eqs").addEventListener("input",evIn);$("eqs").addEventListener("change",evIn);
+$("chk7").onclick=()=>{const bad=new Set();document.querySelectorAll("#eqs [data-a]").forEach(el=>{const ok=el.value.trim()===el.dataset.a;el.classList.remove("ok","bad");el.classList.add(ok?"ok":"bad");if(!ok)bad.add(Number(el.id.split("_")[0].slice(1))+1)});
+  done7=!bad.size;renderSteps();done7?msg("m7",t("ok7"),true):msg("m7",t("bad7")+[...bad].join(", ")+".",false)};
+$("send").onclick=()=>{const f=["a1","a2"].every(id=>$(id).value.trim());msg("m8",f?t("sent"):t("empty"),f)};
+applyLang();
+}
+</script>
+<script src="../embed.js"></script>
+</body>
+</html>

@@ -1,0 +1,256 @@
+<!DOCTYPE html>
+<html lang="kk">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Заттардың ерігіштігі</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans:wght@400;600;700&family=Noto+Serif:wght@600;700&display=swap" rel="stylesheet">
+<style>
+/* VOICE: calm school lab workbook, clear and encouraging
+   IDEA: a workbench sheet — three beakers with stirring rods and a watch glass below
+   PICTURE: beakers where salt vanishes, gypsum half-dissolves, chalk clouds then settles; drops dry on the watch glass
+   COLOUR and TYPE: white sheet on deep lab-teal; water blue, white solids; Noto Serif + Noto Sans
+   LAYOUT: steps left, beakers right (sticky); stacks on phones as title, beakers, steps */
+:root{color-scheme:light dark;
+--bg:light-dark(#0f4c5c,#0a2d36);--sheet:light-dark(#ffffff,#13202a);--ink:light-dark(#10131a,#e7edf2);
+--mute:light-dark(#566170,#9fb0bf);--line:light-dark(#d5dde5,#2b3d4b);--soft:light-dark(#eef5f7,#182a35);
+--acc:light-dark(#0f4c5c,#5cc2d6);--ok:light-dark(#12733a,#4ade80);--bad:light-dark(#b91c1c,#f87171);
+--warn:light-dark(#fff4d6,#3a2f12);--glass:light-dark(#f7fbfd,#1d2f3b);--glassline:light-dark(#8aa1b1,#6c8597)}
+:root[data-theme=light]{color-scheme:light}:root[data-theme=dark]{color-scheme:dark}
+*{box-sizing:border-box;min-width:0}
+body{margin:0;background:var(--bg);color:var(--ink);font:16px/1.55 "Noto Sans",system-ui,sans-serif;overflow-x:clip}
+.wrap{max-width:1240px;margin:0 auto;padding:clamp(14px,3vw,36px) max(3vw,12px)}
+header{display:flex;flex-wrap:wrap;gap:12px;align-items:flex-end;justify-content:space-between;color:#fff;margin-bottom:18px}
+header small{display:block;opacity:.8;font-size:14px}
+h1{font:700 clamp(24px,3.6vw,38px)/1.08 "Noto Serif",Georgia,serif;margin:2px 0 0;text-wrap:balance;max-width:24ch}
+.lang{display:flex;background:rgba(255,255,255,.14);border-radius:999px;padding:4px}
+.lang button{border:0;background:none;color:#fff;font:600 15px "Noto Sans";padding:8px 16px;border-radius:999px;cursor:pointer;min-height:40px}
+.lang button.on{background:#fff;color:#0f4c5c}
+.sheet{background:var(--sheet);border-radius:18px;box-shadow:0 18px 40px rgba(0,0,0,.25);padding:clamp(16px,2.6vw,30px)}
+.note{font-size:13px;color:var(--mute);margin:0 0 10px}
+.goal{margin:0 0 6px;max-width:70ch}
+.reag{margin:0 0 16px;color:var(--mute);font-size:15px;max-width:70ch}
+.safety{display:flex;gap:12px;align-items:center;flex-wrap:wrap;background:var(--warn);border-radius:12px;padding:12px 14px;margin-bottom:18px}
+.safety p{margin:0;flex:1 1 260px;font-weight:600}
+.safety label{flex-direction:row;align-items:center;gap:8px;color:var(--ink);font-weight:600;cursor:pointer}
+.safety input{width:22px;height:22px}
+.grid{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1.05fr);gap:clamp(16px,3vw,36px);align-items:start}
+.step{border-top:1px solid var(--line);padding:16px 0}
+.step:first-child{border-top:0;padding-top:0}
+.step.off{opacity:.45;pointer-events:none}
+h2{font:700 20px/1.2 "Noto Serif",Georgia,serif;margin:0 0 6px}
+.hint{color:var(--mute);font-size:15px;margin:0 0 12px}
+label{font-size:14px;color:var(--mute);display:flex;flex-direction:column;gap:4px}
+textarea,select{font:16px "Noto Sans";color:var(--ink);background:var(--sheet);border:1.5px solid var(--line);border-radius:10px;padding:10px 12px;width:100%}
+textarea:focus,select:focus,button:focus-visible{outline:3px solid color-mix(in srgb,var(--acc) 45%,transparent);outline-offset:1px}
+.ok{border-color:var(--ok)!important}.bad{border-color:var(--bad)!important}
+textarea{min-height:76px;resize:vertical}
+.btns{display:flex;flex-wrap:wrap;gap:10px;margin-top:12px}
+.btn{border:0;border-radius:10px;padding:11px 18px;font:600 15px "Noto Sans";cursor:pointer;min-height:44px;background:var(--acc);color:light-dark(#fff,#08202a)}
+.btn:disabled{opacity:.45;cursor:not-allowed}
+.msg{margin-top:10px;font-size:15px;min-height:1.5em}
+.msg.ok{color:var(--ok)}.msg.bad{color:var(--bad)}
+.board{position:sticky;top:12px}
+.rackbox{background:var(--soft);border-radius:16px;padding:10px}
+.rackbox svg{display:block;width:100%;height:auto}
+.bk{cursor:pointer}
+.solid{transition:opacity 1s ease}
+.cloud{transition:opacity 1.6s ease}
+.rod{transform-box:view-box}
+.stir .rod{animation:stir .9s ease-in-out}
+@keyframes stir{0%,100%{transform:rotate(0)}25%{transform:rotate(-9deg)}75%{transform:rotate(9deg)}}
+.drop{transition:r 2.5s ease,opacity 2.5s ease}
+.res{transition:opacity 2.5s ease}
+@media(prefers-reduced-motion:reduce){.stir .rod{animation:none}}
+.tray{display:flex;gap:10px;justify-content:center;flex-wrap:wrap;margin-top:12px}
+.chip{display:flex;align-items:center;gap:8px;border:2px solid var(--line);background:var(--sheet);color:var(--ink);border-radius:999px;padding:8px 16px;font:600 15px "Noto Sans";cursor:pointer;min-height:48px}
+.chip.sel{border-color:var(--acc);background:var(--soft)}
+.chip:disabled{opacity:.4;cursor:default}
+table{width:100%;border-collapse:collapse;font-size:15px}
+th,td{padding:6px;border-bottom:1px solid var(--line);text-align:left;vertical-align:middle}
+th{font-size:13px;color:var(--mute);font-weight:600}
+td select{padding:8px;font-size:15px}
+.ref{display:none;margin-top:12px;background:var(--soft);border-radius:12px;padding:12px 14px;font-size:15px}
+.ref b{display:block;margin-bottom:4px}
+.ref div{display:grid;grid-template-columns:auto minmax(0,1fr) auto;gap:10px;align-items:center;margin:4px 0}
+.bar{height:10px;border-radius:5px;background:var(--acc)}
+.q{margin-bottom:10px}
+@media(max-width:860px){.grid{grid-template-columns:minmax(0,1fr)}.board{position:static;order:-1}}
+@media(max-width:600px){.stack thead{display:none}.stack tr{display:grid;gap:6px;padding-block:10px}.stack td{border:0;padding:0}.stack td:first-child{font-weight:700}.stack td::before{content:attr(data-l);display:block;font-size:13px;color:var(--mute)}}
+</style>
+</head>
+<body>
+<div class="wrap">
+<header>
+  <div><small data-i="lab"></small><h1 data-i="title"></h1></div>
+  <div class="lang" role="group" aria-label="Тіл"><button id="l-kk" class="on">Қазақша</button><button id="l-ru">Русский</button></div>
+</header>
+<div class="sheet">
+  <p class="note" data-i="demo"></p>
+  <p class="goal" data-i="goal"></p>
+  <p class="reag" data-i="reag"></p>
+  <div class="safety">
+    <svg width="34" height="34" viewBox="0 0 34 34" aria-hidden="true"><path d="M17 3 32 30H2Z" fill="#f59e0b"/><rect x="15.5" y="11" width="3" height="11" rx="1.5" fill="#fff"/><circle cx="17" cy="26" r="1.8" fill="#fff"/></svg>
+    <p data-i="safe"></p>
+    <label><input type="checkbox" id="goggles"><span data-i="safeok"></span></label>
+  </div>
+  <div class="grid">
+    <div>
+      <section class="step" id="st1">
+        <h2 data-i="s1"></h2>
+        <p class="hint" data-i="s1h"></p>
+        <div class="btns" style="margin-top:0"><button class="btn" id="water" data-i="waterbtn"></button></div>
+        <div class="msg" id="m1" aria-live="polite"></div>
+      </section>
+      <section class="step" id="st2">
+        <h2 data-i="s2"></h2>
+        <p class="hint" data-i="s2h"></p>
+        <div class="msg" id="m2" aria-live="polite"></div>
+      </section>
+      <section class="step" id="st3">
+        <h2 data-i="s3"></h2>
+        <p class="hint" data-i="s3h"></p>
+        <div class="btns" style="margin-top:0"><button class="btn" id="wait" data-i="waitbtn"></button><button class="btn" id="drops" data-i="dropbtn"></button><button class="btn" id="evap" data-i="evapbtn"></button></div>
+        <div class="msg" id="m3" aria-live="polite"></div>
+      </section>
+      <section class="step" id="st4">
+        <h2 data-i="s4"></h2>
+        <p class="hint" data-i="s4h"></p>
+        <table class="stack"><thead><tr><th data-i="csub"></th><th data-i="cstir"></th><th data-i="cevap"></th><th data-i="ccls"></th></tr></thead><tbody id="tbl"></tbody></table>
+        <div class="btns"><button class="btn" id="chk4" data-i="check"></button></div>
+        <div class="msg" id="m4" aria-live="polite"></div>
+        <div class="ref" id="ref"><b data-i="reft"></b><div id="refrows"></div></div>
+      </section>
+      <section class="step" id="st5">
+        <h2 data-i="s5"></h2>
+        <div class="q"><label><span data-i="q1"></span><textarea id="a1"></textarea></label></div>
+        <div class="q"><label><span data-i="q2"></span><textarea id="a2"></textarea></label></div>
+        <div class="btns"><button class="btn" id="send" data-i="send"></button></div>
+        <div class="msg" id="m5" aria-live="polite"></div>
+      </section>
+    </div>
+    <div class="board">
+      <div class="rackbox"><svg id="bench" viewBox="0 0 560 430" aria-label="beakers"></svg></div>
+      <div class="tray" id="tray"></div>
+    </div>
+  </div>
+</div>
+</div>
+<script>
+{
+const T={
+kk:{lab:"5-зертханалық тәжірибе",title:"Заттардың ерігіштігін зерттеу",demo:"Үлгі нұсқа: тіркелу және жұмысты мұғалімге жіберу толық сайтта қосылады.",
+goal:"Мақсаты: натрий хлоридінің, кальций сульфатының және кальций карбонатының суда ерігіштігін салыстырып, оларды еритін, аз еритін және ерімейтін заттарға жіктеу.",
+reag:"Реактивтер: натрий хлориді — 5 г, кальций карбонаты — 5 г, кальций сульфаты — 5 г, су — 100 мл. Құрал-жабдықтар: 3 стақан, шыны таяқшалар, сағат шынысы.",
+safe:"Зертханада заттардың дәмін татуға болмайды. Шыны ыдыстармен сақ жұмыс істе.",safeok:"Ережені оқыдым",
+s1:"1-қадам. Стақандарға су құйып, заттарды сал",s1h:"Алдымен үш стақанға 20 мл-ден су құй. Сосын төмендегі затты таңдап, стақанды бас.",
+waterbtn:"Әр стақанға 20 мл су құю",watered:"Су құйылды. Енді заттарды сал.",placed:"Барлық заттар салынды.",
+s2:"2-қадам. Араластыр",s2h:"Стақанды басса, шыны таяқшамен араластырылады. Әр стақанды кемінде 3 рет араластыр. Не байқадың?",
+stirred:"Үш стақан да араластырылды. Әр стақандағы өзгерісті бақыла.",
+s3:"3-қадам. Тамшыны буландыр",s3h:"3–4 минут күт. Сосын әр стақаннан шыны таяқшамен бір тамшыдан алып, сағат шынысына тамыз да, буландыр.",
+waitbtn:"3–4 минут күту",waited:"3–4 минут өтті. Ерімеген заттар стақан түбіне тұнды.",dropbtn:"Әр стақаннан бір тамшы алу",dropped:"Тамшылар сағат шынысына тамызылды.",evapbtn:"Тамшыларды буландыру",evapd:"Су буланды. Сағат шынысындағы қалдыққа қара.",
+s4:"4-қадам. Бақылауыңды жаз да, жікте",s4h:"Әр зат үшін араластырғандағы және буландырғандағы бақылауыңды таңда, сосын оның ерігіштігін анықта.",
+csub:"Зат",cstir:"Араластырғанда",cevap:"Буландырғанда",ccls:"Ерігіштігі",
+o1:["—","Толық еріді","Аздап еріді","Ерімеді, лайланды"],o2:["—","Көп ақ қалдық","Аз қалдық","Қалдық жоқ"],o3:["—","Еритін","Аз еритін","Ерімейтін"],
+check:"Тексеру",ok4:"Дұрыс жіктедің! Төменде анықтамалық мәндер берілген.",bad4:"Мына заттарда қате бар: ",
+reft:"20 °C-та 100 г суда еритін зат массасы:",
+s5:"5-қадам. Зертхана журналы",q1:"Жауаптарыңды түсіндір: тамшыны буландырғанда қалдықтың мөлшері заттың ерігіштігі туралы не айтады?",q2:"Қорытынды",
+send:"Мұғалімге жіберу",sent:"Үлгіде жіберу әлі жұмыс істемейді. Толық сайтта жұмыс мұғалімнің бетіне түседі.",empty:"Алдымен журналдың барлық сұрағына жауап бер.",
+NaCl:"натрий хлориді",CaSO4:"кальций сульфаты",CaCO3:"кальций карбонаты",glass:"сағат шынысы"},
+ru:{lab:"Лабораторный опыт №5",title:"Исследование растворимости веществ",demo:"Демо-версия: регистрация и отправка работы учителю появятся в полной версии сайта.",
+goal:"Цель: сравнить растворимость хлорида натрия, сульфата кальция и карбоната кальция в воде и разделить их на растворимые, малорастворимые и нерастворимые.",
+reag:"Реактивы: хлорид натрия — 5 г, карбонат кальция — 5 г, сульфат кальция — 5 г, вода — 100 мл. Оборудование: 3 стакана, стеклянные палочки, часовое стекло.",
+safe:"В лаборатории нельзя пробовать вещества на вкус. Осторожно обращайся со стеклянной посудой.",safeok:"Правила прочитаны",
+s1:"Шаг 1. Налей воду и положи вещества",s1h:"Сначала налей в три стакана по 20 мл воды. Затем выбери вещество внизу и нажми на стакан.",
+waterbtn:"Налить по 20 мл воды",watered:"Вода налита. Теперь положи вещества.",placed:"Все вещества помещены.",
+s2:"Шаг 2. Перемешай",s2h:"Нажми на стакан, чтобы перемешать стеклянной палочкой. Перемешай каждый стакан не менее 3 раз. Что ты наблюдаешь?",
+stirred:"Все три стакана перемешаны. Пронаблюдай изменения в каждом.",
+s3:"Шаг 3. Выпари каплю",s3h:"Подожди 3–4 минуты. Затем возьми стеклянной палочкой по капле из каждого стакана, нанеси на часовое стекло и выпари.",
+waitbtn:"Подождать 3–4 минуты",waited:"Прошло 3–4 минуты. Нерастворившиеся вещества осели на дно.",dropbtn:"Взять по капле",dropped:"Капли нанесены на часовое стекло.",evapbtn:"Выпарить капли",evapd:"Вода испарилась. Посмотри на остаток на часовом стекле.",
+s4:"Шаг 4. Запиши наблюдения и классифицируй",s4h:"Для каждого вещества выбери наблюдения при перемешивании и выпаривании, затем определи растворимость.",
+csub:"Вещество",cstir:"При перемешивании",cevap:"При выпаривании",ccls:"Растворимость",
+o1:["—","Растворилось полностью","Растворилось немного","Не растворилось, помутнело"],o2:["—","Много белого остатка","Мало остатка","Остатка нет"],o3:["—","Растворимое","Малорастворимое","Нерастворимое"],
+check:"Проверить",ok4:"Классификация верна! Ниже приведены справочные значения.",bad4:"Ошибки для веществ: ",
+reft:"Масса вещества, растворяющегося в 100 г воды при 20 °C:",
+s5:"Шаг 5. Лабораторный журнал",q1:"Объясни ответы: что количество остатка после выпаривания капли говорит о растворимости вещества?",q2:"Вывод",
+send:"Отправить учителю",sent:"В демо-версии отправка пока не работает. В полной версии работа попадёт на страницу учителя.",empty:"Сначала ответь на все вопросы журнала.",
+NaCl:"хлорид натрия",CaSO4:"сульфат кальция",CaCO3:"карбонат кальция",glass:"часовое стекло"}};
+const SUB={NaCl:{f:"NaCl",rem:0,cloud:.04,res:2,ans:"1",g:"36"},CaSO4:{f:"CaSO₄",rem:.6,cloud:.18,res:1,ans:"2",g:"0,2"},CaCO3:{f:"CaCO₃",rem:1,cloud:.6,res:0,ans:"3",g:"0,0013"}};
+let lang="kk",sel=null,water=false,waited=false,dropped=false,evap=false,done4=false;
+const B=[null,null,null],stirs=[0,0,0],tv={};
+const $=id=>document.getElementById(id),t=k=>T[lang][k];
+const BX=[30,205,380],BW=150,BT=70,BB=250,WH=110;
+function remain(i){const s=SUB[B[i]];if(!s)return 1;const k=Math.min(stirs[i],3)/3;return 1-(1-s.rem)*k}
+function cloud(i){const s=SUB[B[i]];if(!s||!stirs[i])return 0;return waited?Math.min(s.cloud,.06):s.cloud}
+function beaker(i){
+  const x=BX[i],m=B[i];let h=`<g class="bk" id="bk${i}" data-i="${i}">`;
+  h+=`<clipPath id="bc${i}"><path d="M${x+6} ${BT}L${x+12} ${BB-10}Q${x+14} ${BB} ${x+24} ${BB}H${x+BW-24}Q${x+BW-14} ${BB} ${x+BW-12} ${BB-10}L${x+BW-6} ${BT}Z"/></clipPath>`;
+  h+=`<g clip-path="url(#bc${i})"><rect x="${x}" y="${BT}" width="${BW}" height="${BB-BT}" fill="var(--glass)"/>`;
+  if(water)h+=`<rect x="${x}" y="${BB-WH}" width="${BW}" height="${WH}" fill="rgba(160,205,235,.45)"/>`;
+  if(m){const r=remain(i),n=Math.round(26*r),settled=waited||!stirs[i];
+    h+=`<g class="solid">`;for(let k=0;k<n;k++){const a=x+22+(k*41)%(BW-44),b=BB-6-((k*13)%(settled?12:70));h+=`<circle cx="${a}" cy="${b}" r="${2.5+(k%3)}" fill="#fff" stroke="#b9c4cc" stroke-width=".8"/>`}h+=`</g>`;
+    h+=`<rect class="cloud" x="${x}" y="${BB-WH}" width="${BW}" height="${WH}" fill="#f2f2ee" opacity="${cloud(i)}"/>`}
+  h+=`</g>`;
+  h+=`<path d="M${x} ${BT-4}Q${x+4} ${BT} ${x+6} ${BT}L${x+12} ${BB-10}Q${x+14} ${BB} ${x+24} ${BB}H${x+BW-24}Q${x+BW-14} ${BB} ${x+BW-12} ${BB-10}L${x+BW-6} ${BT}" fill="none" stroke="var(--glassline)" stroke-width="2.5"/>`;
+  for(let k=1;k<=3;k++)h+=`<line x1="${x+BW-30}" x2="${x+BW-18}" y1="${BB-k*36}" y2="${BB-k*36}" stroke="var(--glassline)"/>`;
+  if(m)h+=`<g class="rod" style="transform-origin:${x+BW/2}px ${BT-30}px"><rect x="${x+BW/2+14}" y="${BT-34}" width="7" height="${BB-BT+20}" rx="3.5" fill="light-dark(#e8f3f8,#5f7a8a)" stroke="var(--glassline)" transform="rotate(10 ${x+BW/2+17} ${BT-34})"/></g>`;
+  h+=`<text x="${x+BW/2}" y="${BT-44}" text-anchor="middle" font-size="14" font-weight="700" fill="var(--mute)">${i+1}</text>`;
+  h+=`<text x="${x+BW/2}" y="${BB+26}" text-anchor="middle" font-size="16" font-weight="700" fill="var(--ink)">${m?SUB[m].f:"—"}</text>`;
+  if(m&&!waited)h+=`<text x="${x+BW/2}" y="${BB+44}" text-anchor="middle" font-size="12" fill="var(--mute)">${"●".repeat(Math.min(stirs[i],3))}${"○".repeat(3-Math.min(stirs[i],3))}</text>`;
+  return h+`</g>`;
+}
+function watch(){
+  let h=`<ellipse cx="280" cy="365" rx="210" ry="34" fill="light-dark(#f4f8fa,#1a2a34)" stroke="var(--glassline)" stroke-width="2"/><ellipse cx="280" cy="360" rx="190" ry="22" fill="none" stroke="#fff" opacity=".5"/>`;
+  h+=`<text x="280" y="420" text-anchor="middle" font-size="12" fill="var(--mute)">${t("glass")}</text>`;
+  [150,280,410].forEach((cx,i)=>{const m=B[i];h+=`<text x="${cx}" y="${342}" text-anchor="middle" font-size="12" font-weight="700" fill="var(--mute)">${i+1}</text>`;
+    if(dropped){h+=`<circle class="drop" cx="${cx}" cy="366" r="${evap?0:16}" fill="rgba(150,200,235,.55)" opacity="${evap?0:1}"/>`;
+      if(m){const n=[0,5,26][SUB[m].res];h+=`<g class="res" opacity="${evap?1:0}">`;for(let k=0;k<n;k++){const a=cx-13+(k*7)%26,b=360+(k*5)%12;h+=`<rect x="${a}" y="${b}" width="3" height="3" fill="#fff" stroke="#9aa7b0" stroke-width=".6" transform="rotate(${k*17} ${a} ${b})"/>`}h+=`</g>`}}});
+  return h;
+}
+function render(){$("bench").innerHTML=beaker(0)+beaker(1)+beaker(2)+watch()}
+function renderTray(){$("tray").innerHTML=Object.keys(SUB).map(k=>`<button class="chip${sel===k?" sel":""}" data-s="${k}" ${B.includes(k)?"disabled":""}>${SUB[k].f} — ${t(k)}</button>`).join("");$("tray").style.display=water&&B.includes(null)?"flex":"none"}
+function opts(arr,v){return arr.map((s,i)=>`<option value="${i||""}" ${String(v||"")===String(i||"")?"selected":""}>${s}</option>`).join("")}
+function renderTable(){$("tbl").innerHTML=Object.keys(SUB).map(k=>{const v=tv[k]||{};return`<tr><td>${SUB[k].f} — ${t(k)}</td>${["o1","o2","o3"].map((o,j)=>`<td data-l="${t(["cstir","cevap","ccls"][j])}"><select data-s="${k}" data-o="${o}" ${done4?"disabled":""}>${opts(t(o),v[o])}</select></td>`).join("")}</tr>`}).join("");
+  $("ref").style.display=done4?"block":"none";
+  $("refrows").innerHTML=Object.keys(SUB).map(k=>{const g=Number(SUB[k].g.replace(",","."));return`<div><span>${SUB[k].f}</span><span class="bar" style="width:${Math.max(1,g/36*100)}%"></span><b style="margin:0">${SUB[k].g} г</b></div>`}).join("")}
+function renderSteps(){
+  const g=$("goggles").checked,placed=!B.includes(null),allStir=placed&&stirs.every(s=>s>=3);
+  $("st1").classList.toggle("off",!g);$("water").disabled=water;
+  $("st2").classList.toggle("off",!placed);
+  $("st3").classList.toggle("off",!allStir);$("wait").disabled=waited;$("drops").disabled=!waited||dropped;$("evap").disabled=!dropped||evap;
+  $("st4").classList.toggle("off",!evap);$("st5").classList.toggle("off",!done4);
+}
+function applyLang(){
+  document.documentElement.lang=lang;
+  document.querySelectorAll("[data-i]").forEach(el=>{const v=T[lang][el.dataset.i];if(typeof v==="string")el.textContent=v});
+  $("l-kk").classList.toggle("on",lang==="kk");$("l-ru").classList.toggle("on",lang==="ru");
+  document.querySelectorAll(".msg").forEach(m=>m.textContent="");
+  render();renderTray();renderTable();renderSteps();
+}
+function msg(id,text,ok){const m=$(id);m.textContent=text;m.className="msg "+(ok?"ok":"bad")}
+$("l-kk").onclick=()=>{lang="kk";applyLang()};$("l-ru").onclick=()=>{lang="ru";applyLang()};
+$("goggles").onchange=renderSteps;
+$("water").onclick=()=>{water=true;msg("m1",t("watered"),true);render();renderTray();renderSteps()};
+$("tray").onclick=e=>{const b=e.target.closest(".chip");if(!b||b.disabled)return;sel=sel===b.dataset.s?null:b.dataset.s;renderTray()};
+$("bench").addEventListener("click",e=>{
+  const g=e.target.closest(".bk");if(!g||!water)return;const i=Number(g.dataset.i);
+  if(!B[i]&&sel){B[i]=sel;sel=null;render();renderTray();renderSteps();if(!B.includes(null))msg("m1",t("placed"),true);return}
+  if(B[i]&&!B.includes(null)&&!waited){stirs[i]++;render();const el=$("bk"+i);el.classList.add("stir");setTimeout(()=>el.classList.remove("stir"),900);renderSteps();if(stirs.every(s=>s>=3))msg("m2",t("stirred"),true)}
+});
+$("wait").onclick=()=>{waited=true;document.querySelectorAll("#bench .cloud").forEach(c=>c.setAttribute("opacity",.05));renderSteps();setTimeout(()=>{render();msg("m3",t("waited"),true)},1600)};
+$("drops").onclick=()=>{dropped=true;msg("m3",t("dropped"),true);render();renderSteps()};
+$("evap").onclick=()=>{evap=true;document.querySelectorAll("#bench .drop").forEach(d=>{d.setAttribute("r",0);d.setAttribute("opacity",0)});document.querySelectorAll("#bench .res").forEach(r=>r.setAttribute("opacity",1));renderSteps();setTimeout(()=>msg("m3",t("evapd"),true),2500)};
+$("tbl").addEventListener("change",e=>{const s=e.target.dataset.s;if(!s)return;tv[s]=tv[s]||{};tv[s][e.target.dataset.o]=e.target.value;e.target.classList.remove("ok","bad")});
+$("chk4").onclick=()=>{
+  const bad=[];document.querySelectorAll("#tbl select").forEach(sl=>{const ok=sl.value===SUB[sl.dataset.s].ans;sl.classList.toggle("ok",ok);sl.classList.toggle("bad",!ok);if(!ok&&!bad.includes(SUB[sl.dataset.s].f))bad.push(SUB[sl.dataset.s].f)});
+  if(bad.length){msg("m4",t("bad4")+bad.join(", ")+".",false);return}
+  done4=true;renderTable();renderSteps();msg("m4",t("ok4"),true);
+};
+$("send").onclick=()=>{const f=["a1","a2"].every(id=>$(id).value.trim());msg("m5",f?t("sent"):t("empty"),f)};
+applyLang();
+}
+</script>
+<script src="../embed.js"></script>
+</body>
+</html>

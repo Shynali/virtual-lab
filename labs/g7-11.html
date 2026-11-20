@@ -1,0 +1,213 @@
+<!DOCTYPE html>
+<html lang="kk">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Тыныс алу процесі</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans:wght@400;600;700&family=Noto+Serif:wght@600;700&display=swap" rel="stylesheet">
+<style>
+/* VOICE: calm school lab workbook, clear and encouraging (grade 7)
+   IDEA: a workbench sheet — a tube of limewater with a breathing tube, and a hand mirror
+   PICTURE: exhaled bubbles turning the limewater milky; a breath mist spreading on the mirror then fading
+   COLOUR and TYPE: white sheet on deep lab-teal; milky white, cool mirror silver; Noto Serif + Noto Sans
+   LAYOUT: steps left, scene right (sticky) with view switch; stacks on phones */
+:root{color-scheme:light dark;
+--bg:light-dark(#0f4c5c,#0a2d36);--sheet:light-dark(#ffffff,#13202a);--ink:light-dark(#10131a,#e7edf2);
+--mute:light-dark(#566170,#9fb0bf);--line:light-dark(#d5dde5,#2b3d4b);--soft:light-dark(#eef5f7,#182a35);
+--acc:light-dark(#0f4c5c,#5cc2d6);--ok:light-dark(#12733a,#4ade80);--bad:light-dark(#b91c1c,#f87171);
+--warn:light-dark(#fff4d6,#3a2f12);--glass:light-dark(#f7fbfd,#1d2f3b);--glassline:light-dark(#8aa1b1,#6c8597)}
+:root[data-theme=light]{color-scheme:light}:root[data-theme=dark]{color-scheme:dark}
+*{box-sizing:border-box;min-width:0}
+body{margin:0;background:var(--bg);color:var(--ink);font:16px/1.55 "Noto Sans",system-ui,sans-serif;overflow-x:clip}
+.wrap{max-width:1240px;margin:0 auto;padding:clamp(14px,3vw,36px) max(3vw,12px)}
+header{display:flex;flex-wrap:wrap;gap:12px;align-items:flex-end;justify-content:space-between;color:#fff;margin-bottom:18px}
+header small{display:block;opacity:.8;font-size:14px}
+h1{font:700 clamp(24px,3.6vw,38px)/1.08 "Noto Serif",Georgia,serif;margin:2px 0 0;text-wrap:balance;max-width:26ch}
+.lang{display:flex;background:rgba(255,255,255,.14);border-radius:999px;padding:4px}
+.lang button{border:0;background:none;color:#fff;font:600 15px "Noto Sans";padding:8px 16px;border-radius:999px;cursor:pointer;min-height:40px}
+.lang button.on{background:#fff;color:#0f4c5c}
+.sheet{background:var(--sheet);border-radius:18px;box-shadow:0 18px 40px rgba(0,0,0,.25);padding:clamp(16px,2.6vw,30px)}
+.note{font-size:13px;color:var(--mute);margin:0 0 10px}
+.goal{margin:0 0 6px;max-width:70ch}
+.reag{margin:0 0 16px;color:var(--mute);font-size:15px;max-width:70ch}
+.safety{display:flex;gap:12px;align-items:center;flex-wrap:wrap;background:var(--warn);border-radius:12px;padding:12px 14px;margin-bottom:18px}
+.safety p{margin:0;flex:1 1 260px;font-weight:600}
+.safety label{flex-direction:row;align-items:center;gap:8px;color:var(--ink);font-weight:600;cursor:pointer}
+.grid{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1.05fr);gap:clamp(16px,3vw,36px);align-items:start}
+.step{border-top:1px solid var(--line);padding:14px 0}
+.step:first-child{border-top:0;padding-top:0}
+.step.off{opacity:.45;pointer-events:none}
+h2{font:700 19px/1.2 "Noto Serif",Georgia,serif;margin:0 0 6px}
+.hint{color:var(--mute);font-size:15px;margin:0 0 8px}
+label{font-size:14px;color:var(--mute);display:flex;flex-direction:column;gap:4px}
+textarea,select{font:16px "Noto Sans";color:var(--ink);background:var(--sheet);border:1.5px solid var(--line);border-radius:10px;padding:10px 12px;width:100%}
+textarea:focus,select:focus,button:focus-visible{outline:3px solid color-mix(in srgb,var(--acc) 45%,transparent);outline-offset:1px}
+.ok{border-color:var(--ok)!important}.bad{border-color:var(--bad)!important}
+textarea{min-height:76px;resize:vertical}
+.btns{display:flex;flex-wrap:wrap;gap:8px;margin-top:8px}
+.btn{border:0;border-radius:10px;padding:10px 14px;font:600 15px "Noto Sans";cursor:pointer;min-height:44px;background:var(--acc);color:light-dark(#fff,#08202a)}
+.btn.done{background:var(--soft);color:var(--ok)}
+.btn:disabled{opacity:.45;cursor:not-allowed}.btn.done:disabled{opacity:1}
+.msg{margin-top:8px;font-size:15px;min-height:1.4em}
+.msg.ok{color:var(--ok)}.msg.bad{color:var(--bad)}
+.board{position:sticky;top:12px}
+.seg{display:flex;background:var(--soft);border-radius:10px;padding:4px;gap:4px;margin-bottom:10px}
+.seg button{flex:1;border:0;background:none;color:var(--ink);font:600 14px "Noto Sans";padding:8px 10px;border-radius:8px;cursor:pointer;min-height:40px}
+.seg button.on{background:var(--sheet);box-shadow:0 1px 4px rgba(0,0,0,.15)}
+.seg button:disabled{opacity:.4;cursor:default}
+.rackbox{background:var(--soft);border-radius:16px;padding:10px}
+.rackbox svg{display:block;width:100%;height:auto}
+.mag{transition:transform 1.2s ease}
+.glow{animation:glow 1.4s ease-in-out 2;transform-box:fill-box}
+@keyframes glow{50%{fill:#f97316}}
+.flame{animation:flick .25s ease-in-out infinite alternate;transform-box:fill-box;transform-origin:bottom center}
+@keyframes flick{to{transform:scaleY(1.12) scaleX(.94)}}
+@media(prefers-reduced-motion:reduce){.mag{transition:none}.glow,.flame{animation:none}}
+.scroll{overflow-x:auto}
+.fog{transition:opacity 1.2s ease}.fog.fade{transition:opacity 4s ease}.turb{transition:opacity 1.2s ease}
+.bub{animation:rise var(--d) linear infinite;animation-delay:var(--dl);opacity:0}
+@keyframes rise{0%{transform:translateY(0);opacity:0}10%{opacity:.95}100%{transform:translateY(-80px);opacity:0}}
+.smoke{animation:smoke 2.6s ease-out infinite;opacity:0}
+@keyframes smoke{0%{transform:translateY(0) scale(.6);opacity:0}20%{opacity:.6}100%{transform:translateY(-70px) scale(1.4);opacity:0}}
+@media(prefers-reduced-motion:reduce){.bub,.smoke{animation:none;opacity:.6}}
+table{width:100%;border-collapse:collapse;font-size:14px;min-width:560px}
+th,td{padding:5px;border-bottom:1px solid var(--line);text-align:left;vertical-align:middle}
+th{font-size:13px;color:var(--mute);font-weight:600}
+td:first-child{font-weight:600;font-size:14px;width:150px}
+td select{padding:6px;font-size:13px}
+.eq{display:flex;flex-wrap:wrap;align-items:center;gap:8px;font:600 17px "Noto Sans";margin-bottom:10px}
+.eq select{width:auto;padding:6px 8px;font:600 15px "Noto Sans"}
+.q{margin-bottom:10px}
+@media(max-width:860px){.grid{grid-template-columns:minmax(0,1fr)}.board{position:static;order:-1}}
+</style>
+</head>
+<body>
+<div class="wrap">
+<header>
+  <div><small data-i="lab"></small><h1 data-i="title"></h1></div>
+  <div class="lang" role="group" aria-label="Тіл"><button id="l-kk" class="on">Қазақша</button><button id="l-ru">Русский</button></div>
+</header>
+<div class="sheet">
+  <p class="note" data-i="demo"></p>
+  <p class="goal" data-i="goal"></p>
+  <p class="reag" data-i="reag"></p>
+  <div class="safety">
+    <svg width="34" height="34" viewBox="0 0 34 34" aria-hidden="true"><path d="M17 3 32 30H2Z" fill="#f59e0b"/><rect x="15.5" y="11" width="3" height="11" rx="1.5" fill="#fff"/><circle cx="17" cy="26" r="1.8" fill="#fff"/></svg>
+    <p data-i="safe"></p>
+    <label><input type="checkbox" id="goggles" style="width:22px;height:22px"><span data-i="safeok"></span></label>
+  </div>
+  <div class="grid">
+    <div>
+      <section class="step" id="st1"><h2 data-i="s1"></h2><p class="hint" data-i="s1h"></p>
+        <div class="btns"><button class="btn" data-b="lime" data-i="blime"></button><button class="btn" id="blow"></button></div>
+        <div class="msg" id="m1" aria-live="polite"></div></section>
+      <section class="step" id="st2"><h2 data-i="s2"></h2><p class="hint" data-i="s2h"></p>
+        <div class="btns"><button class="btn" data-b="mirror" data-i="bmirror"></button><button class="btn" id="breath" data-i="bbreath"></button></div>
+        <div class="msg" id="m2" aria-live="polite"></div></section>
+      <section class="step" id="st3"><h2 data-i="s3"></h2><p class="hint" data-i="s3h"></p>
+        <div class="scroll"><table><thead><tr><th data-i="cexp"></th><th data-i="cobs"></th><th data-i="csub"></th></tr></thead><tbody id="tbl"></tbody></table></div>
+        <div class="btns"><button class="btn" id="chk3" data-i="check"></button></div>
+        <div class="msg" id="m3" aria-live="polite"></div></section>
+      <section class="step" id="st4"><h2 data-i="s4"></h2><p class="hint" data-i="s4h"></p>
+        <div class="scroll"><table><thead><tr><th data-i="cprop"></th><th data-i="cburn"></th><th data-i="cresp"></th></tr></thead><tbody id="cmp"></tbody></table></div>
+        <div class="btns"><button class="btn" id="chk4" data-i="check"></button></div>
+        <div class="msg" id="m4" aria-live="polite"></div></section>
+      <section class="step" id="st5"><h2 data-i="s5"></h2>
+        <div class="q"><label><span data-i="q1"></span><textarea id="a1"></textarea></label></div>
+        <div class="q"><label><span data-i="q2"></span><textarea id="a2"></textarea></label></div>
+        <div class="btns"><button class="btn" id="send" data-i="send"></button></div>
+        <div class="msg" id="m5" aria-live="polite"></div></section>
+    </div>
+    <div class="board"><div class="rackbox"><svg id="scene" viewBox="0 0 560 420" aria-label="scene"></svg></div></div>
+  </div>
+</div>
+</div>
+<script>
+{
+const T={
+kk:{lab:"7-сынып · 11-зертханалық жұмыс",title:"Тыныс алу процесін зерттеу",demo:"Үлгі нұсқа: тіркелу және жұмысты мұғалімге жіберу толық сайтта қосылады.",
+goal:"Мақсаты: тыныс алу кезінде шығарылатын ауада көмірқышқыл газы мен су буы бар екенін тәжірибе арқылы дәлелдеу.",
+reag:"Реактивтер: әк суы Ca(OH)₂ ерітіндісі. Құрал-жабдықтар: сынауық, шыны түтік, айна.",
+safe:"Әк суымен жұмыс жасағанда қорғағыш көзілдірік кию қажет. Түтік арқылы тек үрле, ерітіндіні ішке тартпа.",safeok:"Көзілдірікті кидім",
+s1:"1-тәжірибе. Әк суына үрлеу",s1h:"Сынауықтағы мөлдір әк суына түтік арқылы (тыныс алу өнімін сыртқа шығарып) үрле. Не байқадың?",blime:"Сынауыққа мөлдір әк суын құю",bblow:"Түтік арқылы үрлеу",
+clouded:"Әк суы лайланды!",
+s2:"2-тәжірибе. Айнаға үрлеу",s2h:"Айнаны қолыңа алып, оның бетіне дем шығар. Не байқадың?",bmirror:"Айнаны қолға алу",bbreath:"Айнаға дем шығару",fogged:"Айнаның беті буланып қалды, біраздан кейін бу жоғалды.",
+s3:"Бақылауыңды жаз",s3h:"Әр тәжірибеде не байқадың және бұл шығарылған ауада қандай зат бар екенін дәлелдейді?",cexp:"Тәжірибе",cobs:"Бақылау",csub:"Шығарылған ауадағы зат",
+rows:["Әк суына үрлеу","Айнаға дем шығару"],
+o:[["—","Әк суы лайланды","Әк суы көгерді","Өзгеріс жоқ"],["—","Айна буланды","Айна қарайды","Өзгеріс жоқ"]],sb:["—","Көмірқышқыл газы","Су буы","Оттек"],
+check:"Тексеру",ok3:"Дұрыс! Тыныс алғанда сыртқа көмірқышқыл газы мен су буы шығады.",bad3:"Мына жолдарда қате бар: ",
+s4:"Жану мен тыныс алуды салыстыр",s4h:"6-зертханалық жұмысты (балауыз шамның жануы) еске түсір. Әр белгі жану мен тыныс алуға тән бе?",cprop:"Белгісі",cburn:"Жану",cresp:"Тыныс алу",
+props:["Оттек жұмсалады","Көмірқышқыл газы түзіледі","Су түзіледі","Жалын мен жарық пайда болады","Энергия бөлінеді"],yn:["—","Иә","Жоқ"],
+ok4:"Дұрыс! Екеуінде де оттек жұмсалып, көмірқышқыл газы, су және энергия бөлінеді. Бірақ тыныс алу жалынсыз, баяу жүреді.",bad4:"Қате ұяшықтар саны: ",
+s5:"Сұрақтар",q1:"1. Тәжірибелердің нәтижелерін түсіндір.",q2:"2. Жану мен тыныс алу процестерінің ұқсастықтары мен айырмашылықтарын ата.",
+send:"Мұғалімге жіберу",sent:"Үлгіде жіберу әлі жұмыс істемейді. Толық сайтта жұмыс мұғалімнің бетіне түседі.",empty:"Алдымен барлық сұраққа жауап бер.",l1:"әк суы",l2:"айна"},
+ru:{lab:"7 класс · Лабораторная работа №11",title:"Исследование процесса дыхания",demo:"Демо-версия: регистрация и отправка работы учителю появятся в полной версии сайта.",
+goal:"Цель: опытным путём доказать, что в выдыхаемом воздухе есть углекислый газ и водяной пар.",
+reag:"Реактивы: известковая вода — раствор Ca(OH)₂. Оборудование: пробирка, стеклянная трубка, зеркало.",
+safe:"При работе с известковой водой необходимо надеть защитные очки. Через трубку только выдыхай, не втягивай раствор.",safeok:"Очки надеты",
+s1:"Опыт 1. Продувание известковой воды",s1h:"Продувай через трубку прозрачную известковую воду в пробирке (выдыхая воздух). Что ты наблюдаешь?",blime:"Налить прозрачную известковую воду",bblow:"Продуть через трубку",
+clouded:"Известковая вода помутнела!",
+s2:"Опыт 2. Дыхание на зеркало",s2h:"Возьми зеркало в руки и подыши на его поверхность. Что ты наблюдаешь?",bmirror:"Взять зеркало",bbreath:"Подышать на зеркало",fogged:"Поверхность зеркала запотела, через некоторое время налёт исчез.",
+s3:"Запиши наблюдения",s3h:"Что ты наблюдал в каждом опыте и наличие какого вещества в выдыхаемом воздухе это доказывает?",cexp:"Опыт",cobs:"Наблюдение",csub:"Вещество в выдыхаемом воздухе",
+rows:["Продувание известковой воды","Дыхание на зеркало"],
+o:[["—","Известковая вода помутнела","Известковая вода посинела","Изменений нет"],["—","Зеркало запотело","Зеркало потемнело","Изменений нет"]],sb:["—","Углекислый газ","Водяной пар","Кислород"],
+check:"Проверить",ok3:"Верно! При дыхании выделяются углекислый газ и водяной пар.",bad3:"Ошибки в строках: ",
+s4:"Сравни горение и дыхание",s4h:"Вспомни лабораторную работу №6 (горение свечи). Характерен ли каждый признак для горения и для дыхания?",cprop:"Признак",cburn:"Горение",cresp:"Дыхание",
+props:["Расходуется кислород","Образуется углекислый газ","Образуется вода","Появляются пламя и свет","Выделяется энергия"],yn:["—","Да","Нет"],
+ok4:"Верно! В обоих процессах расходуется кислород и выделяются углекислый газ, вода и энергия. Но дыхание идёт медленно и без пламени.",bad4:"Неверных ячеек: ",
+s5:"Вопросы",q1:"1. Объясни результаты опытов.",q2:"2. Назови сходства и различия процессов горения и дыхания.",
+send:"Отправить учителю",sent:"В демо-версии отправка пока не работает. В полной версии работа попадёт на страницу учителя.",empty:"Сначала ответь на все вопросы.",l1:"изв. вода",l2:"зеркало"}};
+let lang="kk",blows=0,breathed=false,done3=false,done4=false;const S={lime:0,mirror:0};const tv={},cv={};
+const $=id=>document.getElementById(id),t=k=>T[lang][k];
+function render(bubbling){
+  const x=150,W=70,TOP=110,BOT=340;let h="";
+  h+=`<clipPath id="ct"><rect x="${x}" y="${TOP}" width="${W}" height="${BOT-TOP}" rx="${W/2}"/><rect x="${x}" y="${TOP}" width="${W}" height="${(BOT-TOP)/2}"/></clipPath><g clip-path="url(#ct)"><rect x="${x}" y="${TOP}" width="${W}" height="${BOT-TOP}" fill="var(--glass)"/>`;
+  if(S.lime){h+=`<rect x="${x}" y="${BOT-120}" width="${W}" height="120" fill="rgba(205,230,242,.5)"/><rect class="turb" id="turb" x="${x}" y="${BOT-120}" width="${W}" height="120" fill="#f5f5f0" opacity="${(Math.min(blows,3)/3*.85).toFixed(2)}"/>`;
+    if(bubbling)for(let k=0;k<14;k++){const cx=x+W/2+8+(k*7)%22-11,d=(.9+(k%5)/6).toFixed(2);h+=`<circle class="bub" cx="${cx}" cy="${BOT-24}" r="${2.4+(k%3)}" fill="#fff" stroke="#9fb7c7" style="--d:${d}s;--dl:${(-k*0.07).toFixed(2)}s"/>`}}
+  h+=`</g><path d="M${x} ${TOP-8}V${BOT-W/2}a${W/2} ${W/2} 0 0 0 ${W} 0V${TOP-8}" fill="none" stroke="var(--glassline)" stroke-width="2.6"/><rect x="${x-6}" y="${TOP-12}" width="${W+12}" height="8" rx="3" fill="var(--glassline)"/>`;
+  if(S.lime)h+=`<path d="M${x+W/2+8} 40V${BOT-22}" stroke="light-dark(#c6dbe6,#5f7a8a)" stroke-width="7" stroke-linecap="round" fill="none"/>`;
+  h+=`<text x="${x+W/2}" y="${BOT+28}" text-anchor="middle" font-size="14" font-weight="700" fill="var(--ink)">${t("l1")}</text>`;
+  // mirror
+  if(S.mirror){const mx=400,my=190;h+=`<rect x="${mx-9}" y="${my+92}" width="18" height="90" rx="6" fill="#7c5a3c"/><ellipse cx="${mx}" cy="${my}" rx="82" ry="98" fill="#9ca3af"/><ellipse cx="${mx}" cy="${my}" rx="72" ry="88" fill="light-dark(#dbeafe,#334155)"/><path d="M${mx-50} ${my-50}L${mx-20} ${my-80}M${mx-58} ${my-20}L${mx-10} ${my-70}" stroke="#fff" stroke-width="5" opacity=".6"/>`;
+    h+=`<ellipse class="fog" id="fog" cx="${mx}" cy="${my+10}" rx="48" ry="40" fill="#f8fafc" opacity="0"/>`;
+    h+=`<text x="${mx}" y="${my+206}" text-anchor="middle" font-size="14" font-weight="700" fill="var(--ink)">${t("l2")}</text>`}
+  $("scene").innerHTML=h;
+}
+function renderSteps(){
+  const g=$("goggles").checked;$("st1").classList.toggle("off",!g);$("st2").classList.toggle("off",blows<3);
+  document.querySelectorAll("[data-b]").forEach(b=>{const k=b.dataset.b,done=!!S[k],en=k!=="mirror"||blows>=3;b.disabled=done||!en;b.classList.toggle("done",done)});
+  $("blow").textContent=t("bblow")+(S.lime?` (${Math.min(blows,3)}/3)`:"");$("blow").disabled=!S.lime||blows>=3;$("blow").classList.toggle("done",blows>=3);
+  $("breath").disabled=!S.mirror;$("st3").classList.toggle("off",!breathed);$("st4").classList.toggle("off",!done3);$("st5").classList.toggle("off",!done4);
+}
+function opts(arr,v){return arr.map((s,i)=>`<option value="${i||""}" ${String(v||"")===String(i||"")?"selected":""}>${s}</option>`).join("")}
+function renderTables(){$("tbl").innerHTML=t("rows").map((r,i)=>`<tr><td>${r}</td><td><select data-r="${i}" data-k="o">${opts(t("o")[i],tv["o"+i])}</select></td><td><select data-r="${i}" data-k="s">${opts(t("sb"),tv["s"+i])}</select></td></tr>`).join("");
+  $("cmp").innerHTML=t("props").map((p,r)=>`<tr><td>${p}</td>${[0,1].map(c=>`<td><select data-cr="${r}" data-cc="${c}">${opts(t("yn"),cv[r+"_"+c])}</select></td>`).join("")}</tr>`).join("")}
+function applyLang(){
+  document.documentElement.lang=lang;
+  document.querySelectorAll("[data-i]").forEach(el=>{const v=T[lang][el.dataset.i];if(typeof v==="string")el.textContent=v});
+  $("l-kk").classList.toggle("on",lang==="kk");$("l-ru").classList.toggle("on",lang==="ru");
+  document.querySelectorAll(".msg").forEach(m=>m.textContent="");
+  render();renderSteps();renderTables();
+}
+function msg(id,text,ok){const m=$(id);m.textContent=text;m.className="msg "+(ok?"ok":"bad")}
+$("l-kk").onclick=()=>{lang="kk";applyLang()};$("l-ru").onclick=()=>{lang="ru";applyLang()};
+$("goggles").onchange=renderSteps;
+document.querySelector(".grid").addEventListener("click",e=>{const b=e.target.closest("[data-b]");if(!b||b.disabled)return;S[b.dataset.b]=1;render();renderSteps()});
+$("blow").onclick=()=>{const prev=(Math.min(blows,3)/3*.85);blows++;render(true);const tb=$("turb");if(tb){tb.style.transition="none";tb.setAttribute("opacity",prev);requestAnimationFrame(()=>requestAnimationFrame(()=>{tb.style.transition="";tb.setAttribute("opacity",(Math.min(blows,3)/3*.85).toFixed(2))}))}
+  setTimeout(()=>render(false),1600);renderSteps();if(blows>=3)msg("m1",t("clouded"),true)};
+$("breath").onclick=()=>{const f=$("fog");if(!f)return;f.classList.remove("fade");f.setAttribute("opacity",.85);setTimeout(()=>{f.classList.add("fade");f.setAttribute("opacity",0)},1600);breathed=true;renderSteps();msg("m2",t("fogged"),true)};
+$("tbl").addEventListener("change",e=>{const el=e.target;if(el.dataset.r==null)return;tv[el.dataset.k+el.dataset.r]=el.value;el.classList.remove("ok","bad")});
+$("cmp").addEventListener("change",e=>{const el=e.target;if(el.dataset.cr==null)return;cv[el.dataset.cr+"_"+el.dataset.cc]=el.value;el.classList.remove("ok","bad")});
+$("chk3").onclick=()=>{const SA=["1","2"],bad=[];[0,1].forEach(i=>{const o=document.querySelector(`[data-r="${i}"][data-k="o"]`),s=document.querySelector(`[data-r="${i}"][data-k="s"]`),oOk=o.value==="1",sOk=s.value===SA[i];o.className=oOk?"ok":"bad";s.className=sOk?"ok":"bad";if(!oOk||!sOk)bad.push(i+1)});
+  done3=!bad.length;renderSteps();done3?msg("m3",t("ok3"),true):msg("m3",t("bad3")+bad.join(", ")+".",false)};
+const CA=[[1,1],[1,1],[1,1],[1,2],[1,1]];
+$("chk4").onclick=()=>{let bad=0;document.querySelectorAll("#cmp select").forEach(s=>{const ok=s.value===String(CA[s.dataset.cr][s.dataset.cc]);s.classList.toggle("ok",ok);s.classList.toggle("bad",!ok);if(!ok)bad++});
+  done4=!bad;renderSteps();done4?msg("m4",t("ok4"),true):msg("m4",t("bad4")+bad+".",false)};
+$("send").onclick=()=>{const f=["a1","a2"].every(id=>$(id).value.trim());msg("m5",f?t("sent"):t("empty"),f)};
+applyLang();
+}
+</script>
+<script src="../embed.js"></script>
+</body>
+</html>

@@ -1,0 +1,238 @@
+<!DOCTYPE html>
+<html lang="kk">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Сүйек құрамындағы кальций</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans:wght@400;600;700&family=Noto+Serif:wght@600;700&display=swap" rel="stylesheet">
+<style>
+/* VOICE: calm school lab workbook, clear and encouraging (grade 7)
+   IDEA: a workbench sheet — two twin tubes, acid and alkali, each with an aluminium granule
+   PICTURE: both tubes starting slowly, then fizzing hard once the oxide film is gone: aluminium reacts with both
+   COLOUR and TYPE: white sheet on deep lab-teal; the universal-indicator rainbow; Noto Serif + Noto Sans
+   LAYOUT: steps left, scene right (sticky) with view switch; stacks on phones */
+:root{color-scheme:light dark;
+--bg:light-dark(#0f4c5c,#0a2d36);--sheet:light-dark(#ffffff,#13202a);--ink:light-dark(#10131a,#e7edf2);
+--mute:light-dark(#566170,#9fb0bf);--line:light-dark(#d5dde5,#2b3d4b);--soft:light-dark(#eef5f7,#182a35);
+--acc:light-dark(#0f4c5c,#5cc2d6);--ok:light-dark(#12733a,#4ade80);--bad:light-dark(#b91c1c,#f87171);
+--warn:light-dark(#fff4d6,#3a2f12);--glass:light-dark(#f7fbfd,#1d2f3b);--glassline:light-dark(#8aa1b1,#6c8597)}
+:root[data-theme=light]{color-scheme:light}:root[data-theme=dark]{color-scheme:dark}
+*{box-sizing:border-box;min-width:0}
+body{margin:0;background:var(--bg);color:var(--ink);font:16px/1.55 "Noto Sans",system-ui,sans-serif;overflow-x:clip}
+.wrap{max-width:1240px;margin:0 auto;padding:clamp(14px,3vw,36px) max(3vw,12px)}
+header{display:flex;flex-wrap:wrap;gap:12px;align-items:flex-end;justify-content:space-between;color:#fff;margin-bottom:18px}
+header small{display:block;opacity:.8;font-size:14px}
+h1{font:700 clamp(24px,3.6vw,38px)/1.08 "Noto Serif",Georgia,serif;margin:2px 0 0;text-wrap:balance;max-width:26ch}
+.lang{display:flex;background:rgba(255,255,255,.14);border-radius:999px;padding:4px}
+.lang button{border:0;background:none;color:#fff;font:600 15px "Noto Sans";padding:8px 16px;border-radius:999px;cursor:pointer;min-height:40px}
+.lang button.on{background:#fff;color:#0f4c5c}
+.sheet{background:var(--sheet);border-radius:18px;box-shadow:0 18px 40px rgba(0,0,0,.25);padding:clamp(16px,2.6vw,30px)}
+.note{font-size:13px;color:var(--mute);margin:0 0 10px}
+.goal{margin:0 0 6px;max-width:70ch}
+.reag{margin:0 0 16px;color:var(--mute);font-size:15px;max-width:70ch}
+.safety{display:flex;gap:12px;align-items:center;flex-wrap:wrap;background:var(--warn);border-radius:12px;padding:12px 14px;margin-bottom:18px}
+.safety p{margin:0;flex:1 1 260px;font-weight:600}
+.safety label{flex-direction:row;align-items:center;gap:8px;color:var(--ink);font-weight:600;cursor:pointer}
+.grid{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1.05fr);gap:clamp(16px,3vw,36px);align-items:start}
+.step{border-top:1px solid var(--line);padding:14px 0}
+.step:first-child{border-top:0;padding-top:0}
+.step.off{opacity:.45;pointer-events:none}
+h2{font:700 19px/1.2 "Noto Serif",Georgia,serif;margin:0 0 6px}
+.hint{color:var(--mute);font-size:15px;margin:0 0 8px}
+label{font-size:14px;color:var(--mute);display:flex;flex-direction:column;gap:4px}
+textarea,select{font:16px "Noto Sans";color:var(--ink);background:var(--sheet);border:1.5px solid var(--line);border-radius:10px;padding:10px 12px;width:100%}
+textarea:focus,select:focus,button:focus-visible{outline:3px solid color-mix(in srgb,var(--acc) 45%,transparent);outline-offset:1px}
+.ok{border-color:var(--ok)!important}.bad{border-color:var(--bad)!important}
+textarea{min-height:76px;resize:vertical}
+.btns{display:flex;flex-wrap:wrap;gap:8px;margin-top:8px}
+.btn{border:0;border-radius:10px;padding:10px 14px;font:600 15px "Noto Sans";cursor:pointer;min-height:44px;background:var(--acc);color:light-dark(#fff,#08202a)}
+.btn.done{background:var(--soft);color:var(--ok)}
+.btn:disabled{opacity:.45;cursor:not-allowed}.btn.done:disabled{opacity:1}
+.msg{margin-top:8px;font-size:15px;min-height:1.4em}
+.msg.ok{color:var(--ok)}.msg.bad{color:var(--bad)}
+.board{position:sticky;top:12px}
+.seg{display:flex;background:var(--soft);border-radius:10px;padding:4px;gap:4px;margin-bottom:10px}
+.seg button{flex:1;border:0;background:none;color:var(--ink);font:600 14px "Noto Sans";padding:8px 10px;border-radius:8px;cursor:pointer;min-height:40px}
+.seg button.on{background:var(--sheet);box-shadow:0 1px 4px rgba(0,0,0,.15)}
+.seg button:disabled{opacity:.4;cursor:default}
+.rackbox{background:var(--soft);border-radius:16px;padding:10px}
+.rackbox svg{display:block;width:100%;height:auto}
+.mag{transition:transform 1.2s ease}
+.glow{animation:glow 1.4s ease-in-out 2;transform-box:fill-box}
+@keyframes glow{50%{fill:#f97316}}
+.flame{animation:flick .25s ease-in-out infinite alternate;transform-box:fill-box;transform-origin:bottom center}
+@keyframes flick{to{transform:scaleY(1.12) scaleX(.94)}}
+@media(prefers-reduced-motion:reduce){.mag{transition:none}.glow,.flame{animation:none}}
+.scroll{overflow-x:auto}
+.seg{display:flex;background:var(--soft);border-radius:10px;padding:4px;gap:4px;margin-bottom:10px;flex-wrap:wrap}
+.seg button{flex:1;border:0;background:none;color:var(--ink);font:600 14px "Noto Sans";padding:8px 10px;border-radius:8px;cursor:pointer;min-height:40px}
+.seg button.on{background:var(--sheet);box-shadow:0 1px 4px rgba(0,0,0,.15)}
+.brown{transition:opacity 2s ease}.pk{transition:fill 1.6s ease}.ca{transition:transform 4s ease-in-out,opacity 6s ease;transform-box:fill-box;transform-origin:center}.water{animation:fall2 .6s linear infinite}@keyframes fall2{from{transform:translateY(-10px);opacity:.9}to{transform:translateY(30px);opacity:.2}}.eq input{width:44px;padding:6px;text-align:center;font:600 16px "Noto Sans";border:1.5px solid var(--line);border-radius:8px;background:var(--sheet);color:var(--ink)}
+.tray{display:flex;flex-wrap:wrap;gap:8px;margin-top:10px}
+.tray small{width:100%;font-weight:700;color:var(--mute);font-size:13px;margin-top:4px}
+.chip{border:2px solid var(--line);background:var(--sheet);color:var(--ink);border-radius:999px;padding:6px 12px;font:600 14px "Noto Sans";cursor:pointer;min-height:40px}
+.chip.sel{border-color:var(--acc);background:var(--soft)}.chip.done{color:var(--ok)}.chip:disabled{opacity:.4;cursor:default}
+.scroll{overflow-x:auto}td select{padding:6px;font-size:13px}td input{width:70px;padding:6px;text-align:right;font:600 15px "Noto Sans";color:var(--ink);background:var(--sheet);border:1.5px solid var(--line);border-radius:8px}
+.two{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:0 18px}@media(max-width:600px){.two{grid-template-columns:minmax(0,1fr)}}
+.bub{animation:rise var(--d) linear infinite;animation-delay:var(--dl);opacity:0}
+@keyframes rise{0%{transform:translateY(0);opacity:0}10%{opacity:.95}100%{transform:translateY(-80px);opacity:0}}
+.smoke{animation:smoke 2.6s ease-out infinite;opacity:0}
+@keyframes smoke{0%{transform:translateY(0) scale(.6);opacity:0}20%{opacity:.6}100%{transform:translateY(-70px) scale(1.4);opacity:0}}
+@media(prefers-reduced-motion:reduce){.bub,.smoke{animation:none;opacity:.6}}
+table{width:100%;border-collapse:collapse;font-size:14px}
+th,td{padding:5px;border-bottom:1px solid var(--line);text-align:left;vertical-align:middle}
+th{font-size:13px;color:var(--mute);font-weight:600}
+td:first-child{font-weight:600;font-size:14px}
+td select{padding:6px;font-size:13px}
+.eq{display:flex;flex-wrap:wrap;align-items:center;gap:8px;font:600 17px "Noto Sans";margin-bottom:10px}
+.eq select{width:auto;padding:6px 8px;font:600 15px "Noto Sans"}
+.q{margin-bottom:10px}
+input[type=range]{width:100%;accent-color:var(--acc);height:32px}
+.rng{display:flex;align-items:center;gap:12px;margin-top:6px}.rng b{min-width:90px;font-size:15px}
+.ebub{animation:er 1.6s linear infinite;animation-delay:var(--dl);opacity:0}@keyframes er{0%{transform:translate(0,0);opacity:0}15%{opacity:.9}100%{transform:translate(6px,-60px);opacity:0}}
+.fade{animation:fade 2.6s ease forwards}@keyframes fade{to{opacity:0}}
+.stir{animation:stir .5s ease-in-out 5;transform-box:fill-box;transform-origin:top center}@keyframes stir{50%{transform:rotate(9deg)}}
+@media(max-width:860px){.grid{grid-template-columns:minmax(0,1fr)}.board{position:static;order:-1}}
+</style>
+</head>
+<body>
+<div class="wrap">
+<header>
+  <div><small data-i="lab"></small><h1 data-i="title"></h1></div>
+  <div class="lang" role="group" aria-label="Тіл"><button id="l-kk" class="on">Қазақша</button><button id="l-ru">Русский</button></div>
+</header>
+<div class="sheet">
+  <p class="note" data-i="demo"></p>
+  <p class="goal" data-i="goal"></p>
+  <p class="reag" data-i="reag"></p>
+  <div class="safety">
+    <svg width="34" height="34" viewBox="0 0 34 34" aria-hidden="true"><path d="M17 3 32 30H2Z" fill="#f59e0b"/><rect x="15.5" y="11" width="3" height="11" rx="1.5" fill="#fff"/><circle cx="17" cy="26" r="1.8" fill="#fff"/></svg>
+    <p data-i="safe"></p>
+    <label><input type="checkbox" id="goggles" style="width:22px;height:22px"><span data-i="safeok"></span></label>
+  </div>
+  <div class="grid">
+    <div>
+      <section class="step" id="st1"><h2 data-i="e1"></h2><p class="hint" data-i="e1h"></p>
+        <div class="btns"><button class="btn" data-b="bone" data-i="bbone"></button><button class="btn" data-b="vin1" data-i="bvin"></button></div>
+        <div class="rng"><input type="range" id="days" min="0" max="7" value="0" disabled aria-labelledby="dl"><b id="dl"></b></div>
+        <div class="btns"><button class="btn" data-b="bend" data-i="bbend"></button></div>
+        <div class="msg" id="m1" aria-live="polite"></div></section>
+      <section class="step" id="st2"><h2 data-i="e2"></h2><p class="hint" data-i="e2h"></p>
+        <div class="btns"><button class="btn" data-b="paste" data-i="bpaste"></button><button class="btn" data-b="vin2" data-i="bdip"></button></div>
+        <div class="rng"><input type="range" id="hours" min="0" max="48" step="2" value="0" disabled aria-labelledby="hl"><b id="hl"></b></div>
+        <div class="msg" id="m2" aria-live="polite"></div></section>
+      <section class="step" id="st3"><h2 data-i="s3"></h2><p class="hint" data-i="s3h"></p>
+        <div id="qs"></div>
+        <div id="eqs" style="margin-top:12px"></div>
+        <div class="btns"><button class="btn" id="chk" data-i="check"></button></div>
+        <div class="msg" id="m3" aria-live="polite"></div></section>
+      <section class="step" id="st4"><h2 data-i="s4"></h2>
+        <div class="q"><label><span data-i="q1"></span><textarea id="a1"></textarea></label></div>
+        <div class="q"><label><span data-i="q2"></span><textarea id="a2"></textarea></label></div>
+        <div class="btns"><button class="btn" id="send" data-i="send"></button></div>
+        <div class="msg" id="m4" aria-live="polite"></div></section>
+    </div>
+    <div class="board">
+      <div class="seg" role="group"><button id="v1" class="on" data-i="vbone"></button><button id="v2" data-i="vegg"></button></div>
+      <div class="rackbox"><svg id="scene" viewBox="0 0 560 400" aria-label="scene"></svg></div></div>
+  </div>
+</div>
+</div>
+<script>
+{
+const T={
+kk:{lab:"9-сынып · 14-зертханалық жұмыс",title:"Сүйек құрамындағы кальцийді анықтау",demo:"Үлгі нұсқа: тіркелу және жұмысты мұғалімге жіберу толық сайтта қосылады.",
+goal:"Мақсаты: сірке қышқылының сүйекке және жұмыртқа қабығына әсерін бақылап, олардың құрамында кальцийдің бар екенін дәлелдеу.",
+reag:"Реактивтер мен материалдар: сірке қышқылы, тіс пастасы, шикі жұмыртқа, тауық сүйегі. Құрал-жабдықтар: құты, химиялық стақан.",
+safe:"Қыздырғыш құралдармен, қышқылдармен және сілтілермен жұмыс істеу ережесін сақта: қорғау көзілдірігін ки.",safeok:"Ережені оқыдым",
+e1:"1-тәжірибе",e1h:"Тауық сүйектерін құтыға салып, үстіне сірке қышқылын құй да, 7 күнге қалдыр. Сосын сүйекті шығарып, ақырындап иіп көр. Не байқадың?",
+bbone:"Сүйекті құтыға салу",bvin:"Сірке қышқылын құю",bbend:"Сүйекті шығарып, иіп көру",day:"күн",
+stiff:"Сүйек әлі қатты — иілмейді. Тағы бірнеше күн күт.",bent:"7 күннен кейін сүйек жұмсарып, резеңке сияқты иіледі! Кальций қосылыстары ерітіндіге өтті.",
+e2:"2-тәжірибе. Жұмыртқа қабығына сірке қышқылының әсері",e2h:"Шикі жұмыртқаның қабығының жартысына тіс пастасын жағып, оны сірке қышқылына батыр. Уақытты жылжытып, бірнеше сағат бойы бақыла.",
+bpaste:"Жартысына тіс пастасын жағу",bdip:"Сірке қышқылына батыру",hour:"сағат",
+h0:"Жұмыртқа сірке қышқылында жатыр.",h1:"Паста жағылмаған жағы көпіршіктенуде — газ бөлініп жатыр.",h2:"Паста жағылмаған жақтағы қабық жұқарып барады.",h3:"Қабық толық еріп, жұмыртқа ағарып кетті. Паста жағылған жағы сақталды.",
+vbone:"Сүйек",vegg:"Жұмыртқа",paste:"паста",
+s3:"Бақылаулар мен теңдеу",s3h:"Бақылауыңды таңда да, теңдеудегі коэффициенттерді қой (1 болса, бос қалдыруға болады).",
+qs:[["7 күннен кейін сүйек қандай болды?",["—","Жұмсарып, оңай иілетін болды","Одан да қатты болды","Өзгерген жоқ"],"1"],["Сүйектің қаттылығын не береді?",["—","Кальций қосылыстары (кальций фосфаты, карбонаты)","Су","Май"],"1"],["Жұмыртқа қабығының негізгі құрамы:",["—","Кальций карбонаты CaCO₃","Натрий хлориді NaCl","Кремний диоксиді SiO₂"],"1"],["Паста жағылмаған жағында қандай газ бөлінді?",["—","Көмірқышқыл газы CO₂","Сутек H₂","Оттек O₂"],"1"],["Паста жағылған жағы неге көпіршіктенбеді?",["—","Паста қабықты қышқылдан қорғады","Онда кальций жоқ","Ол жақ суық болды"],"1"]],
+check:"Тексеру",ok:"Барлығы дұрыс! Сүйек пен жұмыртқа қабығының құрамында кальций қосылыстары бар: сірке қышқылы оларды ерітеді, ал тіс пастасы тіс эмалі сияқты қабықты қорғайды.",bad:"Қате жауаптар саны: ",
+eqm:"Молекулалық:",
+s4:"Қорытынды",q1:"Екі тәжірибеде байқаған құбылыстарыңды жаз.",q2:"Қорытынды жаса: сүйек пен жұмыртқа қабығының құрамында қандай элемент бар? Тіс пастасы не үшін қажет?",
+send:"Мұғалімге жіберу",sent:"Үлгіде жіберу әлі жұмыс істемейді. Толық сайтта жұмыс мұғалімнің бетіне түседі.",empty:"Алдымен сұрақтарға жауап бер."},
+ru:{lab:"9 класс · Лабораторная работа №14",title:"Определение кальция в составе кости",demo:"Демо-версия: регистрация и отправка работы учителю появятся в полной версии сайта.",
+goal:"Цель: пронаблюдать действие уксусной кислоты на кость и яичную скорлупу и доказать наличие в них кальция.",
+reag:"Реактивы и материалы: уксусная кислота, зубная паста, сырое яйцо, куриная кость. Оборудование: банка, химический стакан.",
+safe:"Соблюдай правила работы с нагревательными приборами, кислотами и щелочами: надень защитные очки.",safeok:"Правила прочитаны",
+e1:"Опыт 1",e1h:"Положи куриные кости в банку, залей уксусной кислотой и оставь на 7 дней. Затем достань кость и попробуй осторожно её согнуть. Что ты наблюдаешь?",
+bbone:"Положить кость в банку",bvin:"Залить уксусной кислотой",bbend:"Достать кость и согнуть",day:"дн.",
+stiff:"Кость ещё твёрдая — не гнётся. Подожди ещё несколько дней.",bent:"Через 7 дней кость стала мягкой и гнётся, как резина! Соединения кальция перешли в раствор.",
+e2:"Опыт 2. Действие уксусной кислоты на яичную скорлупу",e2h:"Нанеси зубную пасту на половину скорлупы сырого яйца и опусти его в уксусную кислоту. Передвигай время и наблюдай в течение нескольких часов.",
+bpaste:"Намазать пастой половину",bdip:"Опустить в уксусную кислоту",hour:"ч",
+h0:"Яйцо лежит в уксусной кислоте.",h1:"Сторона без пасты покрывается пузырьками — выделяется газ.",h2:"Скорлупа на стороне без пасты истончается.",h3:"Скорлупа полностью растворилась, яйцо побелело. Сторона с пастой сохранилась.",
+vbone:"Кость",vegg:"Яйцо",paste:"паста",
+s3:"Наблюдения и уравнение",s3h:"Выбери наблюдения и расставь коэффициенты (если 1, поле можно оставить пустым).",
+qs:[["Какой стала кость через 7 дней?",["—","Мягкой, легко гнётся","Ещё твёрже","Не изменилась"],"1"],["Что придаёт кости твёрдость?",["—","Соединения кальция (фосфат, карбонат кальция)","Вода","Жир"],"1"],["Основной состав яичной скорлупы:",["—","Карбонат кальция CaCO₃","Хлорид натрия NaCl","Диоксид кремния SiO₂"],"1"],["Какой газ выделялся на стороне без пасты?",["—","Углекислый газ CO₂","Водород H₂","Кислород O₂"],"1"],["Почему сторона с пастой не покрылась пузырьками?",["—","Паста защитила скорлупу от кислоты","В ней нет кальция","Там было холоднее"],"1"]],
+check:"Проверить",ok:"Всё верно! В кости и яичной скорлупе есть соединения кальция: уксусная кислота их растворяет, а зубная паста защищает скорлупу, как эмаль зубов.",bad:"Неверных ответов: ",
+eqm:"Молекулярное:",
+s4:"Вывод",q1:"Опиши явления, которые ты наблюдал в обоих опытах.",q2:"Сделай вывод: какой элемент входит в состав кости и яичной скорлупы? Для чего нужна зубная паста?",
+send:"Отправить учителю",sent:"В демо-версии отправка пока не работает. В полной версии работа попадёт на страницу учителя.",empty:"Сначала ответь на вопросы."}};
+let lang="kk",ok=false,view=1;const S={bone:0,vin1:0,bend:0,paste:0,vin2:0};let days=0,hours=0,eggDone=false;const qv={},ev={};
+const $=id=>document.getElementById(id),t=k=>T[lang][k];
+function bonePath(x1,y1,x2,y2,bend){const mx=(x1+x2)/2,my=(y1+y2)/2+bend;const d=`M${x1} ${y1}Q${mx} ${my} ${x2} ${y2}`;
+  const knob=(x,y)=>`<circle cx="${x-7}" cy="${y-7}" r="11"/><circle cx="${x+7}" cy="${y+7}" r="11"/>`;
+  return`<g><path d="${d}" fill="none" stroke="#a8936a" stroke-width="20" stroke-linecap="round"/><g fill="#a8936a">${knob(x1,y1)}${knob(x2,y2)}</g><path d="${d}" fill="none" stroke="#f3ead2" stroke-width="15" stroke-linecap="round"/><g fill="#f3ead2" transform="translate(0,0)">${knob(x1,y1).replace(/r="11"/g,'r="8.5"')}${knob(x2,y2).replace(/r="11"/g,'r="8.5"')}</g></g>`}
+function boneScene(){let h=`<text x="280" y="34" text-anchor="middle" font-size="16" font-weight="700" fill="var(--ink)">${S.vin1?days+" "+t("day"):""}</text>`;
+  const X=110,W=200,TOP=90,BOT=350;
+  h+=`<rect x="${X}" y="${TOP}" width="${W}" height="${BOT-TOP}" rx="22" fill="var(--glass)" stroke="var(--glassline)" stroke-width="3"/><rect x="${X+10}" y="${TOP-18}" width="${W-20}" height="20" rx="6" fill="var(--glassline)" opacity=".7"/>`;
+  if(S.vin1)h+=`<rect x="${X+3}" y="${TOP+60}" width="${W-6}" height="${BOT-TOP-63}" rx="18" style="fill:rgba(${240-days*3},${236-days*2},${200-days*6},.6)"/>`;
+  if(S.bone&&!S.bend)h+=bonePath(X+40,BOT-40,X+W-40,TOP+100,0);
+  if(S.vin1&&!S.bend)for(let k=0;k<5;k++)h+=`<circle class="bub" cx="${X+50+k*25}" cy="${BOT-60-(k%3)*30}" r="2.5" fill="#fff" stroke="#9fb7c7" style="--d:${3+k%3}s;--dl:${-k}s"/>`;
+  if(S.bend){h+=bonePath(360,250,510,250,-120);h+=`<path d="M350 300q-20-40 0-80" fill="none" stroke="var(--acc)" stroke-width="3" marker-end="url(#ar)"/><path d="M520 300q20-40 0-80" fill="none" stroke="var(--acc)" stroke-width="3" marker-end="url(#ar)"/><text x="435" y="300" text-anchor="middle" font-size="15" font-weight="700" fill="var(--acc)">${lang==="kk"?"иілді":"гнётся"}</text>`}
+  return`<defs><marker id="ar" viewBox="0 0 10 10" refX="5" refY="5" markerWidth="6" markerHeight="6" orient="auto"><path d="M0 0 10 5 0 10z" fill="var(--acc)"/></marker></defs>`+h}
+function eggScene(){const X=150,W=260,TOP=80,BOT=360,cx=280,cy=255;let h=`<text x="280" y="34" text-anchor="middle" font-size="16" font-weight="700" fill="var(--ink)">${S.vin2?hours+" "+t("hour"):""}</text>`;
+  h+=`<path d="M${X} ${TOP}V${BOT-14}q0 14 14 14h${W-28}q14 0 14-14V${TOP}" fill="var(--glass)" stroke="var(--glassline)" stroke-width="3"/>`;
+  if(S.vin2)h+=`<path d="M${X+2} ${TOP+50}V${BOT-14}q0 12 12 12h${W-28}q12 0 12-12V${TOP+50}z" fill="rgba(240,236,200,.55)"/>`;
+  const shellOp=hours<12?1:Math.max(0,1-(hours-12)/24);
+  h+=`<clipPath id="L"><rect x="0" y="0" width="${cx}" height="400"/></clipPath><clipPath id="R"><rect x="${cx}" y="0" width="300" height="400"/></clipPath>`;
+  h+=`<ellipse cx="${cx}" cy="${cy}" rx="62" ry="80" fill="#fbf8f0" stroke="#d8d2c2" stroke-width="2"/>`;
+  h+=`<g clip-path="url(#R)"><ellipse cx="${cx}" cy="${cy}" rx="62" ry="80" fill="#d9a877" opacity="${shellOp}"/></g>`;
+  h+=`<g clip-path="url(#L)"><ellipse cx="${cx}" cy="${cy}" rx="62" ry="80" fill="#d9a877"/>${S.paste?`<ellipse cx="${cx}" cy="${cy}" rx="62" ry="80" fill="#e6f4f1" opacity=".92"/><path d="M${cx-50} ${cy-30}h40M${cx-56} ${cy}h46M${cx-50} ${cy+30}h40" stroke="#7dd3c0" stroke-width="4" stroke-linecap="round"/>`:""}</g>`;
+  h+=`<line x1="${cx}" y1="${cy-80}" x2="${cx}" y2="${cy+80}" stroke="#b9a98a" stroke-dasharray="4 4" opacity="${S.paste?.8:0}"/>`;
+  if(S.paste)h+=`<text x="${cx-30}" y="${cy-92}" text-anchor="middle" font-size="13" font-weight="700" fill="var(--mute)">${t("paste")}</text>`;
+  if(S.vin2&&hours>=2&&hours<40)for(let k=0;k<12;k++){const a=-1.2+k*0.22,bx=cx+62*Math.cos(a)*0.98,by=cy+80*Math.sin(a)*0.98;h+=`<circle class="ebub" cx="${bx.toFixed(1)}" cy="${by.toFixed(1)}" r="${2+k%3}" fill="#fff" stroke="#9fb7c7" style="--dl:${(-k*0.13).toFixed(2)}s"/>`}
+  if(S.vin2&&hours>=2&&hours<40)h+=`<text x="${cx+110}" y="${cy-60}" font-size="16" font-weight="700" fill="var(--acc)">CO₂↑</text>`;
+  return h}
+function render(){$("scene").innerHTML=view===1?boneScene():eggScene();$("v1").classList.toggle("on",view===1);$("v2").classList.toggle("on",view===2)}
+function opts(arr,v){return arr.map((s,i)=>`<option value="${i||""}" ${String(v||"")===String(i||"")?"selected":""}>${s}</option>`).join("")}
+const E=[["m",[["k0","1"],"CaCO₃ + ",["k1","2"],"CH₃COOH → ",["k2","1"],"(CH₃COO)₂Ca + H₂O + CO₂↑"]]];
+function renderQ(){$("qs").innerHTML=t("qs").map((q,i)=>`<label style="margin-top:6px"><span>${q[0]}</span><select data-q="${i}">${opts(q[1],qv[i])}</select></label>`).join("");
+  $("eqs").innerHTML=E.map(([k,e])=>`<div class="eq"><small style="width:100%;font-size:13px;color:var(--mute);font-weight:600">${t("eqm")}</small>${e.map(p=>typeof p==="string"?p:`<input id="${p[0]}" data-a="${p[1]}" inputmode="numeric" value="${ev[p[0]]||""}">`).join("")}</div>`).join("")}
+function renderSteps(){const g=$("goggles").checked;$("st1").classList.toggle("off",!g);$("st2").classList.toggle("off",!g);
+  const DEP={vin1:"bone",bend:"vin1",vin2:"paste"};document.querySelectorAll("[data-b]").forEach(b=>{const k=b.dataset.b,done=!!S[k],en=!DEP[k]||S[DEP[k]];b.disabled=done||!en;b.classList.toggle("done",done)});
+  $("days").disabled=!S.vin1||!!S.bend;$("hours").disabled=!S.vin2;$("dl").textContent=days+" "+t("day");$("hl").textContent=hours+" "+t("hour");
+  $("st3").classList.toggle("off",!(S.bend&&eggDone));$("st4").classList.toggle("off",!ok)}
+function applyLang(){document.documentElement.lang=lang;
+  document.querySelectorAll("[data-i]").forEach(el=>{const v=T[lang][el.dataset.i];if(typeof v==="string")el.textContent=v});
+  $("l-kk").classList.toggle("on",lang==="kk");$("l-ru").classList.toggle("on",lang==="ru");
+  document.querySelectorAll(".msg").forEach(m=>m.textContent="");render();renderQ();renderSteps()}
+function msg(id,text,okk){const m=$(id);m.textContent=text;m.className="msg "+(okk?"ok":"bad")}
+$("l-kk").onclick=()=>{lang="kk";applyLang()};$("l-ru").onclick=()=>{lang="ru";applyLang()};
+$("v1").onclick=()=>{view=1;render()};$("v2").onclick=()=>{view=2;render()};
+$("goggles").onchange=renderSteps;
+$("days").oninput=e=>{days=+e.target.value;view=1;$("m1").textContent="";render();renderSteps()};
+$("hours").oninput=e=>{hours=+e.target.value;view=2;msg("m2",hours>=36?t("h3"):hours>=12?t("h2"):hours>=2?t("h1"):t("h0"),true);if(hours>=48)eggDone=true;render();renderSteps()};
+document.querySelector(".grid").addEventListener("click",e=>{const b=e.target.closest("[data-b]");if(!b||b.disabled)return;const k=b.dataset.b;
+  if(k==="bend"){view=1;if(days<7){msg("m1",t("stiff"),false);render();return}S.bend=1;msg("m1",t("bent"),true);render();renderSteps();return}
+  S[k]=1;view=(k==="paste"||k==="vin2")?2:1;if(k==="vin2")msg("m2",t("h0"),true);render();renderSteps()});
+document.querySelector(".grid").addEventListener("change",e=>{const s=e.target;if(s.dataset.q!=null){qv[s.dataset.q]=s.value;s.className=""}});
+$("eqs").addEventListener("input",e=>{const el=e.target;if(el.id)ev[el.id]=el.value;el.style.borderColor=""});
+$("chk").onclick=()=>{let bad=0;document.querySelectorAll("[data-q]").forEach(s=>{const g=s.value===t("qs")[s.dataset.q][2];s.className=g?"ok":"bad";if(!g)bad++});
+  document.querySelectorAll("#eqs input").forEach(el=>{const v=el.value.trim(),a=el.dataset.a,g=v===a||(a==="1"&&v==="");el.style.borderColor=g?"var(--ok)":"var(--bad)";if(!g)bad++});
+  ok=!bad;renderSteps();ok?msg("m3",t("ok"),true):msg("m3",t("bad")+bad+".",false)};
+$("send").onclick=()=>{const f=$("a1").value.trim()&&$("a2").value.trim();msg("m4",f?t("sent"):t("empty"),!!f)};
+applyLang();
+}
+</script>
+<script src="../embed.js"></script>
+</body>
+</html>

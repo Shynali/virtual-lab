@@ -1,0 +1,316 @@
+<!DOCTYPE html>
+<html lang="kk">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Массалар қатынасы</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans:wght@400;600;700&family=Noto+Serif:wght@600;700&display=swap" rel="stylesheet">
+<style>
+/* VOICE: calm school lab workbook, clear and encouraging
+   IDEA: a workbench sheet — a rack of eight test tubes on a lab table
+   PICTURE: the tube rack where blue Cu(OH)2 settles, plus a magnified ruler view
+   COLOUR and TYPE: white sheet on deep lab-teal; copper-sulfate blue as accent; Noto Serif + Noto Sans (Kazakh letters)
+   LAYOUT: steps left, rack right (sticky); stacks on phones as title, rack, steps */
+:root{color-scheme:light dark;
+--bg:light-dark(#0f4c5c,#0a2d36);--sheet:light-dark(#ffffff,#13202a);--ink:light-dark(#10131a,#e7edf2);
+--mute:light-dark(#566170,#9fb0bf);--line:light-dark(#d5dde5,#2b3d4b);--soft:light-dark(#eef5f7,#182a35);
+--acc:light-dark(#0f4c5c,#5cc2d6);--ok:light-dark(#12733a,#4ade80);--bad:light-dark(#b91c1c,#f87171);
+--warn:light-dark(#fff4d6,#3a2f12);--glass:light-dark(#f7fbfd,#1d2f3b);--glassline:light-dark(#8aa1b1,#6c8597)}
+:root[data-theme=light]{color-scheme:light}:root[data-theme=dark]{color-scheme:dark}
+*{box-sizing:border-box;min-width:0}
+body{margin:0;background:var(--bg);color:var(--ink);font:16px/1.55 "Noto Sans",system-ui,sans-serif;overflow-x:clip}
+.wrap{max-width:1240px;margin:0 auto;padding:clamp(14px,3vw,36px) max(3vw,12px)}
+header{display:flex;flex-wrap:wrap;gap:12px;align-items:flex-end;justify-content:space-between;color:#fff;margin-bottom:18px}
+header small{display:block;opacity:.8;font-size:14px}
+h1{font:700 clamp(24px,3.6vw,38px)/1.08 "Noto Serif",Georgia,serif;margin:2px 0 0;text-wrap:balance;max-width:24ch}
+.lang{display:flex;background:rgba(255,255,255,.14);border-radius:999px;padding:4px}
+.lang button{border:0;background:none;color:#fff;font:600 15px "Noto Sans";padding:8px 16px;border-radius:999px;cursor:pointer;min-height:40px}
+.lang button.on{background:#fff;color:#0f4c5c}
+.sheet{background:var(--sheet);border-radius:18px;box-shadow:0 18px 40px rgba(0,0,0,.25);padding:clamp(16px,2.6vw,30px)}
+.note{font-size:13px;color:var(--mute);margin:0 0 10px}
+.goal{margin:0 0 6px;max-width:70ch}
+.reag{margin:0 0 16px;color:var(--mute);font-size:15px;max-width:70ch}
+.safety{display:flex;gap:12px;align-items:center;flex-wrap:wrap;background:var(--warn);border-radius:12px;padding:12px 14px;margin-bottom:18px}
+.safety svg{flex:none}
+.safety p{margin:0;flex:1 1 260px;font-weight:600}
+.safety label{flex-direction:row;align-items:center;gap:8px;color:var(--ink);font-weight:600;cursor:pointer}
+.safety input{width:22px;height:22px}
+.grid{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1.1fr);gap:clamp(16px,3vw,36px);align-items:start}
+.step{border-top:1px solid var(--line);padding:16px 0}
+.step:first-child{border-top:0;padding-top:0}
+.step.off{opacity:.45;pointer-events:none}
+h2{font:700 20px/1.2 "Noto Serif",Georgia,serif;margin:0 0 6px}
+.hint{color:var(--mute);font-size:15px;margin:0 0 12px}
+label{font-size:14px;color:var(--mute);display:flex;flex-direction:column;gap:4px}
+input,textarea,select{font:16px "Noto Sans";color:var(--ink);background:var(--sheet);border:1.5px solid var(--line);border-radius:10px;padding:10px 12px;width:100%}
+input:focus,textarea:focus,select:focus,button:focus-visible{outline:3px solid color-mix(in srgb,var(--acc) 45%,transparent);outline-offset:1px}
+input.ok,select.ok{border-color:var(--ok)}input.bad,select.bad{border-color:var(--bad)}
+textarea{min-height:76px;resize:vertical}
+.btns{display:flex;flex-wrap:wrap;gap:10px;margin-top:12px}
+.btn{border:0;border-radius:10px;padding:11px 18px;font:600 15px "Noto Sans";cursor:pointer;min-height:44px;background:var(--acc);color:light-dark(#fff,#08202a)}
+.btn.ghost{background:var(--soft);color:var(--ink)}
+.btn:disabled{opacity:.45;cursor:not-allowed}
+.msg{margin-top:10px;font-size:15px;min-height:1.5em}
+.msg.ok{color:var(--ok)}.msg.bad{color:var(--bad)}
+.board{position:sticky;top:12px}
+.rackbox{background:var(--soft);border-radius:16px;padding:10px}
+.rackbox svg{display:block;width:100%;height:auto}
+.tube{cursor:pointer}
+.tube .sel{fill:none;stroke:var(--acc);stroke-width:3;opacity:0}
+.tube.on .sel{opacity:1}
+.liq,.ppt{transition:y .9s ease,height .9s ease,fill .9s ease}
+.vlab{font:600 12px "Noto Sans";fill:var(--ink)}
+.nlab{font:600 12px "Noto Sans";fill:var(--mute)}
+.pour{display:flex;gap:8px;align-items:center;flex-wrap:wrap;margin-top:10px;justify-content:center}
+.pour .cur{font-weight:600;min-width:12ch;text-align:center}
+.zoom{display:grid;grid-template-columns:auto minmax(0,1fr);gap:14px;align-items:center;margin-top:12px;background:var(--soft);border-radius:16px;padding:10px 14px}
+.zoom svg{width:150px;height:auto;display:block}
+.zoom p{margin:0;font-size:15px;color:var(--mute)}
+table{width:100%;border-collapse:collapse;font-size:15px}
+th,td{padding:6px;border-bottom:1px solid var(--line);text-align:left}
+th{font-size:13px;color:var(--mute);font-weight:600}
+td.n,th.n{text-align:right;font-variant-numeric:tabular-nums;white-space:nowrap}
+td input{padding:7px 8px;max-width:90px;margin-left:auto;display:block;text-align:right}
+.fig{position:relative;height:240px;margin-top:12px;background:var(--soft);border-radius:12px}
+.fig svg{position:absolute;inset:0;width:100%;height:100%}
+.eq{display:flex;flex-wrap:wrap;align-items:center;gap:6px;font:600 18px "Noto Serif",serif;margin-bottom:12px}
+.eq input{width:52px;padding:6px;text-align:center;font:600 17px "Noto Sans"}
+.two{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px 14px}
+.q{margin-bottom:10px}
+@media(max-width:860px){.grid{grid-template-columns:minmax(0,1fr)}.board{position:static;order:-1}}
+@media(max-width:480px){.two{grid-template-columns:minmax(0,1fr)}.eq{font-size:16px}}
+@media(prefers-reduced-motion:reduce){.liq,.ppt{transition:none}}
+</style>
+</head>
+<body>
+<div class="wrap">
+<header>
+  <div><small data-i="lab"></small><h1 data-i="title"></h1></div>
+  <div class="lang" role="group" aria-label="Тіл"><button id="l-kk" class="on">Қазақша</button><button id="l-ru">Русский</button></div>
+</header>
+<div class="sheet">
+  <p class="note" data-i="demo"></p>
+  <p class="goal" data-i="goal"></p>
+  <p class="reag" data-i="reag"></p>
+  <div class="safety">
+    <svg width="34" height="34" viewBox="0 0 34 34" aria-hidden="true"><path d="M17 3 32 30H2Z" fill="#f59e0b"/><rect x="15.5" y="11" width="3" height="11" rx="1.5" fill="#fff"/><circle cx="17" cy="26" r="1.8" fill="#fff"/></svg>
+    <p data-i="safe"></p>
+    <label><input type="checkbox" id="goggles"><span data-i="safeok"></span></label>
+  </div>
+  <div class="grid">
+    <div>
+      <section class="step" id="st1">
+        <h2 data-i="s1"></h2>
+        <p class="hint" data-i="s1h"></p>
+        <div class="btns" style="margin-top:0"><button class="btn" id="koh" data-i="kohbtn"></button></div>
+        <div class="msg" id="m1" aria-live="polite"></div>
+      </section>
+      <section class="step" id="st2">
+        <h2 data-i="s2"></h2>
+        <p class="hint" data-i="s2h"></p>
+        <div class="btns" style="margin-top:0"><button class="btn" id="react" data-i="reactbtn"></button></div>
+        <div class="msg" id="m2" aria-live="polite"></div>
+      </section>
+      <section class="step" id="st3">
+        <h2 data-i="s3"></h2>
+        <p class="hint" data-i="s3h"></p>
+        <table><thead><tr><th>№</th><th class="n" data-i="colv"></th><th class="n" data-i="colh"></th></tr></thead><tbody id="tbl"></tbody></table>
+        <div class="btns"><button class="btn" id="chk3" data-i="check"></button></div>
+        <div class="msg" id="m3" aria-live="polite"></div>
+        <div class="fig" id="fig"><svg id="chart"></svg></div>
+      </section>
+      <section class="step" id="st4">
+        <h2 data-i="s4"></h2>
+        <p class="hint" data-i="s4h"></p>
+        <div class="eq">
+          <input id="k1" inputmode="numeric" aria-label="k1">CuSO₄ +
+          <input id="k2" inputmode="numeric" aria-label="k2">KOH →
+          <input id="k3" inputmode="numeric" aria-label="k3">Cu(OH)₂↓ +
+          <input id="k4" inputmode="numeric" aria-label="k4">K₂SO₄
+        </div>
+        <div class="two">
+          <label><span data-i="qtype"></span><select id="rtype"></select></label>
+          <label><span data-i="qratio"></span><select id="ratio"><option value="">—</option><option>1 : 1</option><option>1 : 2</option><option>2 : 1</option></select></label>
+          <label><span data-i="qvol"></span><input id="vconst" type="number" step="0.5" inputmode="decimal"></label>
+        </div>
+        <div class="btns"><button class="btn" id="chk4" data-i="check"></button></div>
+        <div class="msg" id="m4" aria-live="polite"></div>
+      </section>
+      <section class="step" id="st5">
+        <h2 data-i="s5"></h2>
+        <div class="q"><label><span data-i="q1"></span><textarea id="a1"></textarea></label></div>
+        <div class="q"><label><span data-i="q2"></span><textarea id="a2"></textarea></label></div>
+        <div class="btns"><button class="btn" id="send" data-i="send"></button></div>
+        <div class="msg" id="m5" aria-live="polite"></div>
+      </section>
+    </div>
+    <div class="board">
+      <div class="rackbox"><svg id="rack" viewBox="0 0 640 340" aria-label="rack"></svg></div>
+      <div class="pour" id="pour">
+        <button class="btn ghost" id="minus">− 0,5</button>
+        <span class="cur" id="cur"></span>
+        <button class="btn" id="plus">+ 0,5</button>
+      </div>
+      <div class="zoom" id="zoom"><svg id="zsvg" viewBox="0 0 150 260"></svg><p id="ztext"></p></div>
+    </div>
+  </div>
+</div>
+</div>
+<script>
+{
+const T={
+kk:{lab:"2-зертханалық тәжірибе",title:"Әрекеттесуші заттардың массасының қатынасы",demo:"Үлгі нұсқа: тіркелу және жұмысты мұғалімге жіберу толық сайтта қосылады.",
+goal:"Мақсаты: мыс(II) сульфаты мен калий гидроксидінің қандай қатынаста толық әрекеттесетінін тұнбаның биіктігі арқылы анықтау.",
+reag:"Реактивтер: 0,5 М мыс(II) сульфаты, 0,5 М калий гидроксиді ерітінділері. Құрал-жабдықтар: 8 сынауық, сынауыққа арналған тұрғы, сызғыш.",
+safe:"Қорғау көзілдірігін киген жөн. Тәжірибені жасағаннан кейін қолды жақсылап жуу керек.",safeok:"Көзілдірікті кидім",
+s1:"1-қадам. Калий гидроксидін құй",s1h:"Сегіз сынауықтың әрқайсысына 5 мл KOH ерітіндісін құй.",kohbtn:"Әр сынауыққа 5 мл KOH құю",kohdone:"Барлық сынауыққа 5 мл KOH құйылды.",
+s2:"2-қадам. Мыс(II) сульфатын қос",s2h:"Сынауықты басып таңда да, «+ 0,5» батырмасымен CuSO₄ қос. Ұсыныс: 1-сынауыққа 0,5 мл, 2-сіне 1,0 мл, ... 8-іне 4,0 мл.",
+reactbtn:"Араластырып, тұндыру",needall:"Әр сынауыққа CuSO₄ қосып шық.",reacted:"Реакция аяқталды. Сынауықтардың түбіне көгілдір тұнба тұнды.",
+cur:"{n}-сынауық: {v} мл CuSO₄",pick:"Сынауықты таңда",
+s3:"3-қадам. Тұнбаның биіктігін өлше",s3h:"Сынауықты таңда: төменде оның сызғышпен үлкейтілген көрінісі шығады. Биіктікті см-мен кестеге жаз.",
+colv:"CuSO₄, мл",colh:"Тұнба, см",check:"Тексеру",ok3:"Дұрыс өлшедің! Төмендегі графикке назар аудар.",bad3:"Мына сынауықтардың өлшемі қате: ",
+zt:"{n}-сынауық. Тұнбаның жоғарғы шетіне қарап, сызғыштан мәнін оқы.",zt0:"Тұнба әлі жоқ.",
+ax:"CuSO₄ көлемі, мл",ay:"тұнба, см",
+s4:"4-қадам. Реакция теңдеуі",s4h:"Коэффициенттерді қой (1 болса да жаз), реакция типін және заттардың қатынасын анықта.",
+qtype:"Реакция типі",qratio:"CuSO₄ : KOH зат мөлшерлерінің қатынасы",qvol:"Тұнба биіктігі қай көлемнен (мл) бастап тұрақты?",
+types:["— таңда —","Қосылу","Айырылу","Орынбасу","Алмасу"],
+ok4:"Барлығы дұрыс! CuSO₄ + 2KOH → Cu(OH)₂↓ + K₂SO₄, алмасу реакциясы, қатынасы 1 : 2.",bad4:"Қате бар: ",bk:"коэффициенттер",bt:"реакция типі",br:"қатынас",bv:"тұрақты көлем",
+s5:"5-қадам. Зертхана журналы",q1:"Не байқадың? Тұнба биіктігі неге белгілі бір көлемнен кейін өспейді?",q2:"Қорытынды",
+send:"Мұғалімге жіберу",sent:"Үлгіде жіберу әлі жұмыс істемейді. Толық сайтта жұмыс мұғалімнің бетіне түседі.",empty:"Алдымен журналдың барлық сұрағына жауап бер.",
+needg:"Алдымен қорғау көзілдірігін ки."},
+ru:{lab:"Лабораторный опыт №2",title:"Соотношение масс реагирующих веществ",demo:"Демо-версия: регистрация и отправка работы учителю появятся в полной версии сайта.",
+goal:"Цель: по высоте осадка определить, в каком соотношении сульфат меди(II) и гидроксид калия реагируют полностью.",
+reag:"Реактивы: 0,5 М растворы сульфата меди(II) и гидроксида калия. Оборудование: 8 пробирок, штатив для пробирок, линейка.",
+safe:"Надень защитные очки. После опыта тщательно вымой руки.",safeok:"Очки надеты",
+s1:"Шаг 1. Налей гидроксид калия",s1h:"Налей по 5 мл раствора KOH в каждую из восьми пробирок.",kohbtn:"Налить по 5 мл KOH",kohdone:"Во все пробирки налито по 5 мл KOH.",
+s2:"Шаг 2. Добавь сульфат меди(II)",s2h:"Выбери пробирку и добавляй CuSO₄ кнопкой «+ 0,5». Рекомендуется: в 1-ю — 0,5 мл, во 2-ю — 1,0 мл, ... в 8-ю — 4,0 мл.",
+reactbtn:"Перемешать и дать отстояться",needall:"Добавь CuSO₄ в каждую пробирку.",reacted:"Реакция завершена. На дне пробирок осел голубой осадок.",
+cur:"Пробирка {n}: {v} мл CuSO₄",pick:"Выбери пробирку",
+s3:"Шаг 3. Измерь высоту осадка",s3h:"Выбери пробирку: ниже появится её увеличенный вид с линейкой. Запиши высоту в см в таблицу.",
+colv:"CuSO₄, мл",colh:"Осадок, см",check:"Проверить",ok3:"Измерено верно! Посмотри на график ниже.",bad3:"Неверные измерения в пробирках: ",
+zt:"Пробирка {n}. Посмотри на верхний край осадка и сними показание линейки.",zt0:"Осадка пока нет.",
+ax:"объём CuSO₄, мл",ay:"осадок, см",
+s4:"Шаг 4. Уравнение реакции",s4h:"Расставь коэффициенты (пиши и 1), определи тип реакции и соотношение веществ.",
+qtype:"Тип реакции",qratio:"Соотношение количеств веществ CuSO₄ : KOH",qvol:"С какого объёма (мл) высота осадка постоянна?",
+types:["— выбери —","Соединение","Разложение","Замещение","Обмен"],
+ok4:"Всё верно! CuSO₄ + 2KOH → Cu(OH)₂↓ + K₂SO₄, реакция обмена, соотношение 1 : 2.",bad4:"Есть ошибки: ",bk:"коэффициенты",bt:"тип реакции",br:"соотношение",bv:"постоянный объём",
+s5:"Шаг 5. Лабораторный журнал",q1:"Что ты наблюдал? Почему после определённого объёма высота осадка не растёт?",q2:"Вывод",
+send:"Отправить учителю",sent:"В демо-версии отправка пока не работает. В полной версии работа попадёт на страницу учителя.",empty:"Сначала ответь на все вопросы журнала.",
+needg:"Сначала надень защитные очки."}};
+let lang="kk",sel=0,phase=0; // 0 empty, 1 KOH, 2 reacted
+const V=Array(8).fill(0),H=Array(8).fill(""),ok3=Array(8).fill(false);
+let done3=false,done4=false;
+const $=id=>document.getElementById(id),t=k=>T[lang][k];
+const KOH=5,EQ=2.5,PX_ML=20,PX_CM=30,TOP=40,BOT=262;
+const ppt=v=>Math.min(v,EQ)*1.0; // precipitate height in cm
+const fmt=x=>String(Math.round(x*10)/10).replace(".",lang==="kk"||lang==="ru"?",":".");
+
+function tubeSVG(i){
+  const x=40+i*76,w=36,v=V[i],tot=(phase>=1?KOH:0)+v,lh=tot*PX_ML,ph=phase===2?ppt(v)*PX_CM:0;
+  let liqCol;
+  if(phase<2){liqCol=v?`rgba(59,130,246,${0.15+0.06*v})`:"rgba(180,210,230,.35)"}
+  else{const ex=Math.max(0,v-EQ);liqCol=ex?`rgba(37,99,235,${0.18+0.22*ex})`:"rgba(200,225,240,.35)"}
+  return `<g class="tube${i===sel?" on":""}" data-i="${i}">
+  <rect class="sel" x="${x-6}" y="${TOP-14}" width="${w+12}" height="${BOT-TOP+34}" rx="22"/>
+  <clipPath id="c${i}"><rect x="${x}" y="${TOP}" width="${w}" height="${BOT-TOP}" rx="${w/2}" ry="${w/2}"/><rect x="${x}" y="${TOP}" width="${w}" height="${(BOT-TOP)/2}"/></clipPath>
+  <g clip-path="url(#c${i})"><rect x="${x}" y="${TOP}" width="${w}" height="${BOT-TOP}" fill="var(--glass)"/>
+  <rect class="liq" x="${x}" y="${BOT-lh}" width="${w}" height="${lh}" fill="${liqCol}"/>
+  <rect class="ppt" x="${x}" y="${BOT-ph}" width="${w}" height="${ph}" fill="url(#pp)"/></g>
+  <path d="M${x} ${TOP-6}V${BOT-w/2}a${w/2} ${w/2} 0 0 0 ${w} 0V${TOP-6}" fill="none" stroke="var(--glassline)" stroke-width="2"/>
+  <rect x="${x-4}" y="${TOP-10}" width="${w+8}" height="6" rx="3" fill="var(--glassline)"/>
+  <rect x="${x+6}" y="${TOP+8}" width="4" height="${BOT-TOP-40}" rx="2" fill="#fff" opacity=".5"/>
+  <text class="nlab" x="${x+w/2}" y="${TOP-18}" text-anchor="middle">${i+1}</text>
+  <text class="vlab" x="${x+w/2}" y="${BOT+46}" text-anchor="middle">${v?fmt(v):"–"}</text></g>`;
+}
+function renderRack(){
+  let h=`<defs><pattern id="pp" width="6" height="6" patternUnits="userSpaceOnUse"><rect width="6" height="6" fill="#7cb9ea"/><circle cx="2" cy="2" r="1.2" fill="#5aa1dc"/><circle cx="5" cy="4.5" r=".9" fill="#a9d3f5"/></pattern></defs>`;
+  h+=`<rect x="20" y="${BOT-60}" width="600" height="14" rx="4" style="fill:light-dark(#b7c4cd,#3a4b57)" opacity=".8"/>`;
+  for(let i=0;i<8;i++)h+=tubeSVG(i);
+  h+=`<rect x="20" y="${BOT+10}" width="600" height="18" rx="5" style="fill:light-dark(#9aabb7,#33444f)"/>`;
+  h+=`<text class="nlab" x="320" y="${BOT+64}" text-anchor="middle">${t("colv")}</text>`;
+  $("rack").innerHTML=h;
+  $("cur").textContent=phase>=1?t("cur").replace("{n}",sel+1).replace("{v}",fmt(V[sel])):t("pick");
+  const can=phase===1;$("plus").disabled=!can||V[sel]>=4;$("minus").disabled=!can||V[sel]<=0;
+  $("pour").style.display=phase===2?"none":"flex";
+  renderZoom();
+}
+function renderZoom(){
+  const z=$("zoom");if(phase!==2){z.style.display="none";return}z.style.display="grid";
+  const S=60,base=240,h=ppt(V[sel]),v=V[sel],ex=Math.max(0,v-EQ);
+  let s=`<rect x="70" y="10" width="60" height="${base-10}" fill="var(--glass)"/>`;
+  s+=`<rect x="70" y="10" width="60" height="${base-10-h*S}" fill="${ex?`rgba(37,99,235,${0.18+0.22*ex})`:"rgba(200,225,240,.35)"}"/>`;
+  s+=`<rect x="70" y="${base-h*S}" width="60" height="${h*S}" fill="url(#pz)"/>`;
+  s+=`<path d="M70 4V${base}M130 4V${base}" stroke="var(--glassline)" stroke-width="2"/>`;
+  s+=`<rect x="8" y="4" width="44" height="${base-2}" rx="3" style="fill:light-dark(#fdf3c7,#4a4222);stroke:light-dark(#c9a94a,#8a7536)"/>`;
+  for(let mm=0;mm<=38;mm++){const y=base-mm*S/10,L=mm%10===0?20:mm%5===0?14:8;s+=`<line x1="52" x2="${52-L}" y1="${y}" y2="${y}" stroke="var(--ink)" stroke-width="${mm%10===0?1.4:.8}"/>`;if(mm%10===0)s+=`<text x="16" y="${y+4}" font-size="12" font-weight="700" fill="var(--ink)">${mm/10}</text>`}
+  s+=`<text x="16" y="${base+16}" font-size="11" fill="var(--mute)">см</text>`;
+  $("zsvg").innerHTML=`<defs><pattern id="pz" width="8" height="8" patternUnits="userSpaceOnUse"><rect width="8" height="8" fill="#7cb9ea"/><circle cx="2" cy="3" r="1.5" fill="#5aa1dc"/><circle cx="6" cy="6" r="1.1" fill="#a9d3f5"/></pattern></defs>`+s;
+  $("ztext").textContent=h?t("zt").replace("{n}",sel+1):t("zt0");
+}
+function renderTable(){
+  $("tbl").innerHTML=V.map((v,i)=>`<tr><td>${i+1}</td><td class="n">${v?fmt(v):"–"}</td><td class="n"><input data-h="${i}" inputmode="decimal" value="${H[i]}" class="${H[i]===""?"":ok3[i]?"ok":"bad"}" ${phase<2?"disabled":""}></td></tr>`).join("");
+}
+function renderChart(){
+  const s=$("chart"),fig=$("fig");fig.style.display=done3?"block":"none";if(!done3)return;
+  const W=s.clientWidth,Hh=s.clientHeight,l=44,r=14,tp=16,b=40,xs=v=>l+v/4.5*(W-l-r),ys=h=>Hh-b-h/3*(Hh-tp-b);
+  let g="";
+  for(let v=0;v<=4;v++)g+=`<line x1="${xs(v)}" x2="${xs(v)}" y1="${tp}" y2="${Hh-b}" stroke="var(--line)"/><text x="${xs(v)}" y="${Hh-b+18}" font-size="12" text-anchor="middle" fill="var(--mute)">${v}</text>`;
+  for(let h=0;h<=3;h++)g+=`<line x1="${l}" x2="${W-r}" y1="${ys(h)}" y2="${ys(h)}" stroke="var(--line)"/><text x="${l-8}" y="${ys(h)+4}" font-size="12" text-anchor="end" fill="var(--mute)">${h}</text>`;
+  const pts=V.map((v,i)=>[v,Number(String(H[i]).replace(",","."))]).sort((a,b)=>a[0]-b[0]);
+  g+=`<polyline fill="none" stroke="#2563eb" stroke-width="2.5" points="${pts.map(p=>xs(p[0])+","+ys(p[1])).join(" ")}"/>`;
+  g+=pts.map(p=>`<circle cx="${xs(p[0])}" cy="${ys(p[1])}" r="4.5" fill="#2563eb" stroke="var(--sheet)" stroke-width="2"/>`).join("");
+  g+=`<line x1="${xs(EQ)}" x2="${xs(EQ)}" y1="${tp}" y2="${Hh-b}" stroke="#f59e0b" stroke-dasharray="5 5" stroke-width="2"/>`;
+  g+=`<text x="${(l+W-r)/2}" y="${Hh-6}" font-size="12" text-anchor="middle" fill="var(--mute)">${t("ax")}</text><text x="${l}" y="${tp-4}" font-size="12" fill="var(--mute)">${t("ay")}</text>`;
+  s.innerHTML=g;
+}
+function renderSteps(){
+  const g=$("goggles").checked;
+  $("st1").classList.toggle("off",!g);$("koh").disabled=phase>=1;
+  $("st2").classList.toggle("off",phase<1);$("react").disabled=phase!==1;
+  $("st3").classList.toggle("off",phase<2);
+  $("st4").classList.toggle("off",!done3);
+  $("st5").classList.toggle("off",!done4);
+}
+function applyLang(){
+  document.documentElement.lang=lang;
+  document.querySelectorAll("[data-i]").forEach(el=>{const v=T[lang][el.dataset.i];if(typeof v==="string")el.textContent=v});
+  $("l-kk").classList.toggle("on",lang==="kk");$("l-ru").classList.toggle("on",lang==="ru");
+  const rt=$("rtype"),val=rt.value;rt.innerHTML=t("types").map((s,i)=>`<option value="${i||""}">${s}</option>`).join("");rt.value=val;
+  document.querySelectorAll(".msg").forEach(m=>m.textContent="");
+  renderAll();
+}
+function renderAll(){renderRack();renderTable();renderSteps();renderChart()}
+function msg(id,text,ok){const m=$(id);m.textContent=text;m.className="msg "+(ok?"ok":"bad")}
+
+$("l-kk").onclick=()=>{lang="kk";applyLang()};$("l-ru").onclick=()=>{lang="ru";applyLang()};
+$("goggles").onchange=renderSteps;
+$("koh").onclick=()=>{if(!$("goggles").checked){msg("m1",t("needg"),false);return}phase=1;msg("m1",t("kohdone"),true);renderAll()};
+$("rack").addEventListener("click",e=>{const g=e.target.closest(".tube");if(!g)return;sel=Number(g.dataset.i);renderRack()});
+$("plus").onclick=()=>{if(phase===1&&V[sel]<4){V[sel]=Math.round((V[sel]+.5)*10)/10;$("m2").textContent="";renderRack();renderTable()}};
+$("minus").onclick=()=>{if(phase===1&&V[sel]>0){V[sel]=Math.round((V[sel]-.5)*10)/10;renderRack();renderTable()}};
+$("react").onclick=()=>{if(V.some(v=>!v)){msg("m2",t("needall"),false);return}phase=2;msg("m2",t("reacted"),true);renderAll()};
+$("tbl").addEventListener("input",e=>{const i=e.target.dataset.h;if(i!=null){H[i]=e.target.value;e.target.className=""}});
+$("tbl").addEventListener("focusin",e=>{const i=e.target.dataset.h;if(i!=null&&phase===2){sel=Number(i);renderRack()}});
+$("chk3").onclick=()=>{
+  const bad=[];V.forEach((v,i)=>{const x=Number(String(H[i]).replace(",","."));ok3[i]=H[i]!==""&&Math.abs(x-ppt(v))<=0.1;if(!ok3[i])bad.push(i+1)});
+  done3=!bad.length;renderTable();renderSteps();renderChart();
+  done3?msg("m3",t("ok3"),true):msg("m3",t("bad3")+bad.join(", ")+".",false);
+};
+$("chk4").onclick=()=>{
+  const k=["k1","k2","k3","k4"].map(id=>$(id).value.trim()),kOk=k.join()==="1,2,1,1";
+  ["k1","k2","k3","k4"].forEach(id=>$(id).className=kOk?"ok":"bad");
+  const tOk=$("rtype").value==="4",rOk=$("ratio").value==="1 : 2",vOk=Math.abs(Number(String($("vconst").value).replace(",","."))-EQ)<0.01&&$("vconst").value!=="";
+  $("rtype").className=tOk?"ok":"bad";$("ratio").className=rOk?"ok":"bad";$("vconst").className=vOk?"ok":"bad";
+  const bad=[];if(!kOk)bad.push(t("bk"));if(!tOk)bad.push(t("bt"));if(!rOk)bad.push(t("br"));if(!vOk)bad.push(t("bv"));
+  done4=!bad.length;renderSteps();
+  done4?msg("m4",t("ok4"),true):msg("m4",t("bad4")+bad.join(", ")+".",false);
+};
+$("send").onclick=()=>{const f=["a1","a2"].every(id=>$(id).value.trim());msg("m5",f?t("sent"):t("empty"),f)};
+new ResizeObserver(renderChart).observe($("fig"));
+applyLang();
+}
+</script>
+<script src="../embed.js"></script>
+</body>
+</html>

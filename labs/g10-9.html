@@ -1,0 +1,231 @@
+<!DOCTYPE html>
+<html lang="kk">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Спирттердің қасиеттері</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans:wght@400;600;700&family=Noto+Serif:wght@600;700&display=swap" rel="stylesheet">
+<style>
+/* VOICE: calm school lab workbook, clear and encouraging (grade 7)
+   IDEA: a workbench sheet — two twin tubes, acid and alkali, each with an aluminium granule
+   PICTURE: both tubes starting slowly, then fizzing hard once the oxide film is gone: aluminium reacts with both
+   COLOUR and TYPE: white sheet on deep lab-teal; the universal-indicator rainbow; Noto Serif + Noto Sans
+   LAYOUT: steps left, scene right (sticky) with view switch; stacks on phones */
+:root{color-scheme:light dark;
+--bg:light-dark(#0f4c5c,#0a2d36);--sheet:light-dark(#ffffff,#13202a);--ink:light-dark(#10131a,#e7edf2);
+--mute:light-dark(#566170,#9fb0bf);--line:light-dark(#d5dde5,#2b3d4b);--soft:light-dark(#eef5f7,#182a35);
+--acc:light-dark(#0f4c5c,#5cc2d6);--ok:light-dark(#12733a,#4ade80);--bad:light-dark(#b91c1c,#f87171);
+--warn:light-dark(#fff4d6,#3a2f12);--glass:light-dark(#f7fbfd,#1d2f3b);--glassline:light-dark(#8aa1b1,#6c8597)}
+:root[data-theme=light]{color-scheme:light}:root[data-theme=dark]{color-scheme:dark}
+*{box-sizing:border-box;min-width:0}
+body{margin:0;background:var(--bg);color:var(--ink);font:16px/1.55 "Noto Sans",system-ui,sans-serif;overflow-x:clip}
+.wrap{max-width:1240px;margin:0 auto;padding:clamp(14px,3vw,36px) max(3vw,12px)}
+header{display:flex;flex-wrap:wrap;gap:12px;align-items:flex-end;justify-content:space-between;color:#fff;margin-bottom:18px}
+header small{display:block;opacity:.8;font-size:14px}
+h1{font:700 clamp(24px,3.6vw,38px)/1.08 "Noto Serif",Georgia,serif;margin:2px 0 0;text-wrap:balance;max-width:26ch}
+.lang{display:flex;background:rgba(255,255,255,.14);border-radius:999px;padding:4px}
+.lang button{border:0;background:none;color:#fff;font:600 15px "Noto Sans";padding:8px 16px;border-radius:999px;cursor:pointer;min-height:40px}
+.lang button.on{background:#fff;color:#0f4c5c}
+.sheet{background:var(--sheet);border-radius:18px;box-shadow:0 18px 40px rgba(0,0,0,.25);padding:clamp(16px,2.6vw,30px)}
+.note{font-size:13px;color:var(--mute);margin:0 0 10px}
+.goal{margin:0 0 6px;max-width:70ch}
+.reag{margin:0 0 16px;color:var(--mute);font-size:15px;max-width:70ch}
+.safety{display:flex;gap:12px;align-items:center;flex-wrap:wrap;background:var(--warn);border-radius:12px;padding:12px 14px;margin-bottom:18px}
+.safety p{margin:0;flex:1 1 260px;font-weight:600}
+.safety label{flex-direction:row;align-items:center;gap:8px;color:var(--ink);font-weight:600;cursor:pointer}
+.grid{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1.05fr);gap:clamp(16px,3vw,36px);align-items:start}
+.step{border-top:1px solid var(--line);padding:14px 0}
+.step:first-child{border-top:0;padding-top:0}
+.step.off{opacity:.45;pointer-events:none}
+h2{font:700 19px/1.2 "Noto Serif",Georgia,serif;margin:0 0 6px}
+.hint{color:var(--mute);font-size:15px;margin:0 0 8px}
+label{font-size:14px;color:var(--mute);display:flex;flex-direction:column;gap:4px}
+textarea,select{font:16px "Noto Sans";color:var(--ink);background:var(--sheet);border:1.5px solid var(--line);border-radius:10px;padding:10px 12px;width:100%}
+textarea:focus,select:focus,button:focus-visible{outline:3px solid color-mix(in srgb,var(--acc) 45%,transparent);outline-offset:1px}
+.ok{border-color:var(--ok)!important}.bad{border-color:var(--bad)!important}
+textarea{min-height:76px;resize:vertical}
+.btns{display:flex;flex-wrap:wrap;gap:8px;margin-top:8px}
+.btn{border:0;border-radius:10px;padding:10px 14px;font:600 15px "Noto Sans";cursor:pointer;min-height:44px;background:var(--acc);color:light-dark(#fff,#08202a)}
+.btn.done{background:var(--soft);color:var(--ok)}
+.btn:disabled{opacity:.45;cursor:not-allowed}.btn.done:disabled{opacity:1}
+.msg{margin-top:8px;font-size:15px;min-height:1.4em}
+.msg.ok{color:var(--ok)}.msg.bad{color:var(--bad)}
+.board{position:sticky;top:12px}
+.seg{display:flex;background:var(--soft);border-radius:10px;padding:4px;gap:4px;margin-bottom:10px}
+.seg button{flex:1;border:0;background:none;color:var(--ink);font:600 14px "Noto Sans";padding:8px 10px;border-radius:8px;cursor:pointer;min-height:40px}
+.seg button.on{background:var(--sheet);box-shadow:0 1px 4px rgba(0,0,0,.15)}
+.seg button:disabled{opacity:.4;cursor:default}
+.rackbox{background:var(--soft);border-radius:16px;padding:10px}
+.rackbox svg{display:block;width:100%;height:auto}
+.mag{transition:transform 1.2s ease}
+.glow{animation:glow 1.4s ease-in-out 2;transform-box:fill-box}
+@keyframes glow{50%{fill:#f97316}}
+.flame{animation:flick .25s ease-in-out infinite alternate;transform-box:fill-box;transform-origin:bottom center}
+@keyframes flick{to{transform:scaleY(1.12) scaleX(.94)}}
+@media(prefers-reduced-motion:reduce){.mag{transition:none}.glow,.flame{animation:none}}
+.scroll{overflow-x:auto}
+.seg{display:flex;background:var(--soft);border-radius:10px;padding:4px;gap:4px;margin-bottom:10px;flex-wrap:wrap}
+.seg button{flex:1;border:0;background:none;color:var(--ink);font:600 14px "Noto Sans";padding:8px 10px;border-radius:8px;cursor:pointer;min-height:40px}
+.seg button.on{background:var(--sheet);box-shadow:0 1px 4px rgba(0,0,0,.15)}
+.brown{transition:opacity 2s ease}.pk{transition:fill 1.6s ease}.ca{transition:transform 4s ease-in-out,opacity 6s ease;transform-box:fill-box;transform-origin:center}.water{animation:fall2 .6s linear infinite}@keyframes fall2{from{transform:translateY(-10px);opacity:.9}to{transform:translateY(30px);opacity:.2}}.eq input{width:44px;padding:6px;text-align:center;font:600 16px "Noto Sans";border:1.5px solid var(--line);border-radius:8px;background:var(--sheet);color:var(--ink)}
+.tray{display:flex;flex-wrap:wrap;gap:8px;margin-top:10px}
+.tray small{width:100%;font-weight:700;color:var(--mute);font-size:13px;margin-top:4px}
+.chip{border:2px solid var(--line);background:var(--sheet);color:var(--ink);border-radius:999px;padding:6px 12px;font:600 14px "Noto Sans";cursor:pointer;min-height:40px}
+.chip.sel{border-color:var(--acc);background:var(--soft)}.chip.done{color:var(--ok)}.chip:disabled{opacity:.4;cursor:default}
+.scroll{overflow-x:auto}td select{padding:6px;font-size:13px}td input{width:70px;padding:6px;text-align:right;font:600 15px "Noto Sans";color:var(--ink);background:var(--sheet);border:1.5px solid var(--line);border-radius:8px}
+.two{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:0 18px}@media(max-width:600px){.two{grid-template-columns:minmax(0,1fr)}}
+.bub{animation:rise var(--d) linear infinite;animation-delay:var(--dl);opacity:0}
+@keyframes rise{0%{transform:translateY(0);opacity:0}10%{opacity:.95}100%{transform:translateY(-80px);opacity:0}}
+.smoke{animation:smoke 2.6s ease-out infinite;opacity:0;transform-box:fill-box;transform-origin:center}
+@keyframes smoke{0%{transform:translateY(0) scale(.6);opacity:0}20%{opacity:.6}100%{transform:translateY(-70px) scale(1.4);opacity:0}}
+@media(prefers-reduced-motion:reduce){.bub,.smoke{animation:none;opacity:.6}}
+table{width:100%;border-collapse:collapse;font-size:14px}
+th,td{padding:5px;border-bottom:1px solid var(--line);text-align:left;vertical-align:middle}
+th{font-size:13px;color:var(--mute);font-weight:600}
+td:first-child{font-weight:600;font-size:14px}
+td select{padding:6px;font-size:13px}
+.eq{display:flex;flex-wrap:wrap;align-items:center;gap:8px;font:600 17px "Noto Sans";margin-bottom:10px}
+.eq select{width:auto;padding:6px 8px;font:600 15px "Noto Sans"}
+.q{margin-bottom:10px}
+.toblue{animation:toblue 3.2s ease forwards}@keyframes toblue{from{fill:rgba(200,228,242,.55)}to{fill:#4f9cf5}}
+.shrink{animation:shrink 4.5s ease forwards;transform-box:fill-box;transform-origin:center bottom}@keyframes shrink{to{transform:scale(.15);opacity:.2}}
+.liq{transition:fill-opacity 2s ease}
+.fade{animation:fade 2.6s ease forwards}@keyframes fade{to{opacity:0}}
+.stir{animation:stir .5s ease-in-out 5;transform-box:fill-box;transform-origin:top center}@keyframes stir{50%{transform:rotate(9deg)}}
+@media(max-width:860px){.grid{grid-template-columns:minmax(0,1fr)}.board{position:static;order:-1}}
+</style>
+</head>
+<body>
+<div class="wrap">
+<header>
+  <div><small data-i="lab"></small><h1 data-i="title"></h1></div>
+  <div class="lang" role="group" aria-label="Тіл"><button id="l-kk" class="on">Қазақша</button><button id="l-ru">Русский</button></div>
+</header>
+<div class="sheet">
+  <p class="note" data-i="demo"></p>
+  <p class="goal" data-i="goal"></p>
+  <p class="reag" data-i="reag"></p>
+  <div class="safety">
+    <svg width="34" height="34" viewBox="0 0 34 34" aria-hidden="true"><path d="M17 3 32 30H2Z" fill="#f59e0b"/><rect x="15.5" y="11" width="3" height="11" rx="1.5" fill="#fff"/><circle cx="17" cy="26" r="1.8" fill="#fff"/></svg>
+    <p data-i="safe"></p>
+    <label><input type="checkbox" id="goggles" style="width:22px;height:22px"><span data-i="safeok"></span></label>
+  </div>
+  <div class="grid">
+    <div>
+      <section class="step" id="st1"><h2 data-i="e1"></h2><p class="hint" data-i="e1h"></p>
+        <div class="btns"><button class="btn" data-b="alc" data-i="balc"></button><button class="btn" data-b="water" data-i="bwater"></button><button class="btn" data-b="shake" data-i="bshake"></button></div>
+        <div class="msg" id="m1" aria-live="polite"></div></section>
+      <section class="step" id="st2"><h2 data-i="e2"></h2><p class="hint" data-i="e2h"></p>
+        <div class="btns"><button class="btn" data-b="pour" data-i="bpour"></button><button class="btn" data-b="fire" data-i="bfire"></button></div>
+        <div class="msg" id="m2" aria-live="polite"></div></section>
+      <section class="step" id="st3"><h2 data-i="e3"></h2><p class="hint" data-i="e3h"></p>
+        <div class="btns"><button class="btn" data-b="gly" data-i="bgly"></button><button class="btn" data-b="cu" data-i="bcu"></button><button class="btn" data-b="naoh" data-i="bnaoh"></button></div>
+        <div class="msg" id="m3" aria-live="polite"></div></section>
+      <section class="step" id="st4"><h2 data-i="s4"></h2><p class="hint" data-i="s4h"></p>
+        <div id="qs"></div>
+        <div id="eqs" style="margin-top:12px"></div>
+        <div class="btns"><button class="btn" id="chk" data-i="check"></button></div>
+        <div class="msg" id="m4" aria-live="polite"></div></section>
+      <section class="step" id="st5"><h2 data-i="s5"></h2>
+        <div class="q"><label><span data-i="q1"></span><textarea id="a1"></textarea></label></div>
+        <div class="q"><label><span data-i="q2"></span><textarea id="a2"></textarea></label></div>
+        <div class="q"><label><span data-i="q3"></span><textarea id="a3"></textarea></label></div>
+        <div class="btns"><button class="btn" id="send" data-i="send"></button></div>
+        <div class="msg" id="m5" aria-live="polite"></div></section>
+    </div>
+    <div class="board">
+      <div class="seg" role="group"><button id="v1" class="on" data-i="v1"></button><button id="v2" data-i="v2"></button><button id="v3" data-i="v3"></button></div>
+      <div class="rackbox"><svg id="scene" viewBox="0 0 560 400" aria-label="scene"></svg></div></div>
+  </div>
+</div>
+</div>
+<script>
+{
+const T={
+kk:{lab:"10-сынып · 9-зертханалық жұмыс",title:"Спирттердің суда ерігіштігі, жануы, біратомды және көпатомды спирттерге сапалық реакциялар",demo:"Үлгі нұсқа: тіркелу және жұмысты мұғалімге жіберу толық сайтта қосылады.",
+goal:"Мақсаты: этанол мен бутанол-1-дің суда ерігіштігін және жануын салыстыру; көпатомды спирттерге (глицерин) сапалық реакцияны жүргізу.",
+reag:"Реактивтер: этанол; бутанол-1; су; натрий гидроксидінің 10%-дық, мыс (II) сульфатының 3%-дық ерітінділері; фуксин ерітіндісі. Құрал-жабдықтар: сынауықтар; сынауыққа арналған тұрғы; кәрлен табақша, сіріңке; шыра.",
+safe:"Спирттер тез тұтанады — оларды оттан алыс ұста, жағуды тек кәрлен табақшада жүргіз. Сілтімен абай бол, қорғау көзілдірігін ки.",safeok:"Ережені оқыдым",
+e1:"1-тәжірибе. Спирттердің судағы ерігіштігі",e1h:"Сынауықтарға 5 мл-ден этанол және бутанол-1 құй. Спирттердің үстіне фуксин тамызылған 20 мл су қос. Спирттердің тығыздығы судан аз болғандықтан, олар жоғарғы қабатты түзеді. Сынауықтарды шайқа.",
+balc:"5 мл-ден этанол мен бутанол-1 құю",bwater:"Фуксинді 20 мл су қосу",bshake:"Сынауықтарды шайқау",waterm:"Спирттер жоғарғы түссіз қабатты, қызғылт су төменгі қабатты түзді.",shakem:"Этанол сумен толық араласты (біртекті қызғылт ерітінді), ал бутанол-1 аз ериді — жоғарғы қабат сақталды.",
+e2:"2-тәжірибе. Жануы",e2h:"Екі кәрлен табақшаның біреуіне шамамен 2 мл этанол, екіншісіне 2 мл бутанол-1 құйып, оларға тұтанған шыраны жақындат.",
+bpour:"Табақшаларға 2 мл-ден құю",bfire:"Тұтанған шыраны жақындату",firem:"Этанол көгілдір, әлсіз жарқырайтын жалынмен, ал бутанол-1 жарық жалынмен жанады.",
+e3:"3-тәжірибе. Көпатомды спирттерге сапалық реакция",e3h:"Сынауыққа 5 мл глицерин ерітіндісін құйып, оған 5–6 тамшы мыс (II) сульфатын тамызып, үстінен натрий гидроксидін қос. Салыстыру үшін екінші сынауықта этанолмен де жаса.",
+bgly:"Глицерин мен этанол құю",bcu:"5–6 тамшы CuSO₄",bnaoh:"NaOH қосу",naohm:"Глицерин бар сынауықта түзілген Cu(OH)₂ еріп, ашық көк (көгілдір-күлгін) ерітінді түзілді. Этанолда көк тұнба өзгеріссіз қалды.",
+v1:"1-тәжірибе",v2:"2-тәжірибе",v3:"3-тәжірибе",
+s4:"Бақылаулар мен теңдеулер",s4h:"Жауапты таңда да, теңдеулердегі коэффициенттерді қой (1 болса, бос қалдыруға болады).",
+qs:[["Қай спирт суда жақсы ериді?",["—","Этанол","Бутанол-1","Екеуі бірдей"],"1"],["Көмірсутек радикалы ұзарған сайын спирттердің суда ерігіштігі:",["—","Азаяды","Артады","Өзгермейді"],"1"],["Спирттер неге жоғарғы қабатты түзді?",["—","Тығыздығы судан аз","Тығыздығы судан көп","Түсі бар"],"1"],["Бутанол-1 неге жарығырақ жалынмен жанады?",["—","Құрамындағы көміртектің массалық үлесі жоғары","Құрамында оттек көп","Ол суда ерімейді"],"1"],["Глицерин мен Cu(OH)₂ реакциясы нені анықтайды?",["—","Көпатомды спирттерді (бірнеше OH тобы)","Біратомды спирттерді","Альдегидтерді"],"1"]],
+check:"Тексеру",ok:"Барлығы дұрыс! Төменгі спирттер суда жақсы ериді, радикал ұзарған сайын ерігіштік азаяды; көпатомды спирттер Cu(OH)₂-мен ашық көк ерітінді береді.",bad:"Қате жауаптар саны: ",
+eqm:"Реакция теңдеулері:",
+s5:"Тапсырмалар",q1:"1-тәжірибе: спирттердің судағы ерігіштігіне көңіл аударып, тиісті қорытынды жаса.",q2:"2-тәжірибе: байқаған құбылыстарды түсіндіріп, тиісті қорытынды жаса.",q3:"3-тәжірибе: байқаған құбылыстарды түсіндіріп, тиісті қорытынды жаса.",
+send:"Мұғалімге жіберу",sent:"Үлгіде жіберу әлі жұмыс істемейді. Толық сайтта жұмыс мұғалімнің бетіне түседі.",empty:"Алдымен барлық тапсырмаларға жауап бер.",cmp:"салыстыру"},
+ru:{lab:"10 класс · Лабораторная работа №9",title:"Растворимость спиртов в воде, горение, качественные реакции на одноатомные и многоатомные спирты",demo:"Демо-версия: регистрация и отправка работы учителю появятся в полной версии сайта.",
+goal:"Цель: сравнить растворимость в воде и горение этанола и бутанола-1; провести качественную реакцию на многоатомные спирты (глицерин).",
+reag:"Реактивы: этанол; бутанол-1; вода; 10%-ный раствор гидроксида натрия, 3%-ный раствор сульфата меди (II); раствор фуксина. Оборудование: пробирки; штатив для пробирок; фарфоровая чашка, спички; лучинка.",
+safe:"Спирты легко воспламеняются — держи их вдали от огня, поджигай только в фарфоровой чашке. Осторожно со щёлочью, надень защитные очки.",safeok:"Правила прочитаны",
+e1:"Опыт 1. Растворимость спиртов в воде",e1h:"Налей в пробирки по 5 мл этанола и бутанола-1. Добавь к спиртам 20 мл воды, подкрашенной фуксином. Так как плотность спиртов меньше плотности воды, они образуют верхний слой. Встряхни пробирки.",
+balc:"Налить по 5 мл этанола и бутанола-1",bwater:"Добавить 20 мл воды с фуксином",bshake:"Встряхнуть пробирки",waterm:"Спирты образовали верхний бесцветный слой, розовая вода — нижний.",shakem:"Этанол полностью смешался с водой (однородный розовый раствор), а бутанол-1 растворяется мало — верхний слой сохранился.",
+e2:"Опыт 2. Горение",e2h:"Налей в одну фарфоровую чашку около 2 мл этанола, в другую — 2 мл бутанола-1 и поднеси к ним горящую лучинку.",
+bpour:"Налить по 2 мл в чашки",bfire:"Поднести горящую лучинку",firem:"Этанол горит голубоватым, слабо светящимся пламенем, а бутанол-1 — ярким пламенем.",
+e3:"Опыт 3. Качественная реакция на многоатомные спирты",e3h:"Налей в пробирку 5 мл раствора глицерина, добавь 5–6 капель сульфата меди (II), затем прилей гидроксид натрия. Для сравнения проведи опыт с этанолом во второй пробирке.",
+bgly:"Налить глицерин и этанол",bcu:"5–6 капель CuSO₄",bnaoh:"Добавить NaOH",naohm:"В пробирке с глицерином образующийся Cu(OH)₂ растворился — образовался ярко-синий (сине-фиолетовый) раствор. В этаноле голубой осадок не изменился.",
+v1:"Опыт 1",v2:"Опыт 2",v3:"Опыт 3",
+s4:"Наблюдения и уравнения",s4h:"Выбери ответ и расставь коэффициенты (если 1, поле можно оставить пустым).",
+qs:[["Какой спирт хорошо растворяется в воде?",["—","Этанол","Бутанол-1","Одинаково"],"1"],["С удлинением углеводородного радикала растворимость спиртов в воде:",["—","Уменьшается","Увеличивается","Не меняется"],"1"],["Почему спирты образовали верхний слой?",["—","Их плотность меньше плотности воды","Их плотность больше","Они окрашены"],"1"],["Почему бутанол-1 горит более ярким пламенем?",["—","В нём выше массовая доля углерода","В нём больше кислорода","Он не растворяется в воде"],"1"],["Что определяет реакция глицерина с Cu(OH)₂?",["—","Многоатомные спирты (несколько групп OH)","Одноатомные спирты","Альдегиды"],"1"]],
+check:"Проверить",ok:"Всё верно! Низшие спирты хорошо растворимы в воде, с удлинением радикала растворимость падает; многоатомные спирты дают с Cu(OH)₂ ярко-синий раствор.",bad:"Неверных ответов: ",
+eqm:"Уравнения реакций:",
+s5:"Задания",q1:"Опыт 1: обрати внимание на растворимость спиртов в воде и сделай вывод.",q2:"Опыт 2: объясни наблюдаемые явления и сделай вывод.",q3:"Опыт 3: объясни наблюдаемые явления и сделай вывод.",
+send:"Отправить учителю",sent:"В демо-версии отправка пока не работает. В полной версии работа попадёт на страницу учителя.",empty:"Сначала ответь на все задания.",cmp:"сравнение"}};
+let lang="kk",ok=false,view=1,shaking=false;const S={alc:0,water:0,shake:0,pour:0,fire:0,gly:0,cu:0,naoh:0};const qv={},ev={};
+const $=id=>document.getElementById(id),t=k=>T[lang][k];
+const PINK="#f9a8d4",CLR="rgba(200,228,242,.5)";
+function tube(x,lab,layers,cls,top){const W=56,TOP=60,BOT=320;let h=`<g class="${cls||""}"><clipPath id="c${x}"><rect x="${x}" y="${TOP}" width="${W}" height="${BOT-TOP}" rx="${W/2}"/><rect x="${x}" y="${TOP}" width="${W}" height="${(BOT-TOP)/2}"/></clipPath><g clip-path="url(#c${x})"><rect x="${x}" y="${TOP}" width="${W}" height="${BOT-TOP}" fill="var(--glass)"/>`;
+  let y=BOT;layers.forEach(([hh,c,ex])=>{y-=hh;h+=`<rect x="${x}" y="${y}" width="${W}" height="${hh}" style="fill:${c}"/>`;if(ex)h+=ex(x,y,W,hh)});
+  h+=`</g><path d="M${x} ${TOP-8}V${BOT-W/2}a${W/2} ${W/2} 0 0 0 ${W} 0V${TOP-8}" fill="none" stroke="var(--glassline)" stroke-width="2.4"/><rect x="${x-5}" y="${TOP-12}" width="${W+10}" height="7" rx="3" fill="var(--glassline)"/></g>`;
+  h+=`<text x="${x+W/2}" y="${BOT+26}" text-anchor="middle" font-size="13" font-weight="700" fill="var(--ink)">${lab}</text>`;if(top)h+=`<text x="${x+W/2}" y="${BOT+44}" text-anchor="middle" font-size="12" fill="var(--mute)">${top}</text>`;return h}
+function render(){let h="";
+  if(view===1){const k=5.2;// px per ml
+    const eth=!S.alc?[]:!S.water?[[5*k,CLR]]:S.shake?[[25*k,"#fbcfe8"]]:[[20*k,PINK],[5*k,CLR]];
+    const but=!S.alc?[]:!S.water?[[5*k,CLR]]:S.shake?[[20.6*k,"#f7b6d8"],[4.4*k,"rgba(236,240,244,.95)"]]:[[20*k,PINK],[5*k,CLR]];
+    h+=tube(170,"C₂H₅OH",eth,shaking?"shake":"")+tube(330,"C₄H₉OH",but,shaking?"shake":"")}
+  if(view===2){[[170,"C₂H₅OH",0],[390,"C₄H₉OH",1]].forEach(([cx,lab,i])=>{h+=`<path d="M${cx-70} 270q70 50 140 0z" fill="#f8fafc" stroke="#94a3b8" stroke-width="2.5"/>`;
+      if(S.pour)h+=`<path d="M${cx-52} 276q52 30 104 0z" fill="rgba(200,228,242,.7)"/>`;
+      if(S.fire)h+=i===0?`<path class="bflame" d="M${cx} 150c-30 40-40 80-36 120h72c4-40-6-80-36-120z" fill="#93c5fd" opacity=".45"/><path class="bflame" d="M${cx} 200c-14 24-18 48-16 70h32c2-22-2-46-16-70z" fill="#60a5fa" opacity=".4"/>`:`<path class="bflame" d="M${cx} 120c-34 48-44 100-40 150h80c4-50-6-102-40-150z" fill="#fb923c" opacity=".95"/><path class="bflame" d="M${cx} 170c-18 30-22 64-20 100h40c2-36-2-70-20-100z" fill="#fde047"/><circle class="smoke" cx="${cx}" cy="110" r="8" fill="#6b7280"/>`;
+      h+=`<text x="${cx}" y="330" text-anchor="middle" font-size="14" font-weight="700" fill="var(--ink)">${lab}</text>`})}
+  if(view===3){const ppt=(x,y,W,hh)=>`<ellipse cx="${x+W/2}" cy="${y+hh-12}" rx="22" ry="9" fill="#60a5fa" stroke="rgba(0,0,0,.2)"/>`;
+    const g=!S.gly?[]:!S.cu?[[80,CLR]]:!S.naoh?[[84,"#bfdbfe"]]:[[100,"#1e3a8a"]];
+    const e=!S.gly?[]:!S.cu?[[80,CLR]]:!S.naoh?[[84,"#bfdbfe"]]:[[100,"rgba(147,197,253,.6)",ppt]];
+    h+=tube(170,lang==="kk"?"глицерин":"глицерин",g,"",S.naoh?"Cu(II)-глицерат":"")+tube(330,"C₂H₅OH",e,"",t("cmp")+(S.naoh?" · Cu(OH)₂↓":""))}
+  $("scene").innerHTML=h;["v1","v2","v3"].forEach((v,i)=>$(v).classList.toggle("on",view===i+1))}
+function opts(arr,v){return arr.map((s,i)=>`<option value="${i||""}" ${String(v||"")===String(i||"")?"selected":""}>${s}</option>`).join("")}
+const E=[[["k0","1"],"C₂H₅OH + ",["k1","3"],"O₂ → ",["k2","2"],"CO₂ + ",["k3","3"],"H₂O"],[["k4","1"],"C₄H₉OH + ",["k5","6"],"O₂ → ",["k6","4"],"CO₂ + ",["k7","5"],"H₂O"],[["k8","1"],"CuSO₄ + ",["k9","2"],"NaOH → ",["k10","1"],"Cu(OH)₂↓ + ",["k11","1"],"Na₂SO₄"]];
+function renderQ(){$("qs").innerHTML=t("qs").map((q,i)=>`<label style="margin-top:6px"><span>${q[0]}</span><select data-q="${i}">${opts(q[1],qv[i])}</select></label>`).join("");
+  $("eqs").innerHTML=`<small style="font-size:13px;color:var(--mute);font-weight:600">${t("eqm")}</small>`+E.map(e=>`<div class="eq">${e.map(p=>typeof p==="string"?p:`<input id="${p[0]}" data-a="${p[1]}" inputmode="numeric" value="${ev[p[0]]||""}">`).join("")}</div>`).join("")}
+function renderSteps(){const g=$("goggles").checked;["st1","st2","st3"].forEach(s=>$(s).classList.toggle("off",!g));
+  const DEP={water:"alc",shake:"water",fire:"pour",cu:"gly",naoh:"cu"};document.querySelectorAll("[data-b]").forEach(b=>{const k=b.dataset.b,en=(!DEP[k]||S[DEP[k]])&&!shaking;b.disabled=!!S[k]||!en;b.classList.toggle("done",!!S[k])});
+  $("st4").classList.toggle("off",!(S.shake&&S.fire&&S.naoh));$("st5").classList.toggle("off",!ok)}
+function applyLang(){document.documentElement.lang=lang;
+  document.querySelectorAll("[data-i]").forEach(el=>{const v=T[lang][el.dataset.i];if(typeof v==="string")el.textContent=v});
+  $("l-kk").classList.toggle("on",lang==="kk");$("l-ru").classList.toggle("on",lang==="ru");
+  document.querySelectorAll(".msg").forEach(m=>m.textContent="");render();renderQ();renderSteps()}
+function msg(id,text,okk){const m=$(id);m.textContent=text;m.className="msg "+(okk?"ok":"bad")}
+$("l-kk").onclick=()=>{lang="kk";applyLang()};$("l-ru").onclick=()=>{lang="ru";applyLang()};
+[1,2,3].forEach(i=>$("v"+i).onclick=()=>{view=i;render()});
+$("goggles").onchange=renderSteps;
+document.querySelector(".grid").addEventListener("click",e=>{const b=e.target.closest("[data-b]");if(!b||b.disabled)return;const k=b.dataset.b;
+  view=["alc","water","shake"].includes(k)?1:["pour","fire"].includes(k)?2:3;
+  if(k==="shake"){shaking=true;render();renderSteps();setTimeout(()=>{shaking=false;S.shake=1;render();renderSteps();msg("m1",t("shakem"),true)},2000);return}
+  S[k]=1;if(k==="water")msg("m1",t("waterm"),true);if(k==="fire")msg("m2",t("firem"),true);if(k==="naoh")msg("m3",t("naohm"),true);render();renderSteps()});
+document.querySelector(".grid").addEventListener("change",e=>{const s=e.target;if(s.dataset.q!=null){qv[s.dataset.q]=s.value;s.className=""}});
+$("eqs").addEventListener("input",e=>{const el=e.target;if(el.id)ev[el.id]=el.value;el.style.borderColor=""});
+$("chk").onclick=()=>{let bad=0;document.querySelectorAll("[data-q]").forEach(s=>{const g=s.value===t("qs")[s.dataset.q][2];s.className=g?"ok":"bad";if(!g)bad++});
+  document.querySelectorAll("#eqs input").forEach(el=>{const v=el.value.trim(),aa=el.dataset.a,g=v===aa||(aa==="1"&&v==="");el.style.borderColor=g?"var(--ok)":"var(--bad)";if(!g)bad++});
+  ok=!bad;renderSteps();ok?msg("m4",t("ok"),true):msg("m4",t("bad")+bad+".",false)};
+$("send").onclick=()=>{const f=["a1","a2","a3"].every(id=>$(id).value.trim());msg("m5",f?t("sent"):t("empty"),!!f)};
+applyLang();
+}
+</script>
+<script src="../embed.js"></script>
+</body>
+</html>

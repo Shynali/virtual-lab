@@ -1,0 +1,227 @@
+<!DOCTYPE html>
+<html lang="kk">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Бейтараптану реакциясы</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans:wght@400;600;700&family=Noto+Serif:wght@600;700&display=swap" rel="stylesheet">
+<style>
+/* VOICE: calm school lab workbook, clear and encouraging (grade 7)
+   IDEA: a workbench sheet — a test tube of acid with litmus, a dropper of alkali, and a watch glass over a flame
+   PICTURE: red litmus turning violet drop by drop (blue if overshot), then a drop drying to white salt crystals
+   COLOUR and TYPE: white sheet on deep lab-teal; the indicator colours themselves; Noto Serif + Noto Sans
+   LAYOUT: steps left, scene right (sticky) with view switch; stacks on phones */
+:root{color-scheme:light dark;
+--bg:light-dark(#0f4c5c,#0a2d36);--sheet:light-dark(#ffffff,#13202a);--ink:light-dark(#10131a,#e7edf2);
+--mute:light-dark(#566170,#9fb0bf);--line:light-dark(#d5dde5,#2b3d4b);--soft:light-dark(#eef5f7,#182a35);
+--acc:light-dark(#0f4c5c,#5cc2d6);--ok:light-dark(#12733a,#4ade80);--bad:light-dark(#b91c1c,#f87171);
+--warn:light-dark(#fff4d6,#3a2f12);--glass:light-dark(#f7fbfd,#1d2f3b);--glassline:light-dark(#8aa1b1,#6c8597)}
+:root[data-theme=light]{color-scheme:light}:root[data-theme=dark]{color-scheme:dark}
+*{box-sizing:border-box;min-width:0}
+body{margin:0;background:var(--bg);color:var(--ink);font:16px/1.55 "Noto Sans",system-ui,sans-serif;overflow-x:clip}
+.wrap{max-width:1240px;margin:0 auto;padding:clamp(14px,3vw,36px) max(3vw,12px)}
+header{display:flex;flex-wrap:wrap;gap:12px;align-items:flex-end;justify-content:space-between;color:#fff;margin-bottom:18px}
+header small{display:block;opacity:.8;font-size:14px}
+h1{font:700 clamp(24px,3.6vw,38px)/1.08 "Noto Serif",Georgia,serif;margin:2px 0 0;text-wrap:balance;max-width:26ch}
+.lang{display:flex;background:rgba(255,255,255,.14);border-radius:999px;padding:4px}
+.lang button{border:0;background:none;color:#fff;font:600 15px "Noto Sans";padding:8px 16px;border-radius:999px;cursor:pointer;min-height:40px}
+.lang button.on{background:#fff;color:#0f4c5c}
+.sheet{background:var(--sheet);border-radius:18px;box-shadow:0 18px 40px rgba(0,0,0,.25);padding:clamp(16px,2.6vw,30px)}
+.note{font-size:13px;color:var(--mute);margin:0 0 10px}
+.goal{margin:0 0 6px;max-width:70ch}
+.reag{margin:0 0 16px;color:var(--mute);font-size:15px;max-width:70ch}
+.safety{display:flex;gap:12px;align-items:center;flex-wrap:wrap;background:var(--warn);border-radius:12px;padding:12px 14px;margin-bottom:18px}
+.safety p{margin:0;flex:1 1 260px;font-weight:600}
+.safety label{flex-direction:row;align-items:center;gap:8px;color:var(--ink);font-weight:600;cursor:pointer}
+.grid{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1.05fr);gap:clamp(16px,3vw,36px);align-items:start}
+.step{border-top:1px solid var(--line);padding:14px 0}
+.step:first-child{border-top:0;padding-top:0}
+.step.off{opacity:.45;pointer-events:none}
+h2{font:700 19px/1.2 "Noto Serif",Georgia,serif;margin:0 0 6px}
+.hint{color:var(--mute);font-size:15px;margin:0 0 8px}
+label{font-size:14px;color:var(--mute);display:flex;flex-direction:column;gap:4px}
+textarea,select{font:16px "Noto Sans";color:var(--ink);background:var(--sheet);border:1.5px solid var(--line);border-radius:10px;padding:10px 12px;width:100%}
+textarea:focus,select:focus,button:focus-visible{outline:3px solid color-mix(in srgb,var(--acc) 45%,transparent);outline-offset:1px}
+.ok{border-color:var(--ok)!important}.bad{border-color:var(--bad)!important}
+textarea{min-height:76px;resize:vertical}
+.btns{display:flex;flex-wrap:wrap;gap:8px;margin-top:8px}
+.btn{border:0;border-radius:10px;padding:10px 14px;font:600 15px "Noto Sans";cursor:pointer;min-height:44px;background:var(--acc);color:light-dark(#fff,#08202a)}
+.btn.done{background:var(--soft);color:var(--ok)}
+.btn:disabled{opacity:.45;cursor:not-allowed}.btn.done:disabled{opacity:1}
+.msg{margin-top:8px;font-size:15px;min-height:1.4em}
+.msg.ok{color:var(--ok)}.msg.bad{color:var(--bad)}
+.board{position:sticky;top:12px}
+.seg{display:flex;background:var(--soft);border-radius:10px;padding:4px;gap:4px;margin-bottom:10px}
+.seg button{flex:1;border:0;background:none;color:var(--ink);font:600 14px "Noto Sans";padding:8px 10px;border-radius:8px;cursor:pointer;min-height:40px}
+.seg button.on{background:var(--sheet);box-shadow:0 1px 4px rgba(0,0,0,.15)}
+.seg button:disabled{opacity:.4;cursor:default}
+.rackbox{background:var(--soft);border-radius:16px;padding:10px}
+.rackbox svg{display:block;width:100%;height:auto}
+.mag{transition:transform 1.2s ease}
+.glow{animation:glow 1.4s ease-in-out 2;transform-box:fill-box}
+@keyframes glow{50%{fill:#f97316}}
+.flame{animation:flick .25s ease-in-out infinite alternate;transform-box:fill-box;transform-origin:bottom center}
+@keyframes flick{to{transform:scaleY(1.12) scaleX(.94)}}
+@media(prefers-reduced-motion:reduce){.mag{transition:none}.glow,.flame{animation:none}}
+.scroll{overflow-x:auto}
+.fill{transition:fill .9s ease}.res{transition:opacity 2.5s ease}.drop{transition:r 2.5s ease,opacity 2.5s ease}
+.falling{animation:fall .5s ease-in}@keyframes fall{from{transform:translateY(-30px);opacity:1}to{transform:translateY(40px);opacity:0}}.tb{cursor:pointer}.tb:hover .gl{stroke:var(--acc)}
+.bub{animation:rise var(--d) linear infinite;animation-delay:var(--dl);opacity:0}
+@keyframes rise{0%{transform:translateY(0);opacity:0}10%{opacity:.95}100%{transform:translateY(-80px);opacity:0}}
+.smoke{animation:smoke 2.6s ease-out infinite;opacity:0}
+@keyframes smoke{0%{transform:translateY(0) scale(.6);opacity:0}20%{opacity:.6}100%{transform:translateY(-70px) scale(1.4);opacity:0}}
+@media(prefers-reduced-motion:reduce){.bub,.smoke{animation:none;opacity:.6}}
+table{width:100%;border-collapse:collapse;font-size:14px;min-width:560px}
+th,td{padding:5px;border-bottom:1px solid var(--line);text-align:left;vertical-align:middle}
+th{font-size:13px;color:var(--mute);font-weight:600}
+td:first-child{font-weight:600;font-size:14px;width:130px}
+td select{padding:6px;font-size:13px}
+.eq{display:flex;flex-wrap:wrap;align-items:center;gap:8px;font:600 17px "Noto Sans";margin-bottom:10px}
+.eq select{width:auto;padding:6px 8px;font:600 15px "Noto Sans"}
+.q{margin-bottom:10px}
+@media(max-width:860px){.grid{grid-template-columns:minmax(0,1fr)}.board{position:static;order:-1}}
+</style>
+</head>
+<body>
+<div class="wrap">
+<header>
+  <div><small data-i="lab"></small><h1 data-i="title"></h1></div>
+  <div class="lang" role="group" aria-label="Тіл"><button id="l-kk" class="on">Қазақша</button><button id="l-ru">Русский</button></div>
+</header>
+<div class="sheet">
+  <p class="note" data-i="demo"></p>
+  <p class="goal" data-i="goal"></p>
+  <p class="reag" data-i="reag"></p>
+  <div class="safety">
+    <svg width="34" height="34" viewBox="0 0 34 34" aria-hidden="true"><path d="M17 3 32 30H2Z" fill="#f59e0b"/><rect x="15.5" y="11" width="3" height="11" rx="1.5" fill="#fff"/><circle cx="17" cy="26" r="1.8" fill="#fff"/></svg>
+    <p data-i="safe"></p>
+    <label><input type="checkbox" id="goggles" style="width:22px;height:22px"><span data-i="safeok"></span></label>
+  </div>
+  <div class="grid">
+    <div>
+      <section class="step" id="st1"><h2 data-i="s1"></h2><p class="hint" data-i="s1h"></p>
+        <div class="btns"><button class="btn" data-b="acid" data-i="bacid"></button><button class="btn" data-b="lit" data-i="blit"></button></div></section>
+      <section class="step" id="st2"><h2 data-i="s2"></h2><p class="hint" data-i="s2h"></p>
+        <div class="btns"><button class="btn" id="dropB"></button><button class="btn" id="backB" data-i="bback"></button><button class="btn" id="stopB" data-i="bstop"></button></div>
+        <div class="msg" id="m2" aria-live="polite"></div></section>
+      <section class="step" id="st3"><h2 data-i="s3"></h2><p class="hint" data-i="s3h"></p>
+        <div class="btns"><button class="btn" data-b="take" data-i="btake"></button><button class="btn" data-b="evap" data-i="bevap"></button></div>
+        <div class="msg" id="m3" aria-live="polite"></div></section>
+      <section class="step" id="st4"><h2 data-i="s4"></h2><p class="hint" data-i="s4h"></p>
+        <table><tbody id="tbl"></tbody></table>
+        <div class="eq" id="weq" style="margin-top:14px"></div>
+        <div class="btns"><button class="btn" id="chk4" data-i="check"></button></div>
+        <div class="msg" id="m4" aria-live="polite"></div></section>
+      <section class="step" id="st5"><h2 data-i="s5"></h2>
+        <div class="q"><label><span data-i="q1"></span><textarea id="a1"></textarea></label></div>
+        <div class="q"><label><span data-i="q2"></span><textarea id="a2"></textarea></label></div>
+        <div class="btns"><button class="btn" id="send" data-i="send"></button></div>
+        <div class="msg" id="m5" aria-live="polite"></div></section>
+    </div>
+    <div class="board"><div class="rackbox"><svg id="scene" viewBox="0 0 560 420" aria-label="scene"></svg></div></div>
+  </div>
+</div>
+</div>
+<script>
+{
+const T={
+kk:{lab:"7-сынып · 8-зертханалық жұмыс",title:"Тұз қышқылының (хлорсутек қышқылы) бейтараптану реакциясы",demo:"Үлгі нұсқа: тіркелу және жұмысты мұғалімге жіберу толық сайтта қосылады.",
+goal:"Мақсаты: тұз қышқылының натрий гидроксидімен бейтараптану реакциясын индикатор арқылы бақылау және түзілген тұзды бөліп алу.",
+reag:"Реактивтер: тұз қышқылы, натрий гидроксиді, лакмус ерітінділері. Құрал-жабдықтар: сынауық, спиртшам, тамшуыр, сағат шынысы.",
+safe:"Қышқыл, сілті ерітінділерімен жұмыс жасау ережелерін сақта: қорғау көзілдірігін ки.",safeok:"Ережені оқыдым",
+s1:"1-қадам. Қышқылға лакмус тамыз",s1h:"Сынауыққа 2 мл тұз қышқылын құйып, үстіне 1–2 тамшы лакмус тамыз.",bacid:"2 мл HCl құю",blit:"Лакмус тамызу",
+s2:"2-қадам. Сілтіні тамшылат",s2h:"Сынауықтағы ерітіндіні араластыра отырып, оның түсі өзгергенше үстіне натрий гидроксидін тамыз. Түс өзгерген сәтте тоқта!",
+bdrop:"NaOH тамызу",bback:"1 тамшы HCl қосу",bstop:"Түсі өзгерді — тоқтау",
+s0:"Ерітінді әлі қызыл: орта қышқылдық.",sn:"Ерітінді күлгін түске боялды: орта бейтарап! Енді тоқта.",sb:"Ерітінді көгерді: сілті артық қосылды. Бір тамшы қышқыл қосып, күлгін түске келтір.",stopok:"Жарайсың! Қышқыл толық бейтараптанды.",stopbad:"Ерітінді әлі күлгін емес.",
+s3:"3-қадам. Тамшыны буландыр",s3h:"Сынауықтан тамшуырмен 1–2 тамшы ерітінді алып, оны сағат шынысына тамызып, буландыр. Не байқадың?",btake:"Тамшуырмен тамшы алу",bevap:"Буландыру",evapd:"Сағат шынысында ақ кристалдар қалды.",
+s4:"4-қадам. Бақылауыңды жаз",s4h:"Әр кезеңде не байқадың? Реакция теңдеуін сөзбен құрастыр.",
+rows:["Тұз қышқылы + лакмус","NaOH тамызғаннан кейін","Тамшыны буландырғанда"],
+o:[["—","Қызыл","Күлгін","Көк"],["—","Қызыл","Күлгін","Көк"],["—","Ақ кристалдар (ас тұзы) қалды","Ештеңе қалмады","Қара дақ қалды"]],
+w:["тұз қышқылы","натрий гидроксиді","натрий хлориді","су","сутек"],
+check:"Тексеру",ok4:"Дұрыс! Тұз қышқылы + натрий гидроксиді → натрий хлориді + су.",bad4:"Тағы бір қара: қате бар.",
+s5:"5-қадам. Қорытынды",q1:"Ерітіндінің түсі неге өзгерді? Өзгерісті түсіндір.",q2:"Қорытынды: бейтараптану реакциясы дегеніміз не?",
+send:"Мұғалімге жіберу",sent:"Үлгіде жіберу әлі жұмыс істемейді. Толық сайтта жұмыс мұғалімнің бетіне түседі.",empty:"Алдымен барлық сұраққа жауап бер.",
+glass:"сағат шынысы",drops:"тамшы"},
+ru:{lab:"7 класс · Лабораторная работа №8",title:"Реакция нейтрализации соляной (хлороводородной) кислоты",demo:"Демо-версия: регистрация и отправка работы учителю появятся в полной версии сайта.",
+goal:"Цель: пронаблюдать с помощью индикатора реакцию нейтрализации соляной кислоты гидроксидом натрия и выделить образовавшуюся соль.",
+reag:"Реактивы: растворы соляной кислоты, гидроксида натрия, лакмуса. Оборудование: пробирка, спиртовка, пипетка, часовое стекло.",
+safe:"Соблюдай правила работы с растворами кислот и щелочей: надень защитные очки.",safeok:"Правила прочитаны",
+s1:"Шаг 1. Добавь лакмус к кислоте",s1h:"Налей в пробирку 2 мл соляной кислоты и добавь 1–2 капли лакмуса.",bacid:"Налить 2 мл HCl",blit:"Добавить лакмус",
+s2:"Шаг 2. Добавляй щёлочь по каплям",s2h:"Перемешивая раствор в пробирке, добавляй по каплям гидроксид натрия, пока цвет не изменится. Остановись в момент изменения цвета!",
+bdrop:"Добавить каплю NaOH",bback:"Добавить 1 каплю HCl",bstop:"Цвет изменился — стоп",
+s0:"Раствор ещё красный: среда кислотная.",sn:"Раствор стал фиолетовым: среда нейтральная! Теперь остановись.",sb:"Раствор посинел: щёлочь в избытке. Добавь каплю кислоты, чтобы вернуть фиолетовый цвет.",stopok:"Молодец! Кислота полностью нейтрализована.",stopbad:"Раствор ещё не фиолетовый.",
+s3:"Шаг 3. Выпари каплю",s3h:"Возьми пипеткой 1–2 капли раствора, нанеси на часовое стекло и выпари. Что ты наблюдаешь?",btake:"Взять каплю пипеткой",bevap:"Выпарить",evapd:"На часовом стекле остались белые кристаллы.",
+s4:"Шаг 4. Запиши наблюдения",s4h:"Что ты наблюдал на каждом этапе? Составь уравнение реакции словами.",
+rows:["Соляная кислота + лакмус","После добавления NaOH","При выпаривании капли"],
+o:[["—","Красный","Фиолетовый","Синий"],["—","Красный","Фиолетовый","Синий"],["—","Остались белые кристаллы (поваренная соль)","Ничего не осталось","Осталось чёрное пятно"]],
+w:["соляная кислота","гидроксид натрия","хлорид натрия","вода","водород"],
+check:"Проверить",ok4:"Верно! Соляная кислота + гидроксид натрия → хлорид натрия + вода.",bad4:"Посмотри ещё раз: есть ошибка.",
+s5:"Шаг 5. Вывод",q1:"Почему изменился цвет раствора? Объясни изменение.",q2:"Вывод: что такое реакция нейтрализации?",
+send:"Отправить учителю",sent:"В демо-версии отправка пока не работает. В полной версии работа попадёт на страницу учителя.",empty:"Сначала ответь на все вопросы.",
+glass:"часовое стекло",drops:"капель"}};
+const EQ=5;let lang="kk",n=0,stopped=false,done4=false;const S={acid:0,lit:0,take:0,evap:0};const tv={},wv={};
+const $=id=>document.getElementById(id),t=k=>T[lang][k];
+function col(){if(!S.lit)return"rgba(225,235,242,.6)";if(n<EQ-1)return"rgba(220,38,38,.6)";if(n===EQ-1)return"rgba(190,60,120,.6)";if(n===EQ)return"rgba(139,92,246,.6)";return"rgba(37,99,235,.6)"}
+function pts(cx,cy,k,rx,ry,seed,fn){let s="";for(let i=0;i<k;i++){const a=((i*137.5+seed)%360)*Math.PI/180,r=Math.sqrt(((i*53+seed)%97)/97);s+=fn(cx+Math.cos(a)*r*rx,cy+Math.sin(a)*r*ry)}return s}
+let lastCol=null;
+function render(fall){
+  const x=150,W=60,TOP=110,BOT=340;let h="";
+  h+=`<clipPath id="ct"><rect x="${x}" y="${TOP}" width="${W}" height="${BOT-TOP}" rx="${W/2}"/><rect x="${x}" y="${TOP}" width="${W}" height="${(BOT-TOP)/2}"/></clipPath><g clip-path="url(#ct)"><rect x="${x}" y="${TOP}" width="${W}" height="${BOT-TOP}" fill="var(--glass)"/>`;
+  if(S.acid){const lv=70+n*4;h+=`<rect class="fill" id="liq" x="${x}" y="${BOT-lv}" width="${W}" height="${lv}" fill="${lastCol||col()}"/>`}
+  h+=`</g><path d="M${x} ${TOP-8}V${BOT-W/2}a${W/2} ${W/2} 0 0 0 ${W} 0V${TOP-8}" fill="none" stroke="var(--glassline)" stroke-width="2.4"/><rect x="${x-5}" y="${TOP-12}" width="${W+10}" height="7" rx="3" fill="var(--glassline)"/>`;
+  // dropper
+  if(S.lit){h+=`<rect x="${x+W/2-5}" y="20" width="10" height="56" rx="3" style="fill:light-dark(#e8f3f8,#5f7a8a)" stroke="var(--glassline)"/><path d="M${x+W/2-5} 76L${x+W/2} 92L${x+W/2+5} 76Z" style="fill:light-dark(#e8f3f8,#5f7a8a)" stroke="var(--glassline)"/><rect x="${x+W/2-8}" y="8" width="16" height="16" rx="5" fill="#374151"/>`;
+    if(fall)h+=`<circle class="falling" cx="${x+W/2}" cy="98" r="4" fill="rgba(160,205,235,.95)"/>`;
+    h+=`<text x="${x+W/2+22}" y="50" font-size="13" font-weight="700" fill="var(--ink)">${fall==="acid"?"HCl":"NaOH"}</text>`}
+  h+=`<text x="${x+W/2}" y="${BOT+28}" text-anchor="middle" font-size="13" font-weight="700" fill="var(--ink)">HCl + ${lang==="kk"?"лакмус":"лакмус"}</text>`;
+  if(S.lit)h+=`<text x="${x+W/2}" y="${BOT+46}" text-anchor="middle" font-size="12" fill="var(--mute)">NaOH: ${n} ${t("drops")}</text>`;
+  // watch glass + lamp
+  const gx=410;h+=`<rect x="${gx-70}" y="232" width="140" height="6" fill="#6b7280"/><line x1="${gx-60}" y1="238" x2="${gx-70}" y2="350" stroke="#6b7280" stroke-width="5"/><line x1="${gx+60}" y1="238" x2="${gx+70}" y2="350" stroke="#6b7280" stroke-width="5"/>`;
+  h+=`<path d="M${gx-60} 220Q${gx} 246 ${gx+60} 220Z" style="fill:light-dark(#f4f8fa,#1a2a34)" stroke="var(--glassline)" stroke-width="2"/>`;
+  if(S.take)h+=`<circle class="drop" id="drp" cx="${gx}" cy="227" r="16" fill="rgba(139,92,246,.5)"/>`;
+  if(S.take)h+=`<g class="res" id="res" opacity="0">${pts(gx,229,34,24,4,5,(a,b)=>`<rect x="${a-2.4}" y="${b-2.4}" width="4.8" height="4.8" fill="#fff" stroke="#94a3b8" stroke-width=".5"/>`)}</g>`;
+  if(S.evap)h+=`<path class="flame" d="M${gx-9} 330Q${gx-12} 304 ${gx} 280Q${gx+12} 304 ${gx+9} 330Z" fill="#fb923c"/>`;
+  h+=`<path d="M${gx-26} 360Q${gx-28} 334 ${gx} 330Q${gx+28} 334 ${gx+26} 360Z" style="fill:light-dark(#dbe7ee,#2b3f4c)" stroke="var(--glassline)" stroke-width="2"/>`;
+  h+=`<text x="${gx}" y="200" text-anchor="middle" font-size="12" fill="var(--mute)">${t("glass")}</text>`;
+  $("scene").innerHTML=h;
+  const l=$("liq");if(l&&lastCol&&lastCol!==col())requestAnimationFrame(()=>requestAnimationFrame(()=>l.setAttribute("fill",col())));lastCol=col();
+  if(S.evap){const d=$("drp"),r=$("res");requestAnimationFrame(()=>requestAnimationFrame(()=>{d&&(d.setAttribute("r",0),d.setAttribute("opacity",0));r&&r.setAttribute("opacity",1)}))}
+}
+const DEP={lit:"acid",evap:"take"};
+function renderSteps(){
+  const g=$("goggles").checked;$("st1").classList.toggle("off",!g);$("st2").classList.toggle("off",!S.lit);$("st3").classList.toggle("off",!stopped);
+  document.querySelectorAll("[data-b]").forEach(b=>{const k=b.dataset.b,done=!!S[k],en=k==="take"?stopped:(!DEP[k]||S[DEP[k]]);b.disabled=done||!en;b.classList.toggle("done",done)});
+  $("dropB").textContent=t("bdrop")+` (${n})`;$("dropB").disabled=stopped;$("backB").disabled=stopped||n<=EQ;$("stopB").disabled=stopped;$("stopB").classList.toggle("done",stopped);
+  $("st4").classList.toggle("off",!S.evap);$("st5").classList.toggle("off",!done4);
+}
+function opts(arr,v){return arr.map((s,i)=>`<option value="${i||""}" ${String(v||"")===String(i||"")?"selected":""}>${s}</option>`).join("")}
+function wsel(id){return `<select id="${id}"><option value="">?</option>${t("w").map((w,i)=>`<option value="${i+1}" ${wv[id]==i+1?"selected":""}>${w}</option>`).join("")}</select>`}
+function renderTable(){$("tbl").innerHTML=t("rows").map((r,i)=>`<tr><td>${r}</td><td><select data-r="${i}">${opts(t("o")[i],tv[i])}</select></td></tr>`).join("");
+  $("weq").innerHTML=`${wsel("w1")} + ${wsel("w2")} <span>→</span> ${wsel("w3")} + ${wsel("w4")}`}
+function applyLang(){
+  document.documentElement.lang=lang;
+  document.querySelectorAll("[data-i]").forEach(el=>{const v=T[lang][el.dataset.i];if(typeof v==="string")el.textContent=v});
+  $("l-kk").classList.toggle("on",lang==="kk");$("l-ru").classList.toggle("on",lang==="ru");
+  document.querySelectorAll(".msg").forEach(m=>m.textContent="");
+  render();renderSteps();renderTable();
+}
+function msg(id,text,ok){const m=$(id);m.textContent=text;m.className="msg "+(ok?"ok":"bad")}
+$("l-kk").onclick=()=>{lang="kk";applyLang()};$("l-ru").onclick=()=>{lang="ru";applyLang()};
+$("goggles").onchange=renderSteps;
+document.querySelector(".grid").addEventListener("click",e=>{const b=e.target.closest("[data-b]");if(!b||b.disabled)return;const k=b.dataset.b;S[k]=1;render();renderSteps();if(k==="evap")setTimeout(()=>msg("m3",t("evapd"),true),2600)});
+$("dropB").onclick=()=>{n++;render("naoh");renderSteps();n<EQ?msg("m2",t("s0"),false):n===EQ?msg("m2",t("sn"),true):msg("m2",t("sb"),false)};
+$("backB").onclick=()=>{n--;render("acid");renderSteps();n===EQ?msg("m2",t("sn"),true):msg("m2",t("sb"),false)};
+$("stopB").onclick=()=>{if(n!==EQ){msg("m2",t("stopbad"),false);return}stopped=true;msg("m2",t("stopok"),true);render();renderSteps()};
+$("tbl").addEventListener("change",e=>{const r=e.target.dataset.r;if(r==null)return;tv[r]=e.target.value;e.target.classList.remove("ok","bad")});
+$("weq").addEventListener("change",e=>{if(e.target.id)wv[e.target.id]=e.target.value;e.target.classList.remove("ok","bad")});
+$("chk4").onclick=()=>{let ok=true;const A=["1","2","1"];document.querySelectorAll("#tbl select").forEach(s=>{const g=s.value===A[s.dataset.r];s.classList.toggle("ok",g);s.classList.toggle("bad",!g);if(!g)ok=false});
+  const v=["w1","w2","w3","w4"].map(id=>$(id).value),L=[v[0],v[1]].sort().join(),R=[v[2],v[3]].sort().join(),eq=L==="1,2"&&R==="3,4";["w1","w2","w3","w4"].forEach(id=>$(id).className=eq?"ok":"bad");if(!eq)ok=false;
+  done4=ok;renderSteps();ok?msg("m4",t("ok4"),true):msg("m4",t("bad4"),false)};
+$("send").onclick=()=>{const f=["a1","a2"].every(id=>$(id).value.trim());msg("m5",f?t("sent"):t("empty"),f)};
+applyLang();
+}
+</script>
+<script src="../embed.js"></script>
+</body>
+</html>

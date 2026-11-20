@@ -1,0 +1,225 @@
+<!DOCTYPE html>
+<html lang="kk">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Кальций: су және қышқыл</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans:wght@400;600;700&family=Noto+Serif:wght@600;700&display=swap" rel="stylesheet">
+<style>
+/* VOICE: calm school lab workbook, clear and encouraging (grade 7)
+   IDEA: a workbench sheet — a porcelain dish of water with phenolphthalein, and a test tube of acid
+   PICTURE: a calcium piece fizzing and drifting as the water blushes crimson; a second piece vanishing fast in acid
+   COLOUR and TYPE: white sheet on deep lab-teal; the universal-indicator rainbow; Noto Serif + Noto Sans
+   LAYOUT: steps left, scene right (sticky) with view switch; stacks on phones */
+:root{color-scheme:light dark;
+--bg:light-dark(#0f4c5c,#0a2d36);--sheet:light-dark(#ffffff,#13202a);--ink:light-dark(#10131a,#e7edf2);
+--mute:light-dark(#566170,#9fb0bf);--line:light-dark(#d5dde5,#2b3d4b);--soft:light-dark(#eef5f7,#182a35);
+--acc:light-dark(#0f4c5c,#5cc2d6);--ok:light-dark(#12733a,#4ade80);--bad:light-dark(#b91c1c,#f87171);
+--warn:light-dark(#fff4d6,#3a2f12);--glass:light-dark(#f7fbfd,#1d2f3b);--glassline:light-dark(#8aa1b1,#6c8597)}
+:root[data-theme=light]{color-scheme:light}:root[data-theme=dark]{color-scheme:dark}
+*{box-sizing:border-box;min-width:0}
+body{margin:0;background:var(--bg);color:var(--ink);font:16px/1.55 "Noto Sans",system-ui,sans-serif;overflow-x:clip}
+.wrap{max-width:1240px;margin:0 auto;padding:clamp(14px,3vw,36px) max(3vw,12px)}
+header{display:flex;flex-wrap:wrap;gap:12px;align-items:flex-end;justify-content:space-between;color:#fff;margin-bottom:18px}
+header small{display:block;opacity:.8;font-size:14px}
+h1{font:700 clamp(24px,3.6vw,38px)/1.08 "Noto Serif",Georgia,serif;margin:2px 0 0;text-wrap:balance;max-width:26ch}
+.lang{display:flex;background:rgba(255,255,255,.14);border-radius:999px;padding:4px}
+.lang button{border:0;background:none;color:#fff;font:600 15px "Noto Sans";padding:8px 16px;border-radius:999px;cursor:pointer;min-height:40px}
+.lang button.on{background:#fff;color:#0f4c5c}
+.sheet{background:var(--sheet);border-radius:18px;box-shadow:0 18px 40px rgba(0,0,0,.25);padding:clamp(16px,2.6vw,30px)}
+.note{font-size:13px;color:var(--mute);margin:0 0 10px}
+.goal{margin:0 0 6px;max-width:70ch}
+.reag{margin:0 0 16px;color:var(--mute);font-size:15px;max-width:70ch}
+.safety{display:flex;gap:12px;align-items:center;flex-wrap:wrap;background:var(--warn);border-radius:12px;padding:12px 14px;margin-bottom:18px}
+.safety p{margin:0;flex:1 1 260px;font-weight:600}
+.safety label{flex-direction:row;align-items:center;gap:8px;color:var(--ink);font-weight:600;cursor:pointer}
+.grid{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1.05fr);gap:clamp(16px,3vw,36px);align-items:start}
+.step{border-top:1px solid var(--line);padding:14px 0}
+.step:first-child{border-top:0;padding-top:0}
+.step.off{opacity:.45;pointer-events:none}
+h2{font:700 19px/1.2 "Noto Serif",Georgia,serif;margin:0 0 6px}
+.hint{color:var(--mute);font-size:15px;margin:0 0 8px}
+label{font-size:14px;color:var(--mute);display:flex;flex-direction:column;gap:4px}
+textarea,select{font:16px "Noto Sans";color:var(--ink);background:var(--sheet);border:1.5px solid var(--line);border-radius:10px;padding:10px 12px;width:100%}
+textarea:focus,select:focus,button:focus-visible{outline:3px solid color-mix(in srgb,var(--acc) 45%,transparent);outline-offset:1px}
+.ok{border-color:var(--ok)!important}.bad{border-color:var(--bad)!important}
+textarea{min-height:76px;resize:vertical}
+.btns{display:flex;flex-wrap:wrap;gap:8px;margin-top:8px}
+.btn{border:0;border-radius:10px;padding:10px 14px;font:600 15px "Noto Sans";cursor:pointer;min-height:44px;background:var(--acc);color:light-dark(#fff,#08202a)}
+.btn.done{background:var(--soft);color:var(--ok)}
+.btn:disabled{opacity:.45;cursor:not-allowed}.btn.done:disabled{opacity:1}
+.msg{margin-top:8px;font-size:15px;min-height:1.4em}
+.msg.ok{color:var(--ok)}.msg.bad{color:var(--bad)}
+.board{position:sticky;top:12px}
+.seg{display:flex;background:var(--soft);border-radius:10px;padding:4px;gap:4px;margin-bottom:10px}
+.seg button{flex:1;border:0;background:none;color:var(--ink);font:600 14px "Noto Sans";padding:8px 10px;border-radius:8px;cursor:pointer;min-height:40px}
+.seg button.on{background:var(--sheet);box-shadow:0 1px 4px rgba(0,0,0,.15)}
+.seg button:disabled{opacity:.4;cursor:default}
+.rackbox{background:var(--soft);border-radius:16px;padding:10px}
+.rackbox svg{display:block;width:100%;height:auto}
+.mag{transition:transform 1.2s ease}
+.glow{animation:glow 1.4s ease-in-out 2;transform-box:fill-box}
+@keyframes glow{50%{fill:#f97316}}
+.flame{animation:flick .25s ease-in-out infinite alternate;transform-box:fill-box;transform-origin:bottom center}
+@keyframes flick{to{transform:scaleY(1.12) scaleX(.94)}}
+@media(prefers-reduced-motion:reduce){.mag{transition:none}.glow,.flame{animation:none}}
+.scroll{overflow-x:auto}
+.seg{display:flex;background:var(--soft);border-radius:10px;padding:4px;gap:4px;margin-bottom:10px;flex-wrap:wrap}
+.seg button{flex:1;border:0;background:none;color:var(--ink);font:600 14px "Noto Sans";padding:8px 10px;border-radius:8px;cursor:pointer;min-height:40px}
+.seg button.on{background:var(--sheet);box-shadow:0 1px 4px rgba(0,0,0,.15)}
+.brown{transition:opacity 2s ease}.pk{transition:fill 1.6s ease}.ca{transition:transform 4s ease-in-out,opacity 6s ease;transform-box:fill-box;transform-origin:center}.water{animation:fall2 .6s linear infinite}@keyframes fall2{from{transform:translateY(-10px);opacity:.9}to{transform:translateY(30px);opacity:.2}}.eq input{width:44px;padding:6px;text-align:center;font:600 16px "Noto Sans";border:1.5px solid var(--line);border-radius:8px;background:var(--sheet);color:var(--ink)}
+.tray{display:flex;flex-wrap:wrap;gap:8px;margin-top:10px}
+.tray small{width:100%;font-weight:700;color:var(--mute);font-size:13px;margin-top:4px}
+.chip{border:2px solid var(--line);background:var(--sheet);color:var(--ink);border-radius:999px;padding:6px 12px;font:600 14px "Noto Sans";cursor:pointer;min-height:40px}
+.chip.sel{border-color:var(--acc);background:var(--soft)}.chip.done{color:var(--ok)}.chip:disabled{opacity:.4;cursor:default}
+.scroll{overflow-x:auto}td select{padding:6px;font-size:13px}td input{width:70px;padding:6px;text-align:right;font:600 15px "Noto Sans";color:var(--ink);background:var(--sheet);border:1.5px solid var(--line);border-radius:8px}
+.two{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:0 18px}@media(max-width:600px){.two{grid-template-columns:minmax(0,1fr)}}
+.bub{animation:rise var(--d) linear infinite;animation-delay:var(--dl);opacity:0}
+@keyframes rise{0%{transform:translateY(0);opacity:0}10%{opacity:.95}100%{transform:translateY(-80px);opacity:0}}
+.smoke{animation:smoke 2.6s ease-out infinite;opacity:0}
+@keyframes smoke{0%{transform:translateY(0) scale(.6);opacity:0}20%{opacity:.6}100%{transform:translateY(-70px) scale(1.4);opacity:0}}
+@media(prefers-reduced-motion:reduce){.bub,.smoke{animation:none;opacity:.6}}
+table{width:100%;border-collapse:collapse;font-size:14px}
+th,td{padding:5px;border-bottom:1px solid var(--line);text-align:left;vertical-align:middle}
+th{font-size:13px;color:var(--mute);font-weight:600}
+td:first-child{font-weight:600;font-size:14px}
+td select{padding:6px;font-size:13px}
+.eq{display:flex;flex-wrap:wrap;align-items:center;gap:8px;font:600 17px "Noto Sans";margin-bottom:10px}
+.eq select{width:auto;padding:6px 8px;font:600 15px "Noto Sans"}
+.q{margin-bottom:10px}
+@media(max-width:860px){.grid{grid-template-columns:minmax(0,1fr)}.board{position:static;order:-1}}
+</style>
+</head>
+<body>
+<div class="wrap">
+<header>
+  <div><small data-i="lab"></small><h1 data-i="title"></h1></div>
+  <div class="lang" role="group" aria-label="Тіл"><button id="l-kk" class="on">Қазақша</button><button id="l-ru">Русский</button></div>
+</header>
+<div class="sheet">
+  <p class="note" data-i="demo"></p>
+  <p class="goal" data-i="goal"></p>
+  <p class="reag" data-i="reag"></p>
+  <div class="safety">
+    <svg width="34" height="34" viewBox="0 0 34 34" aria-hidden="true"><path d="M17 3 32 30H2Z" fill="#f59e0b"/><rect x="15.5" y="11" width="3" height="11" rx="1.5" fill="#fff"/><circle cx="17" cy="26" r="1.8" fill="#fff"/></svg>
+    <p data-i="safe"></p>
+    <label><input type="checkbox" id="goggles" style="width:22px;height:22px"><span data-i="safeok"></span></label>
+  </div>
+  <div class="grid">
+    <div>
+      <section class="step" id="st1"><h2 data-i="e1"></h2><p class="hint" data-i="e1h"></p>
+        <div class="btns"><button class="btn" data-b="w" data-i="bw"></button><button class="btn" data-b="ph" data-i="bph"></button><button class="btn" data-b="cut" data-i="bcut"></button><button class="btn" data-b="dry" data-i="bdry"></button><button class="btn" data-b="drop" data-i="bdrop"></button></div>
+        <div class="msg" id="m1" aria-live="polite"></div></section>
+      <section class="step" id="st2"><h2 data-i="e2"></h2><p class="hint" data-i="e2h"></p>
+        <div class="btns"><button class="btn" data-b="hcl" data-i="bhcl"></button><button class="btn" data-b="ca2" data-i="bca2"></button></div>
+        <div class="msg" id="m2" aria-live="polite"></div></section>
+      <section class="step" id="st3"><h2 data-i="s3"></h2><p class="hint" data-i="s3h"></p>
+        <div id="qs"></div>
+        <div id="eqs" style="margin-top:12px"></div>
+        <div class="btns"><button class="btn" id="chk" data-i="check"></button></div>
+        <div class="msg" id="m3" aria-live="polite"></div></section>
+      <section class="step" id="st4"><h2 data-i="s4"></h2>
+        <div class="q"><label><span data-i="q1"></span><textarea id="a1"></textarea></label></div>
+        <div class="btns"><button class="btn" id="send" data-i="send"></button></div>
+        <div class="msg" id="m4" aria-live="polite"></div></section>
+    </div>
+    <div class="board">
+      <div class="seg" id="seg"><button data-v="1" class="on" data-i="v1"></button><button data-v="2" data-i="v2"></button></div>
+      <div class="rackbox"><svg id="scene" viewBox="0 0 560 400" aria-label="scene"></svg></div>
+    </div>
+  </div>
+</div>
+</div>
+<script>
+{
+const T={
+kk:{lab:"9-сынып · 8-зертханалық жұмыс",title:"Кальцийдің сумен және қышқыл ерітіндісімен әрекеттесуі",demo:"Үлгі нұсқа: тіркелу және жұмысты мұғалімге жіберу толық сайтта қосылады.",
+goal:"Мақсаты: кальцийдің сумен және тұз қышқылымен әрекеттесуін бақылап, түзілетін заттарды анықтау.",
+reag:"Реактивтер: кальций; су; фенолфталеин ерітіндісі; тұз қышқылының ерітіндісі. Құрал-жабдықтар: кәрлен табақша; сынауықтарға арналған тұрғы; сынауықтар; сүзгі қағазы; пинцет.",
+safe:"Қыздырғыш құралдармен, қышқылдармен және сілтілермен жұмыс істеу ережесін сақта. Кальцийді қолмен ұстама — тек пинцетпен ал.",safeok:"Ережені оқыдым",
+v1:"1 · Су",v2:"2 · Қышқыл",
+e1:"1-тәжірибе",e1h:"Кәрлен табақшаға (немесе Петри табақшасына) су құйып, оған бірнеше тамшы фенолфталеин тамыз. Кальцийдің кішкентай түйірін кесіп алып, сүзгі қағазымен оны майдан жақсылап құрғат. Құрғатылған кальций түйірін қысқышпен абайлап суға батыр. Жүретін реакцияны бақыла.",
+bw:"Табақшаға су құю",bph:"Фенолфталеин тамызу",bcut:"Кальций түйірін кесу",bdry:"Сүзгі қағазымен құрғату",bdrop:"Пинцетпен суға батыру",
+r1:"Кальций бетінен газ көпіршіктері бөлініп, ерітінді таңқурай түске боялды, сәл лайланды.",
+e2:"2-тәжірибе",e2h:"Сынауыққа 2 мл тұз қышқылын құйып, оған кальцийдің кішкентай түйірін сал. Жүретін реакцияны бақыла.",bhcl:"2 мл HCl құю",bca2:"Кальций түйірін салу",r2:"Газ қарқынды бөлініп, кальций тез еріп кетті.",
+s3:"Бақылаулар мен теңдеулер",s3h:"Бақылауыңды таңда және реакция теңдеулерін құрастыр.",
+qs:[["1-тәжірибеде не байқадың?",["—","Газ бөлінді, ерітінді таңқурай түске боялды","Ақ тұнба түзілді, газ жоқ","Өзгеріс жоқ"],"1"],["Фенолфталеиннің түсі нені дәлелдейді?",["—","Сілті — Ca(OH)₂ түзілгенін","Қышқыл түзілгенін","Тұз түзілгенін"],"1"],["2-тәжірибеде не байқадың?",["—","Газ қарқынды бөлініп, кальций тез еріді","Ақ тұнба түзілді","Өзгеріс жоқ"],"1"],["Қай жерде реакция қарқындырақ жүрді?",["—","Тұз қышқылында","Суда","Бірдей"],"1"]],
+check:"Тексеру",ok:"Барлығы дұрыс! Кальций — белсенді металл: ол сумен әрекеттесіп сілті мен сутек түзеді, ал қышқылмен одан да қарқынды әрекеттеседі.",bad:"Қате жауаптар саны: ",
+s4:"Қорытынды",q1:"Бақылаған құбылыстарыңды түсіндіріп, тиісті қорытынды жаса.",
+send:"Мұғалімге жіберу",sent:"Үлгіде жіберу әлі жұмыс істемейді. Толық сайтта жұмыс мұғалімнің бетіне түседі.",empty:"Алдымен сұраққа жауап бер.",dish:"кәрлен табақша",paper:"сүзгі қағазы"},
+ru:{lab:"9 класс · Лабораторная работа №8",title:"Взаимодействие кальция с водой и раствором кислоты",demo:"Демо-версия: регистрация и отправка работы учителю появятся в полной версии сайта.",
+goal:"Цель: пронаблюдать взаимодействие кальция с водой и соляной кислотой и определить образующиеся вещества.",
+reag:"Реактивы: кальций; вода; раствор фенолфталеина; раствор соляной кислоты. Оборудование: фарфоровая чашка; штатив для пробирок; пробирки; фильтровальная бумага; пинцет.",
+safe:"Соблюдай правила работы с нагревательными приборами, кислотами и щелочами. Не бери кальций руками — только пинцетом.",safeok:"Правила прочитаны",
+v1:"1 · Вода",v2:"2 · Кислота",
+e1:"Опыт 1",e1h:"Налей в фарфоровую чашку (или чашку Петри) воду и добавь несколько капель фенолфталеина. Отрежь маленький кусочек кальция и хорошо очисти его от масла фильтровальной бумагой. Осторожно опусти высушенный кусочек кальция щипцами в воду. Наблюдай за реакцией.",
+bw:"Налить воду в чашку",bph:"Добавить фенолфталеин",bcut:"Отрезать кусочек кальция",bdry:"Высушить фильтровальной бумагой",bdrop:"Опустить пинцетом в воду",
+r1:"С поверхности кальция выделяются пузырьки газа, раствор стал малиновым и слегка помутнел.",
+e2:"Опыт 2",e2h:"Налей в пробирку 2 мл соляной кислоты и положи в неё маленький кусочек кальция. Наблюдай за реакцией.",bhcl:"Налить 2 мл HCl",bca2:"Положить кусочек кальция",r2:"Бурно выделился газ, кальций быстро растворился.",
+s3:"Наблюдения и уравнения",s3h:"Выбери наблюдения и составь уравнения реакций.",
+qs:[["Что ты наблюдал в опыте 1?",["—","Выделялся газ, раствор стал малиновым","Выпал белый осадок, газа нет","Изменений нет"],"1"],["Что доказывает окраска фенолфталеина?",["—","Образование щёлочи — Ca(OH)₂","Образование кислоты","Образование соли"],"1"],["Что ты наблюдал в опыте 2?",["—","Бурно выделялся газ, кальций быстро растворился","Выпал белый осадок","Изменений нет"],"1"],["Где реакция шла интенсивнее?",["—","В соляной кислоте","В воде","Одинаково"],"1"]],
+check:"Проверить",ok:"Всё верно! Кальций — активный металл: с водой он образует щёлочь и водород, а с кислотой реагирует ещё интенсивнее.",bad:"Неверных ответов: ",
+s4:"Вывод",q1:"Объясни наблюдаемые явления и сделай соответствующий вывод.",
+send:"Отправить учителю",sent:"В демо-версии отправка пока не работает. В полной версии работа попадёт на страницу учителя.",empty:"Сначала ответь на вопрос.",dish:"фарфоровая чашка",paper:"фильтр. бумага"}};
+let lang="kk",view=1,ok=false;const S={w:0,ph:0,cut:0,dry:0,drop:0,hcl:0,ca2:0};const qv={},ev={};
+const $=id=>document.getElementById(id),t=k=>T[lang][k];
+function bub(x0,x1,y,n,dur,rise){let s="";for(let k=0;k<n;k++){const cx=x0+(k*13)%(x1-x0),d=(dur*(.8+(k%5)/10)).toFixed(2);s+=`<circle class="bub" cx="${cx}" cy="${y}" r="${1.8+(k%3)}" fill="#fff" stroke="#9fb7c7" style="--d:${d}s;--dl:${(-k*dur/n).toFixed(2)}s"/>`}return s}
+function render(){
+  let h="";
+  if(view===1){
+    h+=`<clipPath id="dsh"><path d="M100 200Q280 330 460 200Z"/></clipPath><g clip-path="url(#dsh)">`;
+    if(S.w)h+=`<rect class="pk" id="wat" x="100" y="206" width="360" height="120" fill="${S.drop?"rgba(225,235,242,.6)":"rgba(225,235,242,.6)"}"/>`;
+    if(S.drop)h+=`<rect x="100" y="206" width="360" height="120" fill="#f5f5f0" opacity=".25"/>`+bub(250,310,236,16,1.2);
+    h+=`</g><path d="M90 196Q280 340 470 196" fill="none" stroke="var(--glassline)" stroke-width="3"/><path d="M90 196Q280 236 470 196" fill="none" stroke="var(--glassline)" stroke-width="1.5" opacity=".5"/>`;
+    if(S.drop)h+=`<g class="ca" id="ca1"><rect x="268" y="218" width="24" height="14" rx="3" fill="#9ca3af" stroke="#6b7280"/></g>`;
+    else if(S.cut){h+=`<rect x="440" y="280" width="80" height="50" rx="4" fill="#fff" stroke="#cbd5e1"/><text x="480" y="346" text-anchor="middle" font-size="11" fill="var(--mute)">${t("paper")}</text><rect x="466" y="292" width="28" height="16" rx="3" fill="${S.dry?"#cbd5e1":"#6b7280"}" stroke="#4b5563"/>`;if(!S.dry)h+=`<ellipse cx="480" cy="310" rx="20" ry="5" fill="#a16207" opacity=".25"/>`}
+    if(S.cut&&!S.drop)h+=`<path d="M380 120L470 288" stroke="#6b7280" stroke-width="4"/><path d="M392 118L478 286" stroke="#6b7280" stroke-width="4"/>`;
+    h+=`<text x="280" y="300" text-anchor="middle" font-size="12" fill="var(--mute)">${t("dish")}</text>`;
+    if(S.drop)h+=`<text x="300" y="150" font-size="16" font-weight="700" fill="var(--acc)">H₂↑</text>`;
+  }else{
+    const x=240,W=70,TOP=90,BOT=310;h+=`<clipPath id="ct"><rect x="${x}" y="${TOP}" width="${W}" height="${BOT-TOP}" rx="${W/2}"/><rect x="${x}" y="${TOP}" width="${W}" height="${(BOT-TOP)/2}"/></clipPath><g clip-path="url(#ct)"><rect x="${x}" y="${TOP}" width="${W}" height="${BOT-TOP}" fill="var(--glass)"/>`;
+    if(S.hcl)h+=`<rect x="${x}" y="${BOT-90}" width="${W}" height="90" fill="rgba(200,228,242,.55)"/>`;
+    if(S.ca2)h+=`<g class="ca" id="ca2"><rect x="${x+W/2-11}" y="${BOT-24}" width="22" height="13" rx="3" fill="#9ca3af" stroke="#6b7280"/></g>`+bub(x+8,x+W-8,BOT-20,26,0.7);
+    h+=`</g><path d="M${x} ${TOP-8}V${BOT-W/2}a${W/2} ${W/2} 0 0 0 ${W} 0V${TOP-8}" fill="none" stroke="var(--glassline)" stroke-width="2.4"/><rect x="${x-5}" y="${TOP-12}" width="${W+10}" height="7" rx="3" fill="var(--glassline)"/>`;
+    h+=`<text x="${x+W/2}" y="${BOT+28}" text-anchor="middle" font-size="15" font-weight="700" fill="var(--ink)">${S.ca2?"Ca + HCl":S.hcl?"HCl":""}</text>`;
+    if(S.ca2)h+=`<text x="${x+W+14}" y="${TOP+20}" font-size="16" font-weight="700" fill="var(--acc)">H₂↑</text>`;
+  }
+  $("scene").innerHTML=h;document.querySelectorAll("#seg button").forEach(b=>b.classList.toggle("on",+b.dataset.v===view));
+}
+function animate(k){requestAnimationFrame(()=>requestAnimationFrame(()=>{
+  if(k==="drop"){const w=$("wat");w&&w.setAttribute("fill","rgba(219,39,119,.5)");const c=$("ca1");c&&(c.style.transform="translateX(-60px) scale(.6)",c.style.opacity=".35")}
+  if(k==="ca2"){const c=$("ca2");c&&(c.style.transform="scale(.1)",c.style.opacity="0")}}))}
+const DEP={ph:"w",cut:"ph",dry:"cut",drop:"dry",ca2:"hcl"},VIEW={w:1,ph:1,cut:1,dry:1,drop:1,hcl:2,ca2:2};
+function opts(arr,v){return arr.map((s,i)=>`<option value="${i||""}" ${String(v||"")===String(i||"")?"selected":""}>${s}</option>`).join("")}
+function renderQ(){$("qs").innerHTML=t("qs").map((q,i)=>`<label style="margin-top:6px"><span>${q[0]}</span><select data-q="${i}">${opts(q[1],qv[i])}</select></label>`).join("");
+  const E=[["Ca + ",["k0","2"],"H₂O → Ca(OH)₂ + H₂↑"],["Ca + ",["k1","2"],"HCl → CaCl₂ + H₂↑"]];
+  $("eqs").innerHTML=E.map(e=>`<div class="eq">${e.map(p=>typeof p==="string"?p:`<input id="${p[0]}" data-a="${p[1]}" inputmode="numeric" value="${ev[p[0]]||""}">`).join("")}</div>`).join("")}
+function renderSteps(){const g=$("goggles").checked;$("st1").classList.toggle("off",!g);$("st2").classList.toggle("off",!g);
+  document.querySelectorAll("[data-b]").forEach(b=>{const k=b.dataset.b,done=!!S[k],en=!DEP[k]||S[DEP[k]];b.disabled=done||!en;b.classList.toggle("done",done)});
+  $("st3").classList.toggle("off",!(S.drop&&S.ca2));$("st4").classList.toggle("off",!ok)}
+function applyLang(){
+  document.documentElement.lang=lang;
+  document.querySelectorAll("[data-i]").forEach(el=>{const v=T[lang][el.dataset.i];if(typeof v==="string")el.textContent=v});
+  $("l-kk").classList.toggle("on",lang==="kk");$("l-ru").classList.toggle("on",lang==="ru");
+  document.querySelectorAll(".msg").forEach(m=>m.textContent="");
+  render();if(S.drop){const w=$("wat");w&&(w.style.transition="none",w.setAttribute("fill","rgba(219,39,119,.5)"))}renderQ();renderSteps();
+}
+function msg(id,text,okk){const m=$(id);m.textContent=text;m.className="msg "+(okk?"ok":"bad")}
+$("l-kk").onclick=()=>{lang="kk";applyLang()};$("l-ru").onclick=()=>{lang="ru";applyLang()};
+$("goggles").onchange=renderSteps;
+$("seg").onclick=e=>{const b=e.target.closest("button");if(!b)return;view=+b.dataset.v;render();if(view===1&&S.drop){const w=$("wat");w&&(w.style.transition="none",w.setAttribute("fill","rgba(219,39,119,.5)"))}};
+document.querySelector(".grid").addEventListener("click",e=>{const b=e.target.closest("[data-b]");if(!b||b.disabled)return;const k=b.dataset.b;S[k]=1;view=VIEW[k];render();animate(k);renderSteps();
+  if(k==="drop")setTimeout(()=>msg("m1",t("r1"),true),1500);if(k==="ca2")setTimeout(()=>msg("m2",t("r2"),true),1500)});
+document.querySelector(".grid").addEventListener("change",e=>{const s=e.target;if(s.dataset.q!=null){qv[s.dataset.q]=s.value;s.className=""}});
+$("eqs").addEventListener("input",e=>{const el=e.target;if(el.id)ev[el.id]=el.value;el.style.borderColor=""});
+$("chk").onclick=()=>{let bad=0;document.querySelectorAll("[data-q]").forEach(s=>{const g=s.value===t("qs")[s.dataset.q][2];s.className=g?"ok":"bad";if(!g)bad++});
+  document.querySelectorAll("#eqs input").forEach(el=>{const g=el.value.trim()===el.dataset.a;el.style.borderColor=g?"var(--ok)":"var(--bad)";if(!g)bad++});
+  ok=!bad;renderSteps();ok?msg("m3",t("ok"),true):msg("m3",t("bad")+bad+".",false)};
+$("send").onclick=()=>{const f=$("a1").value.trim();msg("m4",f?t("sent"):t("empty"),!!f)};
+applyLang();
+}
+</script>
+<script src="../embed.js"></script>
+</body>
+</html>

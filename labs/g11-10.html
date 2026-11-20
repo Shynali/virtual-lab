@@ -1,0 +1,238 @@
+<!DOCTYPE html>
+<html lang="kk">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Қорғасын, қалайы және олардың қосылыстары</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans:wght@400;600;700&family=Noto+Serif:wght@600;700&display=swap" rel="stylesheet">
+<style>
+/* VOICE: calm school lab workbook, clear and encouraging (grade 7)
+   IDEA: a workbench sheet — two twin tubes, acid and alkali, each with an aluminium granule
+   PICTURE: both tubes starting slowly, then fizzing hard once the oxide film is gone: aluminium reacts with both
+   COLOUR and TYPE: white sheet on deep lab-teal; the universal-indicator rainbow; Noto Serif + Noto Sans
+   LAYOUT: steps left, scene right (sticky) with view switch; stacks on phones */
+:root{color-scheme:light dark;
+--bg:light-dark(#0f4c5c,#0a2d36);--sheet:light-dark(#ffffff,#13202a);--ink:light-dark(#10131a,#e7edf2);
+--mute:light-dark(#566170,#9fb0bf);--line:light-dark(#d5dde5,#2b3d4b);--soft:light-dark(#eef5f7,#182a35);
+--acc:light-dark(#0f4c5c,#5cc2d6);--ok:light-dark(#12733a,#4ade80);--bad:light-dark(#b91c1c,#f87171);
+--warn:light-dark(#fff4d6,#3a2f12);--glass:light-dark(#f7fbfd,#1d2f3b);--glassline:light-dark(#8aa1b1,#6c8597)}
+:root[data-theme=light]{color-scheme:light}:root[data-theme=dark]{color-scheme:dark}
+*{box-sizing:border-box;min-width:0}
+body{margin:0;background:var(--bg);color:var(--ink);font:16px/1.55 "Noto Sans",system-ui,sans-serif;overflow-x:clip}
+.wrap{max-width:1240px;margin:0 auto;padding:clamp(14px,3vw,36px) max(3vw,12px)}
+header{display:flex;flex-wrap:wrap;gap:12px;align-items:flex-end;justify-content:space-between;color:#fff;margin-bottom:18px}
+header small{display:block;opacity:.8;font-size:14px}
+h1{font:700 clamp(24px,3.6vw,38px)/1.08 "Noto Serif",Georgia,serif;margin:2px 0 0;text-wrap:balance;max-width:26ch}
+.lang{display:flex;background:rgba(255,255,255,.14);border-radius:999px;padding:4px}
+.lang button{border:0;background:none;color:#fff;font:600 15px "Noto Sans";padding:8px 16px;border-radius:999px;cursor:pointer;min-height:40px}
+.lang button.on{background:#fff;color:#0f4c5c}
+.sheet{background:var(--sheet);border-radius:18px;box-shadow:0 18px 40px rgba(0,0,0,.25);padding:clamp(16px,2.6vw,30px)}
+.note{font-size:13px;color:var(--mute);margin:0 0 10px}
+.goal{margin:0 0 6px;max-width:70ch}
+.reag{margin:0 0 16px;color:var(--mute);font-size:15px;max-width:70ch}
+.safety{display:flex;gap:12px;align-items:center;flex-wrap:wrap;background:var(--warn);border-radius:12px;padding:12px 14px;margin-bottom:18px}
+.safety p{margin:0;flex:1 1 260px;font-weight:600}
+.safety label{flex-direction:row;align-items:center;gap:8px;color:var(--ink);font-weight:600;cursor:pointer}
+.grid{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1.05fr);gap:clamp(16px,3vw,36px);align-items:start}
+.step{border-top:1px solid var(--line);padding:14px 0}
+.step:first-child{border-top:0;padding-top:0}
+.step.off{opacity:.45;pointer-events:none}
+h2{font:700 19px/1.2 "Noto Serif",Georgia,serif;margin:0 0 6px}
+.hint{color:var(--mute);font-size:15px;margin:0 0 8px}
+label{font-size:14px;color:var(--mute);display:flex;flex-direction:column;gap:4px}
+textarea,select{font:16px "Noto Sans";color:var(--ink);background:var(--sheet);border:1.5px solid var(--line);border-radius:10px;padding:10px 12px;width:100%}
+textarea:focus,select:focus,button:focus-visible{outline:3px solid color-mix(in srgb,var(--acc) 45%,transparent);outline-offset:1px}
+.ok{border-color:var(--ok)!important}.bad{border-color:var(--bad)!important}
+textarea{min-height:76px;resize:vertical}
+.btns{display:flex;flex-wrap:wrap;gap:8px;margin-top:8px}
+.btn{border:0;border-radius:10px;padding:10px 14px;font:600 15px "Noto Sans";cursor:pointer;min-height:44px;background:var(--acc);color:light-dark(#fff,#08202a)}
+.btn.done{background:var(--soft);color:var(--ok)}
+.btn:disabled{opacity:.45;cursor:not-allowed}.btn.done:disabled{opacity:1}
+.msg{margin-top:8px;font-size:15px;min-height:1.4em}
+.msg.ok{color:var(--ok)}.msg.bad{color:var(--bad)}
+.board{position:sticky;top:12px}
+.seg{display:flex;background:var(--soft);border-radius:10px;padding:4px;gap:4px;margin-bottom:10px}
+.seg button{flex:1;border:0;background:none;color:var(--ink);font:600 14px "Noto Sans";padding:8px 10px;border-radius:8px;cursor:pointer;min-height:40px}
+.seg button.on{background:var(--sheet);box-shadow:0 1px 4px rgba(0,0,0,.15)}
+.seg button:disabled{opacity:.4;cursor:default}
+.rackbox{background:var(--soft);border-radius:16px;padding:10px}
+.rackbox svg{display:block;width:100%;height:auto}
+.mag{transition:transform 1.2s ease}
+.glow{animation:glow 1.4s ease-in-out 2;transform-box:fill-box}
+@keyframes glow{50%{fill:#f97316}}
+.flame{animation:flick .25s ease-in-out infinite alternate;transform-box:fill-box;transform-origin:bottom center}
+@keyframes flick{to{transform:scaleY(1.12) scaleX(.94)}}
+@media(prefers-reduced-motion:reduce){.mag{transition:none}.glow,.flame{animation:none}}
+.scroll{overflow-x:auto}
+.seg{display:flex;background:var(--soft);border-radius:10px;padding:4px;gap:4px;margin-bottom:10px;flex-wrap:wrap}
+.seg button{flex:1;border:0;background:none;color:var(--ink);font:600 14px "Noto Sans";padding:8px 10px;border-radius:8px;cursor:pointer;min-height:40px}
+.seg button.on{background:var(--sheet);box-shadow:0 1px 4px rgba(0,0,0,.15)}
+.brown{transition:opacity 2s ease}.pk{transition:fill 1.6s ease}.ca{transition:transform 4s ease-in-out,opacity 6s ease;transform-box:fill-box;transform-origin:center}.water{animation:fall2 .6s linear infinite}@keyframes fall2{from{transform:translateY(-10px);opacity:.9}to{transform:translateY(30px);opacity:.2}}.eq input{width:44px;padding:6px;text-align:center;font:600 16px "Noto Sans";border:1.5px solid var(--line);border-radius:8px;background:var(--sheet);color:var(--ink)}
+.tray{display:flex;flex-wrap:wrap;gap:8px;margin-top:10px}
+.tray small{width:100%;font-weight:700;color:var(--mute);font-size:13px;margin-top:4px}
+.chip{border:2px solid var(--line);background:var(--sheet);color:var(--ink);border-radius:999px;padding:6px 12px;font:600 14px "Noto Sans";cursor:pointer;min-height:40px}
+.chip.sel{border-color:var(--acc);background:var(--soft)}.chip.done{color:var(--ok)}.chip:disabled{opacity:.4;cursor:default}
+.scroll{overflow-x:auto}td select{padding:6px;font-size:13px}td input{width:70px;padding:6px;text-align:right;font:600 15px "Noto Sans";color:var(--ink);background:var(--sheet);border:1.5px solid var(--line);border-radius:8px}
+.two{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:0 18px}@media(max-width:600px){.two{grid-template-columns:minmax(0,1fr)}}
+.bub{animation:rise var(--d) linear infinite;animation-delay:var(--dl);opacity:0}
+@keyframes rise{0%{transform:translateY(0);opacity:0}10%{opacity:.95}100%{transform:translateY(-80px);opacity:0}}
+.smoke{animation:smoke 2.6s ease-out infinite;opacity:0;transform-box:fill-box;transform-origin:center}
+@keyframes smoke{0%{transform:translateY(0) scale(.6);opacity:0}20%{opacity:.6}100%{transform:translateY(-70px) scale(1.4);opacity:0}}
+@media(prefers-reduced-motion:reduce){.bub,.smoke{animation:none;opacity:.6}}
+table{width:100%;border-collapse:collapse;font-size:14px}
+th,td{padding:5px;border-bottom:1px solid var(--line);text-align:left;vertical-align:middle}
+th{font-size:13px;color:var(--mute);font-weight:600}
+td:first-child{font-weight:600;font-size:14px}
+td select{padding:6px;font-size:13px}
+.eq{display:flex;flex-wrap:wrap;align-items:center;gap:8px;font:600 17px "Noto Sans";margin-bottom:10px}
+.eq select{width:auto;padding:6px 8px;font:600 15px "Noto Sans"}
+.q{margin-bottom:10px}
+.toblue{animation:toblue 3.2s ease forwards}@keyframes toblue{from{fill:rgba(200,228,242,.55)}to{fill:#4f9cf5}}
+.shrink{animation:shrink 4.5s ease forwards;transform-box:fill-box;transform-origin:center bottom}@keyframes shrink{to{transform:scale(.15);opacity:.2}}
+.liq{transition:fill-opacity 2s ease}
+.fade{animation:fade 2.6s ease forwards}@keyframes fade{to{opacity:0}}
+.stir{animation:stir .5s ease-in-out 5;transform-box:fill-box;transform-origin:top center}@keyframes stir{50%{transform:rotate(9deg)}}
+@media(max-width:860px){.grid{grid-template-columns:minmax(0,1fr)}.board{position:static;order:-1}}
+</style>
+</head>
+<body>
+<div class="wrap">
+<header>
+  <div><small data-i="lab"></small><h1 data-i="title"></h1></div>
+  <div class="lang" role="group" aria-label="Тіл"><button id="l-kk" class="on">Қазақша</button><button id="l-ru">Русский</button></div>
+</header>
+<div class="sheet">
+  <p class="note" data-i="demo"></p>
+  <p class="goal" data-i="goal"></p>
+  <p class="reag" data-i="reag"></p>
+  <div class="safety">
+    <svg width="34" height="34" viewBox="0 0 34 34" aria-hidden="true"><path d="M17 3 32 30H2Z" fill="#f59e0b"/><rect x="15.5" y="11" width="3" height="11" rx="1.5" fill="#fff"/><circle cx="17" cy="26" r="1.8" fill="#fff"/></svg>
+    <p data-i="safe"></p>
+    <label><input type="checkbox" id="goggles" style="width:22px;height:22px"><span data-i="safeok"></span></label>
+  </div>
+  <div class="grid">
+    <div>
+      <section class="step" id="st1"><h2 data-i="e1"></h2><p class="hint" data-i="e1h"></p>
+        <div class="btns"><button class="btn" data-b="sn1" data-i="bsn1"></button></div>
+        <div class="msg" id="m1" aria-live="polite"></div></section>
+      <section class="step" id="st2"><h2 data-i="e2"></h2><p class="hint" data-i="e2h"></p>
+        <div class="btns"><button class="btn" data-b="sn2a" data-i="bsn2a"></button><button class="btn" data-b="sn2b" data-i="bsn2b"></button></div>
+        <div class="msg" id="m2" aria-live="polite"></div></section>
+      <section class="step" id="st3"><h2 data-i="e3"></h2><p class="hint" data-i="e3h"></p>
+        <div class="btns"><button class="btn" data-b="sn3" data-i="bsn3"></button></div>
+        <div class="msg" id="m3" aria-live="polite"></div></section>
+      <section class="step" id="st4"><h2 data-i="e4"></h2><p class="hint" data-i="e4h"></p>
+        <div class="btns"><button class="btn" data-b="pb1" data-i="bpb1"></button></div>
+        <div class="msg" id="m4" aria-live="polite"></div></section>
+      <section class="step" id="st5"><h2 data-i="e5"></h2><p class="hint" data-i="e5h"></p>
+        <div class="btns"><button class="btn" data-b="pb2" data-i="bpb2"></button></div>
+        <div class="msg" id="m5" aria-live="polite"></div></section>
+      <section class="step" id="st6"><h2 data-i="e6"></h2><p class="hint" data-i="e6h"></p>
+        <div class="btns"><button class="btn" data-b="pb3a" data-i="bpb3a"></button><button class="btn" data-b="pb3b" data-i="bpb3b"></button></div>
+        <div class="msg" id="m6" aria-live="polite"></div></section>
+      <section class="step" id="st7"><h2 data-i="s7"></h2><p class="hint" data-i="s7h"></p>
+        <div id="qs"></div>
+        <div id="eqs" style="margin-top:12px"></div>
+        <div class="btns"><button class="btn" id="chk" data-i="check"></button></div>
+        <div class="msg" id="m7" aria-live="polite"></div></section>
+      <section class="step" id="st8"><h2 data-i="s8"></h2>
+        <div class="q"><label><span data-i="q1"></span><textarea id="a1"></textarea></label></div>
+        <div class="q"><label><span data-i="q2"></span><textarea id="a2"></textarea></label></div>
+        <div class="btns"><button class="btn" id="send" data-i="send"></button></div>
+        <div class="msg" id="m8" aria-live="polite"></div></section>
+    </div>
+    <div class="board">
+      <div class="seg" role="group" style="flex-wrap:wrap"><button id="v1" class="on">Sn · 1</button><button id="v2">Sn · 2</button><button id="v3">Sn · 3</button><button id="v4">Pb · 1</button><button id="v5">Pb · 2</button><button id="v6">Pb · 3</button></div>
+      <div class="rackbox"><svg id="scene" viewBox="0 0 560 400" aria-label="scene"></svg></div></div>
+  </div>
+</div>
+</div>
+<script>
+{
+const T={
+kk:{lab:"11-сынып · 10-зертханалық жұмыс",title:"Қорғасын, қалайы және олардың қосылыстарының химиялық қасиеттері",demo:"Үлгі нұсқа: тіркелу және жұмысты мұғалімге жіберу толық сайтта қосылады.",
+goal:"Мақсаты: қалайы мен қорғасынды тұздарынан ығыстырып алу, олардың гидроксидтерінің екідайлы қасиетін, Sn²⁺ ионының тотықсыздандырғыштығын және қорғасынның аз еритін тұздарын зерттеу.",
+reag:"Реактивтер: қалайы (II), (IV) хлоридтері, аммоний гидроксиді, натрий гидроксиді, тұз қышқылы, қорғасын (II) ацетаты немесе нитраты, натрий хлориді, сульфаты, фосфаты, карбонаты, калий йодиді ерітінділері; Al, Zn, Fe түйірлері немесе тақташалары. Құрал-жабдықтар: сынауықтар, тұрғы, стақан, шыны таяқша.",
+safe:"Улы заттармен жұмыс істеу ережелерін сақта. Қорғасын қосылыстары улы — тәжірибеден кейін қолыңды мұқият жу.",safeok:"Ережені оқыдым",
+e1:"Қалайы · 1-тәжірибе. Металл қалайы алу",e1h:"Қалайы (II) хлоридінің ерітіндісіне металл мырыш түйірін сал. Не байқадың? Осындай реакцияны жүргізу үшін мырышты темірмен алмастыруға бола ма?",bsn1:"SnCl₂ ерітіндісіне Zn салу",sn1m:"Мырыш түйірінің бетіне сұр кеуекті металл қалайы бөлінді.",
+e2:"Қалайы · 2-тәжірибе. Қалайы (II) және (IV) гидроксидтері",e2h:"Жеке сынауықтарда аммоний гидроксиді мен қалайы (II) және (IV) хлоридтерінен гидроксидтер ал. Тұнбаларды екіге бөліп, қышқылға және сілтіге әсерін тексер.",bsn2a:"SnCl₂ мен SnCl₄-ке NH₄OH қосу",bsn2b:"Тұнбаларға HCl және артық NaOH қосу",sn2a:"Екі сынауықта да ақ тұнбалар түзілді: Sn(OH)₂ және Sn(OH)₄.",sn2b:"Тұнбалар қышқылда да, сілтіде де еріді — гидроксидтер екідайлы (амфотерлі).",
+e3:"Қалайы · 3-тәжірибе. Sn²⁺ ионының тотықсыздандырғыш қасиеттері",e3h:"Сынауыққа қалайы (II) хлоридін құйып, үстіне хлор суын тамшылатып қос. Не байқадың?",bsn3:"SnCl₂-ге хлор суын тамызу",sn3m:"Хлор суының сары-жасыл түсі бірден жойылды — Sn²⁺ хлорды тотықсыздандырып, өзі Sn⁴⁺-ке тотықты.",
+e4:"Қорғасын · 1-тәжірибе. Металл қорғасын алу",e4h:"Қорғасын (II) ацетатының ерітіндісіне мырыш немесе алюминий тақташаларын батыр. Тақташалардың бетіне қорғасын тұнады. Al, Zn, Pb стандартты электродтық потенциалдарын салыстыр.",bpb1:"Pb(CH₃COO)₂ ерітіндісіне Zn тақташасын батыру",pb1m:"Тақташаның бетінде жылтыр қорғасын кристалдары өсіп шықты — «қорғасын ағашы».",
+e5:"Қорғасын · 2-тәжірибе. Қорғасынның аз еритін тұздары",e5h:"Қорғасын (II) нитратын және басқа ерімтал тұздарды пайдаланып, жеке сынауықтарда қорғасынның хлоридін, йодидін, фосфатын, сульфатын және карбонатын ал. Тұнбалардың түстеріне назар аудар.",bpb2:"Pb(NO₃)₂-ге бес тұз қосу",pb2m:"PbCl₂, Pb₃(PO₄)₂, PbSO₄, PbCO₃ — ақ тұнбалар, ал PbI₂ — ашық сары тұнба.",
+e6:"Қорғасын · 3-тәжірибе. Қорғасын (II) гидроксидін алу",e6h:"Қорғасын (II) нитратына сілтіні тамшылатып қос. Түзілген тұнбаны екі сынауыққа бөліп, біреуіне қышқыл, екіншісіне артық сілті қос. Не байқадың?",bpb3a:"Pb(NO₃)₂-ге NaOH тамызу",bpb3b:"1-ге HNO₃, 2-ге артық NaOH",pb3a:"Ақ Pb(OH)₂ тұнбасы түзілді.",pb3b:"Тұнба екі сынауықта да еріді — Pb(OH)₂ екідайлы гидроксид.",
+s7:"Бақылаулар мен теңдеулер",s7h:"Жауапты таңда да, теңдеулердегі коэффициенттерді қой (1 болса, бос қалдыруға болады).",
+qs:[["SnCl₂-ден қалайыны ығыстыру үшін мырышты темірмен алмастыруға бола ма?",["—","Иә — темір қалайыдан белсендірек (E°(Fe) < E°(Sn))","Жоқ — темір белсенділігі төмен","Жоқ — темір ерімейді"],"1"],["Мыс қорғасынды тұзынан ығыстыра ала ма?",["—","Жоқ — мыстың белсенділігі қорғасыннан төмен","Иә","Тек қыздырғанда"],"1"],["Sn(OH)₂ және Pb(OH)₂ — бұл:",["—","Екідайлы (амфотерлі) гидроксидтер","Күшті негіздер","Қышқылдар"],"1"],["Хлор суымен реакцияда Sn²⁺ ионы:",["—","Тотықсыздандырғыш — Sn⁴⁺-ке тотығады","Тотықтырғыш","Өзгермейді"],"1"],["Қорғасын (II) йодидінің түсі:",["—","Ашық сары","Ақ","Қара"],"1"]],
+check:"Тексеру",ok:"Барлығы дұрыс! Қалайы мен қорғасын — IVA топтың металдары: олардың гидроксидтері екідайлы, Sn²⁺ — тотықсыздандырғыш, ал Pb²⁺ көптеген аз еритін тұздар түзеді.",bad:"Қате жауаптар саны: ",
+eqm:"Реакция теңдеулері:",
+s8:"Қорытынды",q1:"Қалайы мен қорғасын қосылыстарымен жүргізілген тәжірибелердің нәтижесін түсіндір.",q2:"Al, Zn, Pb стандартты электродтық потенциалдарын салыстырып, металдарды тұздарынан ығыстыру мүмкіндігін түсіндір.",
+send:"Мұғалімге жіберу",sent:"Үлгіде жіберу әлі жұмыс істемейді. Толық сайтта жұмыс мұғалімнің бетіне түседі.",empty:"Алдымен сұрақтарға жауап бер."},
+ru:{lab:"11 класс · Лабораторная работа №10",title:"Химические свойства свинца, олова и их соединений",demo:"Демо-версия: регистрация и отправка работы учителю появятся в полной версии сайта.",
+goal:"Цель: вытеснить олово и свинец из их солей, изучить двойственные свойства их гидроксидов, восстановительные свойства иона Sn²⁺ и малорастворимые соли свинца.",
+reag:"Реактивы: растворы хлоридов олова (II), (IV), гидроксида аммония, гидроксида натрия, соляной кислоты, ацетата или нитрата свинца (II), хлорида, сульфата, фосфата, карбоната натрия, иодида калия; гранулы или пластинки Al, Zn, Fe. Оборудование: пробирки, штатив, стакан, стеклянная палочка.",
+safe:"Соблюдай правила работы с ядовитыми веществами. Соединения свинца ядовиты — после опыта тщательно вымой руки.",safeok:"Правила прочитаны",
+e1:"Олово · Опыт 1. Получение металлического олова",e1h:"Положи в раствор хлорида олова (II) гранулу металлического цинка. Что ты наблюдаешь? Можно ли для этой реакции заменить цинк железом?",bsn1:"Положить Zn в раствор SnCl₂",sn1m:"На поверхности гранулы цинка выделилось серое губчатое металлическое олово.",
+e2:"Олово · Опыт 2. Гидроксиды олова (II) и (IV)",e2h:"В отдельных пробирках получи гидроксиды из гидроксида аммония и хлоридов олова (II) и (IV). Раздели осадки на две части и проверь действие кислоты и щёлочи.",bsn2a:"Добавить NH₄OH к SnCl₂ и SnCl₄",bsn2b:"Добавить к осадкам HCl и избыток NaOH",sn2a:"В обеих пробирках выпали белые осадки: Sn(OH)₂ и Sn(OH)₄.",sn2b:"Осадки растворились и в кислоте, и в щёлочи — гидроксиды амфотерны.",
+e3:"Олово · Опыт 3. Восстановительные свойства иона Sn²⁺",e3h:"Налей в пробирку хлорид олова (II) и по каплям добавь хлорную воду. Что ты наблюдаешь?",bsn3:"Добавить хлорную воду к SnCl₂",sn3m:"Жёлто-зелёная окраска хлорной воды сразу исчезла — Sn²⁺ восстановил хлор и сам окислился до Sn⁴⁺.",
+e4:"Свинец · Опыт 1. Получение металлического свинца",e4h:"Опусти в раствор ацетата свинца (II) пластинку цинка или алюминия. На поверхности пластинки оседает свинец. Сравни стандартные электродные потенциалы Al, Zn, Pb.",bpb1:"Опустить пластинку Zn в Pb(CH₃COO)₂",pb1m:"На поверхности пластинки выросли блестящие кристаллы свинца — «свинцовое дерево».",
+e5:"Свинец · Опыт 2. Малорастворимые соли свинца",e5h:"Используя нитрат свинца (II) и другие растворимые соли, получи в отдельных пробирках хлорид, иодид, фосфат, сульфат и карбонат свинца. Обрати внимание на цвет осадков.",bpb2:"Добавить к Pb(NO₃)₂ пять солей",pb2m:"PbCl₂, Pb₃(PO₄)₂, PbSO₄, PbCO₃ — белые осадки, а PbI₂ — ярко-жёлтый осадок.",
+e6:"Свинец · Опыт 3. Получение гидроксида свинца (II)",e6h:"Добавь по каплям щёлочь к нитрату свинца (II). Раздели осадок на две пробирки: в одну добавь кислоту, в другую — избыток щёлочи. Что ты наблюдаешь?",bpb3a:"Добавить NaOH к Pb(NO₃)₂",bpb3b:"В 1-ю HNO₃, во 2-ю избыток NaOH",pb3a:"Выпал белый осадок Pb(OH)₂.",pb3b:"Осадок растворился в обеих пробирках — Pb(OH)₂ амфотерный гидроксид.",
+s7:"Наблюдения и уравнения",s7h:"Выбери ответ и расставь коэффициенты (если 1, поле можно оставить пустым).",
+qs:[["Можно ли заменить цинк железом для вытеснения олова из SnCl₂?",["—","Да — железо активнее олова (E°(Fe) < E°(Sn))","Нет — железо менее активно","Нет — железо не растворяется"],"1"],["Может ли медь вытеснить свинец из его соли?",["—","Нет — медь менее активна, чем свинец","Да","Только при нагревании"],"1"],["Sn(OH)₂ и Pb(OH)₂ — это:",["—","Амфотерные гидроксиды","Сильные основания","Кислоты"],"1"],["В реакции с хлорной водой ион Sn²⁺:",["—","Восстановитель — окисляется до Sn⁴⁺","Окислитель","Не изменяется"],"1"],["Цвет иодида свинца (II):",["—","Ярко-жёлтый","Белый","Чёрный"],"1"]],
+check:"Проверить",ok:"Всё верно! Олово и свинец — металлы IVA группы: их гидроксиды амфотерны, Sn²⁺ — восстановитель, а Pb²⁺ образует много малорастворимых солей.",bad:"Неверных ответов: ",
+eqm:"Уравнения реакций:",
+s8:"Вывод",q1:"Объясни результаты опытов с соединениями олова и свинца.",q2:"Сравни стандартные электродные потенциалы Al, Zn, Pb и объясни возможность вытеснения металлов из солей.",
+send:"Отправить учителю",sent:"В демо-версии отправка пока не работает. В полной версии работа попадёт на страницу учителя.",empty:"Сначала ответь на вопросы."}};
+let lang="kk",ok=false,view=1,grow=0,cl3=false;const S={sn1:0,sn2a:0,sn2b:0,sn3:0,pb1:0,pb2:0,pb3a:0,pb3b:0};const qv={},ev={};
+const $=id=>document.getElementById(id),t=k=>T[lang][k];
+const CLR="rgba(200,228,242,.55)";
+function tube(x,lab,liq,lh,ppt,ex,top,W=56){const TOP=100,BOT=300;let h=`<clipPath id="c${x}"><rect x="${x}" y="${TOP}" width="${W}" height="${BOT-TOP}" rx="${W/2}"/><rect x="${x}" y="${TOP}" width="${W}" height="${(BOT-TOP)/2}"/></clipPath><g clip-path="url(#c${x})"><rect x="${x}" y="${TOP}" width="${W}" height="${BOT-TOP}" fill="var(--glass)"/>`;
+  if(liq)h+=`<rect x="${x}" y="${BOT-lh}" width="${W}" height="${lh}" style="fill:${liq}"/>`;
+  if(ppt)h+=`<rect x="${x}" y="${BOT-lh}" width="${W}" height="${lh}" fill="${ppt}" opacity=".5"/><ellipse cx="${x+W/2}" cy="${BOT-12}" rx="${W/2-6}" ry="9" fill="${ppt}" stroke="rgba(0,0,0,.28)" stroke-width="1.5"/>`;
+  h+=(ex||"")+`</g><path d="M${x} ${TOP-8}V${BOT-W/2}a${W/2} ${W/2} 0 0 0 ${W} 0V${TOP-8}" fill="none" stroke="var(--glassline)" stroke-width="2.4"/>`;
+  if(lab)h+=`<text x="${x+W/2}" y="${BOT+22}" text-anchor="middle" font-size="12" font-weight="700" fill="var(--ink)">${lab}</text>`;
+  if(top)h+=`<text x="${x+W/2}" y="${TOP-22}" text-anchor="middle" font-size="12" font-weight="700" fill="var(--acc)">${top}</text>`;return h}
+const WH="#e2e8f0";
+function render(){let h="";
+  if(view===1){const ex=`<path d="M266 290q4-14 14-12q12-2 12 10q-2 10-14 9q-12 2-12-7z" fill="#94a3b8" stroke="#64748b"/>`+(S.sn1?[0,1,2,3,4,5].map(k=>`<circle cx="${270+k*4}" cy="${282-(k%2)*6}" r="${3+k%2}" fill="#6b7280"/>`).join(""):"");h+=tube(252,"SnCl₂ + Zn",CLR,90,null,S.sn1?ex:"",S.sn1?"Sn↓":"")}
+  if(view===2){if(!S.sn2b){h+=tube(160,"SnCl₂",CLR,80,S.sn2a?WH:null,"",S.sn2a?"Sn(OH)₂↓":"")+tube(340,"SnCl₄",CLR,80,S.sn2a?WH:null,"",S.sn2a?"Sn(OH)₄↓":"")}
+    else{[["Sn(OH)₂","+HCl"],["Sn(OH)₂","+NaOH"],["Sn(OH)₄","+HCl"],["Sn(OH)₄","+NaOH"]].forEach(([a,b],i)=>h+=tube(70+i*115,a,CLR,90,null,"",b))}}
+  if(view===3){h+=tube(252,"SnCl₂ + Cl₂",cl3?"rgba(190,220,110,.8)":CLR,S.sn3?100:70,null,"",S.sn3&&!cl3?"Sn⁴⁺":"")}
+  if(view===4){h+=`<path d="M190 140v170q0 14 14 14h152q14 0 14-14V140" fill="var(--glass)" stroke="var(--glassline)" stroke-width="2.5"/><rect x="192" y="190" width="176" height="132" fill="${CLR}"/>`;
+    if(S.pb1){h+=`<rect x="272" y="110" width="16" height="200" fill="#94a3b8" stroke="#64748b"/>`;for(let k=0;k<16;k++){const y=200+(k*7)%100,s=k%2?1:-1,L=(10+(k*5)%16)*grow;h+=`<path d="M${280+s*8} ${y}l${s*L} ${-L*0.4}m${-s*L*0.5} ${L*0.2}l${s*L*0.3} ${L*0.4}" stroke="#64748b" stroke-width="2.6" fill="none"/>`}}
+    h+=`<text x="280" y="350" text-anchor="middle" font-size="12" font-weight="700" fill="var(--ink)">Pb(CH₃COO)₂${S.pb1?" + Zn":""}</text>`}
+  if(view===5){const N=["Cl⁻","I⁻","PO₄³⁻","SO₄²⁻","CO₃²⁻"],P=["PbCl₂","PbI₂","Pb₃(PO₄)₂","PbSO₄","PbCO₃"];N.forEach((n,i)=>h+=tube(40+i*102,"+"+n,CLR,80,S.pb2?(i===1?"#facc15":WH):null,"",S.pb2?P[i]+"↓":"",48))}
+  if(view===6){if(!S.pb3b)h+=tube(252,"Pb(NO₃)₂",CLR,80,S.pb3a?WH:null,"",S.pb3a?"Pb(OH)₂↓":"");else h+=tube(160,"Pb(OH)₂",CLR,95,null,"","+HNO₃")+tube(340,"Pb(OH)₂",CLR,95,null,"","+NaOH")}
+  $("scene").innerHTML=h;for(let i=1;i<=6;i++)$("v"+i).classList.toggle("on",view===i)}
+function opts(arr,v){return arr.map((s,i)=>`<option value="${i||""}" ${String(v||"")===String(i||"")?"selected":""}>${s}</option>`).join("")}
+const E=[[["k0","1"],"SnCl₂ + ",["k1","1"],"Zn → ZnCl₂ + Sn"],["SnCl₂ + Cl₂ → SnCl₄"],[["k2","1"],"Pb(CH₃COO)₂ + Zn → Zn(CH₃COO)₂ + Pb"],["Pb(NO₃)₂ + ",["k3","2"],"KI → PbI₂↓ + ",["k4","2"],"KNO₃"],["Pb(OH)₂ + ",["k5","2"],"NaOH → Na₂[Pb(OH)₄]"],["Sn(OH)₂ + ",["k6","2"],"HCl → SnCl₂ + ",["k7","2"],"H₂O"]];
+function renderQ(){$("qs").innerHTML=t("qs").map((q,i)=>`<label style="margin-top:6px"><span>${q[0]}</span><select data-q="${i}">${opts(q[1],qv[i])}</select></label>`).join("");
+  $("eqs").innerHTML=`<small style="font-size:13px;color:var(--mute);font-weight:600">${t("eqm")}</small>`+E.map(e=>`<div class="eq">${e.map(p=>typeof p==="string"?p:`<input id="${p[0]}" data-a="${p[1]}" inputmode="numeric" value="${ev[p[0]]||""}">`).join("")}</div>`).join("")}
+function renderSteps(){const g=$("goggles").checked;["st1","st2","st3","st4","st5","st6"].forEach(s=>$(s).classList.toggle("off",!g));
+  const DEP={sn2b:"sn2a",pb3b:"pb3a"};document.querySelectorAll("[data-b]").forEach(b=>{const k=b.dataset.b,en=!DEP[k]||S[DEP[k]];b.disabled=!!S[k]||!en;b.classList.toggle("done",!!S[k])});
+  $("st7").classList.toggle("off",!Object.values(S).every(x=>x));$("st8").classList.toggle("off",!ok)}
+function applyLang(){document.documentElement.lang=lang;
+  document.querySelectorAll("[data-i]").forEach(el=>{const v=T[lang][el.dataset.i];if(typeof v==="string")el.textContent=v});
+  $("l-kk").classList.toggle("on",lang==="kk");$("l-ru").classList.toggle("on",lang==="ru");
+  document.querySelectorAll(".msg").forEach(m=>m.textContent="");render();renderQ();renderSteps()}
+function msg(id,text,okk){const m=$(id);m.textContent=text;m.className="msg "+(okk?"ok":"bad")}
+$("l-kk").onclick=()=>{lang="kk";applyLang()};$("l-ru").onclick=()=>{lang="ru";applyLang()};
+for(let i=1;i<=6;i++)$("v"+i).onclick=()=>{view=i;render()};
+$("goggles").onchange=renderSteps;
+const MAP={sn1:[1,"m1","sn1m"],sn2a:[2,"m2","sn2a"],sn2b:[2,"m2","sn2b"],sn3:[3,"m3","sn3m"],pb1:[4,"m4","pb1m"],pb2:[5,"m5","pb2m"],pb3a:[6,"m6","pb3a"],pb3b:[6,"m6","pb3b"]};
+document.querySelector(".grid").addEventListener("click",e=>{const b=e.target.closest("[data-b]");if(!b||b.disabled)return;const k=b.dataset.b;S[k]=1;const[v,m,txt]=MAP[k];view=v;
+  if(k==="sn3"){cl3=true;setTimeout(()=>{cl3=false;msg(m,t(txt),true);render()},900);render();renderSteps();return}
+  if(k==="pb1"){grow=0;const iv=setInterval(()=>{grow=Math.min(1,grow+0.1);render();if(grow>=1){clearInterval(iv);msg(m,t(txt),true)}},200)}else msg(m,t(txt),true);
+  if(k==="sn3"){$("scene").innerHTML+="";}render();renderSteps()});
+document.querySelector(".grid").addEventListener("change",e=>{const s=e.target;if(s.dataset.q!=null){qv[s.dataset.q]=s.value;s.className=""}});
+$("eqs").addEventListener("input",e=>{const el=e.target;if(el.id)ev[el.id]=el.value;el.style.borderColor=""});
+$("chk").onclick=()=>{let bad=0;document.querySelectorAll("[data-q]").forEach(s=>{const g=s.value===t("qs")[s.dataset.q][2];s.className=g?"ok":"bad";if(!g)bad++});
+  document.querySelectorAll("#eqs input").forEach(el=>{const v=el.value.trim(),aa=el.dataset.a,g=v===aa||(aa==="1"&&v==="");el.style.borderColor=g?"var(--ok)":"var(--bad)";if(!g)bad++});
+  ok=!bad;renderSteps();ok?msg("m7",t("ok"),true):msg("m7",t("bad")+bad+".",false)};
+$("send").onclick=()=>{const f=$("a1").value.trim()&&$("a2").value.trim();msg("m8",f?t("sent"):t("empty"),!!f)};
+applyLang();
+}
+</script>
+<script src="../embed.js"></script>
+</body>
+</html>

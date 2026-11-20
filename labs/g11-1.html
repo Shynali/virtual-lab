@@ -1,0 +1,221 @@
+<!DOCTYPE html>
+<html lang="kk">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Бензол молекуласының моделі</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans:wght@400;600;700&family=Noto+Serif:wght@600;700&display=swap" rel="stylesheet">
+<style>
+/* VOICE: calm school lab workbook, clear and encouraging (grade 7)
+   IDEA: a workbench sheet — two twin tubes, acid and alkali, each with an aluminium granule
+   PICTURE: both tubes starting slowly, then fizzing hard once the oxide film is gone: aluminium reacts with both
+   COLOUR and TYPE: white sheet on deep lab-teal; the universal-indicator rainbow; Noto Serif + Noto Sans
+   LAYOUT: steps left, scene right (sticky) with view switch; stacks on phones */
+:root{color-scheme:light dark;
+--bg:light-dark(#0f4c5c,#0a2d36);--sheet:light-dark(#ffffff,#13202a);--ink:light-dark(#10131a,#e7edf2);
+--mute:light-dark(#566170,#9fb0bf);--line:light-dark(#d5dde5,#2b3d4b);--soft:light-dark(#eef5f7,#182a35);
+--acc:light-dark(#0f4c5c,#5cc2d6);--ok:light-dark(#12733a,#4ade80);--bad:light-dark(#b91c1c,#f87171);
+--warn:light-dark(#fff4d6,#3a2f12);--glass:light-dark(#f7fbfd,#1d2f3b);--glassline:light-dark(#8aa1b1,#6c8597)}
+:root[data-theme=light]{color-scheme:light}:root[data-theme=dark]{color-scheme:dark}
+*{box-sizing:border-box;min-width:0}
+body{margin:0;background:var(--bg);color:var(--ink);font:16px/1.55 "Noto Sans",system-ui,sans-serif;overflow-x:clip}
+.wrap{max-width:1240px;margin:0 auto;padding:clamp(14px,3vw,36px) max(3vw,12px)}
+header{display:flex;flex-wrap:wrap;gap:12px;align-items:flex-end;justify-content:space-between;color:#fff;margin-bottom:18px}
+header small{display:block;opacity:.8;font-size:14px}
+h1{font:700 clamp(24px,3.6vw,38px)/1.08 "Noto Serif",Georgia,serif;margin:2px 0 0;text-wrap:balance;max-width:26ch}
+.lang{display:flex;background:rgba(255,255,255,.14);border-radius:999px;padding:4px}
+.lang button{border:0;background:none;color:#fff;font:600 15px "Noto Sans";padding:8px 16px;border-radius:999px;cursor:pointer;min-height:40px}
+.lang button.on{background:#fff;color:#0f4c5c}
+.sheet{background:var(--sheet);border-radius:18px;box-shadow:0 18px 40px rgba(0,0,0,.25);padding:clamp(16px,2.6vw,30px)}
+.note{font-size:13px;color:var(--mute);margin:0 0 10px}
+.goal{margin:0 0 6px;max-width:70ch}
+.reag{margin:0 0 16px;color:var(--mute);font-size:15px;max-width:70ch}
+.safety{display:flex;gap:12px;align-items:center;flex-wrap:wrap;background:var(--warn);border-radius:12px;padding:12px 14px;margin-bottom:18px}
+.safety p{margin:0;flex:1 1 260px;font-weight:600}
+.safety label{flex-direction:row;align-items:center;gap:8px;color:var(--ink);font-weight:600;cursor:pointer}
+.grid{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1.05fr);gap:clamp(16px,3vw,36px);align-items:start}
+.step{border-top:1px solid var(--line);padding:14px 0}
+.step:first-child{border-top:0;padding-top:0}
+.step.off{opacity:.45;pointer-events:none}
+h2{font:700 19px/1.2 "Noto Serif",Georgia,serif;margin:0 0 6px}
+.hint{color:var(--mute);font-size:15px;margin:0 0 8px}
+label{font-size:14px;color:var(--mute);display:flex;flex-direction:column;gap:4px}
+textarea,select{font:16px "Noto Sans";color:var(--ink);background:var(--sheet);border:1.5px solid var(--line);border-radius:10px;padding:10px 12px;width:100%}
+textarea:focus,select:focus,button:focus-visible{outline:3px solid color-mix(in srgb,var(--acc) 45%,transparent);outline-offset:1px}
+.ok{border-color:var(--ok)!important}.bad{border-color:var(--bad)!important}
+textarea{min-height:76px;resize:vertical}
+.btns{display:flex;flex-wrap:wrap;gap:8px;margin-top:8px}
+.btn{border:0;border-radius:10px;padding:10px 14px;font:600 15px "Noto Sans";cursor:pointer;min-height:44px;background:var(--acc);color:light-dark(#fff,#08202a)}
+.btn.done{background:var(--soft);color:var(--ok)}
+.btn:disabled{opacity:.45;cursor:not-allowed}.btn.done:disabled{opacity:1}
+.msg{margin-top:8px;font-size:15px;min-height:1.4em}
+.msg.ok{color:var(--ok)}.msg.bad{color:var(--bad)}
+.board{position:sticky;top:12px}
+.seg{display:flex;background:var(--soft);border-radius:10px;padding:4px;gap:4px;margin-bottom:10px}
+.seg button{flex:1;border:0;background:none;color:var(--ink);font:600 14px "Noto Sans";padding:8px 10px;border-radius:8px;cursor:pointer;min-height:40px}
+.seg button.on{background:var(--sheet);box-shadow:0 1px 4px rgba(0,0,0,.15)}
+.seg button:disabled{opacity:.4;cursor:default}
+.rackbox{background:var(--soft);border-radius:16px;padding:10px}
+.rackbox svg{display:block;width:100%;height:auto}
+.mag{transition:transform 1.2s ease}
+.glow{animation:glow 1.4s ease-in-out 2;transform-box:fill-box}
+@keyframes glow{50%{fill:#f97316}}
+.flame{animation:flick .25s ease-in-out infinite alternate;transform-box:fill-box;transform-origin:bottom center}
+@keyframes flick{to{transform:scaleY(1.12) scaleX(.94)}}
+@media(prefers-reduced-motion:reduce){.mag{transition:none}.glow,.flame{animation:none}}
+.scroll{overflow-x:auto}
+.seg{display:flex;background:var(--soft);border-radius:10px;padding:4px;gap:4px;margin-bottom:10px;flex-wrap:wrap}
+.seg button{flex:1;border:0;background:none;color:var(--ink);font:600 14px "Noto Sans";padding:8px 10px;border-radius:8px;cursor:pointer;min-height:40px}
+.seg button.on{background:var(--sheet);box-shadow:0 1px 4px rgba(0,0,0,.15)}
+.brown{transition:opacity 2s ease}.pk{transition:fill 1.6s ease}.ca{transition:transform 4s ease-in-out,opacity 6s ease;transform-box:fill-box;transform-origin:center}.water{animation:fall2 .6s linear infinite}@keyframes fall2{from{transform:translateY(-10px);opacity:.9}to{transform:translateY(30px);opacity:.2}}.eq input{width:44px;padding:6px;text-align:center;font:600 16px "Noto Sans";border:1.5px solid var(--line);border-radius:8px;background:var(--sheet);color:var(--ink)}
+.tray{display:flex;flex-wrap:wrap;gap:8px;margin-top:10px}
+.tray small{width:100%;font-weight:700;color:var(--mute);font-size:13px;margin-top:4px}
+.chip{border:2px solid var(--line);background:var(--sheet);color:var(--ink);border-radius:999px;padding:6px 12px;font:600 14px "Noto Sans";cursor:pointer;min-height:40px}
+.chip.sel{border-color:var(--acc);background:var(--soft)}.chip.done{color:var(--ok)}.chip:disabled{opacity:.4;cursor:default}
+.scroll{overflow-x:auto}td select{padding:6px;font-size:13px}td input{width:70px;padding:6px;text-align:right;font:600 15px "Noto Sans";color:var(--ink);background:var(--sheet);border:1.5px solid var(--line);border-radius:8px}
+.two{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:0 18px}@media(max-width:600px){.two{grid-template-columns:minmax(0,1fr)}}
+.bub{animation:rise var(--d) linear infinite;animation-delay:var(--dl);opacity:0}
+@keyframes rise{0%{transform:translateY(0);opacity:0}10%{opacity:.95}100%{transform:translateY(-80px);opacity:0}}
+.smoke{animation:smoke 2.6s ease-out infinite;opacity:0}
+@keyframes smoke{0%{transform:translateY(0) scale(.6);opacity:0}20%{opacity:.6}100%{transform:translateY(-70px) scale(1.4);opacity:0}}
+@media(prefers-reduced-motion:reduce){.bub,.smoke{animation:none;opacity:.6}}
+table{width:100%;border-collapse:collapse;font-size:14px}
+th,td{padding:5px;border-bottom:1px solid var(--line);text-align:left;vertical-align:middle}
+th{font-size:13px;color:var(--mute);font-weight:600}
+td:first-child{font-weight:600;font-size:14px}
+td select{padding:6px;font-size:13px}
+.eq{display:flex;flex-wrap:wrap;align-items:center;gap:8px;font:600 17px "Noto Sans";margin-bottom:10px}
+.eq select{width:auto;padding:6px 8px;font:600 15px "Noto Sans"}
+.q{margin-bottom:10px}
+.pop{animation:pop .45s ease}@keyframes pop{0%{transform:scale(.3)}70%{transform:scale(1.12)}}.pop{transform-box:fill-box;transform-origin:center}
+.ball{cursor:pointer}.ball:focus-visible{outline:3px solid var(--acc)}
+input[type=range]{width:100%;accent-color:var(--acc);height:32px}.rng{display:flex;align-items:center;gap:12px;margin-top:6px}
+.edge{cursor:pointer}.edge:hover line:first-child{stroke:#16a34a}
+.hpick{cursor:pointer}.hpick:hover circle:first-child{stroke:#16a34a;stroke-width:4}
+.fade{animation:fade 2.6s ease forwards}@keyframes fade{to{opacity:0}}
+.stir{animation:stir .5s ease-in-out 5;transform-box:fill-box;transform-origin:top center}@keyframes stir{50%{transform:rotate(9deg)}}
+@media(max-width:860px){.grid{grid-template-columns:minmax(0,1fr)}.board{position:static;order:-1}}
+</style>
+</head>
+<body>
+<div class="wrap">
+<header>
+  <div><small data-i="lab"></small><h1 data-i="title"></h1></div>
+  <div class="lang" role="group" aria-label="Тіл"><button id="l-kk" class="on">Қазақша</button><button id="l-ru">Русский</button></div>
+</header>
+<div class="sheet">
+  <p class="note" data-i="demo"></p>
+  <p class="goal" data-i="goal"></p>
+  <p class="reag" data-i="reag"></p>
+  <div class="grid">
+    <div>
+      <section class="step" id="st1"><h2 data-i="e1"></h2><p class="hint" data-i="e1h"></p>
+        <div class="two"><label><span data-i="lc"></span><select id="nc"></select></label><label><span data-i="lh"></span><select id="nh"></select></label></div>
+        <label style="margin-top:6px"><span data-i="lf"></span><select id="form"></select></label>
+        <div class="btns"><button class="btn" id="b1" data-i="bbuild"></button></div>
+        <div class="msg" id="m1" aria-live="polite"></div></section>
+      <section class="step" id="st2"><h2 data-i="e2"></h2><p class="hint" data-i="e2h"></p>
+        <div class="btns"><button class="btn" id="b2" data-i="bchk2"></button><button class="btn" id="clr" data-i="bclr"></button></div>
+        <div class="msg" id="m2" aria-live="polite"></div></section>
+      <section class="step" id="st3"><h2 data-i="e3"></h2><p class="hint" data-i="e3h"></p>
+        <div class="btns"><button class="btn" id="b3" data-i="breal"></button></div>
+        <div class="rng"><span data-i="ltilt" style="font-size:14px;color:var(--mute)"></span><input type="range" id="tilt" min="0" max="80" value="0"></div>
+        <div class="msg" id="m3" aria-live="polite"></div></section>
+      <section class="step" id="st4"><h2 data-i="s4"></h2><p class="hint" data-i="s4h"></p>
+        <div id="qs"></div>
+        <div class="btns"><button class="btn" id="chk" data-i="check"></button></div>
+        <div class="msg" id="m4" aria-live="polite"></div></section>
+      <section class="step" id="st5"><h2 data-i="s5"></h2>
+        <div class="q"><label><span data-i="q1"></span><textarea id="a1"></textarea></label></div>
+        <div class="btns"><button class="btn" id="send" data-i="send"></button></div>
+        <div class="msg" id="m5" aria-live="polite"></div></section>
+    </div>
+    <div class="board"><div class="rackbox"><svg id="scene" viewBox="0 0 560 420" aria-label="scene"></svg></div></div>
+  </div>
+</div>
+</div>
+<script>
+{
+const T={
+kk:{lab:"11-сынып · 1-зертханалық жұмыс",title:"Бензол молекуласының моделін құрастыру",demo:"Үлгі нұсқа: тіркелу және жұмысты мұғалімге жіберу толық сайтта қосылады.",
+goal:"Мақсаты: бензолдың құрылымдық формуласын жазып, молекуланың шарөзекті моделін құрастыру; бензол сақинасының ерекшелігін түсіну.",
+reag:"Зертханалық құрал-жабдықтар: органикалық қосылыстар молекулаларының шарөзекті моделін құрастыруға арналған жиынтық.",
+e1:"1-қадам. Шарларды таңда",e1h:"Дәптеріңе бензолдың құрылымдық формуласын жаз. Көміртек атомдарын бейнелеу үшін жиынтықтан қара түсті шар, сутек атомдарын бейнелеу үшін ақ түсті шарлардың тиісті санын ал.",
+lc:"Қара шарлар (көміртек) саны:",lh:"Ақ шарлар (сутек) саны:",lf:"Бензол молекуласының құрылысы:",bbuild:"Тұйық тізбек құрастыру",
+ok1:"Дұрыс! C₆H₆: алты көміртек атомы тұйық сақина түзеді, әр көміртекке бір сутек атомы бекітілген.",bad1:"Бензолдың молекулалық формуласы C₆H₆ және оның тізбегі тұйық (сақина) екенін еске түсір.",
+e2:"2-қадам. Қос байланыстар (Кекуле формуласы)",e2h:"Әр көміртек атомы төрт валентті. Сақинадағы байланыстарды басып, қажетті жерлерге қос байланыс қой, сосын тексер.",bchk2:"Тексеру",bclr:"Тазалау",
+ok2:"Дұрыс! Қос және дара байланыстар кезектесіп келеді — Кекуле формуласы.",bad2a:"Кейбір көміртек атомдарының валенттілігі IV емес. Әр көміртекте дәл бір қос байланыс болуы керек.",
+e3:"3-қадам. Бензолдың нақты құрылысы",e3h:"Шын мәнінде бензол сақинасындағы барлық C–C байланыстары бірдей. Нақты құрылысын көріп, молекуланы еңкейтіп қара.",breal:"Нақты құрылысын көрсету",ltilt:"Еңкейту",
+m3:"Алты p-электрон біртұтас π-электрон бұлтын (ароматты жүйе) түзеді. Барлық C–C байланыстары бірдей (0,139 нм), бұрыштар 120°, молекула жазық.",
+s4:"Сұрақтар",s4h:"Модельге қарап, жауапты таңда.",
+qs:[["Бензолдағы көміртек атомдарының гибридтенуі:",["—","sp²","sp³","sp"],"1"],["Сақинадағы байланыстар арасындағы бұрыш:",["—","120°","109°28′","180°"],"1"],["Бензол молекуласының пішіні:",["—","Жазық алтыбұрыш","Тетраэдр","Кеңістіктегі зигзаг"],"1"],["Бензолдағы C–C байланыстарының ұзындығы:",["—","Бәрі бірдей (0,139 нм)","Кезектесіп ұзын-қысқа","Әртүрлі"],"1"],["Бензол неге бром суын түссіздендірмейді?",["—","Біртұтас π-жүйе (ароматты сақина) тұрақты, оқшауланған қос байланыс жоқ","Онда сутек жоқ","Ол суда ериді"],"1"]],
+check:"Тексеру",ok:"Барлығы дұрыс! Бензол — ароматты көмірсутек: жазық сақина, sp²-көміртек, біртұтас π-электрон жүйесі.",bad:"Қате жауаптар саны: ",
+s5:"Қорытынды",q1:"Бензол молекуласының құрылысын сипатта: Кекуле формуласы мен нақты құрылысының айырмашылығы неде?",
+send:"Мұғалімге жіберу",sent:"Үлгіде жіберу әлі жұмыс істемейді. Толық сайтта жұмыс мұғалімнің бетіне түседі.",empty:"Алдымен сұраққа жауап бер.",tap:"Байланысты басып, қос/дара етіп ауыстыр"},
+ru:{lab:"11 класс · Лабораторная работа №1",title:"Сборка модели молекулы бензола",demo:"Демо-версия: регистрация и отправка работы учителю появятся в полной версии сайта.",
+goal:"Цель: записать структурную формулу бензола, собрать шаростержневую модель молекулы и понять особенность бензольного кольца.",
+reag:"Оборудование: набор для сборки шаростержневых моделей молекул органических соединений.",
+e1:"Шаг 1. Выбери шарики",e1h:"Запиши в тетради структурную формулу бензола. Возьми из набора нужное число чёрных шариков (атомы углерода) и белых шариков (атомы водорода).",
+lc:"Чёрных шариков (углерод):",lh:"Белых шариков (водород):",lf:"Строение молекулы бензола:",bbuild:"Собрать замкнутую цепь",
+ok1:"Верно! C₆H₆: шесть атомов углерода образуют замкнутое кольцо, к каждому атому углерода присоединён один атом водорода.",bad1:"Вспомни молекулярную формулу бензола C₆H₆ и то, что его цепь замкнута (кольцо).",
+e2:"Шаг 2. Двойные связи (формула Кекуле)",e2h:"Каждый атом углерода четырёхвалентен. Нажимай на связи в кольце, чтобы поставить двойные связи где нужно, затем проверь.",bchk2:"Проверить",bclr:"Очистить",
+ok2:"Верно! Двойные и одинарные связи чередуются — формула Кекуле.",bad2a:"У некоторых атомов углерода валентность не равна IV. У каждого атома углерода должна быть ровно одна двойная связь.",
+e3:"Шаг 3. Реальное строение бензола",e3h:"На самом деле все связи C–C в бензольном кольце одинаковы. Посмотри на реальное строение и наклони молекулу.",breal:"Показать реальное строение",ltilt:"Наклон",
+m3:"Шесть p-электронов образуют единое π-электронное облако (ароматическая система). Все связи C–C одинаковы (0,139 нм), углы 120°, молекула плоская.",
+s4:"Вопросы",s4h:"Посмотри на модель и выбери ответ.",
+qs:[["Гибридизация атомов углерода в бензоле:",["—","sp²","sp³","sp"],"1"],["Угол между связями в кольце:",["—","120°","109°28′","180°"],"1"],["Форма молекулы бензола:",["—","Плоский шестиугольник","Тетраэдр","Пространственный зигзаг"],"1"],["Длина связей C–C в бензоле:",["—","Все одинаковы (0,139 нм)","Чередуются длинные и короткие","Разные"],"1"],["Почему бензол не обесцвечивает бромную воду?",["—","Единая π-система (ароматическое кольцо) устойчива, изолированных двойных связей нет","В нём нет водорода","Он растворяется в воде"],"1"]],
+check:"Проверить",ok:"Всё верно! Бензол — ароматический углеводород: плоское кольцо, sp²-углерод, единая π-электронная система.",bad:"Неверных ответов: ",
+s5:"Вывод",q1:"Опиши строение молекулы бензола: в чём отличие формулы Кекуле от реального строения?",
+send:"Отправить учителю",sent:"В демо-версии отправка пока не работает. В полной версии работа попадёт на страницу учителя.",empty:"Сначала ответь на вопрос.",tap:"Нажми на связь, чтобы сделать её двойной/одинарной"}};
+const NUM=["—","3","4","6","8","12"];
+let lang="kk",ok=false,f1=false,f2=false,f3=false,tilt=0;const dbl=[0,0,0,0,0,0];const qv={},sv={};
+const $=id=>document.getElementById(id),t=k=>T[lang][k];
+function P(r,k){const a=Math.PI/2+k*Math.PI/3;return[r*Math.cos(a),r*Math.sin(a)]}
+function proj([x,y]){const tt=tilt*Math.PI/180;return[280+x,218-y*Math.cos(tt),y*Math.sin(tt)]}
+function render(){let h=`<text x="40" y="34" font-size="17" font-weight="700" fill="var(--ink)">C₆H₆</text>`;
+  if(!f1){$("scene").innerHTML=h+`<text x="280" y="210" text-anchor="middle" font-size="14" fill="var(--mute)">?</text>`;return}
+  const RC=96,RH=158,C=[...Array(6)].map((_,k)=>proj(P(RC,k))),H=[...Array(6)].map((_,k)=>proj(P(RH,k)));let items=[];
+  for(let k=0;k<6;k++){items.push([Math.min(C[k][2],H[k][2])-.5,`<line x1="${C[k][0]}" y1="${C[k][1]}" x2="${H[k][0]}" y2="${H[k][1]}" stroke="#9ca3af" stroke-width="7" stroke-linecap="round"/>`])}
+  for(let k=0;k<6;k++){const a=C[k],b=C[(k+1)%6],z=Math.min(a[2],b[2])-.4;let s=`<line x1="${a[0]}" y1="${a[1]}" x2="${b[0]}" y2="${b[1]}" stroke="#9ca3af" stroke-width="7" stroke-linecap="round"/>`;
+    if(!f3&&dbl[k]){const mx=(a[0]+b[0])/2,my=(a[1]+b[1])/2,cx=280,cy=218,dx=cx-mx,dy=cy-my,L=Math.hypot(dx,dy),ox=dx/L*14,oy=dy/L*14;s+=`<line x1="${a[0]*.8+b[0]*.2+ox}" y1="${a[1]*.8+b[1]*.2+oy}" x2="${a[0]*.2+b[0]*.8+ox}" y2="${a[1]*.2+b[1]*.8+oy}" stroke="#6b7280" stroke-width="5" stroke-linecap="round"/>`}
+    if(!f2)s=`<g class="edge" data-e="${k}" tabindex="0" role="button" aria-label="bond ${k+1}">${s}<line x1="${a[0]}" y1="${a[1]}" x2="${b[0]}" y2="${b[1]}" stroke="transparent" stroke-width="26"/></g>`;
+    items.push([z,s])}
+  if(f3)items.push([9,`<ellipse cx="280" cy="218" rx="56" ry="${(56*Math.cos(tilt*Math.PI/180)).toFixed(1)}" fill="none" stroke="#2563eb" stroke-width="5" stroke-dasharray="2 0" opacity=".8"/>`]);
+  const ball=(x,y,r,f,s,tc,e)=>`<circle cx="${x}" cy="${y}" r="${r}" fill="${f}" stroke="${s}" stroke-width="2"/><circle cx="${x-r*.35}" cy="${y-r*.35}" r="${r*.28}" fill="#fff" opacity=".35"/><text x="${x}" y="${y+r*.33}" text-anchor="middle" font-size="${r*.85}" font-weight="700" fill="${tc}" pointer-events="none">${e}</text>`;
+  for(let k=0;k<6;k++){items.push([C[k][2],ball(C[k][0],C[k][1],21,"#1f2937","#000","#fff","C")]);items.push([H[k][2],ball(H[k][0],H[k][1],14,"#f8fafc","#94a3b8","#111","H")])}
+  items.sort((p,q)=>p[0]-q[0]);h+=items.map(x=>x[1]).join("");
+  if(f1&&!f2)h+=`<text x="280" y="405" text-anchor="middle" font-size="13" fill="var(--mute)">${t("tap")}</text>`;
+  if(f3)h+=`<text x="280" y="405" text-anchor="middle" font-size="13" font-weight="700" fill="var(--acc)">C–C = 0,139 нм · 120°</text>`;
+  $("scene").innerHTML=h}
+function opts(arr,v){return arr.map((s,i)=>`<option value="${i||""}" ${String(v||"")===String(i||"")?"selected":""}>${s}</option>`).join("")}
+const FORMS=()=>lang==="kk"?["—","Ашық тізбек","Тұйық алты мүшелі сақина","Тармақталған тізбек"]:["—","Открытая цепь","Замкнутое шестичленное кольцо","Разветвлённая цепь"];
+function renderQ(){$("nc").innerHTML=opts(NUM,sv.nc);$("nh").innerHTML=opts(NUM,sv.nh);$("form").innerHTML=opts(FORMS(),sv.form);
+  $("qs").innerHTML=t("qs").map((q,i)=>`<label style="margin-top:6px"><span>${q[0]}</span><select data-q="${i}">${opts(q[1],qv[i])}</select></label>`).join("")}
+function renderSteps(){$("st2").classList.toggle("off",!f1);$("st3").classList.toggle("off",!f2);$("st4").classList.toggle("off",!f3);$("st5").classList.toggle("off",!ok);
+  $("b1").disabled=f1;$("b1").classList.toggle("done",f1);$("b2").disabled=f2;$("b2").classList.toggle("done",f2);$("clr").disabled=f2;$("b3").disabled=f3;$("b3").classList.toggle("done",f3);$("tilt").disabled=!f3}
+function applyLang(){document.documentElement.lang=lang;
+  document.querySelectorAll("[data-i]").forEach(el=>{const v=T[lang][el.dataset.i];if(typeof v==="string")el.textContent=v});
+  $("l-kk").classList.toggle("on",lang==="kk");$("l-ru").classList.toggle("on",lang==="ru");
+  document.querySelectorAll(".msg").forEach(m=>m.textContent="");render();renderQ();renderSteps()}
+function msg(id,text,okk){const m=$(id);m.textContent=text;m.className="msg "+(okk?"ok":"bad")}
+$("l-kk").onclick=()=>{lang="kk";applyLang()};$("l-ru").onclick=()=>{lang="ru";applyLang()};
+["nc","nh","form"].forEach(id=>$(id).onchange=e=>{sv[id]=e.target.value;e.target.className=""});
+$("b1").onclick=()=>{const A={nc:"3",nh:"3",form:"2"};let bad=0;for(const k in A){const g=$(k).value===A[k];$(k).className=g?"ok":"bad";if(!g)bad++}f1=!bad;f1?msg("m1",t("ok1"),true):msg("m1",t("bad1"),false);render();renderSteps()};
+function tog(k){if(!f1||f2)return;dbl[k]=dbl[k]?0:1;$("m2").textContent="";render()}
+$("scene").addEventListener("click",e=>{const g=e.target.closest("[data-e]");if(g)tog(+g.dataset.e)});
+$("scene").addEventListener("keydown",e=>{const g=e.target.closest("[data-e]");if(g&&(e.key==="Enter"||e.key===" ")){e.preventDefault();tog(+g.dataset.e)}});
+$("clr").onclick=()=>{dbl.fill(0);render()};
+$("b2").onclick=()=>{let good=true;for(let k=0;k<6;k++){const n=dbl[k]+dbl[(k+5)%6];if(n!==1)good=false}f2=good;good?msg("m2",t("ok2"),true):msg("m2",t("bad2a"),false);render();renderSteps()};
+$("b3").onclick=()=>{f3=true;msg("m3",t("m3"),true);render();renderSteps()};
+$("tilt").oninput=e=>{tilt=+e.target.value;render()};
+document.querySelector("#qs").addEventListener("change",e=>{const s=e.target;if(s.dataset.q!=null){qv[s.dataset.q]=s.value;s.className=""}});
+$("chk").onclick=()=>{let bad=0;document.querySelectorAll("[data-q]").forEach(s=>{const g=s.value===t("qs")[s.dataset.q][2];s.className=g?"ok":"bad";if(!g)bad++});
+  ok=!bad;renderSteps();ok?msg("m4",t("ok"),true):msg("m4",t("bad")+bad+".",false)};
+$("send").onclick=()=>{const f=$("a1").value.trim();msg("m5",f?t("sent"):t("empty"),!!f)};
+applyLang();
+}
+</script>
+<script src="../embed.js"></script>
+</body>
+</html>

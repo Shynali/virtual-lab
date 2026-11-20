@@ -1,0 +1,273 @@
+<!DOCTYPE html>
+<html lang="kk">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Атомдар модельдері</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans:wght@400;600;700&family=Noto+Serif:wght@600;700&display=swap" rel="stylesheet">
+<style>
+/* VOICE: calm school lab workbook, clear and encouraging
+   IDEA: a workbench sheet — the textbook's paper circles laid on a lab table
+   PICTURE: the large Bohr board with drag-in protons, neutrons, electrons
+   COLOUR and TYPE: white sheet on deep lab-teal; textbook blue/red/green particles; Noto Serif + Noto Sans (Kazakh letters)
+   LAYOUT: steps left, board right; stacks on phones as title, board, steps */
+:root{color-scheme:light dark;
+--bg:light-dark(#0f4c5c,#0a2d36);--sheet:light-dark(#ffffff,#13202a);--ink:light-dark(#10131a,#e7edf2);
+--mute:light-dark(#566170,#9fb0bf);--line:light-dark(#d5dde5,#2b3d4b);--soft:light-dark(#eef5f7,#182a35);
+--acc:light-dark(#0f4c5c,#5cc2d6);--p:#2563eb;--n:#dc2626;--e:#16a34a;--ok:light-dark(#12733a,#4ade80);--bad:light-dark(#b91c1c,#f87171)}
+:root[data-theme=light]{color-scheme:light}:root[data-theme=dark]{color-scheme:dark}
+*{box-sizing:border-box;min-width:0}
+body{margin:0;background:var(--bg);color:var(--ink);font:16px/1.55 "Noto Sans",system-ui,sans-serif;overflow-x:clip}
+.wrap{max-width:1240px;margin:0 auto;padding:clamp(14px,3vw,36px) max(3vw,12px)}
+header{display:flex;flex-wrap:wrap;gap:12px;align-items:flex-end;justify-content:space-between;color:#fff;margin-bottom:18px}
+header small{display:block;opacity:.8;font-size:14px}
+h1{font:700 clamp(26px,4vw,40px)/1.08 "Noto Serif",Georgia,serif;margin:2px 0 0;text-wrap:balance}
+.lang{display:flex;background:rgba(255,255,255,.14);border-radius:999px;padding:4px}
+.lang button{border:0;background:none;color:#fff;font:600 15px "Noto Sans";padding:8px 16px;border-radius:999px;cursor:pointer;min-height:40px}
+.lang button.on{background:#fff;color:#0f4c5c}
+.sheet{background:var(--sheet);border-radius:18px;box-shadow:0 18px 40px rgba(0,0,0,.25);padding:clamp(16px,2.6vw,30px)}
+.note{font-size:13px;color:var(--mute);margin:0 0 14px}
+.goal{margin:0 0 18px;max-width:70ch}
+.atoms{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:18px}
+.atoms button{display:flex;align-items:center;gap:10px;border:2px solid var(--line);background:var(--sheet);color:var(--ink);border-radius:12px;padding:8px 16px;font:600 16px "Noto Sans";cursor:pointer;min-height:48px}
+.atoms button b{font:700 22px "Noto Serif";color:var(--acc)}
+.atoms button.on{border-color:var(--acc);background:var(--soft)}
+.atoms .tick{color:var(--ok);font-weight:700}
+.grid{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1.05fr);gap:clamp(16px,3vw,36px);align-items:start}
+.step{border-top:1px solid var(--line);padding:16px 0}
+.step:first-child{border-top:0;padding-top:0}
+h2{font:700 20px/1.2 "Noto Serif",Georgia,serif;margin:0 0 6px}
+.hint{color:var(--mute);font-size:15px;margin:0 0 12px}
+.fields{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px 14px}
+label{font-size:14px;color:var(--mute);display:flex;flex-direction:column;gap:4px}
+input,textarea{font:16px "Noto Sans";color:var(--ink);background:var(--sheet);border:1.5px solid var(--line);border-radius:10px;padding:10px 12px;width:100%}
+input:focus,textarea:focus,button:focus-visible{outline:3px solid color-mix(in srgb,var(--acc) 45%,transparent);outline-offset:1px}
+input.ok{border-color:var(--ok)}input.bad{border-color:var(--bad)}
+textarea{min-height:76px;resize:vertical}
+.btns{display:flex;flex-wrap:wrap;gap:10px;margin-top:12px}
+.btn{border:0;border-radius:10px;padding:11px 18px;font:600 15px "Noto Sans";cursor:pointer;min-height:44px;background:var(--acc);color:light-dark(#fff,#08202a)}
+.btn.ghost{background:var(--soft);color:var(--ink)}
+.btn:disabled{opacity:.45;cursor:not-allowed}
+.msg{margin-top:10px;font-size:15px;min-height:1.5em}
+.msg.ok{color:var(--ok)}.msg.bad{color:var(--bad)}
+.board{position:sticky;top:12px}
+.boardbox{background:var(--soft);border-radius:16px;padding:10px;position:relative}
+.boardbox svg{display:block;width:100%;height:auto;max-width:520px;margin:0 auto;touch-action:none}
+.locked .boardbox::after{content:attr(data-lock);position:absolute;inset:0;display:grid;place-items:center;text-align:center;padding:20px;background:color-mix(in srgb,var(--soft) 82%,transparent);border-radius:16px;font-weight:600;color:var(--mute)}
+.tray{display:flex;gap:10px;justify-content:center;flex-wrap:wrap;margin-top:12px}
+.chip{display:flex;align-items:center;gap:8px;border:2px solid var(--line);background:var(--sheet);color:var(--ink);border-radius:999px;padding:6px 16px 6px 6px;font:600 15px "Noto Sans";cursor:grab;min-height:48px;touch-action:none;user-select:none}
+.chip i{width:30px;height:30px;border-radius:50%;display:grid;place-items:center;color:#fff;font:700 13px "Noto Sans";font-style:normal}
+.chip.sel{border-color:var(--acc);background:var(--soft)}
+.counts{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:6px;margin-top:12px;font-size:13px;text-align:center}
+.counts div{background:var(--sheet);border:1px solid var(--line);border-radius:10px;padding:6px 4px}
+.counts b{display:block;font-size:14px}
+.ghost-dot{position:fixed;width:30px;height:30px;border-radius:50%;pointer-events:none;z-index:9;transform:translate(-50%,-50%);box-shadow:0 6px 14px rgba(0,0,0,.3);display:grid;place-items:center;color:#fff;font:700 13px "Noto Sans"}
+.region{fill:transparent;cursor:pointer}
+.ring{fill:none;stroke:var(--mute);stroke-width:1.5;stroke-dasharray:5 6}
+.hl .ring,.hl.nuc{stroke:var(--acc);stroke-width:3;stroke-dasharray:none}
+.nuc{fill:light-dark(#fff7e6,#2a2414);stroke:light-dark(#d4a24c,#a07a2c);stroke-width:2}
+.pt{cursor:pointer}
+.lbl{font:600 11px "Noto Sans";fill:var(--mute)}
+table{width:100%;border-collapse:collapse;font-size:15px}
+th,td{padding:8px 6px;border-bottom:1px solid var(--line);text-align:left}
+td.n{text-align:right;font-variant-numeric:tabular-nums;font-weight:600}
+th.n{text-align:right}
+.q{margin-bottom:10px}
+@media(max-width:860px){.grid{grid-template-columns:minmax(0,1fr)}.board{position:static;order:-1}}
+@media(max-width:480px){.fields{grid-template-columns:minmax(0,1fr)}.counts{grid-template-columns:repeat(2,minmax(0,1fr))}}
+@media(prefers-reduced-motion:no-preference){.pt{animation:pop .25s ease-out}@keyframes pop{from{transform:scale(.3);opacity:0}}.pt{transform-box:fill-box;transform-origin:center}}
+</style>
+</head>
+<body>
+<div class="wrap">
+<header>
+  <div><small data-i="lab">1-зертханалық тәжірибе</small><h1 data-i="title">Атомдар модельдерін жасау</h1></div>
+  <div class="lang" role="group" aria-label="Тіл"><button id="l-kk" class="on">Қазақша</button><button id="l-ru">Русский</button></div>
+</header>
+<div class="sheet">
+  <p class="note" data-i="demo">Үлгі нұсқа</p>
+  <p class="goal" data-i="goal"></p>
+  <div class="atoms" id="atoms"></div>
+  <div class="grid">
+    <div>
+      <section class="step">
+        <h2 data-i="s1">1-қадам</h2>
+        <p class="hint" data-i="s1h"></p>
+        <div class="fields">
+          <label><span data-i="fp"></span><input id="fp" type="number" inputmode="numeric" min="0"></label>
+          <label><span data-i="fn"></span><input id="fn" type="number" inputmode="numeric" min="0"></label>
+          <label><span data-i="fe"></span><input id="fe" type="number" inputmode="numeric" min="0"></label>
+          <label><span data-i="fl"></span><input id="fl" type="number" inputmode="numeric" min="0"></label>
+        </div>
+        <div class="btns"><button class="btn" id="chk1" data-i="check">Тексеру</button></div>
+        <div class="msg" id="m1" aria-live="polite"></div>
+      </section>
+      <section class="step">
+        <h2 data-i="s2">2-қадам</h2>
+        <p class="hint" data-i="s2h"></p>
+        <div class="btns" style="margin-top:0"><button class="btn" id="chk2" data-i="check2"></button><button class="btn ghost" id="clr" data-i="clear"></button></div>
+        <div class="msg" id="m2" aria-live="polite"></div>
+      </section>
+      <section class="step">
+        <h2 data-i="s3">3-қадам</h2>
+        <p class="hint" data-i="s3h"></p>
+        <table><thead><tr><th></th><th class="n" data-i="C"></th><th class="n" data-i="O"></th></tr></thead><tbody id="cmp"></tbody></table>
+      </section>
+      <section class="step">
+        <h2 data-i="s4">4-қадам</h2>
+        <div class="q"><label><span data-i="q1"></span><textarea id="a1"></textarea></label></div>
+        <div class="q"><label><span data-i="q2"></span><textarea id="a2"></textarea></label></div>
+        <div class="q"><label><span data-i="q3"></span><textarea id="a3"></textarea></label></div>
+        <div class="btns"><button class="btn" id="send" data-i="send"></button></div>
+        <div class="msg" id="m4" aria-live="polite"></div>
+      </section>
+    </div>
+    <div class="board" id="board">
+      <div class="boardbox" id="boardbox">
+        <svg id="svg" viewBox="0 0 400 400" aria-label="Bohr"></svg>
+      </div>
+      <div class="tray" id="tray"></div>
+      <div class="counts" id="counts"></div>
+    </div>
+  </div>
+</div>
+</div>
+<script>
+{
+const T={
+kk:{lab:"1-зертханалық тәжірибе",title:"Атомдар модельдерін жасау",demo:"Үлгі нұсқа: тіркелу және жұмысты мұғалімге жіберу толық сайтта қосылады.",
+goal:"Мақсаты: көміртек пен оттек атомдарының Бор диаграммасын құрастырып, олардың құрылысын салыстыру.",
+C:"Көміртек",O:"Оттек",s1:"1-қадам. Бөлшектер санын анықта",s1h:"Периодтық кестеден элементтің реттік нөмірі мен салыстырмалы атомдық массасын қара.",
+fp:"Протондар саны",fn:"Нейтрондар саны",fe:"Электрондар саны",fl:"Энергетикалық деңгейлер саны",check:"Тексеру",
+s2:"2-қадам. Моделді құрастыр",s2h:"Бөлшекті шеңберге сүйреп апар немесе бөлшекті таңдап, шеңберді бас. Орнатылған бөлшекті басса, ол алынып тасталады.",
+check2:"Моделді тексеру",clear:"Тазалау",lock:"Алдымен 1-қадамды орында",
+s3:"3-қадам. Салыстыр",s3h:"Екі атомның моделі дұрыс құрастырылғанда кесте толады.",
+s4:"4-қадам. Зертхана журналы",q1:"Көміртек пен оттек атомдарының құрылысында қандай ұқсастық бар?",q2:"Олардың айырмашылығы неде?",q3:"Қорытынды",
+send:"Мұғалімге жіберу",sent:"Үлгіде жіберу әлі жұмыс істемейді. Толық сайтта жұмыс мұғалімнің бетіне түседі.",empty:"Алдымен журналдың барлық сұрағына жауап бер.",
+p:"Протон",n:"Нейтрон",e:"Электрон",nuc:"Ядро",sh:"-деңгей",
+ok1:"Дұрыс! Енді оң жақтағы шеңберлерде моделді құрастыр.",bad1:"Мына жауаптар қате: ",hn:"Кеңес: нейтрондар саны = атомдық масса − протондар саны.",hl:"Кеңес: деңгейлер саны периодтың нөміріне тең.",
+eNucP:"Ядродағы протондар саны дұрыс емес.",eNucN:"Ядродағы нейтрондар саны дұрыс емес.",eNucE:"Электрондар ядрода болмайды.",ePN:"Протондар мен нейтрондар тек ядрода болады.",
+eS1:"1-деңгейде 2 электрон болуы керек.",eS2:"2-деңгейдегі электрондар саны дұрыс емес.",eS3:"Бұл атомда 3-деңгей бос болуы керек.",
+okM:"Керемет! {a} атомының моделі дұрыс құрастырылды.",next:" Енді келесі атомды құрастыр.",
+r1:"Реттік нөмірі",r2:"Протондар",r3:"Нейтрондар",r4:"Электрондар",r5:"Деңгейлер саны",r6:"Сыртқы деңгейдегі электрондар",r7:"Электрондардың деңгейлерде орналасуы"},
+ru:{lab:"Лабораторный опыт №1",title:"Построение моделей атомов",demo:"Демо-версия: регистрация и отправка работы учителю появятся в полной версии сайта.",
+goal:"Цель: построить диаграммы Бора атомов углерода и кислорода и сравнить их строение.",
+C:"Углерод",O:"Кислород",s1:"Шаг 1. Определи число частиц",s1h:"Посмотри порядковый номер элемента и его относительную атомную массу в периодической таблице.",
+fp:"Число протонов",fn:"Число нейтронов",fe:"Число электронов",fl:"Число энергетических уровней",check:"Проверить",
+s2:"Шаг 2. Собери модель",s2h:"Перетащи частицу на круг или выбери её и нажми на круг. Нажми на поставленную частицу, чтобы убрать её.",
+check2:"Проверить модель",clear:"Очистить",lock:"Сначала выполни шаг 1",
+s3:"Шаг 3. Сравни",s3h:"Таблица заполнится, когда модели обоих атомов будут собраны верно.",
+s4:"Шаг 4. Лабораторный журнал",q1:"Что общего в строении атомов углерода и кислорода?",q2:"Чем они отличаются?",q3:"Вывод",
+send:"Отправить учителю",sent:"В демо-версии отправка пока не работает. В полной версии работа попадёт на страницу учителя.",empty:"Сначала ответь на все вопросы журнала.",
+p:"Протон",n:"Нейтрон",e:"Электрон",nuc:"Ядро",sh:"-й уровень",
+ok1:"Верно! Теперь собери модель на кругах справа.",bad1:"Ошибки в ответах: ",hn:"Подсказка: число нейтронов = атомная масса − число протонов.",hl:"Подсказка: число уровней равно номеру периода.",
+eNucP:"Неверное число протонов в ядре.",eNucN:"Неверное число нейтронов в ядре.",eNucE:"Электроны не находятся в ядре.",ePN:"Протоны и нейтроны находятся только в ядре.",
+eS1:"На 1-м уровне должно быть 2 электрона.",eS2:"Неверное число электронов на 2-м уровне.",eS3:"У этого атома 3-й уровень должен быть пустым.",
+okM:"Отлично! Модель атома ({a}) собрана верно.",next:" Теперь собери следующий атом.",
+r1:"Порядковый номер",r2:"Протоны",r3:"Нейтроны",r4:"Электроны",r5:"Число уровней",r6:"Электроны внешнего уровня",r7:"Распределение электронов по уровням"}};
+const ATOMS={C:{sym:"C",Z:6,N:6,L:2,shells:[2,4]},O:{sym:"O",Z:8,N:8,L:2,shells:[2,6]}};
+const COL={p:"var(--p)",n:"var(--n)",e:"var(--e)"},LET={p:"p",n:"n",e:"e"};
+const R=[56,108,152,192]; // region outer radii: nucleus, shell1..3
+const RING=[0,84,130,172];
+let lang="kk",cur="C",sel=null;
+const st={};for(const k in ATOMS)st[k]={s1:false,ok:false,inp:{fp:"",fn:"",fe:"",fl:""},reg:[[],[],[],[]]};
+const $=id=>document.getElementById(id),t=k=>T[lang][k];
+const svg=$("svg"),NS="http://www.w3.org/2000/svg";
+
+function applyLang(){
+  document.documentElement.lang=lang;
+  document.querySelectorAll("[data-i]").forEach(el=>{const v=T[lang][el.dataset.i];if(v!=null)el.textContent=v});
+  $("l-kk").classList.toggle("on",lang==="kk");$("l-ru").classList.toggle("on",lang==="ru");
+  $("boardbox").dataset.lock=t("lock");
+  $("m1").textContent="";$("m2").textContent="";$("m4").textContent="";
+  renderAll();
+}
+function renderAtoms(){
+  $("atoms").innerHTML=Object.keys(ATOMS).map(k=>`<button data-a="${k}" class="${k===cur?"on":""}"><b>${ATOMS[k].sym}</b>${t(k)}${st[k].ok?' <span class="tick">✓</span>':""}</button>`).join("");
+}
+function renderTray(){
+  $("tray").innerHTML=["p","n","e"].map(k=>`<button class="chip${sel===k?" sel":""}" data-t="${k}"><i style="background:${COL[k]}">${LET[k]}</i>${t(k)}</button>`).join("");
+}
+function shellPos(i,count,r){const a=-Math.PI/2+i*2*Math.PI/count;return[200+r*Math.cos(a),200+r*Math.sin(a)]}
+function nucPos(i){const a=i*2.39996,r=8.6*Math.sqrt(i);return[200+r*Math.cos(a),200+r*Math.sin(a)]}
+function renderBoard(){
+  const s=st[cur];let h="";
+  for(let k=3;k>=1;k--)h+=`<g data-r="${k}" id="g${k}"><circle class="region" cx="200" cy="200" r="${R[k]}"/><circle class="ring" cx="200" cy="200" r="${RING[k]}"/><text class="lbl" x="200" y="${200-RING[k]-8}" text-anchor="middle">${k}${t("sh")}</text></g>`;
+  h+=`<g data-r="0" id="g0"><circle class="nuc" cx="200" cy="200" r="${R[0]-6}"/></g>`;
+  if(!s.reg[0].length)h+=`<text class="lbl" x="200" y="204" text-anchor="middle" pointer-events="none">${t("nuc")}</text>`;
+  s.reg.forEach((arr,ri)=>arr.forEach((p,i)=>{const[x,y]=ri===0?nucPos(i):shellPos(i,arr.length,RING[ri]);
+    h+=`<g class="pt" data-rm="${ri}:${i}"><circle cx="${x}" cy="${y}" r="9" fill="${COL[p]}" stroke="rgba(0,0,0,.25)"/><text x="${x}" y="${y+3.6}" text-anchor="middle" fill="#fff" font-size="10" font-weight="700" pointer-events="none">${LET[p]}</text></g>`}));
+  svg.innerHTML=h;
+  $("board").classList.toggle("locked",!s.s1);
+  $("counts").innerHTML=s.reg.map((arr,ri)=>{const c={p:0,n:0,e:0};arr.forEach(p=>c[p]++);
+    return `<div><b>${ri===0?t("nuc"):ri+t("sh")}</b>${["p","n","e"].filter(k=>c[k]).map(k=>`<span style="color:${COL[k]}">${c[k]}${LET[k]}</span>`).join(" ")||"–"}</div>`}).join("");
+}
+function renderInputs(){const s=st[cur];for(const f of["fp","fn","fe","fl"]){$(f).value=s.inp[f];$(f).classList.remove("ok","bad");if(s.s1)$(f).classList.add("ok")}
+  $("chk2").disabled=!s.s1;$("clr").disabled=!s.s1}
+function renderCmp(){
+  const v=(k,f)=>st[k].ok?f(ATOMS[k]):"?";
+  const rows=[["r1",a=>a.Z],["r2",a=>a.Z],["r3",a=>a.N],["r4",a=>a.Z],["r5",a=>a.L],["r6",a=>a.shells[a.shells.length-1]],["r7",a=>a.shells.join(", ")]];
+  $("cmp").innerHTML=rows.map(([k,f])=>`<tr><td>${t(k)}</td><td class="n">${v("C",f)}</td><td class="n">${v("O",f)}</td></tr>`).join("");
+}
+function renderAll(){renderAtoms();renderTray();renderBoard();renderInputs();renderCmp()}
+function msg(id,text,ok){const m=$(id);m.textContent=text;m.className="msg "+(ok?"ok":"bad")}
+
+$("l-kk").onclick=()=>{lang="kk";applyLang()};$("l-ru").onclick=()=>{lang="ru";applyLang()};
+$("atoms").onclick=e=>{const b=e.target.closest("button");if(!b)return;cur=b.dataset.a;$("m1").textContent="";$("m2").textContent="";renderAll()};
+for(const f of["fp","fn","fe","fl"])$(f).addEventListener("input",e=>{st[cur].inp[f]=e.target.value});
+$("chk1").onclick=()=>{
+  const a=ATOMS[cur],s=st[cur],want={fp:a.Z,fn:a.N,fe:a.Z,fl:a.L},wrong=[];
+  for(const f in want){const ok=Number($(f).value)===want[f]&&$(f).value!=="";$(f).classList.toggle("ok",ok);$(f).classList.toggle("bad",!ok);if(!ok)wrong.push(f)}
+  if(!wrong.length){s.s1=true;msg("m1",t("ok1"),true);renderBoard();renderInputs()}
+  else{let m=t("bad1")+wrong.map(f=>t(f).toLowerCase()).join(", ")+".";if(wrong.includes("fn"))m+=" "+t("hn");if(wrong.includes("fl"))m+=" "+t("hl");msg("m1",m,false)}
+};
+function add(type,ri){const s=st[cur];if(!s.s1)return;if(s.reg[ri].length>=20)return;s.reg[ri].push(type);s.ok=false;$("m2").textContent="";renderBoard();renderAtoms();renderCmp()}
+svg.addEventListener("click",e=>{
+  const pt=e.target.closest(".pt");
+  if(pt){const[ri,i]=pt.dataset.rm.split(":").map(Number);st[cur].reg[ri].splice(i,1);st[cur].ok=false;renderBoard();renderAtoms();renderCmp();return}
+  if(sel){const ri=regionAt(e.clientX,e.clientY);if(ri!=null)add(sel,ri)}
+});
+$("clr").onclick=()=>{st[cur].reg=[[],[],[],[]];st[cur].ok=false;$("m2").textContent="";renderAll()};
+$("chk2").onclick=()=>{
+  const a=ATOMS[cur],s=st[cur],c=s.reg.map(arr=>{const o={p:0,n:0,e:0};arr.forEach(p=>o[p]++);return o});
+  let err=null;
+  if(c[0].e)err="eNucE";else if(c.slice(1).some(o=>o.p||o.n))err="ePN";
+  else if(c[0].p!==a.Z)err="eNucP";else if(c[0].n!==a.N)err="eNucN";
+  else if(c[1].e!==a.shells[0])err="eS1";else if(c[2].e!==a.shells[1])err="eS2";else if(c[3].e)err="eS3";
+  if(err){s.ok=false;msg("m2",t(err),false)}
+  else{s.ok=true;const other=Object.keys(ATOMS).find(k=>!st[k].ok);msg("m2",t("okM").replace("{a}",t(cur))+(other?t("next"):""),true)}
+  renderAtoms();renderCmp();
+};
+$("send").onclick=()=>{const filled=["a1","a2","a3"].every(id=>$(id).value.trim());msg("m4",filled?t("sent"):t("empty"),filled)};
+
+function regionAt(x,y){
+  const r=svg.getBoundingClientRect();if(x<r.left||x>r.right||y<r.top||y>r.bottom)return null;
+  const sx=(x-r.left)/r.width*400-200,sy=(y-r.top)/r.height*400-200,d=Math.hypot(sx,sy);
+  for(let i=0;i<4;i++)if(d<=R[i])return i;return null;
+}
+function hl(ri){for(let i=0;i<4;i++){const g=$("g"+i);if(!g)continue;const on=i===ri;if(i===0)g.firstElementChild.classList.toggle("hl",on);else g.classList.toggle("hl",on)}}
+let drag=null;
+$("tray").addEventListener("pointerdown",e=>{
+  const b=e.target.closest(".chip");if(!b)return;
+  b.setPointerCapture(e.pointerId);drag={type:b.dataset.t,x:e.clientX,y:e.clientY,moved:false,ghost:null,btn:b};
+});
+$("tray").addEventListener("pointermove",e=>{
+  if(!drag)return;
+  if(!drag.moved&&Math.hypot(e.clientX-drag.x,e.clientY-drag.y)>6){drag.moved=true;const g=document.createElement("div");g.className="ghost-dot";g.style.background=COL[drag.type];g.textContent=LET[drag.type];document.body.appendChild(g);drag.ghost=g}
+  if(drag.ghost){drag.ghost.style.left=e.clientX+"px";drag.ghost.style.top=e.clientY+"px";hl(st[cur].s1?regionAt(e.clientX,e.clientY):null)}
+});
+function endDrag(e,cancel){
+  if(!drag)return;const d=drag;drag=null;
+  if(d.ghost){d.ghost.remove();hl(null);if(!cancel){const ri=regionAt(e.clientX,e.clientY);if(ri!=null)add(d.type,ri)}}
+  else if(!cancel){sel=sel===d.type?null:d.type;renderTray()}
+}
+$("tray").addEventListener("pointerup",e=>endDrag(e,false));
+$("tray").addEventListener("pointercancel",e=>endDrag(e,true));
+
+applyLang();
+}
+</script>
+<script src="../embed.js"></script>
+</body>
+</html>

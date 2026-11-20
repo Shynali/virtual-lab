@@ -1,0 +1,251 @@
+<!DOCTYPE html>
+<html lang="kk">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Сутекке сапалық реакция</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans:wght@400;600;700&family=Noto+Serif:wght@600;700&display=swap" rel="stylesheet">
+<style>
+/* VOICE: calm school lab workbook, clear and encouraging (grade 7)
+   IDEA: a workbench sheet — the textbook's gas apparatus: generator tube, delivery tube, inverted collecting tube
+   PICTURE: hydrogen filling the upturned tube from the top down, then a loud or soft pop at the flame
+   COLOUR and TYPE: white sheet on deep lab-teal; the indicator colours themselves; Noto Serif + Noto Sans
+   LAYOUT: steps left, scene right (sticky) with view switch; stacks on phones */
+:root{color-scheme:light dark;
+--bg:light-dark(#0f4c5c,#0a2d36);--sheet:light-dark(#ffffff,#13202a);--ink:light-dark(#10131a,#e7edf2);
+--mute:light-dark(#566170,#9fb0bf);--line:light-dark(#d5dde5,#2b3d4b);--soft:light-dark(#eef5f7,#182a35);
+--acc:light-dark(#0f4c5c,#5cc2d6);--ok:light-dark(#12733a,#4ade80);--bad:light-dark(#b91c1c,#f87171);
+--warn:light-dark(#fff4d6,#3a2f12);--glass:light-dark(#f7fbfd,#1d2f3b);--glassline:light-dark(#8aa1b1,#6c8597)}
+:root[data-theme=light]{color-scheme:light}:root[data-theme=dark]{color-scheme:dark}
+*{box-sizing:border-box;min-width:0}
+body{margin:0;background:var(--bg);color:var(--ink);font:16px/1.55 "Noto Sans",system-ui,sans-serif;overflow-x:clip}
+.wrap{max-width:1240px;margin:0 auto;padding:clamp(14px,3vw,36px) max(3vw,12px)}
+header{display:flex;flex-wrap:wrap;gap:12px;align-items:flex-end;justify-content:space-between;color:#fff;margin-bottom:18px}
+header small{display:block;opacity:.8;font-size:14px}
+h1{font:700 clamp(24px,3.6vw,38px)/1.08 "Noto Serif",Georgia,serif;margin:2px 0 0;text-wrap:balance;max-width:26ch}
+.lang{display:flex;background:rgba(255,255,255,.14);border-radius:999px;padding:4px}
+.lang button{border:0;background:none;color:#fff;font:600 15px "Noto Sans";padding:8px 16px;border-radius:999px;cursor:pointer;min-height:40px}
+.lang button.on{background:#fff;color:#0f4c5c}
+.sheet{background:var(--sheet);border-radius:18px;box-shadow:0 18px 40px rgba(0,0,0,.25);padding:clamp(16px,2.6vw,30px)}
+.note{font-size:13px;color:var(--mute);margin:0 0 10px}
+.goal{margin:0 0 6px;max-width:70ch}
+.reag{margin:0 0 16px;color:var(--mute);font-size:15px;max-width:70ch}
+.safety{display:flex;gap:12px;align-items:center;flex-wrap:wrap;background:var(--warn);border-radius:12px;padding:12px 14px;margin-bottom:18px}
+.safety p{margin:0;flex:1 1 260px;font-weight:600}
+.safety label{flex-direction:row;align-items:center;gap:8px;color:var(--ink);font-weight:600;cursor:pointer}
+.grid{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1.05fr);gap:clamp(16px,3vw,36px);align-items:start}
+.step{border-top:1px solid var(--line);padding:14px 0}
+.step:first-child{border-top:0;padding-top:0}
+.step.off{opacity:.45;pointer-events:none}
+h2{font:700 19px/1.2 "Noto Serif",Georgia,serif;margin:0 0 6px}
+.hint{color:var(--mute);font-size:15px;margin:0 0 8px}
+label{font-size:14px;color:var(--mute);display:flex;flex-direction:column;gap:4px}
+textarea,select{font:16px "Noto Sans";color:var(--ink);background:var(--sheet);border:1.5px solid var(--line);border-radius:10px;padding:10px 12px;width:100%}
+textarea:focus,select:focus,button:focus-visible{outline:3px solid color-mix(in srgb,var(--acc) 45%,transparent);outline-offset:1px}
+.ok{border-color:var(--ok)!important}.bad{border-color:var(--bad)!important}
+textarea{min-height:76px;resize:vertical}
+.btns{display:flex;flex-wrap:wrap;gap:8px;margin-top:8px}
+.btn{border:0;border-radius:10px;padding:10px 14px;font:600 15px "Noto Sans";cursor:pointer;min-height:44px;background:var(--acc);color:light-dark(#fff,#08202a)}
+.btn.done{background:var(--soft);color:var(--ok)}
+.btn:disabled{opacity:.45;cursor:not-allowed}.btn.done:disabled{opacity:1}
+.msg{margin-top:8px;font-size:15px;min-height:1.4em}
+.msg.ok{color:var(--ok)}.msg.bad{color:var(--bad)}
+.board{position:sticky;top:12px}
+.seg{display:flex;background:var(--soft);border-radius:10px;padding:4px;gap:4px;margin-bottom:10px}
+.seg button{flex:1;border:0;background:none;color:var(--ink);font:600 14px "Noto Sans";padding:8px 10px;border-radius:8px;cursor:pointer;min-height:40px}
+.seg button.on{background:var(--sheet);box-shadow:0 1px 4px rgba(0,0,0,.15)}
+.seg button:disabled{opacity:.4;cursor:default}
+.rackbox{background:var(--soft);border-radius:16px;padding:10px}
+.rackbox svg{display:block;width:100%;height:auto}
+.mag{transition:transform 1.2s ease}
+.glow{animation:glow 1.4s ease-in-out 2;transform-box:fill-box}
+@keyframes glow{50%{fill:#f97316}}
+.flame{animation:flick .25s ease-in-out infinite alternate;transform-box:fill-box;transform-origin:bottom center}
+@keyframes flick{to{transform:scaleY(1.12) scaleX(.94)}}
+@media(prefers-reduced-motion:reduce){.mag{transition:none}.glow,.flame{animation:none}}
+.scroll{overflow-x:auto}
+.fill{transition:fill .9s ease}.zn{transition:transform 20s linear;transform-box:fill-box;transform-origin:center}
+.bub{animation:rise var(--d) linear infinite;animation-delay:var(--dl);opacity:0}
+@keyframes rise{0%{transform:translateY(0);opacity:0}10%{opacity:.95}100%{transform:translateY(-110px);opacity:0}}
+.gas{transition:height 1.8s ease}
+.flash{animation:flash .6s ease-out forwards;transform-box:fill-box;transform-origin:center}
+@keyframes flash{0%{transform:scale(.2);opacity:1}100%{transform:scale(1.6);opacity:0}}
+.checks label{flex-direction:row;align-items:center;gap:10px;color:var(--ink);font-size:15px;padding:3px 0}.checks input{width:20px;height:20px}
+.series{display:flex;flex-wrap:wrap;gap:4px;margin:6px 0 10px}.series span{font:700 14px "Noto Sans";padding:4px 7px;border-radius:6px;background:var(--soft);border:1px solid var(--line)}
+.series span.h{background:#fde68a;color:#10131a;border-color:#f59e0b}.series span.m{outline:2px solid var(--acc)}.res{transition:opacity 2.5s ease}.drop{transition:r 2.5s ease,opacity 2.5s ease}
+.falling{animation:fall .5s ease-in}@keyframes fall{from{transform:translateY(-30px);opacity:1}to{transform:translateY(40px);opacity:0}}.tb{cursor:pointer}.tb:hover .gl{stroke:var(--acc)}
+.bub{animation:rise var(--d) linear infinite;animation-delay:var(--dl);opacity:0}
+@keyframes rise{0%{transform:translateY(0);opacity:0}10%{opacity:.95}100%{transform:translateY(-80px);opacity:0}}
+.smoke{animation:smoke 2.6s ease-out infinite;opacity:0}
+@keyframes smoke{0%{transform:translateY(0) scale(.6);opacity:0}20%{opacity:.6}100%{transform:translateY(-70px) scale(1.4);opacity:0}}
+@media(prefers-reduced-motion:reduce){.bub,.smoke{animation:none;opacity:.6}}
+table{width:100%;border-collapse:collapse;font-size:14px;min-width:560px}
+th,td{padding:5px;border-bottom:1px solid var(--line);text-align:left;vertical-align:middle}
+th{font-size:13px;color:var(--mute);font-weight:600}
+td:first-child{font-weight:600;font-size:14px;width:130px}
+td select{padding:6px;font-size:13px}
+.eq{display:flex;flex-wrap:wrap;align-items:center;gap:8px;font:600 17px "Noto Sans";margin-bottom:10px}
+.eq select{width:auto;padding:6px 8px;font:600 15px "Noto Sans"}
+.q{margin-bottom:10px}
+@media(max-width:860px){.grid{grid-template-columns:minmax(0,1fr)}.board{position:static;order:-1}}
+</style>
+</head>
+<body>
+<div class="wrap">
+<header>
+  <div><small data-i="lab"></small><h1 data-i="title"></h1></div>
+  <div class="lang" role="group" aria-label="Тіл"><button id="l-kk" class="on">Қазақша</button><button id="l-ru">Русский</button></div>
+</header>
+<div class="sheet">
+  <p class="note" data-i="demo"></p>
+  <p class="goal" data-i="goal"></p>
+  <p class="reag" data-i="reag"></p>
+  <div class="safety">
+    <svg width="34" height="34" viewBox="0 0 34 34" aria-hidden="true"><path d="M17 3 32 30H2Z" fill="#f59e0b"/><rect x="15.5" y="11" width="3" height="11" rx="1.5" fill="#fff"/><circle cx="17" cy="26" r="1.8" fill="#fff"/></svg>
+    <p data-i="safe"></p>
+    <label><input type="checkbox" id="goggles" style="width:22px;height:22px"><span data-i="safeok"></span></label>
+  </div>
+  <div class="grid">
+    <div>
+      <section class="step" id="st1"><h2 data-i="s1"></h2><p class="hint" data-i="s1h"></p>
+        <div class="btns"><button class="btn" data-b="build" data-i="bbuild"></button><button class="btn" data-b="seal" data-i="bseal"></button></div>
+        <div class="msg" id="m1" aria-live="polite"></div></section>
+      <section class="step" id="st2"><h2 data-i="s2"></h2><p class="hint" data-i="s2h"></p>
+        <div class="btns"><button class="btn" data-b="zn" data-i="bzn"></button><button class="btn" data-b="acid" data-i="bacid"></button><button class="btn" data-b="cork" data-i="bcork"></button><button class="btn" data-b="coll" data-i="bcoll"></button><button class="btn" id="wait"></button></div>
+        <div class="msg" id="m2" aria-live="polite"></div></section>
+      <section class="step" id="st3"><h2 data-i="s3"></h2><p class="hint" data-i="s3h"></p>
+        <div class="btns"><button class="btn" data-b="lamp" data-i="blamp"></button><button class="btn" id="test" data-i="btest"></button></div>
+        <div class="msg" id="m3" aria-live="polite"></div></section>
+      <section class="step" id="st4"><h2 data-i="s4"></h2><p class="hint" data-i="s4h"></p>
+        <table><tbody id="tbl"></tbody></table>
+        <p class="hint" style="margin-top:12px" data-i="qprop"></p>
+        <div class="checks" id="props"></div>
+        <div class="eq" id="weq" style="margin-top:12px"></div>
+        <div class="btns"><button class="btn" id="chk4" data-i="check"></button></div>
+        <div class="msg" id="m4" aria-live="polite"></div></section>
+      <section class="step" id="st5"><h2 data-i="s5"></h2>
+        <div class="q"><label><span data-i="q3"></span><textarea id="a1"></textarea></label></div>
+        <div class="q"><label><span data-i="q4"></span><textarea id="a2"></textarea></label></div>
+        <div class="btns"><button class="btn" id="send" data-i="send"></button></div>
+        <div class="msg" id="m5" aria-live="polite"></div></section>
+    </div>
+    <div class="board"><div class="rackbox"><svg id="scene" viewBox="0 0 560 420" aria-label="apparatus"></svg></div></div>
+  </div>
+</div>
+</div>
+<script>
+{
+const T={
+kk:{lab:"7-сынып · 10-зертханалық жұмыс",title:"Сутекке сапалық реакция",demo:"Үлгі нұсқа: тіркелу және жұмысты мұғалімге жіберу толық сайтта қосылады.",
+goal:"Мақсаты: мырыш пен тұз қышқылынан сутек алып, оны сапалық реакция арқылы тану және тазалығын тексеру.",
+reag:"Реактивтер: мырыш түйіршіктері, тұз қышқылының сұйылтылған ерітіндісі. Құрал-жабдықтар: тұрғы, сынауықтар, газ жүретін түтік, спиртшам, сіріңке.",
+safe:"Қышқыл ерітінділерімен және қыздыру құралдарымен жұмыс жасау ережелерін сақта. Сутек ауамен араласқанда жарылғыш қоспа түзеді: сынауықты жалынға тек аузын төмен қаратып апар.",safeok:"Ережені оқыдым",
+s1:"1-қадам. Құрылғыны құрастыр",s1h:"Газ алуға арналған құрылғыны құрастырып, оның герметикалығын тексер.",bbuild:"Құрылғыны құрастыру",bseal:"Герметикалығын тексеру",sealed:"Сынауықты алақанмен жылытқанда түтіктің ұшынан ауа көпіршіктері шықты: құрылғы герметикалық.",
+s2:"2-қадам. Сутекті жина",s2h:"Сынауыққа 2 түйір мырыш салып, үстіне 2 мл сұйылтылған тұз қышқылын құй. Сынауықты газ жүретін түтігі бар тығынмен жауып, екінші ұшына тағы бір сынауықтың аузын төмен қаратып кигіз. Сынауық газға толғанша күте тұр.",
+bzn:"2 түйір мырыш салу",bacid:"2 мл HCl құю",bcork:"Тығынмен жабу",bcoll:"Сынауықты аузын төмен кигізу",bwait:"Күту",fill:"Сынауықтың {p}% сутекке толды.",
+s3:"3-қадам. Сутектің тазалығын тексер",s3h:"Сутекке толған сынауықты жоғары қаратпай, спиртшамның жалынына апарып, сутектің «тазалығын» тексер. Не байқадың?",
+blamp:"Спиртшамды жағу",btest:"Сынауықты жалынға апару",
+loud:"Қатты «шақылдақ» дыбыс шықты! Сутек ауамен араласқан, яғни таза емес. Сынауықты қайта толтырып, тағы тексер.",soft:"Ақырын «пық» деген дыбыс шықты: сутек таза!",
+s4:"4-қадам. Бақылауыңды жаз",s4h:"Не байқадың? Сутектің қандай физикалық қасиеттерін анықтадың?",
+rows:["Мырышқа тұз қышқылын қосқанда","Таза сутегі бар сынауықты жалынға апарғанда"],
+o:[["—","Газ көпіршіктері бөлінді","Тұнба түзілді","Өзгеріс жоқ"],["—","Ақырын «пық» деген дыбыс шықты","Ештеңе болмады","Сынауық ішінде жалын ұзақ жанды"]],
+qprop:"Тәжірибе бойынша сутектің физикалық қасиеттерін белгіле:",props:["Түссіз газ","Ауадан ауыр","Ауадан жеңіл (сынауық аузы төмен қаратылып жиналды)","Жасыл түсті"],
+w:["мырыш","тұз қышқылы","мырыш хлориді","сутек","оттек"],
+check:"Тексеру",ok4:"Дұрыс! Мырыш + тұз қышқылы → мырыш хлориді + сутек. Сутек — түссіз, ауадан жеңіл газ.",bad4:"Тағы бір қара: қате бар.",
+s5:"5-қадам. Сұрақтар",q3:"3. Сутекті қалай танып білуге болатынын түсіндір.",q4:"4. Тәжірибе жүргізу үшін неліктен сутектің тазалығын тексеру қажет?",
+send:"Мұғалімге жіберу",sent:"Үлгіде жіберу әлі жұмыс істемейді. Толық сайтта жұмыс мұғалімнің бетіне түседі.",empty:"Алдымен барлық сұраққа жауап бер."},
+ru:{lab:"7 класс · Лабораторная работа №10",title:"Качественная реакция на водород",demo:"Демо-версия: регистрация и отправка работы учителю появятся в полной версии сайта.",
+goal:"Цель: получить водород из цинка и соляной кислоты, распознать его качественной реакцией и проверить на чистоту.",
+reag:"Реактивы: гранулы цинка, разбавленный раствор соляной кислоты. Оборудование: штатив, пробирки, газоотводная трубка, спиртовка, спички.",
+safe:"Соблюдай правила работы с растворами кислот и нагревательными приборами. Смесь водорода с воздухом взрывоопасна: подноси пробирку к пламени только отверстием вниз.",safeok:"Правила прочитаны",
+s1:"Шаг 1. Собери прибор",s1h:"Собери прибор для получения газа и проверь его на герметичность.",bbuild:"Собрать прибор",bseal:"Проверить герметичность",sealed:"При нагревании пробирки ладонью из конца трубки выходят пузырьки воздуха: прибор герметичен.",
+s2:"Шаг 2. Собери водород",s2h:"Положи в пробирку 2 гранулы цинка и прилей 2 мл разбавленной соляной кислоты. Закрой пробирку пробкой с газоотводной трубкой, на её второй конец надень другую пробирку отверстием вниз. Подожди, пока пробирка заполнится газом.",
+bzn:"Положить 2 гранулы цинка",bacid:"Прилить 2 мл HCl",bcork:"Закрыть пробкой",bcoll:"Надеть пробирку отверстием вниз",bwait:"Подождать",fill:"Пробирка заполнена водородом на {p}%.",
+s3:"Шаг 3. Проверь водород на чистоту",s3h:"Не переворачивая пробирку с водородом, поднеси её к пламени спиртовки и проверь водород на «чистоту». Что ты наблюдаешь?",
+blamp:"Зажечь спиртовку",btest:"Поднести пробирку к пламени",
+loud:"Раздался громкий «лающий» звук! Водород смешан с воздухом, то есть нечистый. Заполни пробирку снова и проверь ещё раз.",soft:"Раздался тихий хлопок «пах»: водород чистый!",
+s4:"Шаг 4. Запиши наблюдения",s4h:"Что ты наблюдал? Какие физические свойства водорода ты определил?",
+rows:["При добавлении соляной кислоты к цинку","При поднесении пробирки с чистым водородом к пламени"],
+o:[["—","Выделились пузырьки газа","Выпал осадок","Изменений нет"],["—","Раздался тихий хлопок","Ничего не произошло","Пламя долго горело внутри пробирки"]],
+qprop:"Отметь физические свойства водорода по результатам опыта:",props:["Бесцветный газ","Тяжелее воздуха","Легче воздуха (собирали в пробирку отверстием вниз)","Зелёного цвета"],
+w:["цинк","соляная кислота","хлорид цинка","водород","кислород"],
+check:"Проверить",ok4:"Верно! Цинк + соляная кислота → хлорид цинка + водород. Водород — бесцветный газ, легче воздуха.",bad4:"Посмотри ещё раз: есть ошибка.",
+s5:"Шаг 5. Вопросы",q3:"3. Объясни, как можно распознать водород.",q4:"4. Почему для проведения опыта необходимо проверять водород на чистоту?",
+send:"Отправить учителю",sent:"В демо-версии отправка пока не работает. В полной версии работа попадёт на страницу учителя.",empty:"Сначала ответь на все вопросы."}};
+let lang="kk",fill=0,pure=false,testing=null,done4=false;const S={build:0,seal:0,zn:0,acid:0,cork:0,coll:0,lamp:0};const tv={},wv={},pv={};
+const $=id=>document.getElementById(id),t=k=>T[lang][k];
+function bub(x,y,n,dur,h){let s="";for(let k=0;k<n;k++){const cx=x+(k*11)%30-15,d=(dur*(.8+(k%5)/10)).toFixed(2);s+=`<circle class="bub" cx="${cx}" cy="${y}" r="${1.8+(k%3)}" fill="#fff" stroke="#9fb7c7" style="--d:${d}s;--dl:${(-k*dur/n).toFixed(2)}s"/>`}return s}
+function sound(loud){try{const A=window.AudioContext||window.webkitAudioContext;if(!A)return;const c=new A(),len=loud?0.35:0.12,buf=c.createBuffer(1,c.sampleRate*len,c.sampleRate),d=buf.getChannelData(0);for(let i=0;i<d.length;i++)d[i]=(Math.random()*2-1)*Math.pow(1-i/d.length,loud?2:4);const s=c.createBufferSource(),g=c.createGain();g.gain.value=loud?0.9:0.25;s.buffer=buf;s.connect(g).connect(c.destination);s.start()}catch(e){}}
+function render(){
+  let h="";
+  if(!S.build){h+=`<text x="280" y="210" text-anchor="middle" font-size="15" fill="var(--mute)">…</text>`;$("scene").innerHTML=h;return}
+  // left stand + generator tube
+  h+=`<rect x="40" y="390" width="150" height="10" rx="3" fill="#6b7280"/><rect x="56" y="70" width="8" height="320" fill="#6b7280"/><rect x="60" y="210" width="60" height="6" fill="#6b7280"/><rect x="104" y="204" width="22" height="18" rx="3" fill="#374151"/>`;
+  const x=110,W=44,TOP=150,BOT=360;
+  h+=`<clipPath id="g1"><rect x="${x}" y="${TOP}" width="${W}" height="${BOT-TOP}" rx="${W/2}"/><rect x="${x}" y="${TOP}" width="${W}" height="${(BOT-TOP)/2}"/></clipPath><g clip-path="url(#g1)"><rect x="${x}" y="${TOP}" width="${W}" height="${BOT-TOP}" fill="var(--glass)"/>`;
+  if(S.acid)h+=`<rect x="${x}" y="${BOT-80}" width="${W}" height="80" fill="rgba(200,228,242,.55)"/>`;
+  if(S.zn)h+=`<ellipse cx="${x+14}" cy="${BOT-14}" rx="9" ry="7" fill="#9aa6b2" stroke="#6b7785"/><ellipse cx="${x+30}" cy="${BOT-12}" rx="9" ry="7" fill="#9aa6b2" stroke="#6b7785"/>`;
+  if(S.zn&&S.acid)h+=bub(x+W/2,BOT-24,14,1.2);
+  h+=`</g><path d="M${x} ${TOP-8}V${BOT-W/2}a${W/2} ${W/2} 0 0 0 ${W} 0V${TOP-8}" fill="none" stroke="var(--glassline)" stroke-width="2.4"/>`;
+  if(S.cork)h+=`<path d="M${x-2} ${TOP-24}H${x+W+2}L${x+W-2} ${TOP+4}H${x+2}Z" fill="#7c5a3c"/>`;
+  // delivery tube
+  const tx=x+W/2;
+  if(S.cork)h+=`<path d="M${tx} ${TOP+4}V100H350V340H400V${S.coll?190:320}" fill="none" stroke="light-dark(#9fb7c7,#6c8597)" stroke-width="5"/>`;
+  else h+=`<path d="M${tx+60} 120H400" fill="none" stroke="light-dark(#9fb7c7,#6c8597)" stroke-width="5" opacity=".5"/>`;
+  if(S.seal&&!S.zn&&S.cork)h+=bub(400,316,6,1.4);
+  // right stand + collecting tube (inverted)
+  h+=`<rect x="420" y="390" width="120" height="10" rx="3" fill="#6b7280"/><rect x="500" y="70" width="8" height="320" fill="#6b7280"/><rect x="440" y="150" width="62" height="6" fill="#6b7280"/>`;
+  if(S.coll&&testing===null){const cx=400,CW=40,CT=110,CB=300;
+    h+=`<clipPath id="g2"><rect x="${cx-CW/2}" y="${CT}" width="${CW}" height="${CB-CT}" rx="${CW/2}"/><rect x="${cx-CW/2}" y="${CT+(CB-CT)/2}" width="${CW}" height="${(CB-CT)/2}"/></clipPath><g clip-path="url(#g2)"><rect x="${cx-CW/2}" y="${CT}" width="${CW}" height="${CB-CT}" fill="var(--glass)"/>`;
+    h+=`<rect class="gas" id="gas" x="${cx-CW/2}" y="${CT}" width="${CW}" height="${(CB-CT)*fill/100}" fill="rgba(186,230,253,.55)"/></g>`;
+    h+=`<path d="M${cx-CW/2} ${CB+6}V${CT+CW/2}a${CW/2} ${CW/2} 0 0 1 ${CW} 0V${CB+6}" fill="none" stroke="var(--glassline)" stroke-width="2.4"/><rect x="${cx+CW/2-2}" y="146" width="44" height="14" rx="3" fill="#374151"/>`;
+    h+=`<text x="${cx}" y="${CT-10}" text-anchor="middle" font-size="14" font-weight="700" fill="var(--acc)">H₂ ${fill}%</text>`}
+  if(S.zn&&S.acid&&S.cork&&S.coll&&testing===null&&fill<100)h+=bub(400,200,8,1.2);
+  // lamp + test
+  if(S.lamp){const lx=300;h+=`<path class="flame" d="M${lx-9} 350Q${lx-12} 326 ${lx} 302Q${lx+12} 326 ${lx+9} 350Z" fill="#fb923c"/><path d="M${lx-26} 384Q${lx-28} 356 ${lx} 352Q${lx+28} 356 ${lx+26} 384Z" style="fill:light-dark(#dbe7ee,#2b3f4c)" stroke="var(--glassline)" stroke-width="2"/>`;
+    if(testing!==null){const cx=lx+6,CT=170,CB=300,CW=40;h+=`<g transform="rotate(-25 ${cx} ${CB})"><path d="M${cx-CW/2} ${CB}V${CT+CW/2}a${CW/2} ${CW/2} 0 0 1 ${CW} 0V${CB}" fill="var(--glass)" stroke="var(--glassline)" stroke-width="2.4"/></g>`;
+      h+=`<circle class="flash" cx="${lx}" cy="300" r="${testing==="loud"?60:22}" fill="${testing==="loud"?"#f97316":"#fde68a"}"/>`;
+      h+=`<text x="${lx}" y="140" text-anchor="middle" font-size="${testing==="loud"?28:18}" font-weight="700" fill="${testing==="loud"?"#ea580c":"var(--acc)"}">${testing==="loud"?(lang==="kk"?"ШАҚ!":"ГАВ!"):(lang==="kk"?"пық":"пах")}</text>`}}
+  $("scene").innerHTML=h;
+}
+const DEP={seal:"build",zn:"seal",acid:"zn",cork:"acid",coll:"cork",lamp:"coll"};
+function renderSteps(){
+  const g=$("goggles").checked;$("st1").classList.toggle("off",!g);$("st2").classList.toggle("off",!S.seal);$("st3").classList.toggle("off",!S.coll);
+  document.querySelectorAll("[data-b]").forEach(b=>{const k=b.dataset.b,done=!!S[k],en=!DEP[k]||S[DEP[k]];b.disabled=done||!en;b.classList.toggle("done",done)});
+  $("wait").textContent=t("bwait")+(S.coll?` (${fill}%)`:"");$("wait").disabled=!S.coll||fill>=100||pure;
+  $("test").disabled=!S.lamp||fill===0||pure;$("test").classList.toggle("done",pure);
+  $("st4").classList.toggle("off",!pure);$("st5").classList.toggle("off",!done4);
+}
+function opts(arr,v){return arr.map((s,i)=>`<option value="${i||""}" ${String(v||"")===String(i||"")?"selected":""}>${s}</option>`).join("")}
+function wsel(id){return `<select id="${id}"><option value="">?</option>${t("w").map((w,i)=>`<option value="${i+1}" ${wv[id]==i+1?"selected":""}>${w}</option>`).join("")}</select>`}
+function renderTable(){$("tbl").innerHTML=t("rows").map((r,i)=>`<tr><td>${r}</td><td><select data-r="${i}">${opts(t("o")[i],tv[i])}</select></td></tr>`).join("");
+  $("props").innerHTML=t("props").map((p,i)=>`<label><input type="checkbox" data-p="${i}" ${pv[i]?"checked":""}>${p}</label>`).join("");
+  $("weq").innerHTML=`${wsel("w1")} + ${wsel("w2")} <span>→</span> ${wsel("w3")} + ${wsel("w4")}`}
+function applyLang(){
+  document.documentElement.lang=lang;
+  document.querySelectorAll("[data-i]").forEach(el=>{const v=T[lang][el.dataset.i];if(typeof v==="string")el.textContent=v});
+  $("l-kk").classList.toggle("on",lang==="kk");$("l-ru").classList.toggle("on",lang==="ru");
+  document.querySelectorAll(".msg").forEach(m=>m.textContent="");
+  render();renderSteps();renderTable();
+}
+function msg(id,text,ok){const m=$(id);m.textContent=text;m.className="msg "+(ok?"ok":"bad")}
+$("l-kk").onclick=()=>{lang="kk";applyLang()};$("l-ru").onclick=()=>{lang="ru";applyLang()};
+$("goggles").onchange=renderSteps;
+document.querySelector(".grid").addEventListener("click",e=>{const b=e.target.closest("[data-b]");if(!b||b.disabled)return;const k=b.dataset.b;S[k]=1;testing=null;render();renderSteps();if(k==="seal")msg("m1",t("sealed"),true)});
+$("wait").onclick=()=>{testing=null;const old=fill;fill=Math.min(100,fill+50);render();const g=$("gas");if(g){const full=g.getAttribute("height");g.setAttribute("height",full*old/fill||0);requestAnimationFrame(()=>requestAnimationFrame(()=>g.setAttribute("height",full)))}renderSteps();msg("m2",t("fill").replace("{p}",fill),true)};
+$("test").onclick=()=>{if(fill<100){testing="loud";sound(true);fill=0;msg("m3",t("loud"),false)}else{testing="soft";sound(false);pure=true;msg("m3",t("soft"),true)}render();renderSteps()};
+$("tbl").addEventListener("change",e=>{const r=e.target.dataset.r;if(r==null)return;tv[r]=e.target.value;e.target.classList.remove("ok","bad")});
+$("props").addEventListener("change",e=>{const p=e.target.dataset.p;if(p!=null)pv[p]=e.target.checked});
+$("weq").addEventListener("change",e=>{if(e.target.id)wv[e.target.id]=e.target.value;e.target.classList.remove("ok","bad")});
+$("chk4").onclick=()=>{let ok=true;document.querySelectorAll("#tbl select").forEach(s=>{const g=s.value==="1";s.classList.toggle("ok",g);s.classList.toggle("bad",!g);if(!g)ok=false});
+  [1,0,1,0].forEach((w,i)=>{const lab=document.querySelector(`[data-p="${i}"]`).parentElement,good=!!pv[i]===!!w;lab.style.color=good?"":"var(--bad)";if(!good)ok=false});
+  const v=["w1","w2","w3","w4"].map(id=>$(id).value),L=[v[0],v[1]].sort().join(),R=[v[2],v[3]].sort().join(),eq=L==="1,2"&&R==="3,4";["w1","w2","w3","w4"].forEach(id=>$(id).className=eq?"ok":"bad");if(!eq)ok=false;
+  done4=ok;renderSteps();ok?msg("m4",t("ok4"),true):msg("m4",t("bad4"),false)};
+$("send").onclick=()=>{const f=["a1","a2"].every(id=>$(id).value.trim());msg("m5",f?t("sent"):t("empty"),f)};
+applyLang();
+}
+</script>
+<script src="../embed.js"></script>
+</body>
+</html>

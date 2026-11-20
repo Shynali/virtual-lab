@@ -1,0 +1,231 @@
+<!DOCTYPE html>
+<html lang="kk">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>IIA топ элементтері</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans:wght@400;600;700&family=Noto+Serif:wght@600;700&display=swap" rel="stylesheet">
+<style>
+/* VOICE: calm school lab workbook, clear and encouraging (grade 7)
+   IDEA: a workbench sheet — two twin tubes, acid and alkali, each with an aluminium granule
+   PICTURE: both tubes starting slowly, then fizzing hard once the oxide film is gone: aluminium reacts with both
+   COLOUR and TYPE: white sheet on deep lab-teal; the universal-indicator rainbow; Noto Serif + Noto Sans
+   LAYOUT: steps left, scene right (sticky) with view switch; stacks on phones */
+:root{color-scheme:light dark;
+--bg:light-dark(#0f4c5c,#0a2d36);--sheet:light-dark(#ffffff,#13202a);--ink:light-dark(#10131a,#e7edf2);
+--mute:light-dark(#566170,#9fb0bf);--line:light-dark(#d5dde5,#2b3d4b);--soft:light-dark(#eef5f7,#182a35);
+--acc:light-dark(#0f4c5c,#5cc2d6);--ok:light-dark(#12733a,#4ade80);--bad:light-dark(#b91c1c,#f87171);
+--warn:light-dark(#fff4d6,#3a2f12);--glass:light-dark(#f7fbfd,#1d2f3b);--glassline:light-dark(#8aa1b1,#6c8597)}
+:root[data-theme=light]{color-scheme:light}:root[data-theme=dark]{color-scheme:dark}
+*{box-sizing:border-box;min-width:0}
+body{margin:0;background:var(--bg);color:var(--ink);font:16px/1.55 "Noto Sans",system-ui,sans-serif;overflow-x:clip}
+.wrap{max-width:1240px;margin:0 auto;padding:clamp(14px,3vw,36px) max(3vw,12px)}
+header{display:flex;flex-wrap:wrap;gap:12px;align-items:flex-end;justify-content:space-between;color:#fff;margin-bottom:18px}
+header small{display:block;opacity:.8;font-size:14px}
+h1{font:700 clamp(24px,3.6vw,38px)/1.08 "Noto Serif",Georgia,serif;margin:2px 0 0;text-wrap:balance;max-width:26ch}
+.lang{display:flex;background:rgba(255,255,255,.14);border-radius:999px;padding:4px}
+.lang button{border:0;background:none;color:#fff;font:600 15px "Noto Sans";padding:8px 16px;border-radius:999px;cursor:pointer;min-height:40px}
+.lang button.on{background:#fff;color:#0f4c5c}
+.sheet{background:var(--sheet);border-radius:18px;box-shadow:0 18px 40px rgba(0,0,0,.25);padding:clamp(16px,2.6vw,30px)}
+.note{font-size:13px;color:var(--mute);margin:0 0 10px}
+.goal{margin:0 0 6px;max-width:70ch}
+.reag{margin:0 0 16px;color:var(--mute);font-size:15px;max-width:70ch}
+.safety{display:flex;gap:12px;align-items:center;flex-wrap:wrap;background:var(--warn);border-radius:12px;padding:12px 14px;margin-bottom:18px}
+.safety p{margin:0;flex:1 1 260px;font-weight:600}
+.safety label{flex-direction:row;align-items:center;gap:8px;color:var(--ink);font-weight:600;cursor:pointer}
+.grid{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1.05fr);gap:clamp(16px,3vw,36px);align-items:start}
+.step{border-top:1px solid var(--line);padding:14px 0}
+.step:first-child{border-top:0;padding-top:0}
+.step.off{opacity:.45;pointer-events:none}
+h2{font:700 19px/1.2 "Noto Serif",Georgia,serif;margin:0 0 6px}
+.hint{color:var(--mute);font-size:15px;margin:0 0 8px}
+label{font-size:14px;color:var(--mute);display:flex;flex-direction:column;gap:4px}
+textarea,select{font:16px "Noto Sans";color:var(--ink);background:var(--sheet);border:1.5px solid var(--line);border-radius:10px;padding:10px 12px;width:100%}
+textarea:focus,select:focus,button:focus-visible{outline:3px solid color-mix(in srgb,var(--acc) 45%,transparent);outline-offset:1px}
+.ok{border-color:var(--ok)!important}.bad{border-color:var(--bad)!important}
+textarea{min-height:76px;resize:vertical}
+.btns{display:flex;flex-wrap:wrap;gap:8px;margin-top:8px}
+.btn{border:0;border-radius:10px;padding:10px 14px;font:600 15px "Noto Sans";cursor:pointer;min-height:44px;background:var(--acc);color:light-dark(#fff,#08202a)}
+.btn.done{background:var(--soft);color:var(--ok)}
+.btn:disabled{opacity:.45;cursor:not-allowed}.btn.done:disabled{opacity:1}
+.msg{margin-top:8px;font-size:15px;min-height:1.4em}
+.msg.ok{color:var(--ok)}.msg.bad{color:var(--bad)}
+.board{position:sticky;top:12px}
+.seg{display:flex;background:var(--soft);border-radius:10px;padding:4px;gap:4px;margin-bottom:10px}
+.seg button{flex:1;border:0;background:none;color:var(--ink);font:600 14px "Noto Sans";padding:8px 10px;border-radius:8px;cursor:pointer;min-height:40px}
+.seg button.on{background:var(--sheet);box-shadow:0 1px 4px rgba(0,0,0,.15)}
+.seg button:disabled{opacity:.4;cursor:default}
+.rackbox{background:var(--soft);border-radius:16px;padding:10px}
+.rackbox svg{display:block;width:100%;height:auto}
+.mag{transition:transform 1.2s ease}
+.glow{animation:glow 1.4s ease-in-out 2;transform-box:fill-box}
+@keyframes glow{50%{fill:#f97316}}
+.flame{animation:flick .25s ease-in-out infinite alternate;transform-box:fill-box;transform-origin:bottom center}
+@keyframes flick{to{transform:scaleY(1.12) scaleX(.94)}}
+@media(prefers-reduced-motion:reduce){.mag{transition:none}.glow,.flame{animation:none}}
+.scroll{overflow-x:auto}
+.seg{display:flex;background:var(--soft);border-radius:10px;padding:4px;gap:4px;margin-bottom:10px;flex-wrap:wrap}
+.seg button{flex:1;border:0;background:none;color:var(--ink);font:600 14px "Noto Sans";padding:8px 10px;border-radius:8px;cursor:pointer;min-height:40px}
+.seg button.on{background:var(--sheet);box-shadow:0 1px 4px rgba(0,0,0,.15)}
+.brown{transition:opacity 2s ease}.pk{transition:fill 1.6s ease}.ca{transition:transform 4s ease-in-out,opacity 6s ease;transform-box:fill-box;transform-origin:center}.water{animation:fall2 .6s linear infinite}@keyframes fall2{from{transform:translateY(-10px);opacity:.9}to{transform:translateY(30px);opacity:.2}}.eq input{width:44px;padding:6px;text-align:center;font:600 16px "Noto Sans";border:1.5px solid var(--line);border-radius:8px;background:var(--sheet);color:var(--ink)}
+.tray{display:flex;flex-wrap:wrap;gap:8px;margin-top:10px}
+.tray small{width:100%;font-weight:700;color:var(--mute);font-size:13px;margin-top:4px}
+.chip{border:2px solid var(--line);background:var(--sheet);color:var(--ink);border-radius:999px;padding:6px 12px;font:600 14px "Noto Sans";cursor:pointer;min-height:40px}
+.chip.sel{border-color:var(--acc);background:var(--soft)}.chip.done{color:var(--ok)}.chip:disabled{opacity:.4;cursor:default}
+.scroll{overflow-x:auto}td select{padding:6px;font-size:13px}td input{width:70px;padding:6px;text-align:right;font:600 15px "Noto Sans";color:var(--ink);background:var(--sheet);border:1.5px solid var(--line);border-radius:8px}
+.two{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:0 18px}@media(max-width:600px){.two{grid-template-columns:minmax(0,1fr)}}
+.bub{animation:rise var(--d) linear infinite;animation-delay:var(--dl);opacity:0}
+@keyframes rise{0%{transform:translateY(0);opacity:0}10%{opacity:.95}100%{transform:translateY(-80px);opacity:0}}
+.smoke{animation:smoke 2.6s ease-out infinite;opacity:0}
+@keyframes smoke{0%{transform:translateY(0) scale(.6);opacity:0}20%{opacity:.6}100%{transform:translateY(-70px) scale(1.4);opacity:0}}
+@media(prefers-reduced-motion:reduce){.bub,.smoke{animation:none;opacity:.6}}
+table{width:100%;border-collapse:collapse;font-size:14px}
+th,td{padding:5px;border-bottom:1px solid var(--line);text-align:left;vertical-align:middle}
+th{font-size:13px;color:var(--mute);font-weight:600}
+td:first-child{font-weight:600;font-size:14px}
+td select{padding:6px;font-size:13px}
+.eq{display:flex;flex-wrap:wrap;align-items:center;gap:8px;font:600 17px "Noto Sans";margin-bottom:10px}
+.eq select{width:auto;padding:6px 8px;font:600 15px "Noto Sans"}
+.q{margin-bottom:10px}
+.toblue{animation:toblue 3.2s ease forwards}@keyframes toblue{from{fill:rgba(200,228,242,.55)}to{fill:#4f9cf5}}
+.shrink{animation:shrink 4.5s ease forwards;transform-box:fill-box;transform-origin:center bottom}@keyframes shrink{to{transform:scale(.15);opacity:.2}}
+.liq{transition:fill-opacity 2s ease}
+.fade{animation:fade 2.6s ease forwards}@keyframes fade{to{opacity:0}}
+.stir{animation:stir .5s ease-in-out 5;transform-box:fill-box;transform-origin:top center}@keyframes stir{50%{transform:rotate(9deg)}}
+@media(max-width:860px){.grid{grid-template-columns:minmax(0,1fr)}.board{position:static;order:-1}}
+</style>
+</head>
+<body>
+<div class="wrap">
+<header>
+  <div><small data-i="lab"></small><h1 data-i="title"></h1></div>
+  <div class="lang" role="group" aria-label="Тіл"><button id="l-kk" class="on">Қазақша</button><button id="l-ru">Русский</button></div>
+</header>
+<div class="sheet">
+  <p class="note" data-i="demo"></p>
+  <p class="goal" data-i="goal"></p>
+  <p class="reag" data-i="reag"></p>
+  <div class="safety">
+    <svg width="34" height="34" viewBox="0 0 34 34" aria-hidden="true"><path d="M17 3 32 30H2Z" fill="#f59e0b"/><rect x="15.5" y="11" width="3" height="11" rx="1.5" fill="#fff"/><circle cx="17" cy="26" r="1.8" fill="#fff"/></svg>
+    <p data-i="safe"></p>
+    <label><input type="checkbox" id="goggles" style="width:22px;height:22px"><span data-i="safeok"></span></label>
+  </div>
+  <div class="grid">
+    <div>
+      <section class="step" id="st1"><h2 data-i="e1"></h2><p class="hint" data-i="e1h"></p>
+        <p style="margin:6px 0;font-weight:700" id="chA"></p>
+        <div class="tray" id="trA"></div>
+        <div class="msg" id="m1" aria-live="polite"></div>
+        <p style="margin:14px 0 6px;font-weight:700" id="chB"></p>
+        <div class="tray" id="trB"></div>
+        <div class="msg" id="m2" aria-live="polite"></div></section>
+      <section class="step" id="st2"><h2 data-i="e2"></h2><p class="hint" data-i="e2h"></p>
+        <div class="btns"><button class="btn" data-b="php" data-i="bphp"></button><button class="btn" data-b="acid" id="bacid"></button><button class="btn" data-b="blow" data-i="bblow"></button></div>
+        <div class="msg" id="m3" aria-live="polite"></div></section>
+      <section class="step" id="st3"><h2 data-i="s3"></h2><p class="hint" data-i="s3h"></p>
+        <div id="qs"></div>
+        <div id="eqs" style="margin-top:12px"></div>
+        <div class="btns"><button class="btn" id="chk" data-i="check"></button></div>
+        <div class="msg" id="m4" aria-live="polite"></div></section>
+      <section class="step" id="st4"><h2 data-i="s4"></h2>
+        <div class="q"><label><span data-i="q1"></span><textarea id="a1"></textarea></label></div>
+        <div class="btns"><button class="btn" id="send" data-i="send"></button></div>
+        <div class="msg" id="m5" aria-live="polite"></div></section>
+    </div>
+    <div class="board"><div class="rackbox"><svg id="scene" viewBox="0 0 560 400" aria-label="scene"></svg></div></div>
+  </div>
+</div>
+</div>
+<script>
+{
+const T={
+kk:{lab:"10-сынып · 6-зертханалық жұмыс",title:"IIA топ элементтері мен олардың қосылыстарының қасиеттерін зерделеу",demo:"Үлгі нұсқа: тіркелу және жұмысты мұғалімге жіберу толық сайтта қосылады.",
+goal:"Мақсаты: кальций мен магнийдің және олардың қосылыстарының өзгерістерін тәжірибе жүзінде жүзеге асырып, кальций гидроксидінің химиялық қасиеттерімен танысу.",
+reag:"Реактивтер: кальций, магний металдары, су, тұз қышқылының, күкірт қышқылының, натрий гидроксидінің, фенолфталеин ерітінділері. Құрал-жабдықтар: сынауықтар, тамшуырлар, шыны түтіктер.",
+safe:"Қыздырғыш құралдармен, қышқылдармен, сілтілермен жұмыс істеу ережесін сақта: қорғау көзілдірігін ки. Кальцийді қолмен ұстама.",safeok:"Ережені оқыдым",
+e1:"1-тәжірибе",e1h:"Келесі өзгерістерді жүзеге асыруға болатын тәжірибелерді жаса: әр өзгеріс үшін қажетті реактивті таңда.",
+pick:"Реактив таңда:",wrong:"Бұл реактивпен бұл өзгеріс жүрмейді. Қайта ойла.",
+A:["Ca → Ca(OH)₂: кальций сумен әрекеттесіп, газ (H₂) бөлінді, ерітінді лайланды.","Ca(OH)₂ → CaCl₂: тұз қышқылын қосқанда ерітінді мөлдір болды."],
+B:["Mg → MgCl₂: магний тұз қышқылында газ (H₂) бөліп ериді.","MgCl₂ → Mg(OH)₂: сілті қосқанда ақ тұнба түзілді.","Mg(OH)₂ → MgSO₄: күкірт қышқылында тұнба еріп кетті."],
+e2:"2-тәжірибе. Кальций гидроксидінің қасиеттері",e2h:"1) Кальций гидроксидін фенолфталеинмен анықта. 2) Ерітіндіге түсі өзгергенше тұз қышқылын қос. 3) Кальций гидроксиді бар екінші сынауыққа түтікшемен үрле. Не байқадың?",
+bphp:"C-ға фенолфталеин тамызу",bacid:"HCl тамызу",bblow:"D-ға түтікшемен үрлеу",phpm:"Ерітінді таңқурай түске боялды — ортасы сілтілік.",ac1:"Түсі әлсіреп барады…",ac2:"Ерітінді түссізденді — бейтараптану жүрді.",blowm:"Әк суы лайланды — суда ерімейтін CaCO₃ түзілді.",
+s3:"Бақылаулар мен теңдеулер",s3h:"Жауапты таңда да, теңдеулердегі коэффициенттерді қой (1 болса, бос қалдыруға болады).",
+qs:[["Фенолфталеин Ca(OH)₂ ерітіндісінде қандай түске боялды?",["—","Таңқурай","Көк","Түссіз"],"1"],["Mg(OH)₂ тұнбасының түсі:",["—","Ақ","Көк","Қоңыр"],"1"],["Әк суына үрлегенде неге лайланды?",["—","Дем құрамындағы CO₂ әсерінен CaCO₃ тұнбасы түзілді","Оттек әсерінен","Су буланды"],"1"],["Сумен қай металл белсендірек әрекеттеседі?",["—","Кальций","Магний","Бірдей"],"1"],["IIA топта жоғарыдан төмен металдық қасиет:",["—","Күшейеді","Әлсірейді","Өзгермейді"],"1"]],
+check:"Тексеру",ok:"Барлығы дұрыс! IIA топ металдары белсенді, олардың гидроксидтері негіздік қасиет көрсетеді; кальций сумен магнийден белсендірек әрекеттеседі.",bad:"Қате жауаптар саны: ",
+eqm:"Реакция теңдеулері:",
+s4:"Қорытынды",q1:"Тәжірибелердің нәтижесін түсіндіріп, IIA топ элементтері туралы қорытынды жаса.",
+send:"Мұғалімге жіберу",sent:"Үлгіде жіберу әлі жұмыс істемейді. Толық сайтта жұмыс мұғалімнің бетіне түседі.",empty:"Алдымен сұраққа жауап бер.",lime:"әк суы"},
+ru:{lab:"10 класс · Лабораторная работа №6",title:"Изучение свойств элементов IIA группы и их соединений",demo:"Демо-версия: регистрация и отправка работы учителю появятся в полной версии сайта.",
+goal:"Цель: осуществить на опыте превращения кальция, магния и их соединений и познакомиться с химическими свойствами гидроксида кальция.",
+reag:"Реактивы: металлы кальций и магний, вода, растворы соляной кислоты, серной кислоты, гидроксида натрия, фенолфталеина. Оборудование: пробирки, пипетки, стеклянные трубки.",
+safe:"Соблюдай правила работы с нагревательными приборами, кислотами и щелочами: надень защитные очки. Не бери кальций руками.",safeok:"Правила прочитаны",
+e1:"Опыт 1",e1h:"Проведи опыты, с помощью которых можно осуществить следующие превращения: для каждого превращения выбери нужный реактив.",
+pick:"Выбери реактив:",wrong:"С этим реактивом такое превращение не произойдёт. Подумай ещё.",
+A:["Ca → Ca(OH)₂: кальций реагирует с водой, выделяется газ (H₂), раствор мутнеет.","Ca(OH)₂ → CaCl₂: при добавлении соляной кислоты раствор стал прозрачным."],
+B:["Mg → MgCl₂: магний растворяется в соляной кислоте с выделением газа (H₂).","MgCl₂ → Mg(OH)₂: при добавлении щёлочи выпал белый осадок.","Mg(OH)₂ → MgSO₄: в серной кислоте осадок растворился."],
+e2:"Опыт 2. Свойства гидроксида кальция",e2h:"1) Обнаружь гидроксид кальция фенолфталеином. 2) Добавь к раствору соляную кислоту до изменения окраски. 3) Подуй через трубочку во вторую пробирку с гидроксидом кальция. Что ты наблюдаешь?",
+bphp:"Фенолфталеин в C",bacid:"Добавить HCl",bblow:"Подуть в D через трубочку",phpm:"Раствор окрасился в малиновый цвет — среда щелочная.",ac1:"Окраска ослабевает…",ac2:"Раствор обесцветился — произошла нейтрализация.",blowm:"Известковая вода помутнела — образовался нерастворимый CaCO₃.",
+s3:"Наблюдения и уравнения",s3h:"Выбери ответ и расставь коэффициенты (если 1, поле можно оставить пустым).",
+qs:[["В какой цвет окрасился фенолфталеин в растворе Ca(OH)₂?",["—","Малиновый","Синий","Бесцветный"],"1"],["Цвет осадка Mg(OH)₂:",["—","Белый","Синий","Бурый"],"1"],["Почему известковая вода помутнела при продувании?",["—","Под действием CO₂ из выдыхаемого воздуха выпал осадок CaCO₃","Под действием кислорода","Вода испарилась"],"1"],["Какой металл активнее реагирует с водой?",["—","Кальций","Магний","Одинаково"],"1"],["Металлические свойства в IIA группе сверху вниз:",["—","Усиливаются","Ослабевают","Не меняются"],"1"]],
+check:"Проверить",ok:"Всё верно! Металлы IIA группы активны, их гидроксиды проявляют основные свойства; кальций реагирует с водой активнее магния.",bad:"Неверных ответов: ",
+eqm:"Уравнения реакций:",
+s4:"Вывод",q1:"Объясни результаты опытов и сделай вывод об элементах IIA группы.",
+send:"Отправить учителю",sent:"В демо-версии отправка пока не работает. В полной версии работа попадёт на страницу учителя.",empty:"Сначала ответь на вопрос.",lime:"известковая вода"}};
+const CHA=[["Ca","Ca(OH)₂","H₂O"],["Ca(OH)₂","CaCl₂","HCl"]],CHB=[["Mg","MgCl₂","HCl"],["MgCl₂","Mg(OH)₂","NaOH"],["Mg(OH)₂","MgSO₄","H₂SO₄"]],RG=["H₂O","HCl","NaOH","H₂SO₄"];
+let lang="kk",ok=false,a=0,b=0,acid=0;const S={php:0,blow:0};const qv={},ev={};
+const $=id=>document.getElementById(id),t=k=>T[lang][k];
+function bub(x,W,y,n,dur){let s="";for(let k=0;k<n;k++){const cx=x+7+(k*11)%(W-14),d=(dur*(.8+(k%5)/10)).toFixed(2);s+=`<circle class="bub" cx="${cx}" cy="${y}" r="${1.6+(k%3)}" fill="#fff" stroke="#9fb7c7" style="--d:${d}s;--dl:${(-k*dur/n).toFixed(2)}s"/>`}return s}
+const CLR="rgba(200,228,242,.55)";
+function tube(i){const x=40+i*130,W=60,TOP=100,BOT=300;let liq=null,lh=80,ex="",top="",lab=["A","B","C","D"][i];
+  if(i===0){if(a===0)ex=`<rect x="${x+20}" y="${BOT-22}" width="20" height="14" rx="3" fill="#cbd5e1" stroke="#64748b"/>`;
+    if(a>=1){liq=CLR;if(a===1){ex=`<rect x="${x}" y="${BOT-lh}" width="${W}" height="${lh}" fill="#dfe5ec" opacity=".95"/>`+bub(x,W,BOT-14,14,1.1);top="H₂↑"}}}
+  if(i===1){if(b===0)ex=`<path d="M${x+14} ${BOT-14}l32-6" stroke="#9ca3af" stroke-width="6" stroke-linecap="round"/>`;
+    if(b>=1){liq=CLR;if(b===1){ex=bub(x,W,BOT-14,16,1);top="H₂↑"}if(b===2){lh=95;ex=`<rect x="${x}" y="${BOT-lh}" width="${W}" height="${lh}" fill="#e2e8f0" opacity=".85"/><ellipse cx="${x+W/2}" cy="${BOT-12}" rx="24" ry="10" fill="#fff" stroke="rgba(0,0,0,.25)"/>`;top="Mg(OH)₂↓"}if(b===3)lh=105}}
+  if(i===2){liq=!S.php?CLR:acid>=3?CLR:acid>=1?"#f9a8d4":"#db2777";lh=80+acid*5}
+  if(i===3){liq=CLR;if(S.blow){ex=`<rect x="${x}" y="${BOT-lh}" width="${W}" height="${lh}" fill="#dfe5ec" opacity=".95"/>`;top="CaCO₃↓"}}
+  let h=`<clipPath id="c${i}"><rect x="${x}" y="${TOP}" width="${W}" height="${BOT-TOP}" rx="${W/2}"/><rect x="${x}" y="${TOP}" width="${W}" height="${(BOT-TOP)/2}"/></clipPath><g clip-path="url(#c${i})"><rect x="${x}" y="${TOP}" width="${W}" height="${BOT-TOP}" fill="var(--glass)"/>`;
+  if(liq)h+=`<rect x="${x}" y="${BOT-lh}" width="${W}" height="${lh}" style="fill:${liq}"/>`;
+  h+=ex+`</g><path d="M${x} ${TOP-8}V${BOT-W/2}a${W/2} ${W/2} 0 0 0 ${W} 0V${TOP-8}" fill="none" stroke="var(--glassline)" stroke-width="2.4"/><rect x="${x-5}" y="${TOP-12}" width="${W+10}" height="7" rx="3" fill="var(--glassline)"/>`;
+  if(i===3&&S.blow)h+=`<path d="M${x+W/2+6} ${TOP-50}V${BOT-20}" stroke="#94a3b8" stroke-width="5" fill="none"/>`;
+  const sub=[["Ca","Ca(OH)₂","CaCl₂"][a],["Mg","MgCl₂","Mg(OH)₂","MgSO₄"][b],"Ca(OH)₂",t("lime")][i];
+  h+=`<text x="${x+W/2}" y="${BOT+24}" text-anchor="middle" font-size="15" font-weight="700" fill="var(--ink)">${lab}</text><text x="${x+W/2}" y="${BOT+42}" text-anchor="middle" font-size="12" fill="var(--mute)">${sub}</text>`;
+  if(top)h+=`<text x="${x+W/2}" y="${TOP-24}" text-anchor="middle" font-size="13" font-weight="700" fill="var(--acc)">${top}</text>`;return h}
+function render(){let h="";for(let i=0;i<4;i++)h+=tube(i);$("scene").innerHTML=h}
+function chainText(ch,n){return ch.map((s,i)=>(i===0?s[0]:"")+` <span style="color:${i<n?"var(--ok)":"var(--mute)"}">→</span> `+s[1]).join("")}
+function renderTrays(){$("chA").innerHTML="а) "+chainText(CHA,a);$("chB").innerHTML="ә) "+chainText(CHB,b);
+  const tr=(id,ch,n)=>{$(id).innerHTML=n>=ch.length?"":`<small>${ch[n][0]} → ${ch[n][1]} · ${t("pick")}</small>`+RG.map(r=>`<button class="chip" data-r="${r}" data-c="${id}">${r}</button>`).join("")};
+  tr("trA",CHA,a);tr("trB",CHB,b)}
+function opts(arr,v){return arr.map((s,i)=>`<option value="${i||""}" ${String(v||"")===String(i||"")?"selected":""}>${s}</option>`).join("")}
+const E=[[["k0","1"],"Ca + ",["k1","2"],"H₂O → ",["k2","1"],"Ca(OH)₂ + H₂↑"],[["k3","1"],"Ca(OH)₂ + ",["k4","2"],"HCl → ",["k5","1"],"CaCl₂ + ",["k6","2"],"H₂O"],
+ [["k7","1"],"Mg + ",["k8","2"],"HCl → MgCl₂ + H₂↑"],[["k9","1"],"MgCl₂ + ",["k10","2"],"NaOH → ",["k11","1"],"Mg(OH)₂↓ + ",["k12","2"],"NaCl"],
+ [["k13","1"],"Mg(OH)₂ + ",["k14","1"],"H₂SO₄ → ",["k15","1"],"MgSO₄ + ",["k16","2"],"H₂O"],[["k17","1"],"Ca(OH)₂ + ",["k18","1"],"CO₂ → ",["k19","1"],"CaCO₃↓ + H₂O"]];
+function renderQ(){$("qs").innerHTML=t("qs").map((q,i)=>`<label style="margin-top:6px"><span>${q[0]}</span><select data-q="${i}">${opts(q[1],qv[i])}</select></label>`).join("");
+  $("eqs").innerHTML=`<small style="font-size:13px;color:var(--mute);font-weight:600">${t("eqm")}</small>`+E.map(e=>`<div class="eq">${e.map(p=>typeof p==="string"?p:`<input id="${p[0]}" data-a="${p[1]}" inputmode="numeric" value="${ev[p[0]]||""}">`).join("")}</div>`).join("")}
+function renderSteps(){const g=$("goggles").checked;$("st1").classList.toggle("off",!g);$("st2").classList.toggle("off",!g);
+  const DEP={acid:"php"};document.querySelectorAll("[data-b]").forEach(x=>{const k=x.dataset.b,done=k==="acid"?acid>=3:!!S[k],en=!DEP[k]||S[DEP[k]];x.disabled=!!done||!en;x.classList.toggle("done",!!done)});
+  $("bacid").textContent=t("bacid")+(acid?` (${acid})`:"");
+  $("st3").classList.toggle("off",!(a>=2&&b>=3&&acid>=3&&S.blow));$("st4").classList.toggle("off",!ok)}
+function applyLang(){document.documentElement.lang=lang;
+  document.querySelectorAll("[data-i]").forEach(el=>{const v=T[lang][el.dataset.i];if(typeof v==="string")el.textContent=v});
+  $("l-kk").classList.toggle("on",lang==="kk");$("l-ru").classList.toggle("on",lang==="ru");
+  document.querySelectorAll(".msg").forEach(m=>m.textContent="");render();renderTrays();renderQ();renderSteps()}
+function msg(id,text,okk){const m=$(id);m.textContent=text;m.className="msg "+(okk?"ok":"bad")}
+$("l-kk").onclick=()=>{lang="kk";applyLang()};$("l-ru").onclick=()=>{lang="ru";applyLang()};
+$("goggles").onchange=renderSteps;
+document.querySelector(".grid").addEventListener("click",e=>{const c=e.target.closest("[data-r]");
+  if(c){const isA=c.dataset.c==="trA",ch=isA?CHA:CHB,n=isA?a:b;if(c.dataset.r===ch[n][2]){if(isA){a++;msg("m1",t("A")[n],true)}else{b++;msg("m2",t("B")[n],true)}render();renderTrays();renderSteps()}else msg(isA?"m1":"m2",t("wrong"),false);return}
+  const x=e.target.closest("[data-b]");if(!x||x.disabled)return;const k=x.dataset.b;
+  if(k==="acid"){acid++;msg("m3",acid>=3?t("ac2"):t("ac1"),true)}else{S[k]=1;msg("m3",t(k==="php"?"phpm":"blowm"),true)}render();renderSteps()});
+document.querySelector(".grid").addEventListener("change",e=>{const s=e.target;if(s.dataset.q!=null){qv[s.dataset.q]=s.value;s.className=""}});
+$("eqs").addEventListener("input",e=>{const el=e.target;if(el.id)ev[el.id]=el.value;el.style.borderColor=""});
+$("chk").onclick=()=>{let bad=0;document.querySelectorAll("[data-q]").forEach(s=>{const g=s.value===t("qs")[s.dataset.q][2];s.className=g?"ok":"bad";if(!g)bad++});
+  document.querySelectorAll("#eqs input").forEach(el=>{const v=el.value.trim(),aa=el.dataset.a,g=v===aa||(aa==="1"&&v==="");el.style.borderColor=g?"var(--ok)":"var(--bad)";if(!g)bad++});
+  ok=!bad;renderSteps();ok?msg("m4",t("ok"),true):msg("m4",t("bad")+bad+".",false)};
+$("send").onclick=()=>{const f=$("a1").value.trim();msg("m5",f?t("sent"):t("empty"),!!f)};
+applyLang();
+}
+</script>
+<script src="../embed.js"></script>
+</body>
+</html>

@@ -1,0 +1,281 @@
+<!DOCTYPE html>
+<html lang="kk">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Ас тұзын тазарту</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans:wght@400;600;700&family=Noto+Serif:wght@600;700&display=swap" rel="stylesheet">
+<style>
+/* VOICE: calm school lab workbook, clear and encouraging (grade 7)
+   IDEA: a workbench sheet — dissolve, filter, evaporate: three stations of one purification
+   PICTURE: muddy salt water, a folded paper filter dripping clear filtrate, white crystals in a porcelain dish over a flame
+   COLOUR and TYPE: white sheet on deep lab-teal; soil brown, sand ochre, salt white; Noto Serif + Noto Sans
+   LAYOUT: steps left, scene right (sticky) with view switch; stacks on phones */
+:root{color-scheme:light dark;
+--bg:light-dark(#0f4c5c,#0a2d36);--sheet:light-dark(#ffffff,#13202a);--ink:light-dark(#10131a,#e7edf2);
+--mute:light-dark(#566170,#9fb0bf);--line:light-dark(#d5dde5,#2b3d4b);--soft:light-dark(#eef5f7,#182a35);
+--acc:light-dark(#0f4c5c,#5cc2d6);--ok:light-dark(#12733a,#4ade80);--bad:light-dark(#b91c1c,#f87171);
+--warn:light-dark(#fff4d6,#3a2f12);--glass:light-dark(#f7fbfd,#1d2f3b);--glassline:light-dark(#8aa1b1,#6c8597)}
+:root[data-theme=light]{color-scheme:light}:root[data-theme=dark]{color-scheme:dark}
+*{box-sizing:border-box;min-width:0}
+body{margin:0;background:var(--bg);color:var(--ink);font:16px/1.55 "Noto Sans",system-ui,sans-serif;overflow-x:clip}
+.wrap{max-width:1240px;margin:0 auto;padding:clamp(14px,3vw,36px) max(3vw,12px)}
+header{display:flex;flex-wrap:wrap;gap:12px;align-items:flex-end;justify-content:space-between;color:#fff;margin-bottom:18px}
+header small{display:block;opacity:.8;font-size:14px}
+h1{font:700 clamp(24px,3.6vw,38px)/1.08 "Noto Serif",Georgia,serif;margin:2px 0 0;text-wrap:balance;max-width:26ch}
+.lang{display:flex;background:rgba(255,255,255,.14);border-radius:999px;padding:4px}
+.lang button{border:0;background:none;color:#fff;font:600 15px "Noto Sans";padding:8px 16px;border-radius:999px;cursor:pointer;min-height:40px}
+.lang button.on{background:#fff;color:#0f4c5c}
+.sheet{background:var(--sheet);border-radius:18px;box-shadow:0 18px 40px rgba(0,0,0,.25);padding:clamp(16px,2.6vw,30px)}
+.note{font-size:13px;color:var(--mute);margin:0 0 10px}
+.goal{margin:0 0 6px;max-width:70ch}
+.reag{margin:0 0 16px;color:var(--mute);font-size:15px;max-width:70ch}
+.safety{display:flex;gap:12px;align-items:center;flex-wrap:wrap;background:var(--warn);border-radius:12px;padding:12px 14px;margin-bottom:18px}
+.safety p{margin:0;flex:1 1 260px;font-weight:600}
+.safety label{flex-direction:row;align-items:center;gap:8px;color:var(--ink);font-weight:600;cursor:pointer}
+.grid{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1.05fr);gap:clamp(16px,3vw,36px);align-items:start}
+.step{border-top:1px solid var(--line);padding:14px 0}
+.step:first-child{border-top:0;padding-top:0}
+.step.off{opacity:.45;pointer-events:none}
+h2{font:700 19px/1.2 "Noto Serif",Georgia,serif;margin:0 0 6px}
+.hint{color:var(--mute);font-size:15px;margin:0 0 8px}
+label{font-size:14px;color:var(--mute);display:flex;flex-direction:column;gap:4px}
+textarea,select{font:16px "Noto Sans";color:var(--ink);background:var(--sheet);border:1.5px solid var(--line);border-radius:10px;padding:10px 12px;width:100%}
+textarea:focus,select:focus,button:focus-visible{outline:3px solid color-mix(in srgb,var(--acc) 45%,transparent);outline-offset:1px}
+.ok{border-color:var(--ok)!important}.bad{border-color:var(--bad)!important}
+textarea{min-height:76px;resize:vertical}
+.btns{display:flex;flex-wrap:wrap;gap:8px;margin-top:8px}
+.btn{border:0;border-radius:10px;padding:10px 14px;font:600 15px "Noto Sans";cursor:pointer;min-height:44px;background:var(--acc);color:light-dark(#fff,#08202a)}
+.btn.done{background:var(--soft);color:var(--ok)}
+.btn:disabled{opacity:.45;cursor:not-allowed}.btn.done:disabled{opacity:1}
+.msg{margin-top:8px;font-size:15px;min-height:1.4em}
+.msg.ok{color:var(--ok)}.msg.bad{color:var(--bad)}
+.board{position:sticky;top:12px}
+.seg{display:flex;background:var(--soft);border-radius:10px;padding:4px;gap:4px;margin-bottom:10px}
+.seg button{flex:1;border:0;background:none;color:var(--ink);font:600 14px "Noto Sans";padding:8px 10px;border-radius:8px;cursor:pointer;min-height:40px}
+.seg button.on{background:var(--sheet);box-shadow:0 1px 4px rgba(0,0,0,.15)}
+.seg button:disabled{opacity:.4;cursor:default}
+.rackbox{background:var(--soft);border-radius:16px;padding:10px}
+.rackbox svg{display:block;width:100%;height:auto}
+.mag{transition:transform 1.2s ease}
+.glow{animation:glow 1.4s ease-in-out 2;transform-box:fill-box}
+@keyframes glow{50%{fill:#f97316}}
+.flame{animation:flick .25s ease-in-out infinite alternate;transform-box:fill-box;transform-origin:bottom center}
+@keyframes flick{to{transform:scaleY(1.12) scaleX(.94)}}
+@media(prefers-reduced-motion:reduce){.mag{transition:none}.glow,.flame{animation:none}}
+.scroll{overflow-x:auto}
+.lv{transition:y 3s ease,height 3s ease,opacity 3s ease}
+.drop{animation:drip .7s linear infinite}
+@keyframes drip{0%{transform:translateY(0);opacity:1}100%{transform:translateY(16px);opacity:0}}
+.steam{animation:steam 2.4s ease-out infinite;opacity:0}
+@keyframes steam{0%{transform:translateY(0);opacity:0}20%{opacity:.7}100%{transform:translateY(-50px);opacity:0}}
+.stir .rod{animation:stir .9s ease-in-out;transform-box:view-box}
+@keyframes stir{25%{transform:rotate(-8deg)}75%{transform:rotate(8deg)}}
+.checks label{flex-direction:row;align-items:center;gap:10px;color:var(--ink);font-size:15px;padding:4px 0}
+.checks input{width:20px;height:20px}
+@media(prefers-reduced-motion:reduce){.drop,.steam,.stir .rod{animation:none}}
+table{width:100%;border-collapse:collapse;font-size:14px}
+th,td{padding:5px;border-bottom:1px solid var(--line);text-align:left;vertical-align:middle}
+th{font-size:13px;color:var(--mute);font-weight:600}
+td:first-child{font-weight:600;font-size:14px}
+td select{padding:6px;font-size:13px}
+.eq{display:flex;flex-wrap:wrap;align-items:center;gap:8px;font:600 17px "Noto Sans";margin-bottom:10px}
+.eq select{width:auto;padding:6px 8px;font:600 15px "Noto Sans"}
+.q{margin-bottom:10px}
+@media(max-width:860px){.grid{grid-template-columns:minmax(0,1fr)}.board{position:static;order:-1}}
+</style>
+</head>
+<body>
+<div class="wrap">
+<header>
+  <div><small data-i="lab"></small><h1 data-i="title"></h1></div>
+  <div class="lang" role="group" aria-label="Тіл"><button id="l-kk" class="on">Қазақша</button><button id="l-ru">Русский</button></div>
+</header>
+<div class="sheet">
+  <p class="note" data-i="demo"></p>
+  <p class="goal" data-i="goal"></p>
+  <p class="reag" data-i="reag"></p>
+  <div class="safety">
+    <svg width="34" height="34" viewBox="0 0 34 34" aria-hidden="true"><path d="M17 3 32 30H2Z" fill="#f59e0b"/><rect x="15.5" y="11" width="3" height="11" rx="1.5" fill="#fff"/><circle cx="17" cy="26" r="1.8" fill="#fff"/></svg>
+    <p data-i="safe"></p>
+    <label><input type="checkbox" id="goggles" style="width:22px;height:22px"><span data-i="safeok"></span></label>
+  </div>
+  <div class="grid">
+    <div>
+      <section class="step" id="st1"><h2 data-i="s1"></h2><p class="hint" data-i="s1h"></p>
+        <div class="btns"><button class="btn" data-b="water" data-i="bwater"></button><button class="btn" data-b="stir" id="bstir"></button><button class="btn" data-b="more" data-i="bmore"></button></div>
+        <div class="msg" id="m1" aria-live="polite"></div></section>
+      <section class="step" id="st2"><h2 data-i="s2"></h2><p class="hint" data-i="s2h"></p>
+        <div class="btns"><button class="btn" data-b="fold" id="bfold"></button><button class="btn" data-b="place" data-i="bplace"></button><button class="btn" data-b="wet" data-i="bwet"></button><button class="btn" data-b="pour" data-i="bpour"></button></div>
+        <div class="msg" id="m2" aria-live="polite"></div></section>
+      <section class="step" id="st3"><h2 data-i="s3"></h2><p class="hint" data-i="s3h"></p>
+        <div class="btns"><button class="btn" data-b="dish" data-i="bdish"></button><button class="btn" data-b="heat" data-i="bheat"></button></div>
+        <div class="msg" id="m3" aria-live="polite"></div></section>
+      <section class="step" id="st4"><h2 data-i="s4"></h2><p class="hint" data-i="s4h"></p>
+        <table><tbody id="tbl"></tbody></table>
+        <p class="hint" style="margin-top:12px" data-i="qm"></p>
+        <div class="checks" id="methods"></div>
+        <div class="btns"><button class="btn" id="chk4" data-i="check"></button></div>
+        <div class="msg" id="m4" aria-live="polite"></div></section>
+      <section class="step" id="st5"><h2 data-i="s5"></h2>
+        <div class="q"><label><span data-i="q1"></span><textarea id="a1"></textarea></label></div>
+        <div class="q"><label><span data-i="q2"></span><textarea id="a2"></textarea></label></div>
+        <div class="btns"><button class="btn" id="send" data-i="send"></button></div>
+        <div class="msg" id="m5" aria-live="polite"></div></section>
+    </div>
+    <div class="board">
+      <div class="seg" id="seg"><button data-v="d" class="on" data-i="v1"></button><button data-v="f" data-i="v2"></button><button data-v="e" data-i="v3"></button></div>
+      <div class="rackbox"><svg id="scene" viewBox="0 0 560 420" aria-label="scene"></svg></div>
+    </div>
+  </div>
+</div>
+</div>
+<script>
+{
+const T={
+kk:{lab:"7-сынып · 2-зертханалық жұмыс",title:"Ластанған ас тұзын тазарту",demo:"Үлгі нұсқа: тіркелу және жұмысты мұғалімге жіберу толық сайтта қосылады.",
+goal:"Мақсаты: құм мен топырақ араласқан ас тұзын еріту, сүзу және буландыру арқылы тазарту.",
+reag:"Реактивтер: ас тұзы мен құмның, топырақтың қоспасы, су. Құрал-жабдықтар: химиялық стақан, тұрғы, шыны таяқша, құйғы, сүзгі қағаз, спиртшам, кәрлен табақша, конусты құты, асбест торы, қысқыш.",
+safe:"Қыздырғыш құралдармен жұмыс жасау ережелерін сақта. Ыстық кәрлен табақшаны қолмен ұстама, қысқышпен ал.",safeok:"Ережені оқыдым",
+s1:"1-қадам. Ластанған ас тұзын еріт",s1h:"Стақандағы ластанған тұзға 20 мл су құй. Қоспаны шыны таяқшамен стақанның қабырғасына тигізбей, абайлап араластыр. Тұз толық ерімесе, аздап су қос.",
+bwater:"20 мл су құю",bstir:"Абайлап араластыру",bmore:"Аздап су қосу",notall:"Тұздың біразы әлі ерімей жатыр. Аздап су қос.",dissolved:"Тұз толық еріді. Ерітінді лайлы, түбінде құм бар.",
+s2:"2-қадам. Ерітіндіні сүз",s2h:"Сүзгі қағазды екі рет бүктеп, конус жаса. Оны құйғыға салып, сумен ылғалда. Лайланған ерітіндіні сүзгіге шыны таяқша арқылы құй.",
+bfold:"Сүзгі қағазды бүктеу",bplace:"Құйғыға салу",bwet:"Сүзгіні ылғалдау",bpour:"Шыны таяқша арқылы құю",filtered:"Стақанға мөлдір сүзінді ақты, ал құм мен топырақ сүзгі қағазда қалды.",
+s3:"3-қадам. Ерітіндіні буландыр",s3h:"Сүзіндіні кәрлен табақшаға құйып, тұрғы сақинасына қой. Әлсін-әлсін араластыра отырып, толық буланғанша қыздыр.",
+bdish:"Сүзіндіні табақшаға құю",bheat:"Араластыра отырып қыздыру",evapd:"Су буланып кетті, табақшада ақ тұз кристалдары қалды.",
+s4:"4-қадам. Бақылауыңды жаз",s4h:"Әр кезеңде не байқадың?",
+rows:["Ерітілген қоспа (сүзгенге дейін)","Сүзінді","Сүзгі қағазда қалған зат","Буландырғаннан кейін"],
+o:[["—","Мөлдір","Лайлы, қоңырқай","Көгілдір"],["—","Мөлдір","Лайлы, қоңырқай","Көгілдір"],["—","Тұз кристалдары","Құм мен топырақ","Ештеңе қалмады"],["—","Ақ таза тұз кристалдары","Құм мен топырақ","Ештеңе қалмады"]],
+qm:"Тұзды тазарту үшін қандай тәсілдер қолданылды? Барлығын белгіле.",m:["Еріту","Магнитпен бөлу","Сүзу","Айдау","Буландыру"],
+check:"Тексеру",ok4:"Дұрыс! Ластанған тұз еріту, сүзу және буландыру арқылы тазартылды.",bad4:"Тағы бір қара: қате бар.",
+s5:"5-қадам. Қорытынды",q1:"Алынған тұзды бастапқы ластанған тұзбен салыстыр. Олардың айырмашылығы неде?",q2:"Қорытынды: сүзу арқылы қандай қоспаларды бөлуге болады?",
+send:"Мұғалімге жіберу",sent:"Үлгіде жіберу әлі жұмыс істемейді. Толық сайтта жұмыс мұғалімнің бетіне түседі.",empty:"Алдымен барлық сұраққа жауап бер.",
+v1:"Еріту",v2:"Сүзу",v3:"Буландыру",paper:"сүзгі қағаз",filt:"сүзінді",dishl:"кәрлен табақша",lamp:"спиртшам"},
+ru:{lab:"7 класс · Лабораторная работа №2",title:"Очистка загрязнённой поваренной соли",demo:"Демо-версия: регистрация и отправка работы учителю появятся в полной версии сайта.",
+goal:"Цель: очистить поваренную соль, смешанную с песком и почвой, растворением, фильтрованием и выпариванием.",
+reag:"Реактивы: смесь поваренной соли с песком и почвой, вода. Оборудование: химический стакан, штатив, стеклянная палочка, воронка, фильтровальная бумага, спиртовка, фарфоровая чашка, коническая колба, асбестовая сетка, щипцы.",
+safe:"Соблюдай правила работы с нагревательными приборами. Не бери горячую фарфоровую чашку руками — только щипцами.",safeok:"Правила прочитаны",
+s1:"Шаг 1. Растворение загрязнённой соли",s1h:"Налей 20 мл воды к загрязнённой соли в стакане. Осторожно перемешай смесь стеклянной палочкой, не касаясь стенок. Если соль не растворилась полностью, добавь немного воды.",
+bwater:"Налить 20 мл воды",bstir:"Осторожно перемешать",bmore:"Добавить немного воды",notall:"Часть соли ещё не растворилась. Добавь немного воды.",dissolved:"Соль полностью растворилась. Раствор мутный, на дне песок.",
+s2:"Шаг 2. Фильтрование раствора",s2h:"Сложи фильтровальную бумагу дважды, сделай конус. Вложи его в воронку и смочи водой. Мутный раствор налей на фильтр по стеклянной палочке.",
+bfold:"Сложить фильтр",bplace:"Вложить в воронку",bwet:"Смочить фильтр",bpour:"Налить по палочке",filtered:"В стакан стёк прозрачный фильтрат, а песок и почва остались на фильтре.",
+s3:"Шаг 3. Выпаривание раствора",s3h:"Перелей фильтрат в фарфоровую чашку и поставь на кольцо штатива. Нагревай, время от времени помешивая, до полного выпаривания.",
+bdish:"Перелить фильтрат в чашку",bheat:"Нагреть, помешивая",evapd:"Вода испарилась, в чашке остались белые кристаллы соли.",
+s4:"Шаг 4. Запиши наблюдения",s4h:"Что ты наблюдал на каждом этапе?",
+rows:["Растворённая смесь (до фильтрования)","Фильтрат","Что осталось на фильтре","После выпаривания"],
+o:[["—","Прозрачный","Мутный, буроватый","Голубой"],["—","Прозрачный","Мутный, буроватый","Голубой"],["—","Кристаллы соли","Песок и почва","Ничего не осталось"],["—","Белые чистые кристаллы соли","Песок и почва","Ничего не осталось"]],
+qm:"Какие способы использовались для очистки соли? Отметь все.",m:["Растворение","Разделение магнитом","Фильтрование","Перегонка","Выпаривание"],
+check:"Проверить",ok4:"Верно! Загрязнённая соль очищена растворением, фильтрованием и выпариванием.",bad4:"Посмотри ещё раз: есть ошибка.",
+s5:"Шаг 5. Вывод",q1:"Сравни полученную соль с исходной загрязнённой. В чём их различие?",q2:"Вывод: какие смеси можно разделить фильтрованием?",
+send:"Отправить учителю",sent:"В демо-версии отправка пока не работает. В полной версии работа попадёт на страницу учителя.",empty:"Сначала ответь на все вопросы.",
+v1:"Растворение",v2:"Фильтрование",v3:"Выпаривание",paper:"фильтр. бумага",filt:"фильтрат",dishl:"фарфоровая чашка",lamp:"спиртовка"}};
+let lang="kk",view="d";const S={water:0,stir:0,more:0,fold:0,place:0,wet:0,pour:0,dish:0,heat:0};
+let done4=false;const tv={},mv={};
+const $=id=>document.getElementById(id),t=k=>T[lang][k];
+function pts(cx,cy,n,rx,ry,seed,fn){let s="";for(let k=0;k<n;k++){const a=((k*137.5+seed)%360)*Math.PI/180,r=Math.sqrt(((k*53+seed)%97)/97);s+=fn(cx+Math.cos(a)*r*rx,cy+Math.sin(a)*r*ry,k)}return s}
+const SALT=(x,y)=>`<rect x="${x-2}" y="${y-2}" width="4" height="4" fill="#fff" stroke="#cbd5e1" stroke-width=".6"/>`;
+const SAND=(x,y)=>`<circle cx="${x}" cy="${y}" r="1.8" fill="#d6a85a"/>`;
+const SOIL=(x,y)=>`<circle cx="${x}" cy="${y}" r="2.2" fill="#6b4423"/>`;
+function sceneD(){
+  const x=170,w=220,top=110,bot=330;const dis=S.stir>=3&&S.more,mud=S.water&&S.stir;
+  let h=`<clipPath id="bd"><rect x="${x}" y="${top}" width="${w}" height="${bot-top}" rx="14"/></clipPath><g clip-path="url(#bd)"><rect x="${x}" y="${top}" width="${w}" height="${bot-top}" fill="var(--glass)"/>`;
+  const lv=S.water?(S.more?130:110):0;
+  if(lv)h+=`<rect x="${x}" y="${bot-lv}" width="${w}" height="${lv}" fill="${mud?"rgba(150,110,70,.45)":"rgba(160,205,235,.45)"}"/>`;
+  const saltN=dis?0:S.stir>=1?14:40;
+  h+=pts(x+w/2,bot-12,saltN,90,8,3,SALT)+pts(x+w/2,bot-10,50,95,7,5,SAND)+pts(x+w/2,bot-14,30,90,9,9,SOIL);
+  if(mud)h+=pts(x+w/2,bot-lv/2,24,95,lv/2-8,13,(a,b)=>`<circle cx="${a}" cy="${b}" r="1.4" fill="#6b4423" opacity=".6"/>`);
+  h+=`</g><path d="M${x} ${top-6}V${bot-14}q0 14 14 14H${x+w-14}q14 0 14 -14V${top-6}" fill="none" stroke="var(--glassline)" stroke-width="2.6"/>`;
+  if(S.water)h+=`<g id="rodg"><g class="rod" style="transform-origin:${x+w/2}px ${top-40}px"><rect x="${x+w/2+20}" y="${top-50}" width="8" height="${bot-top+30}" rx="4" style="fill:light-dark(#e8f3f8,#5f7a8a)" stroke="var(--glassline)" transform="rotate(12 ${x+w/2+24} ${top-50})"/></g></g>`;
+  h+=`<text x="${x+w/2}" y="${bot+28}" text-anchor="middle" font-size="14" font-weight="700" fill="var(--ink)">NaCl + құм + топырақ</text>`;
+  return h;
+}
+function paperIcon(cx,cy,stage){ // 0 circle,1 half,2 quarter
+  if(stage===0)return `<circle cx="${cx}" cy="${cy}" r="40" fill="#fff" stroke="#cbd5e1" stroke-width="2"/>`;
+  if(stage===1)return `<path d="M${cx-40} ${cy}A40 40 0 0 1 ${cx+40} ${cy}Z" fill="#fff" stroke="#cbd5e1" stroke-width="2"/>`;
+  return `<path d="M${cx} ${cy}L${cx-40} ${cy}A40 40 0 0 1 ${cx} ${cy-40}Z" fill="#fff" stroke="#cbd5e1" stroke-width="2"/>`;
+}
+function sceneF(){
+  let h="";
+  // stand
+  h+=`<rect x="80" y="380" width="180" height="10" rx="3" fill="#6b7280"/><rect x="96" y="60" width="8" height="320" fill="#6b7280"/><rect x="100" y="150" width="120" height="6" fill="#6b7280"/><ellipse cx="250" cy="153" rx="34" ry="6" fill="none" stroke="#6b7280" stroke-width="4"/>`;
+  // funnel
+  h+=`<path d="M200 120L300 120L258 200L258 292L242 292L242 200Z" fill="var(--glass)" stroke="var(--glassline)" stroke-width="2.4"/>`;
+  if(S.place)h+=`<path d="M210 124L290 124L252 196L248 196Z" fill="#fff" stroke="#cbd5e1" stroke-width="1.5" opacity="${S.wet?.85:1}"/>`;
+  if(S.pour){h+=pts(250,178,26,14,10,5,(a,b)=>`<circle cx="${a}" cy="${b}" r="1.8" fill="#d6a85a"/>`)+pts(250,170,18,16,10,9,(a,b)=>`<circle cx="${a}" cy="${b}" r="2" fill="#6b4423"/>`);}
+  // receiving beaker
+  const bx=239,bw=100,bt=270,bb=380;
+  h+=`<clipPath id="rb"><rect x="${bx}" y="${bt}" width="${bw}" height="${bb-bt}" rx="10"/></clipPath><g clip-path="url(#rb)"><rect x="${bx}" y="${bt}" width="${bw}" height="${bb-bt}" fill="var(--glass)"/><rect class="lv" id="flv" x="${bx}" y="${bb}" width="${bw}" height="0" fill="rgba(170,215,240,.5)"/></g>`;
+  h+=`<path d="M${bx} ${bt-4}V${bb-10}q0 10 10 10H${bx+bw-10}q10 0 10 -10V${bt-4}" fill="none" stroke="var(--glassline)" stroke-width="2.4"/>`;
+  if(S.pour)h+=`<circle class="drop" cx="250" cy="294" r="3" fill="rgba(140,200,235,.9)"/>`;
+  h+=`<text x="${bx+bw/2}" y="${bb+28}" text-anchor="middle" font-size="12" fill="var(--mute)">${S.pour?t("filt"):""}</text>`;
+  // muddy beaker pouring side
+  if(S.wet&&!S.pour)h+=`<text x="420" y="200" text-anchor="middle" font-size="12" fill="var(--mute)">→</text>`;
+  // fold inset
+  if(!S.place){h+=`<rect x="360" y="70" width="170" height="150" rx="12" style="fill:var(--sheet)" stroke="var(--line)"/>`+paperIcon(445,S.fold>=1?160:145,Math.min(S.fold,2))+`<text x="445" y="208" text-anchor="middle" font-size="12" fill="var(--mute)">${t("paper")}</text>`}
+  return h;
+}
+function sceneE(){
+  let h="";
+  h+=`<rect x="120" y="390" width="320" height="10" rx="3" fill="#6b7280"/><rect x="136" y="90" width="8" height="300" fill="#6b7280"/><rect x="140" y="232" width="110" height="6" fill="#6b7280"/><ellipse cx="280" cy="235" rx="70" ry="8" fill="none" stroke="#6b7280" stroke-width="4"/>`;
+  h+=`<rect x="200" y="238" width="160" height="6" fill="#9ca3af" opacity=".8"/>`;
+  // dish
+  h+=`<path d="M215 205Q280 250 345 205Z" fill="light-dark(#fdfdfd,#2a3d49)" stroke="var(--glassline)" stroke-width="2.4"/>`;
+  if(S.dish)h+=`<path class="lv" id="dlv" d="M224 210Q280 240 336 210Z" fill="rgba(170,215,240,.6)" opacity="1"/>`;
+  if(S.heat){h+=`<g class="lv" id="xtal" opacity="0">${pts(280,218,30,40,6,7,SALT)}</g>`;for(let k=0;k<5;k++)h+=`<circle class="steam" cx="${240+k*20}" cy="195" r="${8+(k%3)*3}" fill="#fff" style="animation-delay:${-k*0.45}s"/>`;
+    h+=`<path class="flame" d="M268 330Q262 300 280 270Q298 300 292 330Z" fill="#fb923c"/>`}
+  h+=`<path d="M250 360Q246 332 280 328Q314 332 310 360Z" style="fill:light-dark(#dbe7ee,#2b3f4c)" stroke="var(--glassline)" stroke-width="2"/><rect x="274" y="322" width="12" height="10" fill="#9ca3af"/>`;
+  h+=`<text x="420" y="215" font-size="12" fill="var(--mute)">${t("dishl")}</text><text x="330" y="372" font-size="12" fill="var(--mute)">${t("lamp")}</text>`;
+  return h;
+}
+function render(anim){
+  $("scene").innerHTML=view==="d"?sceneD():view==="f"?sceneF():sceneE();
+  document.querySelectorAll("#seg button").forEach(b=>{b.classList.toggle("on",b.dataset.v===view);b.disabled=(b.dataset.v==="f"&&!S.more)||(b.dataset.v==="e"&&!S.pour)});
+  const f=$("flv"),d=$("dlv"),x=$("xtal");
+  if(!anim)[f,d,x].forEach(el=>el&&(el.style.transition="none"));
+  const go=()=>{if(f&&S.pour){f.setAttribute("y",380-70);f.setAttribute("height",70)}if(d&&S.heat)d.setAttribute("opacity",0);if(x&&S.heat)x.setAttribute("opacity",1)};
+  anim?requestAnimationFrame(()=>requestAnimationFrame(go)):go();
+}
+const DEP={stir:"water",more:"stir",fold:"more",place:"fold",wet:"place",pour:"wet",dish:"pour",heat:"dish"};
+function isDone(k){return k==="stir"?S.stir>=3:k==="fold"?S.fold>=2:!!S[k]}
+function renderSteps(){
+  const g=$("goggles").checked;
+  $("st1").classList.toggle("off",!g);$("st2").classList.toggle("off",!S.more);$("st3").classList.toggle("off",!S.pour);
+  document.querySelectorAll("[data-b]").forEach(b=>{const k=b.dataset.b,done=isDone(k),en=!DEP[k]||isDone(DEP[k]);b.disabled=done||!en;b.classList.toggle("done",done)});
+  $("bstir").textContent=t("bstir")+(S.water?` (${Math.min(S.stir,3)}/3)`:"");
+  $("bfold").textContent=t("bfold")+(S.more?` (${Math.min(S.fold,2)}/2)`:"");
+  $("st4").classList.toggle("off",!S.heat);$("st5").classList.toggle("off",!done4);
+}
+const ANS=["2","1","2","1"];
+function opts(arr,v){return arr.map((s,i)=>`<option value="${i||""}" ${String(v||"")===String(i||"")?"selected":""}>${s}</option>`).join("")}
+function renderTable(){$("tbl").innerHTML=t("rows").map((r,i)=>`<tr><td>${r}</td><td><select data-r="${i}">${opts(t("o")[i],tv[i])}</select></td></tr>`).join("");
+  $("methods").innerHTML=t("m").map((m,i)=>`<label><input type="checkbox" data-m="${i}" ${mv[i]?"checked":""}>${m}</label>`).join("")}
+function applyLang(){
+  document.documentElement.lang=lang;
+  document.querySelectorAll("[data-i]").forEach(el=>{const v=T[lang][el.dataset.i];if(typeof v==="string")el.textContent=v});
+  $("l-kk").classList.toggle("on",lang==="kk");$("l-ru").classList.toggle("on",lang==="ru");
+  document.querySelectorAll(".msg").forEach(m=>m.textContent="");
+  render(false);renderSteps();renderTable();
+}
+function msg(id,text,ok){const m=$(id);m.textContent=text;m.className="msg "+(ok?"ok":"bad")}
+$("l-kk").onclick=()=>{lang="kk";applyLang()};$("l-ru").onclick=()=>{lang="ru";applyLang()};
+$("goggles").onchange=renderSteps;
+$("seg").onclick=e=>{const b=e.target.closest("button");if(!b||b.disabled)return;view=b.dataset.v;render(false)};
+document.querySelector(".grid").addEventListener("click",e=>{const b=e.target.closest("[data-b]");if(!b||b.disabled)return;const k=b.dataset.b;
+  if(k==="stir"||k==="fold")S[k]++;else S[k]=1;
+  view=["fold","place","wet","pour"].includes(k)?"f":["dish","heat"].includes(k)?"e":"d";render(true);
+  if(k==="stir"){const g=$("rodg");if(g){g.classList.add("stir");setTimeout(()=>g.classList.remove("stir"),900)}if(S.stir>=3)msg("m1",t("notall"),false)}
+  if(k==="more")msg("m1",t("dissolved"),true);if(k==="pour")setTimeout(()=>msg("m2",t("filtered"),true),2500);if(k==="heat")setTimeout(()=>msg("m3",t("evapd"),true),3000);
+  renderSteps()});
+$("tbl").addEventListener("change",e=>{const r=e.target.dataset.r;if(r==null)return;tv[r]=e.target.value;e.target.classList.remove("ok","bad")});
+$("methods").addEventListener("change",e=>{const m=e.target.dataset.m;if(m!=null)mv[m]=e.target.checked});
+$("chk4").onclick=()=>{let ok=true;document.querySelectorAll("#tbl select").forEach(s=>{const g=s.value===ANS[s.dataset.r];s.classList.toggle("ok",g);s.classList.toggle("bad",!g);if(!g)ok=false});
+  const want=[1,0,1,0,1];want.forEach((w,i)=>{const lab=document.querySelector(`[data-m="${i}"]`).parentElement,good=!!mv[i]===!!w;lab.style.color=good?"":"var(--bad)";if(!good)ok=false});
+  done4=ok;renderSteps();ok?msg("m4",t("ok4"),true):msg("m4",t("bad4"),false)};
+$("send").onclick=()=>{const f=["a1","a2"].every(id=>$(id).value.trim());msg("m5",f?t("sent"):t("empty"),f)};
+applyLang();
+}
+</script>
+<script src="../embed.js"></script>
+</body>
+</html>

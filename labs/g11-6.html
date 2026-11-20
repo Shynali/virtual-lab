@@ -1,0 +1,233 @@
+<!DOCTYPE html>
+<html lang="kk">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Аминқышқылдарының қасиеттері</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans:wght@400;600;700&family=Noto+Serif:wght@600;700&display=swap" rel="stylesheet">
+<style>
+/* VOICE: calm school lab workbook, clear and encouraging (grade 7)
+   IDEA: a workbench sheet — two twin tubes, acid and alkali, each with an aluminium granule
+   PICTURE: both tubes starting slowly, then fizzing hard once the oxide film is gone: aluminium reacts with both
+   COLOUR and TYPE: white sheet on deep lab-teal; the universal-indicator rainbow; Noto Serif + Noto Sans
+   LAYOUT: steps left, scene right (sticky) with view switch; stacks on phones */
+:root{color-scheme:light dark;
+--bg:light-dark(#0f4c5c,#0a2d36);--sheet:light-dark(#ffffff,#13202a);--ink:light-dark(#10131a,#e7edf2);
+--mute:light-dark(#566170,#9fb0bf);--line:light-dark(#d5dde5,#2b3d4b);--soft:light-dark(#eef5f7,#182a35);
+--acc:light-dark(#0f4c5c,#5cc2d6);--ok:light-dark(#12733a,#4ade80);--bad:light-dark(#b91c1c,#f87171);
+--warn:light-dark(#fff4d6,#3a2f12);--glass:light-dark(#f7fbfd,#1d2f3b);--glassline:light-dark(#8aa1b1,#6c8597)}
+:root[data-theme=light]{color-scheme:light}:root[data-theme=dark]{color-scheme:dark}
+*{box-sizing:border-box;min-width:0}
+body{margin:0;background:var(--bg);color:var(--ink);font:16px/1.55 "Noto Sans",system-ui,sans-serif;overflow-x:clip}
+.wrap{max-width:1240px;margin:0 auto;padding:clamp(14px,3vw,36px) max(3vw,12px)}
+header{display:flex;flex-wrap:wrap;gap:12px;align-items:flex-end;justify-content:space-between;color:#fff;margin-bottom:18px}
+header small{display:block;opacity:.8;font-size:14px}
+h1{font:700 clamp(24px,3.6vw,38px)/1.08 "Noto Serif",Georgia,serif;margin:2px 0 0;text-wrap:balance;max-width:26ch}
+.lang{display:flex;background:rgba(255,255,255,.14);border-radius:999px;padding:4px}
+.lang button{border:0;background:none;color:#fff;font:600 15px "Noto Sans";padding:8px 16px;border-radius:999px;cursor:pointer;min-height:40px}
+.lang button.on{background:#fff;color:#0f4c5c}
+.sheet{background:var(--sheet);border-radius:18px;box-shadow:0 18px 40px rgba(0,0,0,.25);padding:clamp(16px,2.6vw,30px)}
+.note{font-size:13px;color:var(--mute);margin:0 0 10px}
+.goal{margin:0 0 6px;max-width:70ch}
+.reag{margin:0 0 16px;color:var(--mute);font-size:15px;max-width:70ch}
+.safety{display:flex;gap:12px;align-items:center;flex-wrap:wrap;background:var(--warn);border-radius:12px;padding:12px 14px;margin-bottom:18px}
+.safety p{margin:0;flex:1 1 260px;font-weight:600}
+.safety label{flex-direction:row;align-items:center;gap:8px;color:var(--ink);font-weight:600;cursor:pointer}
+.grid{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1.05fr);gap:clamp(16px,3vw,36px);align-items:start}
+.step{border-top:1px solid var(--line);padding:14px 0}
+.step:first-child{border-top:0;padding-top:0}
+.step.off{opacity:.45;pointer-events:none}
+h2{font:700 19px/1.2 "Noto Serif",Georgia,serif;margin:0 0 6px}
+.hint{color:var(--mute);font-size:15px;margin:0 0 8px}
+label{font-size:14px;color:var(--mute);display:flex;flex-direction:column;gap:4px}
+textarea,select{font:16px "Noto Sans";color:var(--ink);background:var(--sheet);border:1.5px solid var(--line);border-radius:10px;padding:10px 12px;width:100%}
+textarea:focus,select:focus,button:focus-visible{outline:3px solid color-mix(in srgb,var(--acc) 45%,transparent);outline-offset:1px}
+.ok{border-color:var(--ok)!important}.bad{border-color:var(--bad)!important}
+textarea{min-height:76px;resize:vertical}
+.btns{display:flex;flex-wrap:wrap;gap:8px;margin-top:8px}
+.btn{border:0;border-radius:10px;padding:10px 14px;font:600 15px "Noto Sans";cursor:pointer;min-height:44px;background:var(--acc);color:light-dark(#fff,#08202a)}
+.btn.done{background:var(--soft);color:var(--ok)}
+.btn:disabled{opacity:.45;cursor:not-allowed}.btn.done:disabled{opacity:1}
+.msg{margin-top:8px;font-size:15px;min-height:1.4em}
+.msg.ok{color:var(--ok)}.msg.bad{color:var(--bad)}
+.board{position:sticky;top:12px}
+.seg{display:flex;background:var(--soft);border-radius:10px;padding:4px;gap:4px;margin-bottom:10px}
+.seg button{flex:1;border:0;background:none;color:var(--ink);font:600 14px "Noto Sans";padding:8px 10px;border-radius:8px;cursor:pointer;min-height:40px}
+.seg button.on{background:var(--sheet);box-shadow:0 1px 4px rgba(0,0,0,.15)}
+.seg button:disabled{opacity:.4;cursor:default}
+.rackbox{background:var(--soft);border-radius:16px;padding:10px}
+.rackbox svg{display:block;width:100%;height:auto}
+.mag{transition:transform 1.2s ease}
+.glow{animation:glow 1.4s ease-in-out 2;transform-box:fill-box}
+@keyframes glow{50%{fill:#f97316}}
+.flame{animation:flick .25s ease-in-out infinite alternate;transform-box:fill-box;transform-origin:bottom center}
+@keyframes flick{to{transform:scaleY(1.12) scaleX(.94)}}
+@media(prefers-reduced-motion:reduce){.mag{transition:none}.glow,.flame{animation:none}}
+.scroll{overflow-x:auto}
+.seg{display:flex;background:var(--soft);border-radius:10px;padding:4px;gap:4px;margin-bottom:10px;flex-wrap:wrap}
+.seg button{flex:1;border:0;background:none;color:var(--ink);font:600 14px "Noto Sans";padding:8px 10px;border-radius:8px;cursor:pointer;min-height:40px}
+.seg button.on{background:var(--sheet);box-shadow:0 1px 4px rgba(0,0,0,.15)}
+.brown{transition:opacity 2s ease}.pk{transition:fill 1.6s ease}.ca{transition:transform 4s ease-in-out,opacity 6s ease;transform-box:fill-box;transform-origin:center}.water{animation:fall2 .6s linear infinite}@keyframes fall2{from{transform:translateY(-10px);opacity:.9}to{transform:translateY(30px);opacity:.2}}.eq input{width:44px;padding:6px;text-align:center;font:600 16px "Noto Sans";border:1.5px solid var(--line);border-radius:8px;background:var(--sheet);color:var(--ink)}
+.tray{display:flex;flex-wrap:wrap;gap:8px;margin-top:10px}
+.tray small{width:100%;font-weight:700;color:var(--mute);font-size:13px;margin-top:4px}
+.chip{border:2px solid var(--line);background:var(--sheet);color:var(--ink);border-radius:999px;padding:6px 12px;font:600 14px "Noto Sans";cursor:pointer;min-height:40px}
+.chip.sel{border-color:var(--acc);background:var(--soft)}.chip.done{color:var(--ok)}.chip:disabled{opacity:.4;cursor:default}
+.scroll{overflow-x:auto}td select{padding:6px;font-size:13px}td input{width:70px;padding:6px;text-align:right;font:600 15px "Noto Sans";color:var(--ink);background:var(--sheet);border:1.5px solid var(--line);border-radius:8px}
+.two{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:0 18px}@media(max-width:600px){.two{grid-template-columns:minmax(0,1fr)}}
+.bub{animation:rise var(--d) linear infinite;animation-delay:var(--dl);opacity:0}
+@keyframes rise{0%{transform:translateY(0);opacity:0}10%{opacity:.95}100%{transform:translateY(-80px);opacity:0}}
+.smoke{animation:smoke 2.6s ease-out infinite;opacity:0}
+@keyframes smoke{0%{transform:translateY(0) scale(.6);opacity:0}20%{opacity:.6}100%{transform:translateY(-70px) scale(1.4);opacity:0}}
+@media(prefers-reduced-motion:reduce){.bub,.smoke{animation:none;opacity:.6}}
+table{width:100%;border-collapse:collapse;font-size:14px}
+th,td{padding:5px;border-bottom:1px solid var(--line);text-align:left;vertical-align:middle}
+th{font-size:13px;color:var(--mute);font-weight:600}
+td:first-child{font-weight:600;font-size:14px}
+td select{padding:6px;font-size:13px}
+.eq{display:flex;flex-wrap:wrap;align-items:center;gap:8px;font:600 17px "Noto Sans";margin-bottom:10px}
+.eq select{width:auto;padding:6px 8px;font:600 15px "Noto Sans"}
+.q{margin-bottom:10px}
+.toblue{animation:toblue 3.2s ease forwards}@keyframes toblue{from{fill:rgba(200,228,242,.55)}to{fill:#4f9cf5}}
+.shrink{animation:shrink 4.5s ease forwards;transform-box:fill-box;transform-origin:center bottom}@keyframes shrink{to{transform:scale(.15);opacity:.2}}
+.liq{transition:fill-opacity 2s ease}
+.fade{animation:fade 2.6s ease forwards}@keyframes fade{to{opacity:0}}
+.stir{animation:stir .5s ease-in-out 5;transform-box:fill-box;transform-origin:top center}@keyframes stir{50%{transform:rotate(9deg)}}
+@media(max-width:860px){.grid{grid-template-columns:minmax(0,1fr)}.board{position:static;order:-1}}
+</style>
+</head>
+<body>
+<div class="wrap">
+<header>
+  <div><small data-i="lab"></small><h1 data-i="title"></h1></div>
+  <div class="lang" role="group" aria-label="Тіл"><button id="l-kk" class="on">Қазақша</button><button id="l-ru">Русский</button></div>
+</header>
+<div class="sheet">
+  <p class="note" data-i="demo"></p>
+  <p class="goal" data-i="goal"></p>
+  <p class="reag" data-i="reag"></p>
+  <div class="safety">
+    <svg width="34" height="34" viewBox="0 0 34 34" aria-hidden="true"><path d="M17 3 32 30H2Z" fill="#f59e0b"/><rect x="15.5" y="11" width="3" height="11" rx="1.5" fill="#fff"/><circle cx="17" cy="26" r="1.8" fill="#fff"/></svg>
+    <p data-i="safe"></p>
+    <label><input type="checkbox" id="goggles" style="width:22px;height:22px"><span data-i="safeok"></span></label>
+  </div>
+  <div class="grid">
+    <div>
+      <section class="step" id="st1"><h2 data-i="e1"></h2><p class="hint" data-i="e1h"></p>
+        <div class="btns"><button class="btn" data-d="0" data-i="d0"></button><button class="btn" data-d="1" data-i="d1"></button><button class="btn" data-d="2" data-i="d2"></button></div>
+        <div class="scroll"><table><thead><tr><th data-i="th1"></th><th data-i="th2"></th><th>pH</th></tr></thead><tbody id="tb"></tbody></table></div>
+        <div class="btns"><button class="btn" id="chk1" data-i="check"></button></div>
+        <div class="msg" id="m1" aria-live="polite"></div></section>
+      <section class="step" id="st2"><h2 data-i="e2"></h2><p class="hint" data-i="e2h"></p>
+        <div class="btns"><button class="btn" data-b="gly" data-i="bgly"></button><button class="btn" data-b="soda" data-i="bsoda"></button></div>
+        <div class="msg" id="m2" aria-live="polite"></div></section>
+      <section class="step" id="st3"><h2 data-i="e3"></h2><p class="hint" data-i="e3h"></p>
+        <div class="btns"><button class="btn" data-b="hcl" data-i="bhcl"></button><button class="btn" data-b="heat" data-i="bheat"></button><button class="btn" data-b="glass" data-i="bglass"></button><button class="btn" data-b="micro" data-i="bmicro"></button></div>
+        <div class="msg" id="m3" aria-live="polite"></div></section>
+      <section class="step" id="st4"><h2 data-i="s4"></h2><p class="hint" data-i="s4h"></p>
+        <div id="qs"></div>
+        <div id="eqs" style="margin-top:12px"></div>
+        <div class="btns"><button class="btn" id="chk" data-i="check"></button></div>
+        <div class="msg" id="m4" aria-live="polite"></div></section>
+      <section class="step" id="st5"><h2 data-i="s5"></h2>
+        <div class="q"><label><span data-i="q1"></span><textarea id="a1"></textarea></label></div>
+        <div class="q"><label><span data-i="q2"></span><textarea id="a2"></textarea></label></div>
+        <div class="btns"><button class="btn" id="send" data-i="send"></button></div>
+        <div class="msg" id="m5" aria-live="polite"></div></section>
+    </div>
+    <div class="board">
+      <div class="seg" role="group"><button id="v1" class="on" data-i="v1"></button><button id="v2" data-i="v2"></button><button id="v3" data-i="v3"></button></div>
+      <div class="rackbox"><svg id="scene" viewBox="0 0 560 400" aria-label="scene"></svg></div></div>
+  </div>
+</div>
+</div>
+<script>
+{
+const T={
+kk:{lab:"11-сынып · 6-зертханалық жұмыс",title:"Аминқышқылдарының қасиеттері",demo:"Үлгі нұсқа: тіркелу және жұмысты мұғалімге жіберу толық сайтта қосылады.",
+goal:"Мақсаты: әртүрлі аминқышқылдары ерітінділерінің pH мәнін анықтау және глициннің екідайлы (амфотерлі) қасиетін тәжірибе жүзінде дәлелдеу.",
+reag:"Реактивтер: кристалды глицин және глицин, глутамин, аспарагин қышқылының 1%-дық ерітінділері, натрий гидрокарбонатының, концентрлі тұз қышқылының ерітінділері. Құрал-жабдықтар: сынауықтар, тұрғы, әмбебап индикатор қағазы, сағат шынысы, шыны таяқша, спиртшам, микроскоп.",
+safe:"Қыздырғыш құралдармен, қышқылдармен, сілтілермен жұмыс істеу ережесін сақта. Концентрлі тұз қышқылымен тартпа шкафта жұмыс істе.",safeok:"Ережені оқыдым",
+e1:"1-тәжірибе. Әртүрлі аминқышқылдары ерітінділерінің pH мәнін анықтау",e1h:"Әмбебап индикатор қағазына әртүрлі аминқышқылдары ерітінділерінің бір тамшыдан тамызып, pH мәндерін анықта. Қышқылдардың pH көрсеткішін салыстыр. Тәжірибенің нәтижесін кестеге жаз.",
+d0:"Глицин тамызу",d1:"Глутамин тамызу",d2:"Аспарагин қышқылын тамызу",th1:"Қышқыл атауы",th2:"Құрылымдық формуласы",names:["Глицин","Глутамин","Аспарагин қышқылы"],
+ok1:"Дұрыс! Глицин мен глутамин ерітінділері бейтарапқа жақын (pH ≈ 6), ал аспарагин қышқылының ерітіндісі қышқылдық (pH ≈ 3) — онда екі карбоксил тобы бар.",bad1:"Кестеде қате бар. Индикатор түсін шкаламен салыстырып, формулаларды тексер.",
+e2:"2-тәжірибе. а) Глициннің натрий тұзын алу",e2h:"Сынауыққа 1 мл глицин ерітіндісін құйып, оған 1 мл натрий гидрокарбонатын NaHCO₃ қос. Не байқадың?",bgly:"1 мл глицин құю",bsoda:"1 мл NaHCO₃ қосу",sodam:"Газ (CO₂) көпіршіктері бөлінді — глицин карбоксил тобы арқылы қышқыл ретінде әрекеттесті.",
+e3:"ә) Глициннің тұз қышқылымен әрекеттесуі",e3h:"Сынауыққа 1–2 г құрғақ глицин салып, оны концентрлі тұз қышқылының ерітіндісімен араластыр. Кристалдар толық ерігенше сынауықты абайлап қыздыр. Туындаған ерітіндіден сағат шынысына тамшы тамызып, салқындат. Түзілген кристалдарды микроскоппен қара.",
+bhcl:"Глицин + конц. HCl",bheat:"Абайлап қыздыру",bglass:"Сағат шынысына тамызып салқындату",bmicro:"Микроскоппен қарау",heatm:"Кристалдар толық еріді.",glassm:"Тамшы салқындап, кристалдар түзілді.",microm:"Микроскопта глицин гидрохлоридінің ине тәрізді кристалдары көрінеді — глицин амин тобы арқылы негіз ретінде әрекеттесті.",
+v1:"pH",v2:"NaHCO₃",v3:"HCl · микроскоп",
+s4:"Сұрақтар мен теңдеулер",s4h:"Жауапты таңда да, теңдеулердегі коэффициенттерді қой (1 болса, бос қалдыруға болады).",
+qs:[["Аминқышқылдары ерітінділерінің pH мәні неге әртүрлі?",["—","Молекуладағы –COOH және –NH₂ топтарының санына байланысты","Ерітінді түсіне байланысты","Температураға байланысты"],"1"],["Аминқышқылдарының екідайлы қасиеті дегеніміз:",["—","Қышқылдармен де, негіздермен де әрекеттесуі","Тек қышқылдық қасиет","Тек негіздік қасиет"],"1"],["Глицин NaHCO₃-пен қай функционалдық топ арқылы әрекеттесті?",["—","Карбоксил тобы –COOH","Амин тобы –NH₂","Метил тобы"],"1"],["Глицин HCl-мен қай функционалдық топ арқылы әрекеттесті?",["—","Амин тобы –NH₂","Карбоксил тобы –COOH","Гидроксил тобы"],"1"]],
+check:"Тексеру",ok:"Барлығы дұрыс! Аминқышқылдары — амфотерлі қосылыстар: –COOH тобы есебінен қышқылдық, –NH₂ тобы есебінен негіздік қасиет көрсетеді.",bad:"Қате жауаптар саны: ",
+eqm:"Реакция теңдеулері:",
+s5:"Сұрақтар мен тапсырмалар",q1:"1. Аминқышқылдары ерітінділерінің pH көрсеткішінің әртүрлі болу себебі неде?",q2:"2. Аминқышқылдарының екідайлы қасиет көрсетуін қалай түсіндіруге болады? Екідайлы қасиеті функционалдық топпен анықталатынын қалай дәлелдеуге болады?",
+send:"Мұғалімге жіберу",sent:"Үлгіде жіберу әлі жұмыс істемейді. Толық сайтта жұмыс мұғалімнің бетіне түседі.",empty:"Алдымен сұрақтарға жауап бер.",paper:"әмбебап индикатор қағазы",glassl:"сағат шынысы",mic:"микроскоп"},
+ru:{lab:"11 класс · Лабораторная работа №6",title:"Свойства аминокислот",demo:"Демо-версия: регистрация и отправка работы учителю появятся в полной версии сайта.",
+goal:"Цель: определить pH растворов различных аминокислот и опытным путём доказать двойственные (амфотерные) свойства глицина.",
+reag:"Реактивы: кристаллический глицин и 1%-ные растворы глицина, глутамина, аспарагиновой кислоты, растворы гидрокарбоната натрия, концентрированной соляной кислоты. Оборудование: пробирки, штатив, универсальная индикаторная бумага, часовое стекло, стеклянная палочка, спиртовка, микроскоп.",
+safe:"Соблюдай правила работы с нагревательными приборами, кислотами и щелочами. С концентрированной соляной кислотой работай в вытяжном шкафу.",safeok:"Правила прочитаны",
+e1:"Опыт 1. Определение pH растворов различных аминокислот",e1h:"Нанеси на универсальную индикаторную бумагу по одной капле растворов различных аминокислот и определи значения pH. Сравни pH кислот. Запиши результаты в таблицу.",
+d0:"Капнуть глицин",d1:"Капнуть глутамин",d2:"Капнуть аспарагиновую кислоту",th1:"Название кислоты",th2:"Структурная формула",names:["Глицин","Глутамин","Аспарагиновая кислота"],
+ok1:"Верно! Растворы глицина и глутамина близки к нейтральным (pH ≈ 6), а раствор аспарагиновой кислоты кислый (pH ≈ 3) — в ней две карбоксильные группы.",bad1:"В таблице есть ошибки. Сравни окраску индикатора со шкалой и проверь формулы.",
+e2:"Опыт 2. а) Получение натриевой соли глицина",e2h:"Налей в пробирку 1 мл раствора глицина и добавь 1 мл гидрокарбоната натрия NaHCO₃. Что ты наблюдаешь?",bgly:"Налить 1 мл глицина",bsoda:"Добавить 1 мл NaHCO₃",sodam:"Выделяются пузырьки газа (CO₂) — глицин прореагировал как кислота за счёт карбоксильной группы.",
+e3:"б) Взаимодействие глицина с соляной кислотой",e3h:"Насыпь в пробирку 1–2 г сухого глицина и смешай с концентрированной соляной кислотой. Осторожно нагрей до полного растворения кристаллов. Нанеси каплю раствора на часовое стекло и охлади. Рассмотри образовавшиеся кристаллы под микроскопом.",
+bhcl:"Глицин + конц. HCl",bheat:"Осторожно нагреть",bglass:"Капнуть на часовое стекло и охладить",bmicro:"Рассмотреть под микроскопом",heatm:"Кристаллы полностью растворились.",glassm:"Капля охладилась, образовались кристаллы.",microm:"Под микроскопом видны игольчатые кристаллы гидрохлорида глицина — глицин прореагировал как основание за счёт аминогруппы.",
+v1:"pH",v2:"NaHCO₃",v3:"HCl · микроскоп",
+s4:"Вопросы и уравнения",s4h:"Выбери ответ и расставь коэффициенты (если 1, поле можно оставить пустым).",
+qs:[["Почему pH растворов аминокислот различен?",["—","Зависит от числа групп –COOH и –NH₂ в молекуле","Зависит от цвета раствора","Зависит от температуры"],"1"],["Двойственные свойства аминокислот — это:",["—","Способность реагировать и с кислотами, и с основаниями","Только кислотные свойства","Только основные свойства"],"1"],["За счёт какой группы глицин реагировал с NaHCO₃?",["—","Карбоксильной –COOH","Аминогруппы –NH₂","Метильной"],"1"],["За счёт какой группы глицин реагировал с HCl?",["—","Аминогруппы –NH₂","Карбоксильной –COOH","Гидроксильной"],"1"]],
+check:"Проверить",ok:"Всё верно! Аминокислоты — амфотерные соединения: за счёт –COOH проявляют кислотные, а за счёт –NH₂ — основные свойства.",bad:"Неверных ответов: ",
+eqm:"Уравнения реакций:",
+s5:"Вопросы и задания",q1:"1. В чём причина различия pH растворов аминокислот?",q2:"2. Как объяснить двойственные свойства аминокислот? Как доказать, что они определяются функциональными группами?",
+send:"Отправить учителю",sent:"В демо-версии отправка пока не работает. В полной версии работа попадёт на страницу учителя.",empty:"Сначала ответь на вопросы.",paper:"универсальная индикаторная бумага",glassl:"часовое стекло",mic:"микроскоп"}};
+const FORMS=["—","H₂N–CH₂–COOH","H₂N–CO–(CH₂)₂–CH(NH₂)–COOH","HOOC–CH₂–CH(NH₂)–COOH"],PHV=[6,6,3];
+const PH=["#dc2626","#ef4444","#f97316","#fb923c","#facc15","#eab308","#a3e635","#22c55e","#14b8a6","#0ea5e9","#3b82f6","#4f46e5","#6d28d9","#581c87"];
+let lang="kk",ok=false,f1=false,view=1;const drops=[0,0,0];const S={gly:0,soda:0,hcl:0,heat:0,glass:0,micro:0};const qv={},ev={},tv={};
+const $=id=>document.getElementById(id),t=k=>T[lang][k];
+const CLR="rgba(200,228,242,.55)";
+function bub(x,W,y,n,dur){let s="";for(let k=0;k<n;k++){const cx=x+7+(k*11)%(W-14),d=(dur*(.8+(k%5)/10)).toFixed(2);s+=`<circle class="bub" cx="${cx}" cy="${y}" r="${1.6+(k%3)}" fill="#fff" stroke="#9fb7c7" style="--d:${d}s;--dl:${(-k*dur/n).toFixed(2)}s"/>`}return s}
+function tube(x,liq,lh,ex,top){const W=60,TOP=90,BOT=300;return`<clipPath id="c${x}"><rect x="${x}" y="${TOP}" width="${W}" height="${BOT-TOP}" rx="${W/2}"/><rect x="${x}" y="${TOP}" width="${W}" height="${(BOT-TOP)/2}"/></clipPath><g clip-path="url(#c${x})"><rect x="${x}" y="${TOP}" width="${W}" height="${BOT-TOP}" fill="var(--glass)"/>${liq?`<rect x="${x}" y="${BOT-lh}" width="${W}" height="${lh}" style="fill:${liq}"/>`:""}${ex||""}</g><path d="M${x} ${TOP-8}V${BOT-W/2}a${W/2} ${W/2} 0 0 0 ${W} 0V${TOP-8}" fill="none" stroke="var(--glassline)" stroke-width="2.4"/>${top?`<text x="${x+W/2}" y="${TOP-22}" text-anchor="middle" font-size="14" font-weight="700" fill="var(--acc)">${top}</text>`:""}`}
+function render(){let h="";
+  if(view===1){h+=`<rect x="70" y="90" width="420" height="80" rx="4" fill="#fde68a" stroke="#d6b45a"/><text x="280" y="80" text-anchor="middle" font-size="12" fill="var(--mute)">${t("paper")}</text>`;
+    t("names").forEach((n,i)=>{const cx=140+i*140;if(drops[i])h+=`<circle cx="${cx}" cy="130" r="26" fill="${PH[PHV[i]-1]}" opacity=".9"/>`;h+=`<text x="${cx}" y="196" text-anchor="middle" font-size="13" font-weight="700" fill="var(--ink)">${n}</text>`});
+    h+=`<text x="280" y="250" text-anchor="middle" font-size="12" font-weight="700" fill="var(--mute)">pH</text>`;PH.forEach((c,k)=>h+=`<rect x="${42+k*34}" y="262" width="32" height="24" rx="4" fill="${c}"/><text x="${58+k*34}" y="304" text-anchor="middle" font-size="12" fill="var(--ink)">${k+1}</text>`)}
+  if(view===2){h+=tube(250,S.gly?CLR:null,S.soda?110:60,S.soda?bub(250,60,290,16,1):"",S.soda?"CO₂↑":"");h+=`<text x="280" y="330" text-anchor="middle" font-size="13" font-weight="700" fill="var(--ink)">${S.soda?"H₂N–CH₂–COONa":lang==="kk"?"глицин":"глицин"}</text>`}
+  if(view===3){if(!S.glass){let ex=S.hcl&&!S.heat?[...Array(10)].map((_,k)=>`<rect x="${258+(k*7)%40}" y="${284-(k%3)*5}" width="6" height="6" fill="#fff" stroke="#cbd5e1"/>`).join(""):"";h+=tube(250,S.hcl?"rgba(226,232,240,.8)":null,70,ex,"");
+      if(S.heat&&!S.glass)h+=`<path class="flame" d="M280 304c-15 18-17 36-10 50h20c7-14 5-32-10-50z" fill="#f97316" opacity=".9"/>`}
+    else if(!S.micro){h+=`<ellipse cx="280" cy="230" rx="140" ry="34" fill="var(--glass)" stroke="var(--glassline)" stroke-width="2.5"/><ellipse cx="280" cy="226" rx="40" ry="12" fill="rgba(226,232,240,.9)"/>`+[...Array(9)].map((_,k)=>`<line x1="${255+k*6}" y1="${222+(k%3)*3}" x2="${262+k*6}" y2="${228-(k%2)*4}" stroke="#94a3b8" stroke-width="1.5"/>`).join("")+`<text x="280" y="290" text-anchor="middle" font-size="12" fill="var(--mute)">${t("glassl")}</text>`}
+    else{h+=`<circle cx="280" cy="200" r="150" fill="#f8fafc" stroke="#334155" stroke-width="10"/>`;for(let k=0;k<34;k++){if(Math.hypot(((k*71)%230-115),((k*47)%230-115))>120)continue;const x=280+((k*71)%230-115),y=200+((k*47)%230-115),L=20+(k*13)%34,ang=(k*53)%180;h+=`<line x1="${(x-L/2*Math.cos(ang*Math.PI/180)).toFixed(1)}" y1="${(y-L/2*Math.sin(ang*Math.PI/180)).toFixed(1)}" x2="${(x+L/2*Math.cos(ang*Math.PI/180)).toFixed(1)}" y2="${(y+L/2*Math.sin(ang*Math.PI/180)).toFixed(1)}" stroke="#64748b" stroke-width="3" stroke-linecap="round" opacity=".75"/>`}h+=`<text x="280" y="378" text-anchor="middle" font-size="12" fill="var(--mute)">${t("mic")} · ×100</text>`}}
+  $("scene").innerHTML=h;["v1","v2","v3"].forEach((v,i)=>$(v).classList.toggle("on",view===i+1))}
+function opts(arr,v){return arr.map((s,i)=>`<option value="${i||""}" ${String(v||"")===String(i||"")?"selected":""}>${s}</option>`).join("")}
+const E=[["H₂N–CH₂–COOH + ",["k0","1"],"NaHCO₃ → H₂N–CH₂–COONa + H₂O + ",["k1","1"],"CO₂↑"],["H₂N–CH₂–COOH + ",["k2","1"],"HCl → [H₃N–CH₂–COOH]⁺Cl⁻"]];
+function renderQ(){$("tb").innerHTML=t("names").map((n,i)=>`<tr><td>${n}</td><td><select data-t="f${i}">${opts(FORMS,tv["f"+i])}</select></td><td><input data-t="p${i}" inputmode="decimal" style="width:64px" value="${tv["p"+i]||""}"></td></tr>`).join("");
+  $("qs").innerHTML=t("qs").map((q,i)=>`<label style="margin-top:6px"><span>${q[0]}</span><select data-q="${i}">${opts(q[1],qv[i])}</select></label>`).join("");
+  $("eqs").innerHTML=`<small style="font-size:13px;color:var(--mute);font-weight:600">${t("eqm")}</small>`+E.map(e=>`<div class="eq">${e.map(p=>typeof p==="string"?p:`<input id="${p[0]}" data-a="${p[1]}" inputmode="numeric" value="${ev[p[0]]||""}">`).join("")}</div>`).join("")}
+function renderSteps(){const g=$("goggles").checked;$("st1").classList.toggle("off",!g);$("st2").classList.toggle("off",!(g&&f1));$("st3").classList.toggle("off",!(g&&f1));
+  document.querySelectorAll("[data-d]").forEach(b=>{const i=+b.dataset.d;b.disabled=!!drops[i];b.classList.toggle("done",!!drops[i])});
+  const ORD={soda:"gly",heat:"hcl",glass:"heat",micro:"glass"};document.querySelectorAll("[data-b]").forEach(b=>{const k=b.dataset.b,en=!ORD[k]||S[ORD[k]];b.disabled=!!S[k]||!en;b.classList.toggle("done",!!S[k])});
+  $("chk1").disabled=f1||!drops.every(x=>x);$("chk1").classList.toggle("done",f1);
+  $("st4").classList.toggle("off",!(S.soda&&S.micro));$("st5").classList.toggle("off",!ok)}
+function applyLang(){document.documentElement.lang=lang;
+  document.querySelectorAll("[data-i]").forEach(el=>{const v=T[lang][el.dataset.i];if(typeof v==="string")el.textContent=v});
+  $("l-kk").classList.toggle("on",lang==="kk");$("l-ru").classList.toggle("on",lang==="ru");
+  document.querySelectorAll(".msg").forEach(m=>m.textContent="");render();renderQ();renderSteps()}
+function msg(id,text,okk){const m=$(id);m.textContent=text;m.className="msg "+(okk?"ok":"bad")}
+$("l-kk").onclick=()=>{lang="kk";applyLang()};$("l-ru").onclick=()=>{lang="ru";applyLang()};
+[1,2,3].forEach(i=>$("v"+i).onclick=()=>{view=i;render()});
+$("goggles").onchange=renderSteps;
+document.querySelector(".grid").addEventListener("click",e=>{const d=e.target.closest("[data-d]");if(d&&!d.disabled){drops[+d.dataset.d]=1;view=1;render();renderSteps();return}
+  const b=e.target.closest("[data-b]");if(!b||b.disabled)return;const k=b.dataset.b;S[k]=1;view=["gly","soda"].includes(k)?2:3;
+  const M={soda:["m2","sodam"],heat:["m3","heatm"],glass:["m3","glassm"],micro:["m3","microm"]};if(M[k])msg(M[k][0],t(M[k][1]),true);render();renderSteps()});
+document.querySelector(".grid").addEventListener("change",e=>{const s=e.target;if(s.dataset.q!=null){qv[s.dataset.q]=s.value;s.className=""}if(s.dataset.t){tv[s.dataset.t]=s.value;s.className=""}});
+document.querySelector(".grid").addEventListener("input",e=>{const s=e.target;if(s.dataset.t){tv[s.dataset.t]=s.value;s.className=""}});
+$("chk1").onclick=()=>{let bad=0;for(let i=0;i<3;i++){const f=document.querySelector(`[data-t="f${i}"]`),p=document.querySelector(`[data-t="p${i}"]`);const gf=f.value===String(i+1);f.className=gf?"ok":"bad";const v=parseFloat(p.value.replace(",","."));const gp=Math.abs(v-PHV[i])<=1;p.className=gp?"ok":"bad";if(!gf)bad++;if(!gp)bad++}
+  f1=!bad;f1?msg("m1",t("ok1"),true):msg("m1",t("bad1"),false);renderSteps()};
+$("eqs").addEventListener("input",e=>{const el=e.target;if(el.id)ev[el.id]=el.value;el.style.borderColor=""});
+$("chk").onclick=()=>{let bad=0;document.querySelectorAll("[data-q]").forEach(s=>{const g=s.value===t("qs")[s.dataset.q][2];s.className=g?"ok":"bad";if(!g)bad++});
+  document.querySelectorAll("#eqs input").forEach(el=>{const v=el.value.trim(),aa=el.dataset.a,g=v===aa||(aa==="1"&&v==="");el.style.borderColor=g?"var(--ok)":"var(--bad)";if(!g)bad++});
+  ok=!bad;renderSteps();ok?msg("m4",t("ok"),true):msg("m4",t("bad")+bad+".",false)};
+$("send").onclick=()=>{const f=$("a1").value.trim()&&$("a2").value.trim();msg("m5",f?t("sent"):t("empty"),!!f)};
+applyLang();
+}
+</script>
+<script src="../embed.js"></script>
+</body>
+</html>

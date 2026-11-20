@@ -1,0 +1,247 @@
+<!DOCTYPE html>
+<html lang="kk">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Салолдың салқындауы</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans:wght@400;600;700&family=Noto+Serif:wght@600;700&display=swap" rel="stylesheet">
+<style>
+/* VOICE: calm school lab workbook, clear and encouraging (grade 7)
+   IDEA: a workbench sheet — molten salol cooling in a beaker with a thermometer and a stopwatch
+   PICTURE: the beaker with crystals growing as the reading pauses at the melting point; the cooling curve drawn from the student's readings
+   COLOUR and TYPE: white sheet on deep lab-teal; warm orange for heat, cool blue for the curve; Noto Serif + Noto Sans
+   LAYOUT: steps left, scene right (sticky) with view switch; stacks on phones */
+:root{color-scheme:light dark;
+--bg:light-dark(#0f4c5c,#0a2d36);--sheet:light-dark(#ffffff,#13202a);--ink:light-dark(#10131a,#e7edf2);
+--mute:light-dark(#566170,#9fb0bf);--line:light-dark(#d5dde5,#2b3d4b);--soft:light-dark(#eef5f7,#182a35);
+--acc:light-dark(#0f4c5c,#5cc2d6);--ok:light-dark(#12733a,#4ade80);--bad:light-dark(#b91c1c,#f87171);
+--warn:light-dark(#fff4d6,#3a2f12);--glass:light-dark(#f7fbfd,#1d2f3b);--glassline:light-dark(#8aa1b1,#6c8597)}
+:root[data-theme=light]{color-scheme:light}:root[data-theme=dark]{color-scheme:dark}
+*{box-sizing:border-box;min-width:0}
+body{margin:0;background:var(--bg);color:var(--ink);font:16px/1.55 "Noto Sans",system-ui,sans-serif;overflow-x:clip}
+.wrap{max-width:1240px;margin:0 auto;padding:clamp(14px,3vw,36px) max(3vw,12px)}
+header{display:flex;flex-wrap:wrap;gap:12px;align-items:flex-end;justify-content:space-between;color:#fff;margin-bottom:18px}
+header small{display:block;opacity:.8;font-size:14px}
+h1{font:700 clamp(24px,3.6vw,38px)/1.08 "Noto Serif",Georgia,serif;margin:2px 0 0;text-wrap:balance;max-width:26ch}
+.lang{display:flex;background:rgba(255,255,255,.14);border-radius:999px;padding:4px}
+.lang button{border:0;background:none;color:#fff;font:600 15px "Noto Sans";padding:8px 16px;border-radius:999px;cursor:pointer;min-height:40px}
+.lang button.on{background:#fff;color:#0f4c5c}
+.sheet{background:var(--sheet);border-radius:18px;box-shadow:0 18px 40px rgba(0,0,0,.25);padding:clamp(16px,2.6vw,30px)}
+.note{font-size:13px;color:var(--mute);margin:0 0 10px}
+.goal{margin:0 0 6px;max-width:70ch}
+.reag{margin:0 0 16px;color:var(--mute);font-size:15px;max-width:70ch}
+.safety{display:flex;gap:12px;align-items:center;flex-wrap:wrap;background:var(--warn);border-radius:12px;padding:12px 14px;margin-bottom:18px}
+.safety p{margin:0;flex:1 1 260px;font-weight:600}
+.safety label{flex-direction:row;align-items:center;gap:8px;color:var(--ink);font-weight:600;cursor:pointer}
+.grid{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1.05fr);gap:clamp(16px,3vw,36px);align-items:start}
+.step{border-top:1px solid var(--line);padding:14px 0}
+.step:first-child{border-top:0;padding-top:0}
+.step.off{opacity:.45;pointer-events:none}
+h2{font:700 19px/1.2 "Noto Serif",Georgia,serif;margin:0 0 6px}
+.hint{color:var(--mute);font-size:15px;margin:0 0 8px}
+label{font-size:14px;color:var(--mute);display:flex;flex-direction:column;gap:4px}
+textarea,select{font:16px "Noto Sans";color:var(--ink);background:var(--sheet);border:1.5px solid var(--line);border-radius:10px;padding:10px 12px;width:100%}
+textarea:focus,select:focus,button:focus-visible{outline:3px solid color-mix(in srgb,var(--acc) 45%,transparent);outline-offset:1px}
+.ok{border-color:var(--ok)!important}.bad{border-color:var(--bad)!important}
+textarea{min-height:76px;resize:vertical}
+.btns{display:flex;flex-wrap:wrap;gap:8px;margin-top:8px}
+.btn{border:0;border-radius:10px;padding:10px 14px;font:600 15px "Noto Sans";cursor:pointer;min-height:44px;background:var(--acc);color:light-dark(#fff,#08202a)}
+.btn.done{background:var(--soft);color:var(--ok)}
+.btn:disabled{opacity:.45;cursor:not-allowed}.btn.done:disabled{opacity:1}
+.msg{margin-top:8px;font-size:15px;min-height:1.4em}
+.msg.ok{color:var(--ok)}.msg.bad{color:var(--bad)}
+.board{position:sticky;top:12px}
+.seg{display:flex;background:var(--soft);border-radius:10px;padding:4px;gap:4px;margin-bottom:10px}
+.seg button{flex:1;border:0;background:none;color:var(--ink);font:600 14px "Noto Sans";padding:8px 10px;border-radius:8px;cursor:pointer;min-height:40px}
+.seg button.on{background:var(--sheet);box-shadow:0 1px 4px rgba(0,0,0,.15)}
+.seg button:disabled{opacity:.4;cursor:default}
+.rackbox{background:var(--soft);border-radius:16px;padding:10px}
+.rackbox svg{display:block;width:100%;height:auto}
+.mag{transition:transform 1.2s ease}
+.glow{animation:glow 1.4s ease-in-out 2;transform-box:fill-box}
+@keyframes glow{50%{fill:#f97316}}
+.flame{animation:flick .25s ease-in-out infinite alternate;transform-box:fill-box;transform-origin:bottom center}
+@keyframes flick{to{transform:scaleY(1.12) scaleX(.94)}}
+@media(prefers-reduced-motion:reduce){.mag{transition:none}.glow,.flame{animation:none}}
+.scroll{overflow-x:auto}
+.mins{display:grid;grid-template-columns:repeat(auto-fill,minmax(96px,1fr));gap:8px}
+.mins label{flex-direction:row;align-items:center;gap:6px;font-size:13px;color:var(--mute);background:var(--soft);border-radius:10px;padding:6px 8px}
+.mins label.cur{outline:2px solid var(--acc)}
+.mins input{width:58px;padding:6px;text-align:right;font:600 15px "Noto Sans";color:var(--ink);background:var(--sheet);border:1.5px solid var(--line);border-radius:8px}
+.mins input:disabled{opacity:.4}
+.fig{position:relative;height:260px;margin-top:12px;background:var(--soft);border-radius:12px}
+.fig svg{position:absolute;inset:0;width:100%;height:100%}
+.two{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px 14px}
+input.num{font:16px "Noto Sans";color:var(--ink);background:var(--sheet);border:1.5px solid var(--line);border-radius:10px;padding:10px 12px;width:100%}
+@media(max-width:600px){.two{grid-template-columns:minmax(0,1fr)}}
+.sug{transition:fill 1.6s ease}
+.bub{animation:rise var(--d) linear infinite;animation-delay:var(--dl);opacity:0}
+@keyframes rise{0%{transform:translateY(0);opacity:0}10%{opacity:.95}100%{transform:translateY(-80px);opacity:0}}
+.smoke{animation:smoke 2.6s ease-out infinite;opacity:0}
+@keyframes smoke{0%{transform:translateY(0) scale(.6);opacity:0}20%{opacity:.6}100%{transform:translateY(-70px) scale(1.4);opacity:0}}
+@media(prefers-reduced-motion:reduce){.bub,.smoke{animation:none;opacity:.6}}
+table{width:100%;border-collapse:collapse;font-size:14px;min-width:560px}
+th,td{padding:5px;border-bottom:1px solid var(--line);text-align:left;vertical-align:middle}
+th{font-size:13px;color:var(--mute);font-weight:600}
+td:first-child{font-weight:600;font-size:14px;width:150px}
+td select{padding:6px;font-size:13px}
+.eq{display:flex;flex-wrap:wrap;align-items:center;gap:8px;font:600 17px "Noto Sans";margin-bottom:10px}
+.eq select{width:auto;padding:6px 8px;font:600 15px "Noto Sans"}
+.q{margin-bottom:10px}
+@media(max-width:860px){.grid{grid-template-columns:minmax(0,1fr)}.board{position:static;order:-1}}
+</style>
+</head>
+<body>
+<div class="wrap">
+<header>
+  <div><small data-i="lab"></small><h1 data-i="title"></h1></div>
+  <div class="lang" role="group" aria-label="Тіл"><button id="l-kk" class="on">Қазақша</button><button id="l-ru">Русский</button></div>
+</header>
+<div class="sheet">
+  <p class="note" data-i="demo"></p>
+  <p class="goal" data-i="goal"></p>
+  <p class="reag" data-i="reag"></p>
+  <div class="safety">
+    <svg width="34" height="34" viewBox="0 0 34 34" aria-hidden="true"><path d="M17 3 32 30H2Z" fill="#f59e0b"/><rect x="15.5" y="11" width="3" height="11" rx="1.5" fill="#fff"/><circle cx="17" cy="26" r="1.8" fill="#fff"/></svg>
+    <p data-i="safe"></p>
+    <label><input type="checkbox" id="goggles" style="width:22px;height:22px"><span data-i="safeok"></span></label>
+  </div>
+  <div class="grid">
+    <div>
+      <section class="step" id="st1"><h2 data-i="s1"></h2><p class="hint" data-i="s1h"></p>
+        <div class="btns"><button class="btn" data-b="put" data-i="bput"></button><button class="btn" data-b="heat" data-i="bheat"></button></div>
+        <div class="msg" id="m1" aria-live="polite"></div></section>
+      <section class="step" id="st2"><h2 data-i="s2"></h2><p class="hint" data-i="s2h"></p>
+        <div class="btns"><button class="btn" data-b="stop" data-i="bstop"></button><button class="btn" id="next" data-i="bnext"></button></div>
+        <div class="msg" id="m2" aria-live="polite"></div>
+        <div class="mins" id="mins" style="margin-top:12px"></div>
+        <div class="btns"><button class="btn" id="chk2" data-i="check"></button></div>
+        <div class="msg" id="m2b" aria-live="polite"></div></section>
+      <section class="step" id="st3"><h2 data-i="s3"></h2><p class="hint" data-i="s3h"></p>
+        <div class="fig" id="fig"><svg id="chart"></svg></div></section>
+      <section class="step" id="st4"><h2 data-i="s4"></h2>
+        <div class="two">
+          <label><span data-i="qa"></span><input class="num" id="mp" inputmode="decimal"></label>
+          <label><span data-i="qb"></span><select id="plat"></select></label>
+        </div>
+        <div class="btns"><button class="btn" id="chk4" data-i="check"></button></div>
+        <div class="msg" id="m4" aria-live="polite"></div></section>
+      <section class="step" id="st5"><h2 data-i="s5"></h2>
+        <div class="q"><label><span data-i="q1"></span><textarea id="a1"></textarea></label></div>
+        <div class="q"><label><span data-i="q2"></span><textarea id="a2"></textarea></label></div>
+        <div class="btns"><button class="btn" id="send" data-i="send"></button></div>
+        <div class="msg" id="m5" aria-live="polite"></div></section>
+    </div>
+    <div class="board"><div class="rackbox"><svg id="scene" viewBox="0 0 560 400" aria-label="scene"></svg></div></div>
+  </div>
+</div>
+</div>
+<script>
+{
+const T={
+kk:{lab:"7-сынып · 4-зертханалық жұмыс",title:"Салолдың салқындау процесін зерттеу",demo:"Үлгі нұсқа: тіркелу және жұмысты мұғалімге жіберу толық сайтта қосылады.",
+goal:"Мақсаты: балқытылған салолдың салқындауы кезінде температураның уақытқа тәуелділігін зерттеп, оның графигін сызу.",
+reag:"Реактивтер: салол (фенилсалицилат) немесе парафин. Құрал-жабдықтар: стақан, қыздырғыш құрал/спиртшам, сіріңке, термометр, секундомер, миллиметрлік қағаз. Салол бұл тәжірибе үшін қауіпсіз зат.",
+safe:"Қыздырғыш құралдармен жұмыс жасау ережелерін сақта. Ыстық стақанды қолмен ұстама.",safeok:"Ережені оқыдым",
+s1:"1-қадам. Салолды еріт",s1h:"Массасы 30 г салолды стақанға салып, ол толық ерігенше қыздыр.",bput:"30 г салолды стақанға салу",bheat:"Ерігенше қыздыру",melted:"Салол толық балқып, мөлдір сұйыққа айналды.",
+s2:"2-қадам. Температураны минут сайын өлше",s2h:"Қыздыруды тоқтатып, секундомерді қос. Әр минут сайын термометрдің көрсеткішін жазып отыр.",
+bstop:"Қыздыруды тоқтатып, секундомерді қосу",bnext:"1 минут күту",rec:"Термометрдің көрсеткішін {m}-минуттың ұяшығына жаз.",fin:"Өлшеу аяқталды: салол толық қатайды.",
+mn:"мин",check:"Тексеру",ok2:"Барлық өлшемдер дұрыс жазылды! Графикке қара.",bad2:"Мына минуттардағы мәндер қате: ",
+s3:"3-қадам. График",s3h:"Салолдың салқындау температурасы мен уақыт арасындағы тәуелділік графигі сенің өлшемдеріңнен сызылады.",ax:"уақыт, мин",ay:"t, °C",
+s4:"4-қадам. Графикті талда",qa:"Салол қай температурада қатаяды (°C)?",qb:"Графиктің горизонталь бөлігі нені көрсетеді?",
+po:["— таңда —","Салол қатайып жатыр, сондықтан температура өзгермейді","Салол қайнап жатыр","Салол буланып жатыр"],
+ok4:"Дұрыс! Салол шамамен 42 °C-та қатаяды. Қатаю кезінде бөлінетін жылу салқындауды өтейді, сондықтан температура тұрақты болады.",bad4:"Графикке тағы бір қара.",
+s5:"5-қадам. Қорытынды",q1:"Салолдың салқындау процесін сипатта: қандай кезеңдерден өтті?",q2:"Қорытынды",
+send:"Мұғалімге жіберу",sent:"Үлгіде жіберу әлі жұмыс істемейді. Толық сайтта жұмыс мұғалімнің бетіне түседі.",empty:"Алдымен барлық сұраққа жауап бер.",salol:"салол",watch:"секундомер"},
+ru:{lab:"7 класс · Лабораторная работа №4",title:"Исследование процесса охлаждения салола",demo:"Демо-версия: регистрация и отправка работы учителю появятся в полной версии сайта.",
+goal:"Цель: исследовать зависимость температуры расплавленного салола от времени при охлаждении и построить график.",
+reag:"Реактивы: салол (фенилсалицилат) или парафин. Оборудование: стакан, нагревательный прибор/спиртовка, спички, термометр, секундомер, миллиметровая бумага. Салол безопасен для этого опыта.",
+safe:"Соблюдай правила работы с нагревательными приборами. Не бери горячий стакан руками.",safeok:"Правила прочитаны",
+s1:"Шаг 1. Расплавь салол",s1h:"Положи 30 г салола в стакан и нагревай до полного расплавления.",bput:"Положить 30 г салола в стакан",bheat:"Нагреть до расплавления",melted:"Салол полностью расплавился и превратился в прозрачную жидкость.",
+s2:"Шаг 2. Измеряй температуру каждую минуту",s2h:"Прекрати нагревание и включи секундомер. Каждую минуту записывай показание термометра.",
+bstop:"Прекратить нагрев и включить секундомер",bnext:"Подождать 1 минуту",rec:"Запиши показание термометра в ячейку {m}-й минуты.",fin:"Измерения закончены: салол полностью затвердел.",
+mn:"мин",check:"Проверить",ok2:"Все измерения записаны верно! Посмотри на график.",bad2:"Неверные значения на минутах: ",
+s3:"Шаг 3. График",s3h:"График зависимости температуры охлаждения салола от времени строится по твоим измерениям.",ax:"время, мин",ay:"t, °C",
+s4:"Шаг 4. Проанализируй график",qa:"При какой температуре затвердевает салол (°C)?",qb:"Что показывает горизонтальный участок графика?",
+po:["— выбери —","Салол затвердевает, поэтому температура не меняется","Салол кипит","Салол испаряется"],
+ok4:"Верно! Салол затвердевает примерно при 42 °C. Теплота, выделяющаяся при затвердевании, компенсирует охлаждение, поэтому температура постоянна.",bad4:"Посмотри на график ещё раз.",
+s5:"Шаг 5. Вывод",q1:"Опиши процесс охлаждения салола: какие этапы он прошёл?",q2:"Вывод",
+send:"Отправить учителю",sent:"В демо-версии отправка пока не работает. В полной версии работа попадёт на страницу учителя.",empty:"Сначала ответь на все вопросы.",salol:"салол",watch:"секундомер"}};
+const D=[70,63.5,58,53.5,49.5,46,43.5,42.5,42,42,42,42,42,41,38.5,36,34];
+let lang="kk",min=-1,temp=20,done2=false,done4=false;const S={put:0,heat:0,stop:0};const tv={};
+const $=id=>document.getElementById(id),t=k=>T[lang][k];
+const fmt=x=>(Math.round(x*10)/10).toFixed(1).replace(".",",");
+function pts(cx,cy,n,rx,ry,seed,fn){let s="";for(let k=0;k<n;k++){const a=((k*137.5+seed)%360)*Math.PI/180,r=Math.sqrt(((k*53+seed)%97)/97);s+=fn(cx+Math.cos(a)*r*rx,cy+Math.sin(a)*r*ry,k)}return s}
+function solidFrac(){if(min<0)return S.heat?0:1;if(min<7)return 0;if(min>=13)return 1;return (min-6)/7}
+function render(){
+  const x=150,w=170,top=140,bot=330,lv=80;let h="";
+  h+=`<clipPath id="bk"><rect x="${x}" y="${top}" width="${w}" height="${bot-top}" rx="12"/></clipPath><g clip-path="url(#bk)"><rect x="${x}" y="${top}" width="${w}" height="${bot-top}" fill="var(--glass)"/>`;
+  if(S.put){const sf=solidFrac();
+    if(!S.heat)h+=pts(x+w/2,bot-14,60,70,10,3,(a,b)=>`<rect x="${a-3}" y="${b-3}" width="6" height="6" fill="#fff" stroke="#cbd5e1" stroke-width=".8" transform="rotate(${(a*7)%45} ${a} ${b})"/>`);
+    else{h+=`<rect x="${x}" y="${bot-lv}" width="${w}" height="${lv}" fill="rgba(250,245,225,.7)"/>`;
+      if(sf>0){const n=Math.round(sf*70);h+=`<rect x="${x}" y="${bot-lv}" width="${w}" height="${lv}" fill="#f5f5f4" opacity="${(sf*.85).toFixed(2)}"/>`;
+        for(let k=0;k<n;k++){const side=k%2,a=side?x+6+(k*7)%(w*sf/2+4):x+w-6-(k*7)%(w*sf/2+4),b=bot-6-(k*11)%(lv-10);h+=`<line x1="${a}" y1="${b}" x2="${a+(side?10:-10)}" y2="${b-6}" stroke="#d6d3d1" stroke-width="1.6"/>`}}}}
+  h+=`</g><path d="M${x} ${top-6}V${bot-12}q0 12 12 12H${x+w-12}q12 0 12 -12V${top-6}" fill="none" stroke="var(--glassline)" stroke-width="2.6"/>`;
+  // thermometer
+  const tx=x+w-36,t0=60,tb=bot-14,mh=Math.max(4,temp/80*(tb-t0-20));
+  h+=`<rect x="${tx-5}" y="${t0}" width="10" height="${tb-t0}" rx="5" fill="var(--sheet)" stroke="var(--glassline)"/><rect x="${tx-2}" y="${tb-mh}" width="4" height="${mh}" fill="#ef4444"/><circle cx="${tx}" cy="${tb}" r="7" fill="#ef4444" stroke="var(--glassline)"/>`;
+  for(let c=0;c<=80;c+=10){const y=tb-c/80*(tb-t0-20);h+=`<line x1="${tx-5}" x2="${tx-10}" y1="${y}" y2="${y}" stroke="var(--mute)"/>`}
+  h+=`<rect x="${tx-44}" y="20" width="88" height="30" rx="8" fill="${temp>30?"var(--hot,#f97316)":"var(--soft)"}"/><text x="${tx}" y="41" text-anchor="middle" font-size="16" font-weight="700" fill="${temp>30?"#fff":"var(--ink)"}">${fmt(temp)} °C</text>`;
+  // heater
+  if(S.heat&&!S.stop)h+=`<path class="flame" d="M${x+w/2-10} 386Q${x+w/2-13} 362 ${x+w/2} 338Q${x+w/2+13} 362 ${x+w/2+10} 386Z" fill="#fb923c"/>`;
+  // stopwatch
+  h+=`<circle cx="450" cy="220" r="62" style="fill:var(--sheet)" stroke="var(--glassline)" stroke-width="4"/><rect x="440" y="148" width="20" height="12" rx="3" fill="var(--glassline)"/>`;
+  const mm=Math.max(0,min);h+=`<line x1="450" y1="220" x2="${450+50*Math.sin(mm/16*2*Math.PI)}" y2="${220-50*Math.cos(mm/16*2*Math.PI)}" stroke="#ef4444" stroke-width="3" stroke-linecap="round"/><circle cx="450" cy="220" r="5" fill="#ef4444"/>`;
+  h+=`<text x="450" y="310" text-anchor="middle" font-size="20" font-weight="700" fill="var(--ink)">${String(mm).padStart(2,"0")}:00</text><text x="450" y="330" text-anchor="middle" font-size="12" fill="var(--mute)">${t("watch")}</text>`;
+  h+=`<text x="${x+w/2}" y="${bot+26}" text-anchor="middle" font-size="13" font-weight="700" fill="var(--ink)">${t("salol")} · 30 г</text>`;
+  $("scene").innerHTML=h;
+}
+function renderMins(){$("mins").innerHTML=D.map((_,m)=>`<label class="${m===min?"cur":""}">${m} ${t("mn")}<input data-m="${m}" inputmode="decimal" value="${tv[m]||""}" ${m>min||done2?"disabled":""}></label>`).join("")}
+function chart(){
+  const s=$("chart"),W=s.clientWidth,H=s.clientHeight;if(!W)return;const l=42,r=12,tp=16,b=36,xs=m=>l+m/16*(W-l-r),ys=v=>H-b-(v-30)/45*(H-tp-b);
+  let g="";for(let m=0;m<=16;m+=2)g+=`<line x1="${xs(m)}" x2="${xs(m)}" y1="${tp}" y2="${H-b}" stroke="var(--line)"/><text x="${xs(m)}" y="${H-b+16}" font-size="11" text-anchor="middle" fill="var(--mute)">${m}</text>`;
+  for(let v=30;v<=75;v+=10)g+=`<line x1="${l}" x2="${W-r}" y1="${ys(v)}" y2="${ys(v)}" stroke="var(--line)"/><text x="${l-6}" y="${ys(v)+4}" font-size="11" text-anchor="end" fill="var(--mute)">${v}</text>`;
+  const p=D.map((_,m)=>[m,parseFloat(String(tv[m]||"").replace(",","."))]).filter(q=>!isNaN(q[1]));
+  if(p.length>1)g+=`<polyline fill="none" stroke="#2563eb" stroke-width="2.5" points="${p.map(q=>xs(q[0])+","+ys(q[1])).join(" ")}"/>`;
+  g+=p.map(q=>`<circle cx="${xs(q[0])}" cy="${ys(q[1])}" r="4" fill="#2563eb" stroke="var(--sheet)" stroke-width="2"/>`).join("");
+  g+=`<text x="${(l+W)/2}" y="${H-4}" font-size="12" text-anchor="middle" fill="var(--mute)">${t("ax")}</text><text x="${l}" y="${tp-4}" font-size="12" fill="var(--mute)">${t("ay")}</text>`;
+  s.innerHTML=g;
+}
+function renderSteps(){
+  const g=$("goggles").checked;$("st1").classList.toggle("off",!g);
+  const DEP={heat:"put",stop:"heat"};
+  document.querySelectorAll("[data-b]").forEach(b=>{const k=b.dataset.b,done=!!S[k],en=!DEP[k]||S[DEP[k]];b.disabled=done||!en;b.classList.toggle("done",done)});
+  $("st2").classList.toggle("off",!S.heat);$("next").disabled=!S.stop||min>=D.length-1;$("chk2").disabled=min<D.length-1;
+  $("st3").classList.toggle("off",!S.stop);$("st4").classList.toggle("off",!done2);$("st5").classList.toggle("off",!done4);
+}
+function applyLang(){
+  document.documentElement.lang=lang;
+  document.querySelectorAll("[data-i]").forEach(el=>{const v=T[lang][el.dataset.i];if(typeof v==="string")el.textContent=v});
+  $("l-kk").classList.toggle("on",lang==="kk");$("l-ru").classList.toggle("on",lang==="ru");
+  const pv=$("plat").value;$("plat").innerHTML=t("po").map((s,i)=>`<option value="${i||""}">${s}</option>`).join("");$("plat").value=pv;
+  document.querySelectorAll(".msg").forEach(m=>m.textContent="");
+  render();renderMins();renderSteps();chart();
+}
+function msg(id,text,ok){const m=$(id);m.textContent=text;m.className="msg "+(ok?"ok":"bad")}
+function animTemp(to,ms,cb){const from=temp,t0=performance.now();const f=n=>{const k=Math.min(1,(n-t0)/ms);temp=from+(to-from)*k;render();k<1?requestAnimationFrame(f):cb&&cb()};requestAnimationFrame(f)}
+$("l-kk").onclick=()=>{lang="kk";applyLang()};$("l-ru").onclick=()=>{lang="ru";applyLang()};
+$("goggles").onchange=renderSteps;
+document.querySelector(".grid").addEventListener("click",e=>{const b=e.target.closest("[data-b]");if(!b||b.disabled)return;const k=b.dataset.b;S[k]=1;
+  if(k==="heat"){render();renderSteps();animTemp(D[0],2500,()=>msg("m1",t("melted"),true));return}
+  if(k==="stop"){min=0;temp=D[0];msg("m2",t("rec").replace("{m}",0),true)}
+  render();renderMins();renderSteps()});
+$("next").onclick=()=>{if(min>=D.length-1)return;min++;renderMins();renderSteps();animTemp(D[min],700,()=>{render();msg("m2",min===D.length-1?t("fin"):t("rec").replace("{m}",min),true)})};
+$("mins").addEventListener("input",e=>{const m=e.target.dataset.m;if(m==null)return;tv[m]=e.target.value;e.target.classList.remove("ok","bad");chart()});
+$("chk2").onclick=()=>{const bad=[];document.querySelectorAll("#mins input").forEach(i=>{const m=Number(i.dataset.m),v=parseFloat(String(tv[m]||"").replace(",",".")),ok=!isNaN(v)&&Math.abs(v-D[m])<=0.5;i.className=ok?"ok":"bad";if(!ok)bad.push(m)});
+  done2=!bad.length;if(done2)renderMins();renderSteps();chart();done2?msg("m2b",t("ok2"),true):msg("m2b",t("bad2")+bad.join(", ")+".",false)};
+$("chk4").onclick=()=>{const v=parseFloat(String($("mp").value).replace(",",".")),a=Math.abs(v-42)<=1,b=$("plat").value==="1";$("mp").className="num "+(a?"ok":"bad");$("plat").className=b?"ok":"bad";
+  done4=a&&b;renderSteps();done4?msg("m4",t("ok4"),true):msg("m4",t("bad4"),false)};
+$("send").onclick=()=>{const f=["a1","a2"].every(id=>$(id).value.trim());msg("m5",f?t("sent"):t("empty"),f)};
+new ResizeObserver(chart).observe($("fig"));
+applyLang();
+}
+</script>
+<script src="../embed.js"></script>
+</body>
+</html>

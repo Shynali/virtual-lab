@@ -1,0 +1,213 @@
+<!DOCTYPE html>
+<html lang="kk">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Жалын түсі</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans:wght@400;600;700&family=Noto+Serif:wght@600;700&display=swap" rel="stylesheet">
+<style>
+/* VOICE: calm school lab workbook, clear and encouraging (grade 7)
+   IDEA: a workbench sheet — a spirit lamp, a nichrome loop and seven salt crystals
+   PICTURE: the large flame flaring crimson, yellow, violet, brick-red or green as each salt meets it
+   COLOUR and TYPE: white sheet on deep lab-teal; the universal-indicator rainbow; Noto Serif + Noto Sans
+   LAYOUT: steps left, scene right (sticky) with view switch; stacks on phones */
+:root{color-scheme:light dark;
+--bg:light-dark(#0f4c5c,#0a2d36);--sheet:light-dark(#ffffff,#13202a);--ink:light-dark(#10131a,#e7edf2);
+--mute:light-dark(#566170,#9fb0bf);--line:light-dark(#d5dde5,#2b3d4b);--soft:light-dark(#eef5f7,#182a35);
+--acc:light-dark(#0f4c5c,#5cc2d6);--ok:light-dark(#12733a,#4ade80);--bad:light-dark(#b91c1c,#f87171);
+--warn:light-dark(#fff4d6,#3a2f12);--glass:light-dark(#f7fbfd,#1d2f3b);--glassline:light-dark(#8aa1b1,#6c8597)}
+:root[data-theme=light]{color-scheme:light}:root[data-theme=dark]{color-scheme:dark}
+*{box-sizing:border-box;min-width:0}
+body{margin:0;background:var(--bg);color:var(--ink);font:16px/1.55 "Noto Sans",system-ui,sans-serif;overflow-x:clip}
+.wrap{max-width:1240px;margin:0 auto;padding:clamp(14px,3vw,36px) max(3vw,12px)}
+header{display:flex;flex-wrap:wrap;gap:12px;align-items:flex-end;justify-content:space-between;color:#fff;margin-bottom:18px}
+header small{display:block;opacity:.8;font-size:14px}
+h1{font:700 clamp(24px,3.6vw,38px)/1.08 "Noto Serif",Georgia,serif;margin:2px 0 0;text-wrap:balance;max-width:26ch}
+.lang{display:flex;background:rgba(255,255,255,.14);border-radius:999px;padding:4px}
+.lang button{border:0;background:none;color:#fff;font:600 15px "Noto Sans";padding:8px 16px;border-radius:999px;cursor:pointer;min-height:40px}
+.lang button.on{background:#fff;color:#0f4c5c}
+.sheet{background:var(--sheet);border-radius:18px;box-shadow:0 18px 40px rgba(0,0,0,.25);padding:clamp(16px,2.6vw,30px)}
+.note{font-size:13px;color:var(--mute);margin:0 0 10px}
+.goal{margin:0 0 6px;max-width:70ch}
+.reag{margin:0 0 16px;color:var(--mute);font-size:15px;max-width:70ch}
+.safety{display:flex;gap:12px;align-items:center;flex-wrap:wrap;background:var(--warn);border-radius:12px;padding:12px 14px;margin-bottom:18px}
+.safety p{margin:0;flex:1 1 260px;font-weight:600}
+.safety label{flex-direction:row;align-items:center;gap:8px;color:var(--ink);font-weight:600;cursor:pointer}
+.grid{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1.05fr);gap:clamp(16px,3vw,36px);align-items:start}
+.step{border-top:1px solid var(--line);padding:14px 0}
+.step:first-child{border-top:0;padding-top:0}
+.step.off{opacity:.45;pointer-events:none}
+h2{font:700 19px/1.2 "Noto Serif",Georgia,serif;margin:0 0 6px}
+.hint{color:var(--mute);font-size:15px;margin:0 0 8px}
+label{font-size:14px;color:var(--mute);display:flex;flex-direction:column;gap:4px}
+textarea,select{font:16px "Noto Sans";color:var(--ink);background:var(--sheet);border:1.5px solid var(--line);border-radius:10px;padding:10px 12px;width:100%}
+textarea:focus,select:focus,button:focus-visible{outline:3px solid color-mix(in srgb,var(--acc) 45%,transparent);outline-offset:1px}
+.ok{border-color:var(--ok)!important}.bad{border-color:var(--bad)!important}
+textarea{min-height:76px;resize:vertical}
+.btns{display:flex;flex-wrap:wrap;gap:8px;margin-top:8px}
+.btn{border:0;border-radius:10px;padding:10px 14px;font:600 15px "Noto Sans";cursor:pointer;min-height:44px;background:var(--acc);color:light-dark(#fff,#08202a)}
+.btn.done{background:var(--soft);color:var(--ok)}
+.btn:disabled{opacity:.45;cursor:not-allowed}.btn.done:disabled{opacity:1}
+.msg{margin-top:8px;font-size:15px;min-height:1.4em}
+.msg.ok{color:var(--ok)}.msg.bad{color:var(--bad)}
+.board{position:sticky;top:12px}
+.seg{display:flex;background:var(--soft);border-radius:10px;padding:4px;gap:4px;margin-bottom:10px}
+.seg button{flex:1;border:0;background:none;color:var(--ink);font:600 14px "Noto Sans";padding:8px 10px;border-radius:8px;cursor:pointer;min-height:40px}
+.seg button.on{background:var(--sheet);box-shadow:0 1px 4px rgba(0,0,0,.15)}
+.seg button:disabled{opacity:.4;cursor:default}
+.rackbox{background:var(--soft);border-radius:16px;padding:10px}
+.rackbox svg{display:block;width:100%;height:auto}
+.mag{transition:transform 1.2s ease}
+.glow{animation:glow 1.4s ease-in-out 2;transform-box:fill-box}
+@keyframes glow{50%{fill:#f97316}}
+.flame{animation:flick .25s ease-in-out infinite alternate;transform-box:fill-box;transform-origin:bottom center}
+@keyframes flick{to{transform:scaleY(1.12) scaleX(.94)}}
+@media(prefers-reduced-motion:reduce){.mag{transition:none}.glow,.flame{animation:none}}
+.scroll{overflow-x:auto}
+.fc{transition:stop-color .5s ease}
+.flame2{animation:flick .25s ease-in-out infinite alternate;transform-box:fill-box;transform-origin:bottom center}
+.tray{display:flex;flex-wrap:wrap;gap:8px;margin-top:10px}
+.tray small{width:100%;font-weight:700;color:var(--mute);font-size:13px;margin-top:4px}
+.chip{border:2px solid var(--line);background:var(--sheet);color:var(--ink);border-radius:999px;padding:6px 12px;font:600 14px "Noto Sans";cursor:pointer;min-height:40px}
+.chip.sel{border-color:var(--acc);background:var(--soft)}.chip.done{color:var(--ok)}.chip:disabled{opacity:.4;cursor:default}
+td input{width:70px;padding:6px;text-align:right;font:600 15px "Noto Sans";color:var(--ink);background:var(--sheet);border:1.5px solid var(--line);border-radius:8px}
+.two{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:0 18px}@media(max-width:600px){.two{grid-template-columns:minmax(0,1fr)}}
+.bub{animation:rise var(--d) linear infinite;animation-delay:var(--dl);opacity:0}
+@keyframes rise{0%{transform:translateY(0);opacity:0}10%{opacity:.95}100%{transform:translateY(-80px);opacity:0}}
+.smoke{animation:smoke 2.6s ease-out infinite;opacity:0}
+@keyframes smoke{0%{transform:translateY(0) scale(.6);opacity:0}20%{opacity:.6}100%{transform:translateY(-70px) scale(1.4);opacity:0}}
+@media(prefers-reduced-motion:reduce){.bub,.smoke{animation:none;opacity:.6}}
+table{width:100%;border-collapse:collapse;font-size:14px}
+th,td{padding:5px;border-bottom:1px solid var(--line);text-align:left;vertical-align:middle}
+th{font-size:13px;color:var(--mute);font-weight:600}
+td:first-child{font-weight:600;font-size:14px}
+td select{padding:6px;font-size:13px}
+.eq{display:flex;flex-wrap:wrap;align-items:center;gap:8px;font:600 17px "Noto Sans";margin-bottom:10px}
+.eq select{width:auto;padding:6px 8px;font:600 15px "Noto Sans"}
+.q{margin-bottom:10px}
+@media(max-width:860px){.grid{grid-template-columns:minmax(0,1fr)}.board{position:static;order:-1}}
+</style>
+</head>
+<body>
+<div class="wrap">
+<header>
+  <div><small data-i="lab"></small><h1 data-i="title"></h1></div>
+  <div class="lang" role="group" aria-label="Тіл"><button id="l-kk" class="on">Қазақша</button><button id="l-ru">Русский</button></div>
+</header>
+<div class="sheet">
+  <p class="note" data-i="demo"></p>
+  <p class="goal" data-i="goal"></p>
+  <p class="reag" data-i="reag"></p>
+  <div class="safety">
+    <svg width="34" height="34" viewBox="0 0 34 34" aria-hidden="true"><path d="M17 3 32 30H2Z" fill="#f59e0b"/><rect x="15.5" y="11" width="3" height="11" rx="1.5" fill="#fff"/><circle cx="17" cy="26" r="1.8" fill="#fff"/></svg>
+    <p data-i="safe"></p>
+    <label><input type="checkbox" id="goggles" style="width:22px;height:22px"><span data-i="safeok"></span></label>
+  </div>
+  <div class="grid">
+    <div>
+      <section class="step" id="st1"><h2 data-i="s1"></h2><p class="hint" data-i="s1h"></p>
+        <div class="btns" style="margin-top:0"><button class="btn" id="lamp" data-i="blamp"></button><button class="btn" id="clean" data-i="bclean"></button></div>
+        <div class="msg" id="m1" aria-live="polite"></div></section>
+      <section class="step" id="st2"><h2 data-i="s2"></h2><p class="hint" data-i="s2h"></p>
+        <table><thead><tr><th data-i="cion"></th><th data-i="ccol"></th></tr></thead><tbody id="tbl"></tbody></table>
+        <div class="btns"><button class="btn" id="chk2" data-i="check"></button></div>
+        <div class="msg" id="m2" aria-live="polite"></div></section>
+      <section class="step" id="st3"><h2 data-i="s3"></h2>
+        <label><span data-i="qa"></span><select id="qa"></select></label>
+        <div class="btns"><button class="btn" id="chk3" data-i="check"></button></div>
+        <div class="msg" id="m3" aria-live="polite"></div></section>
+      <section class="step" id="st4"><h2 data-i="s4"></h2>
+        <div class="q"><label><span data-i="q1"></span><textarea id="a1"></textarea></label></div>
+        <div class="q"><label><span data-i="q2"></span><textarea id="a2"></textarea></label></div>
+        <div class="btns"><button class="btn" id="send" data-i="send"></button></div>
+        <div class="msg" id="m4" aria-live="polite"></div></section>
+    </div>
+    <div class="board">
+      <div class="rackbox"><svg id="scene" viewBox="0 0 560 400" aria-label="flame"></svg></div>
+      <div class="tray" id="tray"></div>
+    </div>
+  </div>
+</div>
+</div>
+<script>
+{
+const T={
+kk:{lab:"9-сынып · 3-зертханалық жұмыс",title:"Li⁺, Na⁺, K⁺, Ca²⁺, Sr²⁺, Ba²⁺, Cu²⁺ катиондарын жалын түсінің өзгеруі бойынша анықтау",demo:"Үлгі нұсқа: тіркелу және жұмысты мұғалімге жіберу толық сайтта қосылады.",
+goal:"Мақсаты: металл иондарын тұз кристалдарының жалынды бояуы бойынша анықтау.",
+reag:"Реактивтер: LiCl, NaCl, KCl, CaCl₂, SrCl₂, BaCl₂, CuCl₂ кристалдары. Құрал-жабдықтар: нихром сым, спиртшам.",
+safe:"Қыздырғыш құралдармен, қышқылдармен және сілтілермен жұмыс ережесін сақта. Ыстық сымды қолмен ұстама.",safeok:"Ережені оқыдым",
+s1:"Тәжірибе",s1h:"Спиртшамды жақ. Қоспалардан тазарту үшін ілмектеп байланған нихром сымды жалында ұстап қыздыр. Содан кейін ілмекпен тұздың кристалдарын іліп алып (төменнен тұзды таңда), жанарғының ең ыстық, түссіз жалынына ұста. Әр тұздан кейін сымды қайта тазала.",
+blamp:"Спиртшамды жағу",bclean:"Сымды жалында тазалау",cleaned:"Сым тазаланды: жалынның түсі өзгермейді.",dirty:"Алдымен сымды жалында тазала! Әйтпесе алдыңғы тұздың іздері жалынды бояйды.",
+tested:"{s}: жалынның түсіне қара!",alldone:"Жеті тұз да тексерілді. Кестені толтыр.",
+s2:"Кестені толтыр",s2h:"Жасаған бақылауларың бойынша әр металл ионының жалын түсін таңда.",cion:"Металл ионы",ccol:"Жалын түсі",
+col:["—","Сары","Күлгін","Карминқызыл (ал қызыл)","Кірпіш-қызыл","Сарғыш-жасыл","Жасыл (көкшіл-жасыл)"],
+check:"Тексеру",ok2:"Кесте дұрыс толтырылды! Жалын түсінің өзгеруі кристалдардың құрамында катиондардың бар екенін дәлелдейді.",bad2:"Мына иондарда қате бар: ",
+s3:"Ойлан",qa:"Қай екі ионның жалын түсі бір-біріне ұқсас, сондықтан оларды жалын арқылы ажырату қиын?",oa:["— таңда —","Li⁺ және Sr²⁺","Na⁺ және K⁺","Ba²⁺ және Ca²⁺"],ok3:"Дұрыс! Литий мен стронций жалынды ұқсас карминқызыл түске бояйды.",bad3:"Кестеге тағы бір қара.",
+s4:"Қорытынды",q1:"Жалын түсінің өзгеруі неге кристалдардың құрамында катиондардың бар екенін дәлелдейді?",q2:"Қорытынды: жалын түсі бойынша анықтау әдісі қайда қолданылады (мысал келтір)?",
+send:"Мұғалімге жіберу",sent:"Үлгіде жіберу әлі жұмыс істемейді. Толық сайтта жұмыс мұғалімнің бетіне түседі.",empty:"Алдымен барлық сұраққа жауап бер.",wire:"нихром сым",lampl:"спиртшам"},
+ru:{lab:"9 класс · Лабораторная работа №3",title:"Определение катионов Li⁺, Na⁺, K⁺, Ca²⁺, Sr²⁺, Ba²⁺, Cu²⁺ по окрашиванию пламени",demo:"Демо-версия: регистрация и отправка работы учителю появятся в полной версии сайта.",
+goal:"Цель: определить ионы металлов по окрашиванию пламени кристаллами солей.",
+reag:"Реактивы: кристаллы LiCl, NaCl, KCl, CaCl₂, SrCl₂, BaCl₂, CuCl₂. Оборудование: нихромовая проволока, спиртовка.",
+safe:"Соблюдай правила работы с нагревательными приборами, кислотами и щелочами. Не трогай горячую проволоку руками.",safeok:"Правила прочитаны",
+s1:"Опыт",s1h:"Зажги спиртовку. Для очистки от примесей прокали нихромовую проволоку с петлёй в пламени. Затем захвати петлёй кристаллы соли (выбери соль внизу) и внеси в самую горячую, бесцветную часть пламени. После каждой соли снова очищай проволоку.",
+blamp:"Зажечь спиртовку",bclean:"Прокалить проволоку",cleaned:"Проволока очищена: пламя не окрашивается.",dirty:"Сначала прокали проволоку! Иначе следы предыдущей соли окрасят пламя.",
+tested:"{s}: посмотри на цвет пламени!",alldone:"Все семь солей проверены. Заполни таблицу.",
+s2:"Заполни таблицу",s2h:"По своим наблюдениям выбери цвет пламени для каждого иона металла.",cion:"Ион металла",ccol:"Цвет пламени",
+col:["—","Жёлтый","Фиолетовый","Карминово-красный","Кирпично-красный","Жёлто-зелёный","Зелёный (сине-зелёный)"],
+check:"Проверить",ok2:"Таблица заполнена верно! Окрашивание пламени доказывает наличие катионов в составе кристаллов.",bad2:"Ошибки для ионов: ",
+s3:"Подумай",qa:"У каких двух ионов похожий цвет пламени, поэтому их трудно различить по пламени?",oa:["— выбери —","Li⁺ и Sr²⁺","Na⁺ и K⁺","Ba²⁺ и Ca²⁺"],ok3:"Верно! Литий и стронций окрашивают пламя в похожий карминово-красный цвет.",bad3:"Посмотри на таблицу ещё раз.",
+s4:"Вывод",q1:"Почему окрашивание пламени доказывает наличие катионов в составе кристаллов?",q2:"Вывод: где применяют определение по цвету пламени (приведи пример)?",
+send:"Отправить учителю",sent:"В демо-версии отправка пока не работает. В полной версии работа попадёт на страницу учителя.",empty:"Сначала ответь на все вопросы.",wire:"нихромовая проволока",lampl:"спиртовка"}};
+// order as textbook table: K, Li, Na, Ca, Ba, Sr, Cu
+const SALTS=[{f:"KCl",ion:"K⁺",c:["#c4b5fd","#8b5cf6"],a:"2",x:"#fafafa"},{f:"LiCl",ion:"Li⁺",c:["#fda4af","#e11d48"],a:"3",x:"#fafafa"},{f:"NaCl",ion:"Na⁺",c:["#fef08a","#f59e0b"],a:"1",x:"#fafafa"},{f:"CaCl₂",ion:"Ca²⁺",c:["#fdba74","#c2410c"],a:"4",x:"#fafafa"},{f:"BaCl₂",ion:"Ba²⁺",c:["#d9f99d","#84cc16"],a:"5",x:"#fafafa"},{f:"SrCl₂",ion:"Sr²⁺",c:["#fca5a5","#dc2626"],a:"3",x:"#fafafa"},{f:"CuCl₂",ion:"Cu²⁺",c:["#99f6e4","#10b981"],a:"6",x:"#5eead4"}];
+const BASE=["#bfdbfe","#60a5fa"];
+let lang="kk",lit=false,clean=false,cur=null,d2=false,d3=false,timer=null;const done=new Set();const tv={};
+const $=id=>document.getElementById(id),t=k=>T[lang][k];
+function render(){
+  let h=`<defs><linearGradient id="fg" x1="0" y1="1" x2="0" y2="0"><stop offset="0" stop-color="#fff7ed"/><stop class="fc" id="fc1" offset=".35" stop-color="${BASE[0]}"/><stop class="fc" id="fc2" offset="1" stop-color="${BASE[1]}" stop-opacity=".85"/></linearGradient></defs>`;
+  const lx=230;
+  if(lit)h+=`<path class="flame2" d="M${lx-34} 300Q${lx-46} 220 ${lx} 90Q${lx+46} 220 ${lx+34} 300Z" fill="url(#fg)" opacity=".92"/><path d="M${lx-12} 300Q${lx-14} 262 ${lx} 236Q${lx+14} 262 ${lx+12} 300Z" fill="#dbeafe" opacity=".7"/>`;
+  h+=`<rect x="${lx-10}" y="296" width="20" height="18" rx="3" fill="#9ca3af"/><path d="M${lx-70} 380Q${lx-78} 318 ${lx} 312Q${lx+78} 318 ${lx+70} 380Z" style="fill:light-dark(#dbe7ee,#2b3f4c)" stroke="var(--glassline)" stroke-width="2"/>`;
+  h+=`<text x="${lx}" y="398" text-anchor="middle" font-size="12" fill="var(--mute)">${t("lampl")}</text>`;
+  // wire
+  const inFlame=cur!=null||clean==="burn";const wy=inFlame?220:120,wx=inFlame?lx+6:420;
+  h+=`<rect x="${wx+20}" y="${wy-8}" width="120" height="16" rx="6" fill="#7c5a3c"/><line x1="${wx+4}" y1="${wy}" x2="${wx+22}" y2="${wy}" stroke="#9ca3af" stroke-width="3"/><circle cx="${wx}" cy="${wy}" r="6" fill="none" stroke="#9ca3af" stroke-width="3"/>`;
+  if(cur!=null)h+=`<circle cx="${wx}" cy="${wy}" r="4" fill="${SALTS[cur].x}" stroke="#cbd5e1"/>`;
+  h+=`<text x="${wx+80}" y="${wy+30}" text-anchor="middle" font-size="12" fill="var(--mute)">${t("wire")}</text>`;
+  if(cur!=null)h+=`<text x="${lx}" y="60" text-anchor="middle" font-size="18" font-weight="700" fill="var(--ink)">${SALTS[cur].f}</text>`;
+  $("scene").innerHTML=h;
+}
+function flameTo(c){const a=$("fc1"),b=$("fc2");if(!a)return;requestAnimationFrame(()=>requestAnimationFrame(()=>{a.setAttribute("stop-color",c[0]);b.setAttribute("stop-color",c[1])}))}
+function renderTray(){$("tray").innerHTML=SALTS.map((s,i)=>`<button class="chip${cur===i?" sel":""}${done.has(i)?" done":""}" data-i="${i}" ${!lit?"disabled":""}>${s.f}</button>`).join("")}
+function opts(arr,v){return arr.map((s,i)=>`<option value="${i||""}" ${String(v||"")===String(i||"")?"selected":""}>${s}</option>`).join("")}
+function renderTable(){$("tbl").innerHTML=SALTS.map((s,i)=>`<tr><td>${s.ion}</td><td><select data-r="${i}">${opts(t("col"),tv[i])}</select></td></tr>`).join("");const a=$("qa").value;$("qa").innerHTML=opts(t("oa"),a);$("qa").value=a}
+function renderSteps(){const g=$("goggles").checked;$("st1").classList.toggle("off",!g);$("lamp").disabled=lit;$("lamp").classList.toggle("done",lit);$("clean").disabled=!lit||clean===true;
+  $("st2").classList.toggle("off",done.size<7);$("st3").classList.toggle("off",!d2);$("st4").classList.toggle("off",!d3)}
+function applyLang(){
+  document.documentElement.lang=lang;
+  document.querySelectorAll("[data-i]").forEach(el=>{const v=T[lang][el.dataset.i];if(typeof v==="string")el.textContent=v});
+  $("l-kk").classList.toggle("on",lang==="kk");$("l-ru").classList.toggle("on",lang==="ru");
+  document.querySelectorAll(".msg").forEach(m=>m.textContent="");
+  render();renderTray();renderTable();renderSteps();
+}
+function msg(id,text,ok){const m=$(id);m.textContent=text;m.className="msg "+(ok?"ok":"bad")}
+$("l-kk").onclick=()=>{lang="kk";applyLang()};$("l-ru").onclick=()=>{lang="ru";applyLang()};
+$("goggles").onchange=renderSteps;
+$("lamp").onclick=()=>{if(!$("goggles").checked)return;lit=true;render();renderTray();renderSteps()};
+$("clean").onclick=()=>{clearTimeout(timer);cur=null;clean="burn";render();renderSteps();timer=setTimeout(()=>{clean=true;render();renderSteps();msg("m1",t("cleaned"),true)},900)};
+$("tray").addEventListener("click",e=>{const b=e.target.closest(".chip");if(!b||b.disabled)return;if(clean!==true){msg("m1",t("dirty"),false);return}
+  clearTimeout(timer);const i=+b.dataset.i;cur=i;clean=false;render();flameTo(SALTS[i].c);done.add(i);renderTray();renderSteps();
+  msg("m1",done.size===7?t("alldone"):t("tested").replace("{s}",SALTS[i].f),true);
+  timer=setTimeout(()=>{flameTo(BASE)},3200)});
+$("tbl").addEventListener("change",e=>{const r=e.target.dataset.r;if(r==null)return;tv[r]=e.target.value;e.target.classList.remove("ok","bad")});
+$("chk2").onclick=()=>{const bad=[];document.querySelectorAll("#tbl select").forEach(s=>{const ok=s.value===SALTS[s.dataset.r].a;s.className=ok?"ok":"bad";if(!ok)bad.push(SALTS[s.dataset.r].ion)});
+  d2=!bad.length;renderSteps();d2?msg("m2",t("ok2"),true):msg("m2",t("bad2")+bad.join(", ")+".",false)};
+$("chk3").onclick=()=>{const ok=$("qa").value==="1";$("qa").className=ok?"ok":"bad";d3=ok;renderSteps();ok?msg("m3",t("ok3"),true):msg("m3",t("bad3"),false)};
+$("send").onclick=()=>{const f=["a1","a2"].every(id=>$(id).value.trim());msg("m4",f?t("sent"):t("empty"),f)};
+applyLang();
+}
+</script>
+<script src="../embed.js"></script>
+</body>
+</html>

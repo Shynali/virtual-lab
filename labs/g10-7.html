@@ -1,0 +1,227 @@
+<!DOCTYPE html>
+<html lang="kk">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Органикалық молекулалардың модельдері</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans:wght@400;600;700&family=Noto+Serif:wght@600;700&display=swap" rel="stylesheet">
+<style>
+/* VOICE: calm school lab workbook, clear and encouraging (grade 7)
+   IDEA: a workbench sheet — two twin tubes, acid and alkali, each with an aluminium granule
+   PICTURE: both tubes starting slowly, then fizzing hard once the oxide film is gone: aluminium reacts with both
+   COLOUR and TYPE: white sheet on deep lab-teal; the universal-indicator rainbow; Noto Serif + Noto Sans
+   LAYOUT: steps left, scene right (sticky) with view switch; stacks on phones */
+:root{color-scheme:light dark;
+--bg:light-dark(#0f4c5c,#0a2d36);--sheet:light-dark(#ffffff,#13202a);--ink:light-dark(#10131a,#e7edf2);
+--mute:light-dark(#566170,#9fb0bf);--line:light-dark(#d5dde5,#2b3d4b);--soft:light-dark(#eef5f7,#182a35);
+--acc:light-dark(#0f4c5c,#5cc2d6);--ok:light-dark(#12733a,#4ade80);--bad:light-dark(#b91c1c,#f87171);
+--warn:light-dark(#fff4d6,#3a2f12);--glass:light-dark(#f7fbfd,#1d2f3b);--glassline:light-dark(#8aa1b1,#6c8597)}
+:root[data-theme=light]{color-scheme:light}:root[data-theme=dark]{color-scheme:dark}
+*{box-sizing:border-box;min-width:0}
+body{margin:0;background:var(--bg);color:var(--ink);font:16px/1.55 "Noto Sans",system-ui,sans-serif;overflow-x:clip}
+.wrap{max-width:1240px;margin:0 auto;padding:clamp(14px,3vw,36px) max(3vw,12px)}
+header{display:flex;flex-wrap:wrap;gap:12px;align-items:flex-end;justify-content:space-between;color:#fff;margin-bottom:18px}
+header small{display:block;opacity:.8;font-size:14px}
+h1{font:700 clamp(24px,3.6vw,38px)/1.08 "Noto Serif",Georgia,serif;margin:2px 0 0;text-wrap:balance;max-width:26ch}
+.lang{display:flex;background:rgba(255,255,255,.14);border-radius:999px;padding:4px}
+.lang button{border:0;background:none;color:#fff;font:600 15px "Noto Sans";padding:8px 16px;border-radius:999px;cursor:pointer;min-height:40px}
+.lang button.on{background:#fff;color:#0f4c5c}
+.sheet{background:var(--sheet);border-radius:18px;box-shadow:0 18px 40px rgba(0,0,0,.25);padding:clamp(16px,2.6vw,30px)}
+.note{font-size:13px;color:var(--mute);margin:0 0 10px}
+.goal{margin:0 0 6px;max-width:70ch}
+.reag{margin:0 0 16px;color:var(--mute);font-size:15px;max-width:70ch}
+.safety{display:flex;gap:12px;align-items:center;flex-wrap:wrap;background:var(--warn);border-radius:12px;padding:12px 14px;margin-bottom:18px}
+.safety p{margin:0;flex:1 1 260px;font-weight:600}
+.safety label{flex-direction:row;align-items:center;gap:8px;color:var(--ink);font-weight:600;cursor:pointer}
+.grid{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1.05fr);gap:clamp(16px,3vw,36px);align-items:start}
+.step{border-top:1px solid var(--line);padding:14px 0}
+.step:first-child{border-top:0;padding-top:0}
+.step.off{opacity:.45;pointer-events:none}
+h2{font:700 19px/1.2 "Noto Serif",Georgia,serif;margin:0 0 6px}
+.hint{color:var(--mute);font-size:15px;margin:0 0 8px}
+label{font-size:14px;color:var(--mute);display:flex;flex-direction:column;gap:4px}
+textarea,select{font:16px "Noto Sans";color:var(--ink);background:var(--sheet);border:1.5px solid var(--line);border-radius:10px;padding:10px 12px;width:100%}
+textarea:focus,select:focus,button:focus-visible{outline:3px solid color-mix(in srgb,var(--acc) 45%,transparent);outline-offset:1px}
+.ok{border-color:var(--ok)!important}.bad{border-color:var(--bad)!important}
+textarea{min-height:76px;resize:vertical}
+.btns{display:flex;flex-wrap:wrap;gap:8px;margin-top:8px}
+.btn{border:0;border-radius:10px;padding:10px 14px;font:600 15px "Noto Sans";cursor:pointer;min-height:44px;background:var(--acc);color:light-dark(#fff,#08202a)}
+.btn.done{background:var(--soft);color:var(--ok)}
+.btn:disabled{opacity:.45;cursor:not-allowed}.btn.done:disabled{opacity:1}
+.msg{margin-top:8px;font-size:15px;min-height:1.4em}
+.msg.ok{color:var(--ok)}.msg.bad{color:var(--bad)}
+.board{position:sticky;top:12px}
+.seg{display:flex;background:var(--soft);border-radius:10px;padding:4px;gap:4px;margin-bottom:10px}
+.seg button{flex:1;border:0;background:none;color:var(--ink);font:600 14px "Noto Sans";padding:8px 10px;border-radius:8px;cursor:pointer;min-height:40px}
+.seg button.on{background:var(--sheet);box-shadow:0 1px 4px rgba(0,0,0,.15)}
+.seg button:disabled{opacity:.4;cursor:default}
+.rackbox{background:var(--soft);border-radius:16px;padding:10px}
+.rackbox svg{display:block;width:100%;height:auto}
+.mag{transition:transform 1.2s ease}
+.glow{animation:glow 1.4s ease-in-out 2;transform-box:fill-box}
+@keyframes glow{50%{fill:#f97316}}
+.flame{animation:flick .25s ease-in-out infinite alternate;transform-box:fill-box;transform-origin:bottom center}
+@keyframes flick{to{transform:scaleY(1.12) scaleX(.94)}}
+@media(prefers-reduced-motion:reduce){.mag{transition:none}.glow,.flame{animation:none}}
+.scroll{overflow-x:auto}
+.seg{display:flex;background:var(--soft);border-radius:10px;padding:4px;gap:4px;margin-bottom:10px;flex-wrap:wrap}
+.seg button{flex:1;border:0;background:none;color:var(--ink);font:600 14px "Noto Sans";padding:8px 10px;border-radius:8px;cursor:pointer;min-height:40px}
+.seg button.on{background:var(--sheet);box-shadow:0 1px 4px rgba(0,0,0,.15)}
+.brown{transition:opacity 2s ease}.pk{transition:fill 1.6s ease}.ca{transition:transform 4s ease-in-out,opacity 6s ease;transform-box:fill-box;transform-origin:center}.water{animation:fall2 .6s linear infinite}@keyframes fall2{from{transform:translateY(-10px);opacity:.9}to{transform:translateY(30px);opacity:.2}}.eq input{width:44px;padding:6px;text-align:center;font:600 16px "Noto Sans";border:1.5px solid var(--line);border-radius:8px;background:var(--sheet);color:var(--ink)}
+.tray{display:flex;flex-wrap:wrap;gap:8px;margin-top:10px}
+.tray small{width:100%;font-weight:700;color:var(--mute);font-size:13px;margin-top:4px}
+.chip{border:2px solid var(--line);background:var(--sheet);color:var(--ink);border-radius:999px;padding:6px 12px;font:600 14px "Noto Sans";cursor:pointer;min-height:40px}
+.chip.sel{border-color:var(--acc);background:var(--soft)}.chip.done{color:var(--ok)}.chip:disabled{opacity:.4;cursor:default}
+.scroll{overflow-x:auto}td select{padding:6px;font-size:13px}td input{width:70px;padding:6px;text-align:right;font:600 15px "Noto Sans";color:var(--ink);background:var(--sheet);border:1.5px solid var(--line);border-radius:8px}
+.two{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:0 18px}@media(max-width:600px){.two{grid-template-columns:minmax(0,1fr)}}
+.bub{animation:rise var(--d) linear infinite;animation-delay:var(--dl);opacity:0}
+@keyframes rise{0%{transform:translateY(0);opacity:0}10%{opacity:.95}100%{transform:translateY(-80px);opacity:0}}
+.smoke{animation:smoke 2.6s ease-out infinite;opacity:0}
+@keyframes smoke{0%{transform:translateY(0) scale(.6);opacity:0}20%{opacity:.6}100%{transform:translateY(-70px) scale(1.4);opacity:0}}
+@media(prefers-reduced-motion:reduce){.bub,.smoke{animation:none;opacity:.6}}
+table{width:100%;border-collapse:collapse;font-size:14px}
+th,td{padding:5px;border-bottom:1px solid var(--line);text-align:left;vertical-align:middle}
+th{font-size:13px;color:var(--mute);font-weight:600}
+td:first-child{font-weight:600;font-size:14px}
+td select{padding:6px;font-size:13px}
+.eq{display:flex;flex-wrap:wrap;align-items:center;gap:8px;font:600 17px "Noto Sans";margin-bottom:10px}
+.eq select{width:auto;padding:6px 8px;font:600 15px "Noto Sans"}
+.q{margin-bottom:10px}
+.pop{animation:pop .45s ease}@keyframes pop{0%{transform:scale(.3)}70%{transform:scale(1.12)}}.pop{transform-box:fill-box;transform-origin:center}
+.ball{cursor:pointer}.ball:focus-visible{outline:3px solid var(--acc)}
+input[type=range]{width:100%;accent-color:var(--acc);height:32px}.rng{display:flex;align-items:center;gap:12px;margin-top:6px}
+.hpick{cursor:pointer}.hpick:hover circle:first-child{stroke:#16a34a;stroke-width:4}
+.fade{animation:fade 2.6s ease forwards}@keyframes fade{to{opacity:0}}
+.stir{animation:stir .5s ease-in-out 5;transform-box:fill-box;transform-origin:top center}@keyframes stir{50%{transform:rotate(9deg)}}
+@media(max-width:860px){.grid{grid-template-columns:minmax(0,1fr)}.board{position:static;order:-1}}
+</style>
+</head>
+<body>
+<div class="wrap">
+<header>
+  <div><small data-i="lab"></small><h1 data-i="title"></h1></div>
+  <div class="lang" role="group" aria-label="Тіл"><button id="l-kk" class="on">Қазақша</button><button id="l-ru">Русский</button></div>
+</header>
+<div class="sheet">
+  <p class="note" data-i="demo"></p>
+  <p class="goal" data-i="goal"></p>
+  <p class="reag" data-i="reag"></p>
+  <div class="grid">
+    <div>
+      <section class="step" id="st1"><h2 data-i="e1"></h2><p class="hint" data-i="e1h"></p>
+        <div class="two"><label><span data-i="lsm"></span><select id="m_s"></select></label><label><span data-i="lbig"></span><select id="m_b"></select></label></div>
+        <label style="margin-top:6px"><span data-i="lpts"></span><select id="m_p"></select></label>
+        <div class="btns"><button class="btn" id="bM" data-i="bbuild"></button></div>
+        <div class="msg" id="m1" aria-live="polite"></div></section>
+      <section class="step" id="st2"><h2 data-i="e2"></h2><p class="hint" data-i="e2h"></p>
+        <div class="two"><label><span data-i="lsm"></span><select id="p_s"></select></label><label><span data-i="lbig"></span><select id="p_b"></select></label></div>
+        <label style="margin-top:6px"><span data-i="lang2"></span><select id="p_a"></select></label>
+        <div class="btns"><button class="btn" id="bP" data-i="bbuild"></button></div>
+        <div class="msg" id="m2" aria-live="polite"></div></section>
+      <section class="step" id="st3"><h2 data-i="e3"></h2><p class="hint" data-i="e3h"></p>
+        <div class="btns"><button class="btn" id="resetCl" data-i="breset"></button></div>
+        <div class="msg" id="m3" aria-live="polite"></div></section>
+      <section class="step" id="st4"><h2 data-i="s4"></h2><p class="hint" data-i="s4h"></p>
+        <div id="qs"></div>
+        <div class="btns"><button class="btn" id="chk" data-i="check"></button></div>
+        <div class="msg" id="m4" aria-live="polite"></div></section>
+      <section class="step" id="st5"><h2 data-i="s5"></h2>
+        <div class="q"><label><span data-i="q1"></span><textarea id="a1"></textarea></label></div>
+        <div class="q"><label><span data-i="q2"></span><textarea id="a2"></textarea></label></div>
+        <div class="q"><label><span data-i="q3"></span><textarea id="a3"></textarea></label></div>
+        <div class="btns"><button class="btn" id="send" data-i="send"></button></div>
+        <div class="msg" id="m5" aria-live="polite"></div></section>
+    </div>
+    <div class="board">
+      <div class="seg" role="group"><button id="v1" class="on" data-i="v1"></button><button id="v2" data-i="v2"></button><button id="v3" data-i="v3"></button></div>
+      <div class="rackbox"><svg id="scene" viewBox="0 0 560 400" aria-label="scene"></svg>
+        <div class="rng" style="padding:0 10px"><span data-i="lrot" style="font-size:14px;color:var(--mute)"></span><input type="range" id="rot" min="0" max="360" value="20"></div></div></div>
+  </div>
+</div>
+</div>
+<script>
+{
+const T={
+kk:{lab:"10-сынып · 7-зертханалық жұмыс",title:"Органикалық заттар молекулаларының модельдерін құрастыру",demo:"Үлгі нұсқа: тіркелу және жұмысты мұғалімге жіберу толық сайтта қосылады.",
+goal:"Мақсаты: көмірсутектер мен галогентуындылардың (метан, пропан, 1-хлорпропан) молекулаларының модельдерін дайындау.",
+reag:"Құрал-жабдықтар: ермексаз, ағаш немесе металл өзектер.",
+e1:"Метан молекуласының моделі",e1h:"Бір түсті ермексаздан көлемі бірдей шарлар, басқа түсті ермексаздан диаметрі 1,5 есе үлкен шар жаса. Үлкен шардың (көміртек атомы) бетіне бірдей арақашықтықта нүктелер белгілеп, өзектерге кіші шарларды (сутек атомдарын) бекіт.",
+lsm:"Кіші шарлар (сутек) саны:",lbig:"Үлкен шарлар (көміртек) саны:",lpts:"Үлкен шардағы нүктелер саны:",lang2:"Көміртек атомдары арасындағы бұрыш:",bbuild:"Модельді құрастыру",
+okM:"Дұрыс! CH₄ — тетраэдр: көміртек атомы 4 сутек атомымен байланысқан, H–C–H бұрышы 109°28′.",badM:"Метан CH₄ формуласын және көміртектің валенттілігін (IV) еске түсір.",
+e2:"Пропан молекуласының моделі",e2h:"Бір түсті ермексаздан бірдей кіші шарлар, басқа түсті ермексаздан 1,5 есе үлкен шарлар жаса. Үлкен шарларды («көміртек атомдары») белгілі бұрыш жасап, өзектермен жалғастыр, сосын кіші шарларды бекіт.",
+okP:"Дұрыс! C₃H₈: көміртек атомдары 109° бұрышпен орналасқан, сондықтан тізбек сызықты емес, зигзаг пішінді.",badP:"Пропан C₃H₈ формуласын және sp³-көміртектің тетраэдрлік бұрышын еске түсір.",
+e3:"1-хлорпропан молекуласының моделі",e3h:"Пропан моделінен бір кіші шарды («сутек атомы») алып таста да, оның орнына екі есе үлкен басқа түсті шарды («хлор атомы») бекіт. Модельдегі тиісті сутек атомын бас.",
+breset:"Хлорды алып тастау",ok3:"Дұрыс! Хлор шеткі көміртек атомына бекітілді: CH₃–CH₂–CH₂Cl — 1-хлорпропан.",bad3:"Бұл 2-хлорпропан (CH₃–CHCl–CH₃) болады. 1-хлорпропан үшін шеткі көміртектегі сутекті алмастыр.",
+lrot:"Айналдыру",v1:"Метан",v2:"Пропан",v3:"1-хлорпропан",
+s4:"Сұрақтар",s4h:"Модельдерге қарап, жауапты таңда.",
+qs:[["Метан молекуласының пішіні:",["—","Тетраэдр","Жазық шаршы","Сызықты"],"1"],["Қаныққан көміртек атомы байланыстарының арасындағы бұрыш:",["—","109°28′","90°","120°"],"1"],["Пропан молекуласында неше C–H байланысы бар?",["—","8","6","10"],"1"],["1-хлорпропанның формуласы:",["—","CH₃–CH₂–CH₂Cl","CH₃–CHCl–CH₃","CH₂Cl–CH₂Cl"],"1"],["Неліктен әртүрлі көлемді шарлар қолданылады?",["—","Атомдардың радиустары әртүрлі (H < C < Cl)","Әдемі болу үшін","Шарлардың массасы бірдей болу үшін"],"1"]],
+check:"Тексеру",ok:"Барлығы дұрыс! Қаныққан көмірсутектерде көміртек атомы sp³-гибридтенген, байланыстар тетраэдр төбелеріне бағытталған (109°28′).",bad:"Қате жауаптар саны: ",
+s5:"Сұрақтар мен тапсырмалар (оқулық)",q1:"1. Неліктен молекула модельдерін жасау үшін көлемдері әртүрлі шарларды пайдаланады?",q2:"2. Көмірсутек пен галогентуындының молекулаларының модельдерін жасағанда қандай ережелерге сүйендің?",q3:"3. Пропан молекуласының моделін дайындауда «көміртек атомдарын» неліктен 109° бұрыш жасап орналастырдың?",
+send:"Мұғалімге жіберу",sent:"Үлгіде жіберу әлі жұмыс істемейді. Толық сайтта жұмыс мұғалімнің бетіне түседі.",empty:"Алдымен барлық сұрақтарға жауап бер.",tap:"Сутек атомын басып, хлорға алмастыр"},
+ru:{lab:"10 класс · Лабораторная работа №7",title:"Сборка моделей молекул органических веществ",demo:"Демо-версия: регистрация и отправка работы учителю появятся в полной версии сайта.",
+goal:"Цель: изготовить модели молекул углеводородов и галогенопроизводных (метана, пропана, 1-хлорпропана).",
+reag:"Оборудование: пластилин, деревянные или металлические стержни.",
+e1:"Модель молекулы метана",e1h:"Сделай из пластилина одного цвета одинаковые шарики, а из пластилина другого цвета — шар диаметром в 1,5 раза больше. Отметь на большом шаре (атом углерода) точки на равном расстоянии и закрепи на стержнях маленькие шарики (атомы водорода).",
+lsm:"Число маленьких шариков (водород):",lbig:"Число больших шаров (углерод):",lpts:"Число точек на большом шаре:",lang2:"Угол между атомами углерода:",bbuild:"Собрать модель",
+okM:"Верно! CH₄ — тетраэдр: атом углерода связан с 4 атомами водорода, угол H–C–H 109°28′.",badM:"Вспомни формулу метана CH₄ и валентность углерода (IV).",
+e2:"Модель молекулы пропана",e2h:"Сделай из пластилина одного цвета одинаковые маленькие шарики, а из другого — шары в 1,5 раза больше. Соедини большие шары («атомы углерода») стержнями под определённым углом, затем закрепи маленькие шарики.",
+okP:"Верно! C₃H₈: атомы углерода расположены под углом 109°, поэтому цепь не линейная, а зигзагообразная.",badP:"Вспомни формулу пропана C₃H₈ и тетраэдрический угол sp³-углерода.",
+e3:"Модель молекулы 1-хлорпропана",e3h:"Убери из модели пропана один маленький шарик («атом водорода») и закрепи на его месте шар другого цвета в два раза больше («атом хлора»). Нажми на нужный атом водорода в модели.",
+breset:"Убрать хлор",ok3:"Верно! Хлор закреплён у крайнего атома углерода: CH₃–CH₂–CH₂Cl — 1-хлорпропан.",bad3:"Получится 2-хлорпропан (CH₃–CHCl–CH₃). Для 1-хлорпропана замени водород у крайнего атома углерода.",
+lrot:"Поворот",v1:"Метан",v2:"Пропан",v3:"1-хлорпропан",
+s4:"Вопросы",s4h:"Посмотри на модели и выбери ответ.",
+qs:[["Форма молекулы метана:",["—","Тетраэдр","Плоский квадрат","Линейная"],"1"],["Угол между связями насыщенного атома углерода:",["—","109°28′","90°","120°"],"1"],["Сколько связей C–H в молекуле пропана?",["—","8","6","10"],"1"],["Формула 1-хлорпропана:",["—","CH₃–CH₂–CH₂Cl","CH₃–CHCl–CH₃","CH₂Cl–CH₂Cl"],"1"],["Почему используют шарики разного размера?",["—","Радиусы атомов разные (H < C < Cl)","Для красоты","Чтобы масса шариков была одинаковой"],"1"]],
+check:"Проверить",ok:"Всё верно! В насыщенных углеводородах атом углерода sp³-гибридизован, связи направлены к вершинам тетраэдра (109°28′).",bad:"Неверных ответов: ",
+s5:"Вопросы и задания (учебник)",q1:"1. Почему для изготовления моделей молекул используют шарики разного размера?",q2:"2. Какими правилами ты руководствовался при изготовлении моделей молекул углеводорода и галогенопроизводного?",q3:"3. Почему при изготовлении модели пропана «атомы углерода» располагали под углом 109°?",
+send:"Отправить учителю",sent:"В демо-версии отправка пока не работает. В полной версии работа попадёт на страницу учителя.",empty:"Сначала ответь на все вопросы.",tap:"Нажми на атом водорода, чтобы заменить его хлором"}};
+const M=[["C", 0.0, 0.0, 0.0], ["H", 0.629, 0.629, 0.629], ["H", 0.629, -0.629, -0.629], ["H", -0.629, 0.629, -0.629], ["H", -0.629, -0.629, 0.629]],MB=[[0, 1], [0, 2], [0, 3], [0, 4]],P=[["C", -1.249, -0.241, -0.0], ["C", 0.0, 0.642, -0.0], ["C", 1.249, -0.241, -0.0], ["H", -2.139, 0.389, -0.0], ["H", -1.25, -0.87, 0.89], ["H", -1.25, -0.87, -0.89], ["H", 0.0, 1.271, 0.89], ["H", 0.0, 1.271, -0.89], ["H", 0.953, -1.29, -0.0], ["H", 1.843, -0.031, 0.89], ["H", 1.843, -0.031, -0.89]],PB=[[0, 1], [1, 2], [0, 3], [0, 4], [0, 5], [1, 6], [1, 7], [2, 8], [2, 9], [2, 10]];
+const NUM=["—","1","2","3","4","5","6","8","10"],ANG=["—","90°","109°","120°","180°"];
+let lang="kk",ok=false,fM=false,fP=false,f3=false,clIdx=-1,view=1,rot=20;const qv={},sv={};
+const $=id=>document.getElementById(id),t=k=>T[lang][k];
+const ST={H:[13,"#f8fafc","#94a3b8","#111"],C:[20,"#374151","#111827","#fff"],Cl:[26,"#16a34a","#14532d","#fff"]};
+function draw(atoms,bonds,S,clickable){if(view===3&&clIdx>=0){const c=clIdx<=5?0:clIdx<=7?1:2,A0=atoms[c],H=atoms[clIdx],k=1.65;atoms=atoms.map((x,i)=>i===clIdx?[x[0],A0[1]+(H[1]-A0[1])*k,A0[2]+(H[2]-A0[2])*k,A0[3]+(H[3]-A0[3])*k]:x)}const a=rot*Math.PI/180,ca=Math.cos(a),sa=Math.sin(a),tl=0.35,ct=Math.cos(tl),st=Math.sin(tl);
+  const pr=atoms.map(([e,x,y,z])=>{const x1=x*ca+z*sa,z1=-x*sa+z*ca,y1=y*ct-z1*st,z2=y*st+z1*ct;return[280+x1*S,190-y1*S,z2]});
+  let items=[];bonds.forEach(([i,j])=>{items.push([Math.min(pr[i][2],pr[j][2])-.01,`<line x1="${pr[i][0].toFixed(1)}" y1="${pr[i][1].toFixed(1)}" x2="${pr[j][0].toFixed(1)}" y2="${pr[j][1].toFixed(1)}" stroke="#9ca3af" stroke-width="7" stroke-linecap="round"/>`])});
+  atoms.forEach((at,i)=>{let e=at[0];if(i===clIdx&&view===3)e="Cl";const[r0,f,s,tc]=ST[e],z=pr[i][2],r=r0*(1+z*.08),cx=pr[i][0].toFixed(1),cy=pr[i][1].toFixed(1);
+    const g=`<circle cx="${cx}" cy="${cy}" r="${r.toFixed(1)}" fill="${f}" stroke="${s}" stroke-width="2"/><circle cx="${(pr[i][0]-r*.35).toFixed(1)}" cy="${(pr[i][1]-r*.35).toFixed(1)}" r="${(r*.28).toFixed(1)}" fill="#fff" opacity=".4"/><text x="${cx}" y="${(pr[i][1]+r*.33).toFixed(1)}" text-anchor="middle" font-size="${(r*.85).toFixed(0)}" font-weight="700" fill="${tc}" pointer-events="none">${e}</text>`;
+    items.push([z,clickable&&e==="H"?`<g class="hpick" data-h="${i}" tabindex="0" role="button" aria-label="H">${g}</g>`:`<g>${g}</g>`])});
+  items.sort((p,q)=>p[0]-q[0]);return items.map(x=>x[1]).join("")}
+function render(){let h="";
+  if(view===1){h+=`<text x="280" y="34" text-anchor="middle" font-size="17" font-weight="700" fill="var(--ink)">CH₄</text>`;h+=fM?draw(M,MB,95,false):`<text x="280" y="200" text-anchor="middle" font-size="14" fill="var(--mute)">?</text>`}
+  if(view===2){h+=`<text x="280" y="34" text-anchor="middle" font-size="17" font-weight="700" fill="var(--ink)">C₃H₈ · CH₃–CH₂–CH₃</text>`;h+=fP?draw(P,PB,78,false):`<text x="280" y="200" text-anchor="middle" font-size="14" fill="var(--mute)">?</text>`}
+  if(view===3){h+=`<text x="280" y="34" text-anchor="middle" font-size="17" font-weight="700" fill="var(--ink)">${f3?"C₃H₇Cl · CH₃–CH₂–CH₂Cl":"C₃H₇Cl"}</text>`;if(fP){h+=draw(P,PB,78,!f3);if(clIdx<0)h+=`<text x="280" y="385" text-anchor="middle" font-size="13" fill="var(--mute)">${t("tap")}</text>`}}
+  $("scene").innerHTML=h;["v1","v2","v3"].forEach((v,i)=>$(v).classList.toggle("on",view===i+1))}
+function opts(arr,v){return arr.map((s,i)=>`<option value="${i||""}" ${String(v||"")===String(i||"")?"selected":""}>${s}</option>`).join("")}
+function renderQ(){["m_s","m_b","m_p","p_s","p_b"].forEach(id=>$(id).innerHTML=opts(NUM,sv[id]));$("p_a").innerHTML=opts(ANG,sv.p_a);
+  $("qs").innerHTML=t("qs").map((q,i)=>`<label style="margin-top:6px"><span>${q[0]}</span><select data-q="${i}">${opts(q[1],qv[i])}</select></label>`).join("")}
+function renderSteps(){$("st2").classList.toggle("off",!fM);$("st3").classList.toggle("off",!fP);$("st4").classList.toggle("off",!f3);$("st5").classList.toggle("off",!ok);
+  [["bM",fM],["bP",fP]].forEach(([b,f])=>{$(b).disabled=f;$(b).classList.toggle("done",f)});$("resetCl").disabled=f3||clIdx<0}
+function applyLang(){document.documentElement.lang=lang;
+  document.querySelectorAll("[data-i]").forEach(el=>{const v=T[lang][el.dataset.i];if(typeof v==="string")el.textContent=v});
+  $("l-kk").classList.toggle("on",lang==="kk");$("l-ru").classList.toggle("on",lang==="ru");
+  document.querySelectorAll(".msg").forEach(m=>m.textContent="");render();renderQ();renderSteps()}
+function msg(id,text,okk){const m=$(id);m.textContent=text;m.className="msg "+(okk?"ok":"bad")}
+$("l-kk").onclick=()=>{lang="kk";applyLang()};$("l-ru").onclick=()=>{lang="ru";applyLang()};
+[1,2,3].forEach(i=>$("v"+i).onclick=()=>{view=i;render()});
+document.querySelectorAll("#st1 select,#st2 select").forEach(s=>s.onchange=e=>{sv[s.id]=s.value;s.className=""});
+function chkSet(A){let bad=0;for(const k in A){const g=$(k).value===A[k];$(k).className=g?"ok":"bad";if(!g)bad++}return!bad}
+$("bM").onclick=()=>{view=1;fM=chkSet({m_s:"4",m_b:"1",m_p:"4"});fM?msg("m1",t("okM"),true):msg("m1",t("badM"),false);render();renderSteps()};
+$("bP").onclick=()=>{view=2;fP=chkSet({p_s:"7",p_b:"3",p_a:"2"});fP?msg("m2",t("okP"),true):msg("m2",t("badP"),false);render();renderSteps()};
+function pickH(i){if(f3||view!==3)return;const terminal=[3,4,5,8,9,10].includes(i);clIdx=i;if(terminal){f3=true;msg("m3",t("ok3"),true)}else msg("m3",t("bad3"),false);render();renderSteps()}
+$("scene").addEventListener("click",e=>{const g=e.target.closest("[data-h]");if(g)pickH(+g.dataset.h)});
+$("scene").addEventListener("keydown",e=>{const g=e.target.closest("[data-h]");if(g&&(e.key==="Enter"||e.key===" ")){e.preventDefault();pickH(+g.dataset.h)}});
+$("resetCl").onclick=()=>{clIdx=-1;$("m3").textContent="";render();renderSteps()};
+$("rot").oninput=e=>{rot=+e.target.value;render()};
+document.querySelector("#qs").addEventListener("change",e=>{const s=e.target;if(s.dataset.q!=null){qv[s.dataset.q]=s.value;s.className=""}});
+$("chk").onclick=()=>{let bad=0;document.querySelectorAll("[data-q]").forEach(s=>{const g=s.value===t("qs")[s.dataset.q][2];s.className=g?"ok":"bad";if(!g)bad++});
+  ok=!bad;renderSteps();ok?msg("m4",t("ok"),true):msg("m4",t("bad")+bad+".",false)};
+$("send").onclick=()=>{const f=["a1","a2","a3"].every(id=>$(id).value.trim());msg("m5",f?t("sent"):t("empty"),!!f)};
+// steps unlock view switching on success
+const _bP=$("bP").onclick;$("bP").onclick=()=>{_bP();if(fP)setTimeout(()=>{},0)};
+applyLang();
+}
+</script>
+<script src="../embed.js"></script>
+</body>
+</html>

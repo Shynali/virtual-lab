@@ -1,0 +1,232 @@
+<!DOCTYPE html>
+<html lang="kk">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Тұздар гидролизі</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans:wght@400;600;700&family=Noto+Serif:wght@600;700&display=swap" rel="stylesheet">
+<style>
+/* VOICE: calm school lab workbook, clear and encouraging (grade 7)
+   IDEA: a workbench sheet — five salt solutions in a rack, each with a strip of universal indicator paper
+   PICTURE: strips coloured red, green and blue against the pH scale; then a tube where two salts give a white precipitate and gas
+   COLOUR and TYPE: white sheet on deep lab-teal; the universal-indicator rainbow; Noto Serif + Noto Sans
+   LAYOUT: steps left, scene right (sticky) with view switch; stacks on phones */
+:root{color-scheme:light dark;
+--bg:light-dark(#0f4c5c,#0a2d36);--sheet:light-dark(#ffffff,#13202a);--ink:light-dark(#10131a,#e7edf2);
+--mute:light-dark(#566170,#9fb0bf);--line:light-dark(#d5dde5,#2b3d4b);--soft:light-dark(#eef5f7,#182a35);
+--acc:light-dark(#0f4c5c,#5cc2d6);--ok:light-dark(#12733a,#4ade80);--bad:light-dark(#b91c1c,#f87171);
+--warn:light-dark(#fff4d6,#3a2f12);--glass:light-dark(#f7fbfd,#1d2f3b);--glassline:light-dark(#8aa1b1,#6c8597)}
+:root[data-theme=light]{color-scheme:light}:root[data-theme=dark]{color-scheme:dark}
+*{box-sizing:border-box;min-width:0}
+body{margin:0;background:var(--bg);color:var(--ink);font:16px/1.55 "Noto Sans",system-ui,sans-serif;overflow-x:clip}
+.wrap{max-width:1240px;margin:0 auto;padding:clamp(14px,3vw,36px) max(3vw,12px)}
+header{display:flex;flex-wrap:wrap;gap:12px;align-items:flex-end;justify-content:space-between;color:#fff;margin-bottom:18px}
+header small{display:block;opacity:.8;font-size:14px}
+h1{font:700 clamp(24px,3.6vw,38px)/1.08 "Noto Serif",Georgia,serif;margin:2px 0 0;text-wrap:balance;max-width:26ch}
+.lang{display:flex;background:rgba(255,255,255,.14);border-radius:999px;padding:4px}
+.lang button{border:0;background:none;color:#fff;font:600 15px "Noto Sans";padding:8px 16px;border-radius:999px;cursor:pointer;min-height:40px}
+.lang button.on{background:#fff;color:#0f4c5c}
+.sheet{background:var(--sheet);border-radius:18px;box-shadow:0 18px 40px rgba(0,0,0,.25);padding:clamp(16px,2.6vw,30px)}
+.note{font-size:13px;color:var(--mute);margin:0 0 10px}
+.goal{margin:0 0 6px;max-width:70ch}
+.reag{margin:0 0 16px;color:var(--mute);font-size:15px;max-width:70ch}
+.safety{display:flex;gap:12px;align-items:center;flex-wrap:wrap;background:var(--warn);border-radius:12px;padding:12px 14px;margin-bottom:18px}
+.safety p{margin:0;flex:1 1 260px;font-weight:600}
+.safety label{flex-direction:row;align-items:center;gap:8px;color:var(--ink);font-weight:600;cursor:pointer}
+.grid{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1.05fr);gap:clamp(16px,3vw,36px);align-items:start}
+.step{border-top:1px solid var(--line);padding:14px 0}
+.step:first-child{border-top:0;padding-top:0}
+.step.off{opacity:.45;pointer-events:none}
+h2{font:700 19px/1.2 "Noto Serif",Georgia,serif;margin:0 0 6px}
+.hint{color:var(--mute);font-size:15px;margin:0 0 8px}
+label{font-size:14px;color:var(--mute);display:flex;flex-direction:column;gap:4px}
+textarea,select{font:16px "Noto Sans";color:var(--ink);background:var(--sheet);border:1.5px solid var(--line);border-radius:10px;padding:10px 12px;width:100%}
+textarea:focus,select:focus,button:focus-visible{outline:3px solid color-mix(in srgb,var(--acc) 45%,transparent);outline-offset:1px}
+.ok{border-color:var(--ok)!important}.bad{border-color:var(--bad)!important}
+textarea{min-height:76px;resize:vertical}
+.btns{display:flex;flex-wrap:wrap;gap:8px;margin-top:8px}
+.btn{border:0;border-radius:10px;padding:10px 14px;font:600 15px "Noto Sans";cursor:pointer;min-height:44px;background:var(--acc);color:light-dark(#fff,#08202a)}
+.btn.done{background:var(--soft);color:var(--ok)}
+.btn:disabled{opacity:.45;cursor:not-allowed}.btn.done:disabled{opacity:1}
+.msg{margin-top:8px;font-size:15px;min-height:1.4em}
+.msg.ok{color:var(--ok)}.msg.bad{color:var(--bad)}
+.board{position:sticky;top:12px}
+.seg{display:flex;background:var(--soft);border-radius:10px;padding:4px;gap:4px;margin-bottom:10px}
+.seg button{flex:1;border:0;background:none;color:var(--ink);font:600 14px "Noto Sans";padding:8px 10px;border-radius:8px;cursor:pointer;min-height:40px}
+.seg button.on{background:var(--sheet);box-shadow:0 1px 4px rgba(0,0,0,.15)}
+.seg button:disabled{opacity:.4;cursor:default}
+.rackbox{background:var(--soft);border-radius:16px;padding:10px}
+.rackbox svg{display:block;width:100%;height:auto}
+.mag{transition:transform 1.2s ease}
+.glow{animation:glow 1.4s ease-in-out 2;transform-box:fill-box}
+@keyframes glow{50%{fill:#f97316}}
+.flame{animation:flick .25s ease-in-out infinite alternate;transform-box:fill-box;transform-origin:bottom center}
+@keyframes flick{to{transform:scaleY(1.12) scaleX(.94)}}
+@media(prefers-reduced-motion:reduce){.mag{transition:none}.glow,.flame{animation:none}}
+.scroll{overflow-x:auto}
+.strip{transition:fill 1.2s ease}
+.tray{display:flex;flex-wrap:wrap;gap:8px;margin-top:10px}
+.tray small{width:100%;font-weight:700;color:var(--mute);font-size:13px;margin-top:4px}
+.chip{border:2px solid var(--line);background:var(--sheet);color:var(--ink);border-radius:999px;padding:6px 12px;font:600 14px "Noto Sans";cursor:pointer;min-height:40px}
+.chip.sel{border-color:var(--acc);background:var(--soft)}.chip.done{color:var(--ok)}.chip:disabled{opacity:.4;cursor:default}
+.scroll{overflow-x:auto}td select{padding:6px;font-size:13px}td input{width:70px;padding:6px;text-align:right;font:600 15px "Noto Sans";color:var(--ink);background:var(--sheet);border:1.5px solid var(--line);border-radius:8px}
+.two{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:0 18px}@media(max-width:600px){.two{grid-template-columns:minmax(0,1fr)}}
+.bub{animation:rise var(--d) linear infinite;animation-delay:var(--dl);opacity:0}
+@keyframes rise{0%{transform:translateY(0);opacity:0}10%{opacity:.95}100%{transform:translateY(-80px);opacity:0}}
+.smoke{animation:smoke 2.6s ease-out infinite;opacity:0;transform-box:fill-box;transform-origin:center}
+@keyframes smoke{0%{transform:translateY(0) scale(.6);opacity:0}20%{opacity:.6}100%{transform:translateY(-70px) scale(1.4);opacity:0}}
+@media(prefers-reduced-motion:reduce){.bub,.smoke{animation:none;opacity:.6}}
+table{width:100%;border-collapse:collapse;font-size:14px}
+th,td{padding:5px;border-bottom:1px solid var(--line);text-align:left;vertical-align:middle}
+th{font-size:13px;color:var(--mute);font-weight:600}
+td:first-child{font-weight:600;font-size:14px}
+td select{padding:6px;font-size:13px}
+.eq{display:flex;flex-wrap:wrap;align-items:center;gap:8px;font:600 17px "Noto Sans";margin-bottom:10px}
+.eq select{width:auto;padding:6px 8px;font:600 15px "Noto Sans"}
+.q{margin-bottom:10px}
+@media(max-width:860px){.grid{grid-template-columns:minmax(0,1fr)}.board{position:static;order:-1}}
+</style>
+</head>
+<body>
+<div class="wrap">
+<header>
+  <div><small data-i="lab"></small><h1 data-i="title"></h1></div>
+  <div class="lang" role="group" aria-label="Тіл"><button id="l-kk" class="on">Қазақша</button><button id="l-ru">Русский</button></div>
+</header>
+<div class="sheet">
+  <p class="note" data-i="demo"></p>
+  <p class="goal" data-i="goal"></p>
+  <p class="reag" data-i="reag"></p>
+  <div class="safety">
+    <svg width="34" height="34" viewBox="0 0 34 34" aria-hidden="true"><path d="M17 3 32 30H2Z" fill="#f59e0b"/><rect x="15.5" y="11" width="3" height="11" rx="1.5" fill="#fff"/><circle cx="17" cy="26" r="1.8" fill="#fff"/></svg>
+    <p data-i="safe"></p>
+    <label><input type="checkbox" id="goggles" style="width:22px;height:22px"><span data-i="safeok"></span></label>
+  </div>
+  <div class="grid">
+    <div>
+      <section class="step" id="st1"><h2 data-i="s1"></h2><p class="hint" data-i="s1h"></p>
+        <div class="btns" style="margin-top:0"><button class="btn" id="pour" data-i="bpour"></button></div>
+        <div class="msg" id="m1" aria-live="polite"></div></section>
+      <section class="step" id="st2"><h2 data-i="s2"></h2><p class="hint" data-i="s2h"></p>
+        <div class="scroll"><table style="min-width:640px"><thead><tr><th data-i="c1"></th><th data-i="c2"></th><th data-i="c3"></th><th data-i="c4"></th><th>pH</th><th data-i="c6"></th></tr></thead><tbody id="tbl"></tbody></table></div>
+        <div class="btns"><button class="btn" id="chk2" data-i="check"></button></div>
+        <div class="msg" id="m2" aria-live="polite"></div></section>
+      <section class="step" id="st3"><h2 data-i="s3"></h2><p class="hint" data-i="s3h"></p>
+        <div class="btns" style="margin-top:0"><button class="btn" id="mix" data-i="bmix"></button></div>
+        <div class="msg" id="m3" aria-live="polite"></div>
+        <label style="margin-top:8px"><span data-i="qo"></span><select id="obs"></select></label>
+        <div class="eq" id="eq2" style="margin-top:10px;font-family:'Noto Serif',serif"></div>
+        <div class="btns"><button class="btn" id="chk3" data-i="check"></button></div>
+        <div class="msg" id="m3b" aria-live="polite"></div></section>
+      <section class="step" id="st4"><h2 data-i="s4"></h2>
+        <div class="q"><label><span data-i="q1"></span><textarea id="a1"></textarea></label></div>
+        <div class="q"><label><span data-i="q2"></span><textarea id="a2"></textarea></label></div>
+        <div class="btns"><button class="btn" id="send" data-i="send"></button></div>
+        <div class="msg" id="m4" aria-live="polite"></div></section>
+    </div>
+    <div class="board"><div class="rackbox"><svg id="scene" viewBox="0 0 560 420" aria-label="rack"></svg></div></div>
+  </div>
+</div>
+</div>
+<script>
+{
+const T={
+kk:{lab:"9-сынып · 2-зертханалық жұмыс",title:"Тұздар гидролизі",demo:"Үлгі нұсқа: тіркелу және жұмысты мұғалімге жіберу толық сайтта қосылады.",
+goal:"Мақсаты: тұз ерітінділерінің ортасын әмбебап индикатормен анықтап, тұздың құрамына қарай гидролиздің жүретін-жүрмейтінін түсіндіру.",
+reag:"Реактивтер: KCl, Na₂CO₃, AlCl₃, Na₂S, NaNO₃ тұздарының ерітінділері, әмбебап индикатор. Құрал-жабдықтар: сынауықтар, тұрғы.",
+safe:"AlCl₃ пен Na₂S араласқанда улы күкіртсутек (H₂S) бөлінеді: 2-тәжірибені тартпа шкафта жүргіз. Қорғау көзілдірігін ки.",safeok:"Ережені оқыдым",
+s1:"№1-тәжірибе. Тұз ерітінділерінің pH-ы",s1h:"Бес сынауыққа 3–4 мл берілген тұз ерітінділерін құй. Сосын сынауықты басып, әмбебап индикатордың көмегімен әр ерітіндінің pH көрсеткішін анықта.",
+bpour:"Бес сынауыққа ерітінділерді құю",poured:"Ерітінділер құйылды. Енді әр сынауықты басып, индикатор қағазын батыр.",alltested:"Бес ерітінді де тексерілді. Нәтижені кестеге жаз.",
+s2:"Тәжірибенің нәтижесін кестеге жаз",s2h:"Тұзды түзген негіз бен қышқылдың түрін анықта, гидролиз жүре ме, соны таңда, pH мәнін шкаладан оқып жаз және гидролиз теңдеуін таңда.",
+c1:"Тұз",c2:"Негіздің түрі",c3:"Қышқылдың түрі",c4:"Гидролиз жүре ме?",c6:"Гидролиз теңдеуі (1-саты)",
+st:["—","Күшті","Әлсіз"],yn:["—","Иә","Жоқ"],
+eqo:["—","Гидролиз жүрмейді","CO₃²⁻ + H₂O ⇌ HCO₃⁻ + OH⁻","Al³⁺ + H₂O ⇌ AlOH²⁺ + H⁺","S²⁻ + H₂O ⇌ HS⁻ + OH⁻","Na⁺ + H₂O ⇌ NaOH + H⁺"],
+check:"Тексеру",ok2:"Кесте дұрыс! Күшті негіз бен күшті қышқылдан түзілген тұз гидролизденбейді; әлсіз электролит ионы гидролизге ұшырайды.",bad2:"Мына тұздарда қате бар: ",
+s3:"№2-тәжірибе. AlCl₃ + Na₂S",s3h:"Таза сынауыққа AlCl₃ мен Na₂S ерітінділерін құйып араластыр. Не байқадың? Реакция теңдеуін жаз.",bmix:"AlCl₃ мен Na₂S ерітінділерін араластыру",mixed:"Ақ тұнба түзілді және шіріген жұмыртқа иісті газ бөлінді.",
+qo:"Не байқадың?",oo:["— таңда —","Ақ тұнба түзіліп, шіріген жұмыртқа иісті газ бөлінді","Көк тұнба түзілді","Ерітінді түссізденді, өзгеріс жоқ"],
+ok3:"Дұрыс! Екі тұз бір-бірінің гидролизін күшейтеді, сондықтан гидролиз соңына дейін жүреді: Al(OH)₃ тұнбаға түседі, H₂S газ күйінде бөлінеді.",bad3:"Тағы бір қара: қате бар.",
+s4:"Қорытынды",q1:"Қандай тұздар гидролизге ұшырайды, қандайлары ұшырамайды? Ерітінді ортасы тұздың құрамына қалай байланысты?",q2:"№2-тәжірибеде гидролиз неге соңына дейін жүрді?",
+send:"Мұғалімге жіберу",sent:"Үлгіде жіберу әлі жұмыс істемейді. Толық сайтта жұмыс мұғалімнің бетіне түседі.",empty:"Алдымен барлық сұраққа жауап бер.",scale:"pH шкаласы",tap:"бас"},
+ru:{lab:"9 класс · Лабораторная работа №2",title:"Гидролиз солей",demo:"Демо-версия: регистрация и отправка работы учителю появятся в полной версии сайта.",
+goal:"Цель: определить универсальным индикатором среду растворов солей и объяснить, идёт ли гидролиз в зависимости от состава соли.",
+reag:"Реактивы: растворы солей KCl, Na₂CO₃, AlCl₃, Na₂S, NaNO₃, универсальный индикатор. Оборудование: пробирки, штатив.",
+safe:"При смешивании AlCl₃ и Na₂S выделяется ядовитый сероводород (H₂S): опыт 2 проводи в вытяжном шкафу. Надень защитные очки.",safeok:"Правила прочитаны",
+s1:"Опыт №1. pH растворов солей",s1h:"Налей в пять пробирок по 3–4 мл растворов данных солей. Затем нажимай на пробирки и определяй pH каждого раствора универсальным индикатором.",
+bpour:"Налить растворы в пять пробирок",poured:"Растворы налиты. Нажимай на каждую пробирку, чтобы опустить индикаторную бумагу.",alltested:"Все пять растворов проверены. Запиши результаты в таблицу.",
+s2:"Запиши результаты в таблицу",s2h:"Определи тип основания и кислоты, образовавших соль, выбери, идёт ли гидролиз, запиши pH по шкале и выбери уравнение гидролиза.",
+c1:"Соль",c2:"Тип основания",c3:"Тип кислоты",c4:"Идёт ли гидролиз?",c6:"Уравнение гидролиза (1-я ступень)",
+st:["—","Сильное","Слабое"],yn:["—","Да","Нет"],
+eqo:["—","Гидролиз не идёт","CO₃²⁻ + H₂O ⇌ HCO₃⁻ + OH⁻","Al³⁺ + H₂O ⇌ AlOH²⁺ + H⁺","S²⁻ + H₂O ⇌ HS⁻ + OH⁻","Na⁺ + H₂O ⇌ NaOH + H⁺"],
+check:"Проверить",ok2:"Таблица верна! Соль сильного основания и сильной кислоты не гидролизуется; гидролизу подвергается ион слабого электролита.",bad2:"Ошибки для солей: ",
+s3:"Опыт №2. AlCl₃ + Na₂S",s3h:"Налей в чистую пробирку растворы AlCl₃ и Na₂S и перемешай. Что ты наблюдаешь? Запиши уравнение реакции.",bmix:"Смешать растворы AlCl₃ и Na₂S",mixed:"Выпал белый осадок и выделился газ с запахом тухлых яиц.",
+qo:"Что ты наблюдаешь?",oo:["— выбери —","Выпал белый осадок, выделился газ с запахом тухлых яиц","Выпал голубой осадок","Раствор обесцветился, изменений нет"],
+ok3:"Верно! Соли взаимно усиливают гидролиз друг друга, поэтому он идёт до конца: Al(OH)₃ выпадает в осадок, H₂S выделяется в виде газа.",bad3:"Посмотри ещё раз: есть ошибка.",
+s4:"Вывод",q1:"Какие соли подвергаются гидролизу, а какие нет? Как среда раствора зависит от состава соли?",q2:"Почему в опыте №2 гидролиз прошёл до конца?",
+send:"Отправить учителю",sent:"В демо-версии отправка пока не работает. В полной версии работа попадёт на страницу учителя.",empty:"Сначала ответь на все вопросы.",scale:"шкала pH",tap:"нажми"}};
+const PHC=["#e11d48","#ef4444","#f97316","#fb923c","#facc15","#d9e021","#a3d63c","#4ade80","#22c55e","#14b8a6","#0ea5e9","#3b82f6","#6366f1","#7c3aed","#6d28d9"];
+// salt: formula, pH, base(1 strong,2 weak), acid, hydro(1 yes,2 no), eq option
+const SALT=[{f:"KCl",ph:7,b:"1",a:"1",h:"2",e:"1"},{f:"Na₂CO₃",ph:11,b:"1",a:"2",h:"1",e:"2"},{f:"AlCl₃",ph:3,b:"2",a:"1",h:"1",e:"3"},{f:"Na₂S",ph:12,b:"1",a:"2",h:"1",e:"4"},{f:"NaNO₃",ph:7,b:"1",a:"1",h:"2",e:"1"}];
+let lang="kk",poured=false,mixed=false,d2=false,d3=false;const tested=new Set();const tv={},ev={};
+const $=id=>document.getElementById(id),t=k=>T[lang][k];
+function render(anim){
+  let h="";const X0=40,DX=100,W=44,TOP=110,BOT=280;
+  SALT.forEach((s,i)=>{const x=X0+i*DX;
+    h+=`<g class="tb" data-k="${i}" style="cursor:pointer"><clipPath id="c${i}"><rect x="${x}" y="${TOP}" width="${W}" height="${BOT-TOP}" rx="${W/2}"/><rect x="${x}" y="${TOP}" width="${W}" height="${(BOT-TOP)/2}"/></clipPath><g clip-path="url(#c${i})"><rect x="${x}" y="${TOP}" width="${W}" height="${BOT-TOP}" fill="var(--glass)"/>`;
+    if(poured)h+=`<rect x="${x}" y="${BOT-70}" width="${W}" height="70" fill="rgba(215,232,242,.6)"/>`;
+    h+=`</g><path d="M${x} ${TOP-8}V${BOT-W/2}a${W/2} ${W/2} 0 0 0 ${W} 0V${TOP-8}" fill="none" stroke="var(--glassline)" stroke-width="2.2"/>`;
+    if(tested.has(i)){const c=PHC[s.ph];h+=`<rect x="${x+W/2-9}" y="${TOP-50}" width="18" height="150" rx="3" fill="#f6e7b8" stroke="#d6c08a"/><rect class="strip" id="sp${i}" x="${x+W/2-9}" y="${TOP+40}" width="18" height="60" rx="3" fill="${anim===i?"#f6e7b8":c}" data-to="${c}"/>`}
+    else if(poured)h+=`<text x="${x+W/2}" y="${TOP+30}" text-anchor="middle" font-size="11" font-weight="600" fill="var(--acc)">${t("tap")}</text>`;
+    h+=`<text x="${x+W/2}" y="${BOT+24}" text-anchor="middle" font-size="14" font-weight="700" fill="var(--ink)">${s.f}</text></g>`});
+  h+=`<rect x="20" y="${BOT-100}" width="510" height="8" rx="3" style="fill:light-dark(#b7c4cd,#3a4b57)" opacity=".7"/>`;
+  const y0=345,cw=34,x0=20;h+=`<text x="${x0}" y="${y0-8}" font-size="12" fill="var(--mute)">${t("scale")}</text>`;
+  for(let p=1;p<=14;p++)h+=`<rect x="${x0+(p-1)*(cw+3)}" y="${y0}" width="${cw}" height="26" rx="4" fill="${PHC[p]}"/><text x="${x0+(p-1)*(cw+3)+cw/2}" y="${y0+44}" text-anchor="middle" font-size="12" font-weight="700" fill="var(--ink)">${p}</text>`;
+  if(mixed){const x=480,W2=50,T2=20,B2=150;h=h;}
+  $("scene").innerHTML=h;
+  if(anim!=null){const sp=$("sp"+anim);sp&&requestAnimationFrame(()=>requestAnimationFrame(()=>sp.setAttribute("fill",sp.dataset.to)))}
+}
+function renderMix(){
+  const x=230,W=80,TOP=90,BOT=330;let h="";
+  h+=`<clipPath id="cm"><rect x="${x}" y="${TOP}" width="${W}" height="${BOT-TOP}" rx="${W/2}"/><rect x="${x}" y="${TOP}" width="${W}" height="${(BOT-TOP)/2}"/></clipPath><g clip-path="url(#cm)"><rect x="${x}" y="${TOP}" width="${W}" height="${BOT-TOP}" fill="var(--glass)"/><rect x="${x}" y="${BOT-120}" width="${W}" height="120" fill="rgba(235,235,230,.75)"/>`;
+  for(let k=0;k<26;k++){const a=x+8+(k*23)%(W-16),b=BOT-8-(k*9)%60;h+=`<ellipse cx="${a}" cy="${b}" rx="${5+(k%3)}" ry="4" fill="#fafafa" stroke="#cbd5e1" stroke-width=".7"/>`}
+  for(let k=0;k<12;k++){const cx=x+14+(k*17)%(W-28),d=(1.2+(k%4)/4).toFixed(2);h+=`<circle class="bub" cx="${cx}" cy="${BOT-60}" r="${2+(k%3)}" fill="#fff" stroke="#9fb7c7" style="--d:${d}s;--dl:${(-k*0.12).toFixed(2)}s"/>`}
+  h+=`</g><path d="M${x} ${TOP-8}V${BOT-W/2}a${W/2} ${W/2} 0 0 0 ${W} 0V${TOP-8}" fill="none" stroke="var(--glassline)" stroke-width="2.6"/>`;
+  for(let k=0;k<3;k++)h+=`<circle class="smoke" cx="${x+W/2-10+k*10}" cy="${TOP-10}" r="9" fill="#e7e5c8" style="animation-delay:${-k*0.8}s"/>`;
+  h+=`<text x="${x+W+16}" y="${TOP+10}" font-size="16" font-weight="700" fill="#a16207">H₂S↑</text><text x="${x+W/2}" y="${BOT+28}" text-anchor="middle" font-size="14" font-weight="700" fill="var(--ink)">AlCl₃ + Na₂S → Al(OH)₃↓</text>`;
+  $("scene").innerHTML=h;
+}
+function opts(arr,v){return arr.map((s,i)=>`<option value="${i||""}" ${String(v||"")===String(i||"")?"selected":""}>${s}</option>`).join("")}
+function renderTable(){$("tbl").innerHTML=SALT.map((s,i)=>`<tr><td>${s.f}</td><td><select data-r="${i}" data-k="b">${opts(t("st"),tv[i+"b"])}</select></td><td><select data-r="${i}" data-k="a">${opts(t("st"),tv[i+"a"])}</select></td><td><select data-r="${i}" data-k="h">${opts(t("yn"),tv[i+"h"])}</select></td><td><input data-r="${i}" data-k="p" inputmode="decimal" value="${tv[i+"p"]||""}"></td><td><select data-r="${i}" data-k="e">${opts(t("eqo"),tv[i+"e"])}</select></td></tr>`).join("");
+  const o=$("obs").value;$("obs").innerHTML=opts(t("oo"),o);$("obs").value=o;
+  const K=[["a","2"],["b","3"],["c","6"],["d","2"],["e","3"],["f","6"]];const inp=id=>`<input id="${id}" inputmode="numeric" value="${ev[id]||""}" style="width:44px;padding:6px;text-align:center;font:600 16px 'Noto Sans';border:1.5px solid var(--line);border-radius:8px;background:var(--sheet);color:var(--ink)">`;
+  $("eq2").innerHTML=`${inp("a")}AlCl₃ + ${inp("b")}Na₂S + ${inp("c")}H₂O → ${inp("d")}Al(OH)₃↓ + ${inp("e")}H₂S↑ + ${inp("f")}NaCl`}
+function renderSteps(){const g=$("goggles").checked;$("st1").classList.toggle("off",!g);$("pour").disabled=poured;$("pour").classList.toggle("done",poured);
+  $("st2").classList.toggle("off",tested.size<5);$("st3").classList.toggle("off",!d2);$("mix").disabled=mixed;$("mix").classList.toggle("done",mixed);$("st4").classList.toggle("off",!d3)}
+function applyLang(){
+  document.documentElement.lang=lang;
+  document.querySelectorAll("[data-i]").forEach(el=>{const v=T[lang][el.dataset.i];if(typeof v==="string")el.textContent=v});
+  $("l-kk").classList.toggle("on",lang==="kk");$("l-ru").classList.toggle("on",lang==="ru");
+  document.querySelectorAll(".msg").forEach(m=>m.textContent="");
+  mixed?renderMix():render();renderTable();renderSteps();
+}
+function msg(id,text,ok){const m=$(id);m.textContent=text;m.className="msg "+(ok?"ok":"bad")}
+$("l-kk").onclick=()=>{lang="kk";applyLang()};$("l-ru").onclick=()=>{lang="ru";applyLang()};
+$("goggles").onchange=renderSteps;
+$("pour").onclick=()=>{if(!$("goggles").checked)return;poured=true;render();renderSteps();msg("m1",t("poured"),true)};
+$("scene").addEventListener("click",e=>{const g=e.target.closest(".tb");if(!g||!poured||mixed)return;const k=+g.dataset.k;if(tested.has(k))return;tested.add(k);render(k);renderSteps();if(tested.size===5)msg("m1",t("alltested"),true)});
+const tIn=e=>{const el=e.target;if(el.dataset.r==null)return;tv[el.dataset.r+el.dataset.k]=el.value;el.classList.remove("ok","bad")};
+$("tbl").addEventListener("input",tIn);$("tbl").addEventListener("change",tIn);
+$("chk2").onclick=()=>{const bad=[];SALT.forEach((s,i)=>{let ok=true;["b","a","h","e"].forEach(k=>{const el=document.querySelector(`[data-r="${i}"][data-k="${k}"]`),g=el.value===s[k];el.className=g?"ok":"bad";if(!g)ok=false});
+  const p=document.querySelector(`[data-r="${i}"][data-k="p"]`),v=parseFloat(String(p.value).replace(",",".")),pOk=!isNaN(v)&&Math.abs(v-s.ph)<=1;p.className=pOk?"ok":"bad";if(!pOk)ok=false;if(!ok)bad.push(s.f)});
+  d2=!bad.length;renderSteps();d2?msg("m2",t("ok2"),true):msg("m2",t("bad2")+bad.join(", ")+".",false)};
+$("mix").onclick=()=>{mixed=true;renderMix();renderSteps();msg("m3",t("mixed"),true)};
+$("eq2").addEventListener("input",e=>{if(e.target.id)ev[e.target.id]=e.target.value;e.target.classList.remove("ok","bad")});
+$("chk3").onclick=()=>{let ok=$("obs").value==="1";$("obs").className=ok?"ok":"bad";const W={a:"2",b:"3",c:"6",d:"2",e:"3",f:"6"};Object.entries(W).forEach(([id,v])=>{const g=$(id).value.trim()===v;$(id).style.borderColor=g?"var(--ok)":"var(--bad)";if(!g)ok=false});
+  d3=ok;renderSteps();ok?msg("m3b",t("ok3"),true):msg("m3b",t("bad3"),false)};
+$("send").onclick=()=>{const f=["a1","a2"].every(id=>$(id).value.trim());msg("m4",f?t("sent"):t("empty"),f)};
+applyLang();
+}
+</script>
+<script src="../embed.js"></script>
+</body>
+</html>

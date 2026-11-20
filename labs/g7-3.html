@@ -1,0 +1,224 @@
+<!DOCTYPE html>
+<html lang="kk">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Реакция белгілері</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans:wght@400;600;700&family=Noto+Serif:wght@600;700&display=swap" rel="stylesheet">
+<style>
+/* VOICE: calm school lab workbook, clear and encouraging (grade 7)
+   IDEA: a workbench sheet — three small experiments, each showing one sign of a chemical reaction
+   PICTURE: sugar on an iron spoon browning to black over a flame, soda fizzing in vinegar, blue precipitate forming
+   COLOUR and TYPE: white sheet on deep lab-teal; caramel to charcoal, copper blue; Noto Serif + Noto Sans
+   LAYOUT: steps left, scene right (sticky) with view switch; stacks on phones */
+:root{color-scheme:light dark;
+--bg:light-dark(#0f4c5c,#0a2d36);--sheet:light-dark(#ffffff,#13202a);--ink:light-dark(#10131a,#e7edf2);
+--mute:light-dark(#566170,#9fb0bf);--line:light-dark(#d5dde5,#2b3d4b);--soft:light-dark(#eef5f7,#182a35);
+--acc:light-dark(#0f4c5c,#5cc2d6);--ok:light-dark(#12733a,#4ade80);--bad:light-dark(#b91c1c,#f87171);
+--warn:light-dark(#fff4d6,#3a2f12);--glass:light-dark(#f7fbfd,#1d2f3b);--glassline:light-dark(#8aa1b1,#6c8597)}
+:root[data-theme=light]{color-scheme:light}:root[data-theme=dark]{color-scheme:dark}
+*{box-sizing:border-box;min-width:0}
+body{margin:0;background:var(--bg);color:var(--ink);font:16px/1.55 "Noto Sans",system-ui,sans-serif;overflow-x:clip}
+.wrap{max-width:1240px;margin:0 auto;padding:clamp(14px,3vw,36px) max(3vw,12px)}
+header{display:flex;flex-wrap:wrap;gap:12px;align-items:flex-end;justify-content:space-between;color:#fff;margin-bottom:18px}
+header small{display:block;opacity:.8;font-size:14px}
+h1{font:700 clamp(24px,3.6vw,38px)/1.08 "Noto Serif",Georgia,serif;margin:2px 0 0;text-wrap:balance;max-width:26ch}
+.lang{display:flex;background:rgba(255,255,255,.14);border-radius:999px;padding:4px}
+.lang button{border:0;background:none;color:#fff;font:600 15px "Noto Sans";padding:8px 16px;border-radius:999px;cursor:pointer;min-height:40px}
+.lang button.on{background:#fff;color:#0f4c5c}
+.sheet{background:var(--sheet);border-radius:18px;box-shadow:0 18px 40px rgba(0,0,0,.25);padding:clamp(16px,2.6vw,30px)}
+.note{font-size:13px;color:var(--mute);margin:0 0 10px}
+.goal{margin:0 0 6px;max-width:70ch}
+.reag{margin:0 0 16px;color:var(--mute);font-size:15px;max-width:70ch}
+.safety{display:flex;gap:12px;align-items:center;flex-wrap:wrap;background:var(--warn);border-radius:12px;padding:12px 14px;margin-bottom:18px}
+.safety p{margin:0;flex:1 1 260px;font-weight:600}
+.safety label{flex-direction:row;align-items:center;gap:8px;color:var(--ink);font-weight:600;cursor:pointer}
+.grid{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1.05fr);gap:clamp(16px,3vw,36px);align-items:start}
+.step{border-top:1px solid var(--line);padding:14px 0}
+.step:first-child{border-top:0;padding-top:0}
+.step.off{opacity:.45;pointer-events:none}
+h2{font:700 19px/1.2 "Noto Serif",Georgia,serif;margin:0 0 6px}
+.hint{color:var(--mute);font-size:15px;margin:0 0 8px}
+label{font-size:14px;color:var(--mute);display:flex;flex-direction:column;gap:4px}
+textarea,select{font:16px "Noto Sans";color:var(--ink);background:var(--sheet);border:1.5px solid var(--line);border-radius:10px;padding:10px 12px;width:100%}
+textarea:focus,select:focus,button:focus-visible{outline:3px solid color-mix(in srgb,var(--acc) 45%,transparent);outline-offset:1px}
+.ok{border-color:var(--ok)!important}.bad{border-color:var(--bad)!important}
+textarea{min-height:76px;resize:vertical}
+.btns{display:flex;flex-wrap:wrap;gap:8px;margin-top:8px}
+.btn{border:0;border-radius:10px;padding:10px 14px;font:600 15px "Noto Sans";cursor:pointer;min-height:44px;background:var(--acc);color:light-dark(#fff,#08202a)}
+.btn.done{background:var(--soft);color:var(--ok)}
+.btn:disabled{opacity:.45;cursor:not-allowed}.btn.done:disabled{opacity:1}
+.msg{margin-top:8px;font-size:15px;min-height:1.4em}
+.msg.ok{color:var(--ok)}.msg.bad{color:var(--bad)}
+.board{position:sticky;top:12px}
+.seg{display:flex;background:var(--soft);border-radius:10px;padding:4px;gap:4px;margin-bottom:10px}
+.seg button{flex:1;border:0;background:none;color:var(--ink);font:600 14px "Noto Sans";padding:8px 10px;border-radius:8px;cursor:pointer;min-height:40px}
+.seg button.on{background:var(--sheet);box-shadow:0 1px 4px rgba(0,0,0,.15)}
+.seg button:disabled{opacity:.4;cursor:default}
+.rackbox{background:var(--soft);border-radius:16px;padding:10px}
+.rackbox svg{display:block;width:100%;height:auto}
+.mag{transition:transform 1.2s ease}
+.glow{animation:glow 1.4s ease-in-out 2;transform-box:fill-box}
+@keyframes glow{50%{fill:#f97316}}
+.flame{animation:flick .25s ease-in-out infinite alternate;transform-box:fill-box;transform-origin:bottom center}
+@keyframes flick{to{transform:scaleY(1.12) scaleX(.94)}}
+@media(prefers-reduced-motion:reduce){.mag{transition:none}.glow,.flame{animation:none}}
+.scroll{overflow-x:auto}
+.sug{transition:fill 1.6s ease}
+.bub{animation:rise var(--d) linear infinite;animation-delay:var(--dl);opacity:0}
+@keyframes rise{0%{transform:translateY(0);opacity:0}10%{opacity:.95}100%{transform:translateY(-80px);opacity:0}}
+.smoke{animation:smoke 2.6s ease-out infinite;opacity:0;transform-box:fill-box;transform-origin:center}
+@keyframes smoke{0%{transform:translateY(0) scale(.6);opacity:0}20%{opacity:.6}100%{transform:translateY(-70px) scale(1.4);opacity:0}}
+@media(prefers-reduced-motion:reduce){.bub,.smoke{animation:none;opacity:.6}}
+table{width:100%;border-collapse:collapse;font-size:14px;min-width:560px}
+th,td{padding:5px;border-bottom:1px solid var(--line);text-align:left;vertical-align:middle}
+th{font-size:13px;color:var(--mute);font-weight:600}
+td:first-child{font-weight:600;font-size:14px;width:150px}
+td select{padding:6px;font-size:13px}
+.eq{display:flex;flex-wrap:wrap;align-items:center;gap:8px;font:600 17px "Noto Sans";margin-bottom:10px}
+.eq select{width:auto;padding:6px 8px;font:600 15px "Noto Sans"}
+.q{margin-bottom:10px}
+@media(max-width:860px){.grid{grid-template-columns:minmax(0,1fr)}.board{position:static;order:-1}}
+</style>
+</head>
+<body>
+<div class="wrap">
+<header>
+  <div><small data-i="lab"></small><h1 data-i="title"></h1></div>
+  <div class="lang" role="group" aria-label="Тіл"><button id="l-kk" class="on">Қазақша</button><button id="l-ru">Русский</button></div>
+</header>
+<div class="sheet">
+  <p class="note" data-i="demo"></p>
+  <p class="goal" data-i="goal"></p>
+  <p class="reag" data-i="reag"></p>
+  <div class="safety">
+    <svg width="34" height="34" viewBox="0 0 34 34" aria-hidden="true"><path d="M17 3 32 30H2Z" fill="#f59e0b"/><rect x="15.5" y="11" width="3" height="11" rx="1.5" fill="#fff"/><circle cx="17" cy="26" r="1.8" fill="#fff"/></svg>
+    <p data-i="safe"></p>
+    <label><input type="checkbox" id="goggles" style="width:22px;height:22px"><span data-i="safeok"></span></label>
+  </div>
+  <div class="grid">
+    <div>
+      <section class="step" id="st1"><h2 data-i="s1"></h2><p class="hint" data-i="s1h"></p>
+        <div class="btns"><button class="btn" data-b="sugar" data-i="bsugar"></button><button class="btn" data-b="lamp" data-i="blamp"></button><button class="btn" data-b="heat" data-i="bheat"></button></div>
+        <div class="msg" id="m1" aria-live="polite"></div></section>
+      <section class="step" id="st2"><h2 data-i="s2"></h2><p class="hint" data-i="s2h"></p>
+        <div class="btns"><button class="btn" data-b="soda" data-i="bsoda"></button><button class="btn" data-b="vin" data-i="bvin"></button></div></section>
+      <section class="step" id="st3"><h2 data-i="s3"></h2><p class="hint" data-i="s3h"></p>
+        <div class="btns"><button class="btn" data-b="cu" data-i="bcu"></button><button class="btn" data-b="oh" data-i="boh"></button></div>
+        <div class="msg" id="mx" aria-live="polite"></div></section>
+      <section class="step" id="st4"><h2 data-i="s4"></h2><p class="hint" data-i="s4h"></p>
+        <div class="scroll"><table><thead><tr><th>№</th><th data-i="cobs"></th><th data-i="csign"></th></tr></thead><tbody id="tbl"></tbody></table></div>
+        <div class="btns"><button class="btn" id="chk4" data-i="check"></button></div>
+        <div class="msg" id="m4" aria-live="polite"></div></section>
+      <section class="step" id="st5"><h2 data-i="s5"></h2>
+        <div class="q"><label><span data-i="q1"></span><textarea id="a1"></textarea></label></div>
+        <div class="q"><label><span data-i="q2"></span><textarea id="a2"></textarea></label></div>
+        <div class="btns"><button class="btn" id="send" data-i="send"></button></div>
+        <div class="msg" id="m5" aria-live="polite"></div></section>
+    </div>
+    <div class="board"><div class="rackbox"><svg id="scene" viewBox="0 0 560 400" aria-label="scene"></svg></div></div>
+  </div>
+</div>
+</div>
+<script>
+{
+const T={
+kk:{lab:"7-сынып · 3-зертханалық жұмыс",title:"Химиялық реакциялардың белгілері",demo:"Үлгі нұсқа: тіркелу және жұмысты мұғалімге жіберу толық сайтта қосылады.",
+goal:"Мақсаты: тәжірибелер арқылы химиялық реакциялардың белгілерін бақылау және атау.",
+reag:"Реактивтер: қант, ас содасы, сірке қышқылы, мыс(II) сульфаты, натрий гидроксиді ерітінділері, су. Құрал-жабдықтар: темір қасық, сынауықтар, сынауықтарға арналған тұрғы, тамшуыр, спиртшам, сіріңке.",
+safe:"Қыздырғыш құралдармен, қышқыл және сілті ерітінділерімен жұмыс жасау ережелерін сақта.",safeok:"Ережені оқыдым",
+s1:"1-тәжірибе",s1h:"Темір қасыққа аздаған құмшекер сал да, оны спиртшамның жалынында қыздыр. Не байқадың?",bsugar:"Қасыққа қант салу",blamp:"Спиртшамды жағу",bheat:"Жалында қыздыру",
+h1:"Қант балқыды…",h2:"Қант қоңырланып, иіс шықты…",h3:"Қант қарайып, түтін шықты.",
+s2:"2-тәжірибе",s2h:"Сынауыққа ас содасын салып, үстіне 2 мл сірке қышқылының ерітіндісін құй. Не байқадың?",bsoda:"Ас содасын салу",bvin:"2 мл сірке қышқылын құю",
+s3:"3-тәжірибе",s3h:"Сынауыққа 1 мл мыс(II) сульфаты ерітіндісін құйып, оған 1 мл натрий гидроксиді ерітіндісін қос. Не байқадың?",bcu:"1 мл CuSO₄ құю",boh:"1 мл NaOH қосу",
+alldone:"Үш тәжірибе де жүргізілді. Жұмысты кесте түрінде қорытындыла.",
+s4:"Жұмысты кесте түрінде қорытындыла",s4h:"Әр тәжірибеде не байқағаныңды және химиялық реакцияның қандай белгісі байқалғанын таңда.",cobs:"Бақылау",csign:"Химиялық реакция белгісі",
+rows:["Қантты қыздыру","Ас содасы + сірке қышқылы","CuSO₄ + NaOH"],
+o:[["—","Қант балқып, қоңырланып, соңында қарайды","Қант өзгеріссіз қалды","Қант ақ ұнтаққа айналды"],["—","Көпіршік (газ) қарқынды бөлінді","Көк тұнба түзілді","Өзгеріс жоқ"],["—","Көк тұнба түзілді","Газ бөлінді","Ерітінді түссізденді"]],
+sg:["—","Түстің өзгеруі (иістің шығуы)","Газ бөлінуі","Тұнба түзілуі","Жарық бөлінуі"],
+check:"Тексеру",ok4:"Дұрыс! Түстің өзгеруі, газ бөлінуі және тұнба түзілуі — химиялық реакцияның белгілері.",bad4:"Мына жолдарда қате бар: ",
+s5:"Қорытынды",q1:"Химиялық реакцияның тағы қандай белгілерін білесің? Мысал келтір.",q2:"Қорытынды: химиялық құбылыстың физикалық құбылыстан айырмашылығы неде?",
+send:"Мұғалімге жіберу",sent:"Үлгіде жіберу әлі жұмыс істемейді. Толық сайтта жұмыс мұғалімнің бетіне түседі.",empty:"Алдымен барлық сұраққа жауап бер.",
+l1:"қант",l2:"сода + сірке",l3:"CuSO₄ + NaOH"},
+ru:{lab:"7 класс · Лабораторная работа №3",title:"Признаки химических реакций",demo:"Демо-версия: регистрация и отправка работы учителю появятся в полной версии сайта.",
+goal:"Цель: пронаблюдать на опытах признаки химических реакций и назвать их.",
+reag:"Реактивы: сахар, пищевая сода, уксусная кислота, растворы сульфата меди(II) и гидроксида натрия, вода. Оборудование: железная ложка, пробирки, штатив для пробирок, пипетка, спиртовка, спички.",
+safe:"Соблюдай правила работы с нагревательными приборами, растворами кислот и щелочей.",safeok:"Правила прочитаны",
+s1:"Опыт 1",s1h:"Положи в железную ложку немного сахара и нагрей её в пламени спиртовки. Что ты наблюдаешь?",bsugar:"Положить сахар в ложку",blamp:"Зажечь спиртовку",bheat:"Нагреть в пламени",
+h1:"Сахар плавится…",h2:"Сахар буреет, появляется запах…",h3:"Сахар почернел, идёт дым.",
+s2:"Опыт 2",s2h:"Насыпь в пробирку пищевую соду и прилей 2 мл раствора уксусной кислоты. Что ты наблюдаешь?",bsoda:"Насыпать соду",bvin:"Прилить 2 мл уксусной кислоты",
+s3:"Опыт 3",s3h:"Налей в пробирку 1 мл раствора сульфата меди(II) и добавь 1 мл раствора гидроксида натрия. Что ты наблюдаешь?",bcu:"Налить 1 мл CuSO₄",boh:"Добавить 1 мл NaOH",
+alldone:"Все три опыта проведены. Оформи работу в виде таблицы.",
+s4:"Оформи работу в виде таблицы",s4h:"Выбери, что ты наблюдал в каждом опыте и какой признак химической реакции проявился.",cobs:"Наблюдение",csign:"Признак химической реакции",
+rows:["Нагревание сахара","Пищевая сода + уксусная кислота","CuSO₄ + NaOH"],
+o:[["—","Сахар плавится, буреет и в конце чернеет","Сахар не изменился","Сахар превратился в белый порошок"],["—","Бурно выделяются пузырьки (газ)","Выпал голубой осадок","Изменений нет"],["—","Выпал голубой осадок","Выделился газ","Раствор обесцветился"]],
+sg:["—","Изменение цвета (появление запаха)","Выделение газа","Образование осадка","Выделение света"],
+check:"Проверить",ok4:"Верно! Изменение цвета, выделение газа и образование осадка — признаки химической реакции.",bad4:"Ошибки в строках: ",
+s5:"Вывод",q1:"Какие ещё признаки химической реакции ты знаешь? Приведи пример.",q2:"Вывод: чем химическое явление отличается от физического?",
+send:"Отправить учителю",sent:"В демо-версии отправка пока не работает. В полной версии работа попадёт на страницу учителя.",empty:"Сначала ответь на все вопросы.",
+l1:"сахар",l2:"сода + уксус",l3:"CuSO₄ + NaOH"}};
+let lang="kk";const S={sugar:0,lamp:0,heat:0,soda:0,vin:0,cu:0,oh:0};let stage=0,done4=false;const tv={};
+const $=id=>document.getElementById(id),t=k=>T[lang][k];
+function pts(cx,cy,n,rx,ry,seed,fn){let s="";for(let k=0;k<n;k++){const a=((k*137.5+seed)%360)*Math.PI/180,r=Math.sqrt(((k*53+seed)%97)/97);s+=fn(cx+Math.cos(a)*r*rx,cy+Math.sin(a)*r*ry,k)}return s}
+function bubbles(x,W,bot,n,dur){let s="";for(let k=0;k<n;k++){const cx=x+10+(k*31)%(W-20),d=(dur*(.8+(k%5)/10)).toFixed(2);s+=`<circle class="bub" cx="${cx}" cy="${bot-20}" r="${2+(k%3)}" fill="#fff" stroke="#9fb7c7" style="--d:${d}s;--dl:${(-k*dur/n).toFixed(2)}s"/>`}return s}
+function tube(x,W,TOP,BOT,liq,col,inner,label){
+  let h=`<clipPath id="c${x}"><rect x="${x}" y="${TOP}" width="${W}" height="${BOT-TOP}" rx="${W/2}"/><rect x="${x}" y="${TOP}" width="${W}" height="${(BOT-TOP)/2}"/></clipPath><g clip-path="url(#c${x})"><rect x="${x}" y="${TOP}" width="${W}" height="${BOT-TOP}" fill="var(--glass)"/>`;
+  if(liq)h+=`<rect x="${x}" y="${BOT-liq}" width="${W}" height="${liq}" fill="${col}"/>`;
+  h+=inner+`</g><path d="M${x} ${TOP-8}V${BOT-W/2}a${W/2} ${W/2} 0 0 0 ${W} 0V${TOP-8}" fill="none" stroke="var(--glassline)" stroke-width="2.2"/><rect x="${x-4}" y="${TOP-12}" width="${W+8}" height="6" rx="3" fill="var(--glassline)"/>`;
+  return h+`<text x="${x+W/2}" y="${BOT+24}" text-anchor="middle" font-size="13" font-weight="700" fill="var(--ink)">${label}</text>`;
+}
+const SUG=["#ffffff","#f2c46d","#8a4b1c","#1c1917"];
+function render(){
+  let h="";
+  // station 1: spoon + lamp
+  const sx=130,sy=200;
+  h+=`<line x1="${sx+30}" y1="${sy}" x2="${sx+120}" y2="${sy-60}" stroke="#6b7280" stroke-width="6" stroke-linecap="round"/><ellipse cx="${sx}" cy="${sy}" rx="34" ry="12" fill="#9ca3af" stroke="#4b5563" stroke-width="2"/>`;
+  if(S.sugar){if(stage===0)h+=pts(sx,sy-3,26,24,5,3,(a,b)=>`<rect x="${a-2}" y="${b-2}" width="4" height="4" fill="#fff" stroke="#cbd5e1" stroke-width=".6"/>`);
+    else h+=`<ellipse class="sug" cx="${sx}" cy="${sy-2}" rx="26" ry="7" fill="${SUG[stage]}"/>`}
+  if(stage>=2)for(let k=0;k<4;k++)h+=`<circle class="smoke" cx="${sx-14+k*10}" cy="${sy-16}" r="${8+(k%2)*4}" fill="${stage===3?"#9ca3af":"#e5e7eb"}" style="animation-delay:${-k*0.6}s"/>`;
+  if(S.lamp)h+=`<path class="flame" d="M${sx-10} ${sy+70}Q${sx-13} ${sy+44} ${sx} ${sy+18}Q${sx+13} ${sy+44} ${sx+10} ${sy+70}Z" fill="#fb923c"/>`;
+  h+=`<path d="M${sx-34} ${sy+110}Q${sx-38} ${sy+76} ${sx} ${sy+72}Q${sx+38} ${sy+76} ${sx+34} ${sy+110}Z" style="fill:light-dark(#dbe7ee,#2b3f4c)" stroke="var(--glassline)" stroke-width="2"/><rect x="${sx-6}" y="${sy+66}" width="12" height="8" fill="#9ca3af"/>`;
+  h+=`<text x="${sx}" y="${sy+134}" text-anchor="middle" font-size="13" font-weight="700" fill="var(--ink)">1 · ${t("l1")}</text>`;
+  // station 2
+  let in2="";if(S.soda)in2+=pts(330,302,26,16,5,5,(a,b)=>`<circle cx="${a}" cy="${b}" r="2.2" fill="#fafafa" stroke="#cbd5e1" stroke-width=".6"/>`);if(S.vin)in2+=bubbles(305,50,310,18,1.1)+`<rect x="305" y="${310-90}" width="50" height="10" fill="#fff" opacity=".8"/>`;
+  h+=tube(305,50,90,310,S.vin?90:0,"rgba(190,220,240,.65)",in2,"2 · "+t("l2"));
+  // station 3
+  let in3="";if(S.oh)in3+=pts(455,290,22,18,16,9,(a,b,k)=>`<ellipse cx="${a}" cy="${b}" rx="${5+(k%3)}" ry="3.5" fill="#60a5fa" stroke="#2563eb" stroke-width=".6"/>`);
+  h+=tube(430,50,90,310,S.cu?(S.oh?90:60):0,S.oh?"rgba(147,197,253,.45)":"rgba(59,130,246,.45)",in3,"3 · "+t("l3"));
+  h+=`<rect x="280" y="230" width="230" height="10" rx="4" style="fill:light-dark(#b7c4cd,#3a4b57)" opacity=".7"/>`;
+  $("scene").innerHTML=h;
+}
+const DEP={heat:"lamp",lamp:"sugar",vin:"soda",oh:"cu"};
+function allDone(){return stage===3&&S.vin&&S.oh}
+function renderSteps(){
+  const g=$("goggles").checked;["st1","st2","st3"].forEach(id=>$(id).classList.toggle("off",!g));
+  document.querySelectorAll("[data-b]").forEach(b=>{const k=b.dataset.b,done=!!S[k],en=!DEP[k]||S[DEP[k]];b.disabled=done||!en;b.classList.toggle("done",done)});
+  $("st4").classList.toggle("off",!allDone());$("st5").classList.toggle("off",!done4);
+}
+function opts(arr,v){return arr.map((s,i)=>`<option value="${i||""}" ${String(v||"")===String(i||"")?"selected":""}>${s}</option>`).join("")}
+function renderTable(){$("tbl").innerHTML=t("rows").map((r,i)=>`<tr><td>${i+1}. ${r}</td><td><select data-r="${i}" data-k="o">${opts(t("o")[i],tv["o"+i])}</select></td><td><select data-r="${i}" data-k="s">${opts(t("sg"),tv["s"+i])}</select></td></tr>`).join("")}
+function applyLang(){
+  document.documentElement.lang=lang;
+  document.querySelectorAll("[data-i]").forEach(el=>{const v=T[lang][el.dataset.i];if(typeof v==="string")el.textContent=v});
+  $("l-kk").classList.toggle("on",lang==="kk");$("l-ru").classList.toggle("on",lang==="ru");
+  document.querySelectorAll(".msg").forEach(m=>m.textContent="");
+  render();renderSteps();renderTable();
+}
+function msg(id,text,ok){const m=$(id);m.textContent=text;m.className="msg "+(ok?"ok":"bad")}
+$("l-kk").onclick=()=>{lang="kk";applyLang()};$("l-ru").onclick=()=>{lang="ru";applyLang()};
+$("goggles").onchange=renderSteps;
+document.querySelector(".grid").addEventListener("click",e=>{const b=e.target.closest("[data-b]");if(!b||b.disabled)return;const k=b.dataset.b;S[k]=1;render();renderSteps();
+  if(k==="heat"){[1,2,3].forEach((st,i)=>setTimeout(()=>{stage=st;render();msg("m1",t("h"+st),st===3);if(st===3){renderSteps();if(allDone())msg("mx",t("alldone"),true)}},900+i*1800))}
+  else if(allDone())msg("mx",t("alldone"),true)});
+$("tbl").addEventListener("change",e=>{const el=e.target;if(el.dataset.r==null)return;tv[el.dataset.k+el.dataset.r]=el.value;el.classList.remove("ok","bad")});
+$("chk4").onclick=()=>{const SA=["1","2","3"],bad=[];[0,1,2].forEach(i=>{const o=document.querySelector(`[data-r="${i}"][data-k="o"]`),s=document.querySelector(`[data-r="${i}"][data-k="s"]`);
+  const oOk=o.value==="1",sOk=s.value===SA[i];o.className=oOk?"ok":"bad";s.className=sOk?"ok":"bad";if(!oOk||!sOk)bad.push(i+1)});
+  done4=!bad.length;renderSteps();done4?msg("m4",t("ok4"),true):msg("m4",t("bad4")+bad.join(", ")+".",false)};
+$("send").onclick=()=>{const f=["a1","a2"].every(id=>$(id).value.trim());msg("m5",f?t("sent"):t("empty"),f)};
+applyLang();
+}
+</script>
+<script src="../embed.js"></script>
+</body>
+</html>

@@ -1,0 +1,260 @@
+<!DOCTYPE html>
+<html lang="kk">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Судың қайнауы</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans:wght@400;600;700&family=Noto+Serif:wght@600;700&display=swap" rel="stylesheet">
+<style>
+/* VOICE: calm school lab workbook, clear and encouraging (grade 7)
+   IDEA: a workbench sheet — a glass flask on a heater with a thermometer and a stopwatch, run twice: pure and salted water
+   PICTURE: bubbles and steam once the reading stops rising; two heating curves on one chart, the salted one levelling higher
+   COLOUR and TYPE: white sheet on deep lab-teal; warm orange for heat, cool blue for the curve; Noto Serif + Noto Sans
+   LAYOUT: steps left, scene right (sticky) with view switch; stacks on phones */
+:root{color-scheme:light dark;
+--bg:light-dark(#0f4c5c,#0a2d36);--sheet:light-dark(#ffffff,#13202a);--ink:light-dark(#10131a,#e7edf2);
+--mute:light-dark(#566170,#9fb0bf);--line:light-dark(#d5dde5,#2b3d4b);--soft:light-dark(#eef5f7,#182a35);
+--acc:light-dark(#0f4c5c,#5cc2d6);--ok:light-dark(#12733a,#4ade80);--bad:light-dark(#b91c1c,#f87171);
+--warn:light-dark(#fff4d6,#3a2f12);--glass:light-dark(#f7fbfd,#1d2f3b);--glassline:light-dark(#8aa1b1,#6c8597)}
+:root[data-theme=light]{color-scheme:light}:root[data-theme=dark]{color-scheme:dark}
+*{box-sizing:border-box;min-width:0}
+body{margin:0;background:var(--bg);color:var(--ink);font:16px/1.55 "Noto Sans",system-ui,sans-serif;overflow-x:clip}
+.wrap{max-width:1240px;margin:0 auto;padding:clamp(14px,3vw,36px) max(3vw,12px)}
+header{display:flex;flex-wrap:wrap;gap:12px;align-items:flex-end;justify-content:space-between;color:#fff;margin-bottom:18px}
+header small{display:block;opacity:.8;font-size:14px}
+h1{font:700 clamp(24px,3.6vw,38px)/1.08 "Noto Serif",Georgia,serif;margin:2px 0 0;text-wrap:balance;max-width:26ch}
+.lang{display:flex;background:rgba(255,255,255,.14);border-radius:999px;padding:4px}
+.lang button{border:0;background:none;color:#fff;font:600 15px "Noto Sans";padding:8px 16px;border-radius:999px;cursor:pointer;min-height:40px}
+.lang button.on{background:#fff;color:#0f4c5c}
+.sheet{background:var(--sheet);border-radius:18px;box-shadow:0 18px 40px rgba(0,0,0,.25);padding:clamp(16px,2.6vw,30px)}
+.note{font-size:13px;color:var(--mute);margin:0 0 10px}
+.goal{margin:0 0 6px;max-width:70ch}
+.reag{margin:0 0 16px;color:var(--mute);font-size:15px;max-width:70ch}
+.safety{display:flex;gap:12px;align-items:center;flex-wrap:wrap;background:var(--warn);border-radius:12px;padding:12px 14px;margin-bottom:18px}
+.safety p{margin:0;flex:1 1 260px;font-weight:600}
+.safety label{flex-direction:row;align-items:center;gap:8px;color:var(--ink);font-weight:600;cursor:pointer}
+.grid{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1.05fr);gap:clamp(16px,3vw,36px);align-items:start}
+.step{border-top:1px solid var(--line);padding:14px 0}
+.step:first-child{border-top:0;padding-top:0}
+.step.off{opacity:.45;pointer-events:none}
+h2{font:700 19px/1.2 "Noto Serif",Georgia,serif;margin:0 0 6px}
+.hint{color:var(--mute);font-size:15px;margin:0 0 8px}
+label{font-size:14px;color:var(--mute);display:flex;flex-direction:column;gap:4px}
+textarea,select{font:16px "Noto Sans";color:var(--ink);background:var(--sheet);border:1.5px solid var(--line);border-radius:10px;padding:10px 12px;width:100%}
+textarea:focus,select:focus,button:focus-visible{outline:3px solid color-mix(in srgb,var(--acc) 45%,transparent);outline-offset:1px}
+.ok{border-color:var(--ok)!important}.bad{border-color:var(--bad)!important}
+textarea{min-height:76px;resize:vertical}
+.btns{display:flex;flex-wrap:wrap;gap:8px;margin-top:8px}
+.btn{border:0;border-radius:10px;padding:10px 14px;font:600 15px "Noto Sans";cursor:pointer;min-height:44px;background:var(--acc);color:light-dark(#fff,#08202a)}
+.btn.done{background:var(--soft);color:var(--ok)}
+.btn:disabled{opacity:.45;cursor:not-allowed}.btn.done:disabled{opacity:1}
+.msg{margin-top:8px;font-size:15px;min-height:1.4em}
+.msg.ok{color:var(--ok)}.msg.bad{color:var(--bad)}
+.board{position:sticky;top:12px}
+.seg{display:flex;background:var(--soft);border-radius:10px;padding:4px;gap:4px;margin-bottom:10px}
+.seg button{flex:1;border:0;background:none;color:var(--ink);font:600 14px "Noto Sans";padding:8px 10px;border-radius:8px;cursor:pointer;min-height:40px}
+.seg button.on{background:var(--sheet);box-shadow:0 1px 4px rgba(0,0,0,.15)}
+.seg button:disabled{opacity:.4;cursor:default}
+.rackbox{background:var(--soft);border-radius:16px;padding:10px}
+.rackbox svg{display:block;width:100%;height:auto}
+.mag{transition:transform 1.2s ease}
+.glow{animation:glow 1.4s ease-in-out 2;transform-box:fill-box}
+@keyframes glow{50%{fill:#f97316}}
+.flame{animation:flick .25s ease-in-out infinite alternate;transform-box:fill-box;transform-origin:bottom center}
+@keyframes flick{to{transform:scaleY(1.12) scaleX(.94)}}
+@media(prefers-reduced-motion:reduce){.mag{transition:none}.glow,.flame{animation:none}}
+.scroll{overflow-x:auto}
+.mins h3{grid-column:1/-1;margin:6px 0 0;font:700 14px "Noto Sans";color:var(--ink)}
+.mins{display:grid;grid-template-columns:repeat(auto-fill,minmax(96px,1fr));gap:8px}
+.mins label{flex-direction:row;align-items:center;gap:6px;font-size:13px;color:var(--mute);background:var(--soft);border-radius:10px;padding:6px 8px}
+.mins label.cur{outline:2px solid var(--acc)}
+.mins input{width:58px;padding:6px;text-align:right;font:600 15px "Noto Sans";color:var(--ink);background:var(--sheet);border:1.5px solid var(--line);border-radius:8px}
+.mins input:disabled{opacity:.4}
+.fig{position:relative;height:260px;margin-top:12px;background:var(--soft);border-radius:12px}
+.fig svg{position:absolute;inset:0;width:100%;height:100%}
+.two{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px 14px}
+input.num{font:16px "Noto Sans";color:var(--ink);background:var(--sheet);border:1.5px solid var(--line);border-radius:10px;padding:10px 12px;width:100%}
+@media(max-width:600px){.two{grid-template-columns:minmax(0,1fr)}}
+.sug{transition:fill 1.6s ease}
+.bub{animation:rise var(--d) linear infinite;animation-delay:var(--dl);opacity:0}
+@keyframes rise{0%{transform:translateY(0);opacity:0}10%{opacity:.95}100%{transform:translateY(-80px);opacity:0}}
+.smoke{animation:smoke 2.6s ease-out infinite;opacity:0;transform-box:fill-box;transform-origin:center}
+@keyframes smoke{0%{transform:translateY(0) scale(.6);opacity:0}20%{opacity:.6}100%{transform:translateY(-70px) scale(1.4);opacity:0}}
+@media(prefers-reduced-motion:reduce){.bub,.smoke{animation:none;opacity:.6}}
+table{width:100%;border-collapse:collapse;font-size:14px;min-width:560px}
+th,td{padding:5px;border-bottom:1px solid var(--line);text-align:left;vertical-align:middle}
+th{font-size:13px;color:var(--mute);font-weight:600}
+td:first-child{font-weight:600;font-size:14px;width:150px}
+td select{padding:6px;font-size:13px}
+.eq{display:flex;flex-wrap:wrap;align-items:center;gap:8px;font:600 17px "Noto Sans";margin-bottom:10px}
+.eq select{width:auto;padding:6px 8px;font:600 15px "Noto Sans"}
+.q{margin-bottom:10px}
+@media(max-width:860px){.grid{grid-template-columns:minmax(0,1fr)}.board{position:static;order:-1}}
+</style>
+</head>
+<body>
+<div class="wrap">
+<header>
+  <div><small data-i="lab"></small><h1 data-i="title"></h1></div>
+  <div class="lang" role="group" aria-label="Тіл"><button id="l-kk" class="on">Қазақша</button><button id="l-ru">Русский</button></div>
+</header>
+<div class="sheet">
+  <p class="note" data-i="demo"></p>
+  <p class="goal" data-i="goal"></p>
+  <p class="reag" data-i="reag"></p>
+  <div class="safety">
+    <svg width="34" height="34" viewBox="0 0 34 34" aria-hidden="true"><path d="M17 3 32 30H2Z" fill="#f59e0b"/><rect x="15.5" y="11" width="3" height="11" rx="1.5" fill="#fff"/><circle cx="17" cy="26" r="1.8" fill="#fff"/></svg>
+    <p data-i="safe"></p>
+    <label><input type="checkbox" id="goggles" style="width:22px;height:22px"><span data-i="safeok"></span></label>
+  </div>
+  <div class="grid">
+    <div>
+      <section class="step" id="st1"><h2 data-i="s1"></h2><p class="hint" data-i="s1h"></p>
+        <div class="btns"><button class="btn" data-b="w0" data-i="bw0"></button><button class="btn" data-b="h0" data-i="bh"></button><button class="btn" id="n0" data-i="bnext"></button></div>
+        <div class="msg" id="m1" aria-live="polite"></div>
+        <div class="mins" id="g0" style="margin-top:10px"></div></section>
+      <section class="step" id="st2"><h2 data-i="s2"></h2><p class="hint" data-i="s2h"></p>
+        <div class="btns"><button class="btn" data-b="w1" data-i="bw1"></button><button class="btn" data-b="mix" data-i="bmix"></button><button class="btn" data-b="h1" data-i="bh"></button><button class="btn" id="n1" data-i="bnext"></button></div>
+        <div class="msg" id="m2" aria-live="polite"></div>
+        <div class="mins" id="g1" style="margin-top:10px"></div></section>
+      <section class="step" id="st3"><h2 data-i="s3"></h2><p class="hint" data-i="s3h"></p>
+        <div class="btns" style="margin-top:0"><button class="btn" id="chk3" data-i="check"></button></div>
+        <div class="msg" id="m3" aria-live="polite"></div>
+        <div class="fig" id="fig"><svg id="chart"></svg></div></section>
+      <section class="step" id="st4"><h2 data-i="s4"></h2>
+        <div class="two">
+          <label><span data-i="qa"></span><input class="num" id="bp0" inputmode="decimal"></label>
+          <label><span data-i="qc"></span><input class="num" id="bp1" inputmode="decimal"></label>
+          <label style="grid-column:1/-1"><span data-i="qb"></span><select id="eff"></select></label>
+        </div>
+        <div class="btns"><button class="btn" id="chk4" data-i="check"></button></div>
+        <div class="msg" id="m4" aria-live="polite"></div></section>
+      <section class="step" id="st5"><h2 data-i="s5"></h2>
+        <div class="q"><label><span data-i="q1"></span><textarea id="a1"></textarea></label></div>
+        <div class="q"><label><span data-i="q2"></span><textarea id="a2"></textarea></label></div>
+        <div class="btns"><button class="btn" id="send" data-i="send"></button></div>
+        <div class="msg" id="m5" aria-live="polite"></div></section>
+    </div>
+    <div class="board"><div class="rackbox"><svg id="scene" viewBox="0 0 560 420" aria-label="scene"></svg></div></div>
+  </div>
+</div>
+</div>
+<script>
+{
+const T={
+kk:{lab:"7-сынып · 5-зертханалық жұмыс",title:"Судың қайнау процесін зерттеу",demo:"Үлгі нұсқа: тіркелу және жұмысты мұғалімге жіберу толық сайтта қосылады.",
+goal:"Мақсаты: таза су мен ас тұзының ерітіндісін қыздырғанда температураның өзгерісін бақылап, олардың қайнау температураларын салыстыру.",
+reag:"Реактивтер: дистилденген су, ас тұзы. Құрал-жабдықтар: шыны құты, қыздырғыш құрал/спиртшам, сіріңке, термометр, миллиметрлік қағаз, секундомер.",
+safe:"Қыздырғыш құралдармен және қайнаған сумен жұмыс жасау ережелерін сақта. Будан күйіп қалма.",safeok:"Ережені оқыдым",
+s1:"1-қадам. Таза суды қайнат",s1h:"Құтыға 50 мл су құйып, оны қыздырғыш құралмен қайнат. Су температурасының өзгерісін термометрмен өлшеп, әр минут сайын жазып отыр.",
+bw0:"50 мл дистилденген су құю",bh:"Қыздыруды бастау",bnext:"1 минут күту",
+s2:"2-қадам. Тұзды суды қайнат",s2h:"Құтыға 50 мл су құйып, оған бір ас қасық ас тұзын салып, араластыр. Ерітіндіні қыздырып, температурасын әр минут сайын жазып отыр.",
+bw1:"50 мл су + 1 ас қасық тұз",bmix:"Араластыру",
+rec:"{m}-минут: термометрдің көрсеткішін жаз.",boil:"Су қайнап жатыр! Көпіршіктер мен бу шықты. Температура енді көтерілмейді.",fin:"Өлшеу аяқталды.",
+pure:"Таза су",salt:"Тұзды су",mn:"мин",
+s3:"3-қадам. Қайнау процесінің диаграммасы",s3h:"Екі өлшемді тексер. Дұрыс болса, екі қисық бір диаграммада көрсетіледі.",check:"Тексеру",ok3:"Барлық өлшемдер дұрыс! Диаграммаға қара.",bad3:"Қате мәндер: ",ax:"уақыт, мин",ay:"t, °C",
+s4:"4-қадам. Сұрақтар",qa:"Таза су қандай температурада қайнайды (°C)?",qc:"Тұзды су қандай температурада қайнады (°C)?",qb:"Суға ас тұзын қосқанда қайнау температурасы қалай өзгереді?",
+eo:["— таңда —","Жоғарылайды","Төмендейді","Өзгермейді"],ok4:"Дұрыс! Таза су 100 °C-та қайнайды, ал тұз ерітіндісінің қайнау температурасы жоғарырақ.",bad4:"Диаграммаға тағы бір қара.",
+s5:"5-қадам. Қорытынды",q1:"Су қайнап жатқанда температурасы неге өзгермейді?",q2:"Қорытынды",
+send:"Мұғалімге жіберу",sent:"Үлгіде жіберу әлі жұмыс істемейді. Толық сайтта жұмыс мұғалімнің бетіне түседі.",empty:"Алдымен барлық сұраққа жауап бер.",watch:"секундомер"},
+ru:{lab:"7 класс · Лабораторная работа №5",title:"Исследование процесса кипения воды",demo:"Демо-версия: регистрация и отправка работы учителю появятся в полной версии сайта.",
+goal:"Цель: пронаблюдать изменение температуры при нагревании чистой воды и раствора поваренной соли и сравнить их температуры кипения.",
+reag:"Реактивы: дистиллированная вода, поваренная соль. Оборудование: стеклянная колба, нагревательный прибор/спиртовка, спички, термометр, миллиметровая бумага, секундомер.",
+safe:"Соблюдай правила работы с нагревательными приборами и кипящей водой. Берегись ожога паром.",safeok:"Правила прочитаны",
+s1:"Шаг 1. Вскипяти чистую воду",s1h:"Налей в колбу 50 мл воды и вскипяти её на нагревательном приборе. Измеряй температуру воды термометром и записывай каждую минуту.",
+bw0:"Налить 50 мл дистил. воды",bh:"Начать нагревание",bnext:"Подождать 1 минуту",
+s2:"Шаг 2. Вскипяти солёную воду",s2h:"Налей в колбу 50 мл воды, добавь столовую ложку поваренной соли и перемешай. Нагревай раствор и записывай температуру каждую минуту.",
+bw1:"50 мл воды + 1 ст. ложка соли",bmix:"Перемешать",
+rec:"{m}-я минута: запиши показание термометра.",boil:"Вода кипит! Появились пузыри и пар. Температура больше не растёт.",fin:"Измерения закончены.",
+pure:"Чистая вода",salt:"Солёная вода",mn:"мин",
+s3:"Шаг 3. Диаграмма процесса кипения",s3h:"Проверь оба измерения. Если они верны, обе кривые появятся на одной диаграмме.",check:"Проверить",ok3:"Все измерения верны! Посмотри на диаграмму.",bad3:"Неверные значения: ",ax:"время, мин",ay:"t, °C",
+s4:"Шаг 4. Вопросы",qa:"При какой температуре кипит чистая вода (°C)?",qc:"При какой температуре закипела солёная вода (°C)?",qb:"Как меняется температура кипения при добавлении поваренной соли?",
+eo:["— выбери —","Повышается","Понижается","Не меняется"],ok4:"Верно! Чистая вода кипит при 100 °C, а раствор соли — при более высокой температуре.",bad4:"Посмотри на диаграмму ещё раз.",
+s5:"Шаг 5. Вывод",q1:"Почему температура воды не меняется во время кипения?",q2:"Вывод",
+send:"Отправить учителю",sent:"В демо-версии отправка пока не работает. В полной версии работа попадёт на страницу учителя.",empty:"Сначала ответь на все вопросы.",watch:"секундомер"}};
+const D=[[20,31,42,53,63,72,80,87,93,97,99,100,100,100,100,100],[20,30,40,50,59,68,76,83,89,94,98,101,103,104,104,104]];
+const BP=[100,104];
+let lang="kk",run=0;const S={w0:0,h0:0,w1:0,mix:0,h1:0};const mn=[-1,-1],tv=[{},{}];let temp=20,done3=false,done4=false;
+const $=id=>document.getElementById(id),t=k=>T[lang][k];
+const fmt=x=>(Math.round(x*10)/10).toFixed(1).replace(".",",");
+function boiling(){return mn[run]>=0&&D[run][mn[run]]>=BP[run]-0.01}
+function render(){
+  const cx=210,top=120,bot=330;let h="";
+  // flask
+  const path=`M${cx-22} ${top}V${top+70}L${cx-95} ${bot-20}Q${cx-100} ${bot} ${cx-80} ${bot}H${cx+80}Q${cx+100} ${bot} ${cx+95} ${bot-20}L${cx+22} ${top+70}V${top}`;
+  h+=`<clipPath id="fl"><path d="${path}Z"/></clipPath><g clip-path="url(#fl)"><rect x="${cx-110}" y="${top}" width="220" height="${bot-top}" fill="var(--glass)"/>`;
+  const filled=run===0?S.w0:S.w1;
+  if(filled){h+=`<rect x="${cx-110}" y="${bot-70}" width="220" height="70" fill="rgba(160,205,235,.5)"/>`;
+    if(run===1&&!S.mix)for(let k=0;k<26;k++)h+=`<rect x="${cx-60+(k*17)%120}" y="${bot-8-(k*5)%8}" width="4" height="4" fill="#fff" stroke="#cbd5e1" stroke-width=".6"/>`;
+    const b=boiling(),warm=mn[run]>=0&&D[run][mn[run]]>=80;
+    if(b||warm){const n=b?26:6;for(let k=0;k<n;k++){const bx=cx-70+(k*37)%140,d=(b?0.9:2.2)*(0.8+(k%5)/10);h+=`<circle class="bub" cx="${bx}" cy="${bot-6}" r="${b?3+(k%3):1.6}" fill="#fff" stroke="#9fb7c7" style="--d:${d.toFixed(2)}s;--dl:${(-k*0.13).toFixed(2)}s"/>`}}}
+  h+=`</g><path d="${path}" fill="none" stroke="var(--glassline)" stroke-width="2.6"/>`;
+  if(boiling())for(let k=0;k<4;k++)h+=`<circle class="smoke" cx="${cx-8+k*6}" cy="${top-6}" r="${9+(k%2)*4}" fill="#fff" style="animation-delay:${-k*0.6}s"/>`;
+  // thermometer
+  const tx=cx+8,t0=40,tb=bot-24,mh=Math.max(4,(temp-0)/120*(tb-t0-14));
+  h+=`<rect x="${tx-5}" y="${t0}" width="10" height="${tb-t0}" rx="5" fill="var(--sheet)" stroke="var(--glassline)"/><rect x="${tx-2}" y="${tb-mh}" width="4" height="${mh}" fill="#ef4444"/><circle cx="${tx}" cy="${tb}" r="7" fill="#ef4444" stroke="var(--glassline)"/>`;
+  h+=`<rect x="${tx+16}" y="40" width="96" height="30" rx="8" fill="${temp>60?"#f97316":"var(--soft)"}"/><text x="${tx+64}" y="61" text-anchor="middle" font-size="16" font-weight="700" fill="${temp>60?"#fff":"var(--ink)"}">${fmt(temp)} °C</text>`;
+  // heater
+  h+=`<rect x="${cx-90}" y="${bot+4}" width="180" height="16" rx="4" fill="#4b5563"/>`;
+  const heating=run===0?S.h0:S.h1;if(heating)h+=`<rect x="${cx-80}" y="${bot+6}" width="160" height="5" rx="2" fill="#f97316"/>`;
+  h+=`<text x="${cx}" y="${bot+46}" text-anchor="middle" font-size="14" font-weight="700" fill="var(--ink)">${run===0?t("pure"):t("salt")}</text>`;
+  // stopwatch
+  const mm=Math.max(0,mn[run]);
+  h+=`<circle cx="455" cy="220" r="58" style="fill:var(--sheet)" stroke="var(--glassline)" stroke-width="4"/><rect x="445" y="152" width="20" height="12" rx="3" fill="var(--glassline)"/>`;
+  h+=`<line x1="455" y1="220" x2="${455+46*Math.sin(mm/15*2*Math.PI)}" y2="${220-46*Math.cos(mm/15*2*Math.PI)}" stroke="#ef4444" stroke-width="3" stroke-linecap="round"/><circle cx="455" cy="220" r="5" fill="#ef4444"/>`;
+  h+=`<text x="455" y="304" text-anchor="middle" font-size="20" font-weight="700" fill="var(--ink)">${String(mm).padStart(2,"0")}:00</text><text x="455" y="324" text-anchor="middle" font-size="12" fill="var(--mute)">${t("watch")}</text>`;
+  $("scene").innerHTML=h;
+}
+function grid(r){$("g"+r).innerHTML=D[r].map((_,m)=>`<label class="${r===run&&m===mn[r]?"cur":""}">${m} ${t("mn")}<input data-r="${r}" data-m="${m}" inputmode="decimal" value="${tv[r][m]||""}" ${m>mn[r]||done3?"disabled":""}></label>`).join("")}
+function chart(){
+  const s=$("chart"),W=s.clientWidth,H=s.clientHeight;if(!W)return;const l=42,r=12,tp=26,b=36,xs=m=>l+m/15*(W-l-r),ys=v=>H-b-(v-10)/100*(H-tp-b);
+  let g="";for(let m=0;m<=15;m+=3)g+=`<line x1="${xs(m)}" x2="${xs(m)}" y1="${tp}" y2="${H-b}" stroke="var(--line)"/><text x="${xs(m)}" y="${H-b+16}" font-size="11" text-anchor="middle" fill="var(--mute)">${m}</text>`;
+  for(let v=20;v<=110;v+=20)g+=`<line x1="${l}" x2="${W-r}" y1="${ys(v)}" y2="${ys(v)}" stroke="var(--line)"/><text x="${l-6}" y="${ys(v)+4}" font-size="11" text-anchor="end" fill="var(--mute)">${v}</text>`;
+  const col=["#2563eb","#f97316"];
+  [0,1].forEach(rr=>{const p=D[rr].map((_,m)=>[m,parseFloat(String(tv[rr][m]||"").replace(",","."))]).filter(q=>!isNaN(q[1]));
+    if(p.length>1)g+=`<polyline fill="none" stroke="${col[rr]}" stroke-width="2.5" points="${p.map(q=>xs(q[0])+","+ys(q[1])).join(" ")}"/>`;
+    g+=p.map(q=>`<circle cx="${xs(q[0])}" cy="${ys(q[1])}" r="3.5" fill="${col[rr]}"/>`).join("")});
+  g+=`<rect x="${W-170}" y="6" width="12" height="4" fill="${col[0]}"/><text x="${W-154}" y="12" font-size="12" fill="var(--ink)">${t("pure")}</text><rect x="${W-80}" y="6" width="12" height="4" fill="${col[1]}"/><text x="${W-64}" y="12" font-size="12" fill="var(--ink)">${t("salt")}</text>`;
+  g+=`<text x="${(l+W)/2}" y="${H-4}" font-size="12" text-anchor="middle" fill="var(--mute)">${t("ax")}</text><text x="${l}" y="${tp-8}" font-size="12" fill="var(--mute)">${t("ay")}</text>`;
+  s.innerHTML=g;
+}
+const END=D[0].length-1;
+function renderSteps(){
+  const g=$("goggles").checked;$("st1").classList.toggle("off",!g);
+  const DEP={h0:"w0",w1:"__r0",mix:"w1",h1:"mix"};
+  document.querySelectorAll("[data-b]").forEach(b=>{const k=b.dataset.b,done=!!S[k],en=!DEP[k]||(DEP[k]==="__r0"?mn[0]>=END:S[DEP[k]]);b.disabled=done||!en;b.classList.toggle("done",done)});
+  $("n0").disabled=!S.h0||mn[0]>=END;$("n1").disabled=!S.h1||mn[1]>=END;
+  $("st2").classList.toggle("off",mn[0]<END);$("st3").classList.toggle("off",mn[1]<END);$("st4").classList.toggle("off",!done3);$("st5").classList.toggle("off",!done4);
+}
+function applyLang(){
+  document.documentElement.lang=lang;
+  document.querySelectorAll("[data-i]").forEach(el=>{const v=T[lang][el.dataset.i];if(typeof v==="string")el.textContent=v});
+  $("l-kk").classList.toggle("on",lang==="kk");$("l-ru").classList.toggle("on",lang==="ru");
+  const ev=$("eff").value;$("eff").innerHTML=t("eo").map((s,i)=>`<option value="${i||""}">${s}</option>`).join("");$("eff").value=ev;
+  document.querySelectorAll(".msg").forEach(m=>m.textContent="");
+  render();grid(0);grid(1);renderSteps();chart();
+}
+function msg(id,text,ok){const m=$(id);m.textContent=text;m.className="msg "+(ok?"ok":"bad")}
+function animTemp(to,ms,cb){const from=temp,t0=performance.now();const f=n=>{const k=Math.min(1,(n-t0)/ms);temp=from+(to-from)*k;render();k<1?requestAnimationFrame(f):cb&&cb()};requestAnimationFrame(f)}
+$("l-kk").onclick=()=>{lang="kk";applyLang()};$("l-ru").onclick=()=>{lang="ru";applyLang()};
+$("goggles").onchange=renderSteps;
+document.querySelector(".grid").addEventListener("click",e=>{const b=e.target.closest("[data-b]");if(!b||b.disabled)return;const k=b.dataset.b;S[k]=1;
+  if(k==="w1"){run=1;temp=20}
+  if(k==="h0"||k==="h1"){run=k==="h0"?0:1;mn[run]=0;temp=D[run][0];msg(run?"m2":"m1",t("rec").replace("{m}",0),true)}
+  render();grid(0);grid(1);renderSteps()});
+function step(r){if(mn[r]>=END)return;run=r;mn[r]++;grid(r);renderSteps();animTemp(D[r][mn[r]],650,()=>{const id=r?"m2":"m1";msg(id,mn[r]>=END?t("fin"):boiling()?t("boil")+" "+t("rec").replace("{m}",mn[r]):t("rec").replace("{m}",mn[r]),true)})}
+$("n0").onclick=()=>step(0);$("n1").onclick=()=>step(1);
+document.querySelectorAll(".mins").forEach(el=>el.addEventListener("input",e=>{const i=e.target;if(i.dataset.r==null)return;tv[i.dataset.r][i.dataset.m]=i.value;i.classList.remove("ok","bad");chart()}));
+$("chk3").onclick=()=>{const bad=[];document.querySelectorAll(".mins input").forEach(i=>{const r=+i.dataset.r,m=+i.dataset.m,v=parseFloat(String(tv[r][m]||"").replace(",",".")),ok=!isNaN(v)&&Math.abs(v-D[r][m])<=0.5;i.className=ok?"ok":"bad";if(!ok)bad.push((r?t("salt"):t("pure"))+" "+m)});
+  done3=!bad.length;if(done3){grid(0);grid(1)}renderSteps();chart();done3?msg("m3",t("ok3"),true):msg("m3",t("bad3")+bad.slice(0,6).join(", ")+(bad.length>6?"…":""),false)};
+$("chk4").onclick=()=>{const v0=parseFloat(String($("bp0").value).replace(",",".")),v1=parseFloat(String($("bp1").value).replace(",","."));const a=Math.abs(v0-100)<=0.5,c=Math.abs(v1-104)<=1,b=$("eff").value==="1";
+  $("bp0").className="num "+(a?"ok":"bad");$("bp1").className="num "+(c?"ok":"bad");$("eff").className=b?"ok":"bad";done4=a&&b&&c;renderSteps();done4?msg("m4",t("ok4"),true):msg("m4",t("bad4"),false)};
+$("send").onclick=()=>{const f=["a1","a2"].every(id=>$(id).value.trim());msg("m5",f?t("sent"):t("empty"),f)};
+new ResizeObserver(chart).observe($("fig"));
+applyLang();
+}
+</script>
+<script src="../embed.js"></script>
+</body>
+</html>

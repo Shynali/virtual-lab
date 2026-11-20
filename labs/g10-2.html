@@ -1,0 +1,213 @@
+<!DOCTYPE html>
+<html lang="kk">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Өршіткілердің реакция жылдамдығына әсері</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans:wght@400;600;700&family=Noto+Serif:wght@600;700&display=swap" rel="stylesheet">
+<style>
+/* VOICE: calm school lab workbook, clear and encouraging (grade 7)
+   IDEA: a workbench sheet — two twin tubes, acid and alkali, each with an aluminium granule
+   PICTURE: both tubes starting slowly, then fizzing hard once the oxide film is gone: aluminium reacts with both
+   COLOUR and TYPE: white sheet on deep lab-teal; the universal-indicator rainbow; Noto Serif + Noto Sans
+   LAYOUT: steps left, scene right (sticky) with view switch; stacks on phones */
+:root{color-scheme:light dark;
+--bg:light-dark(#0f4c5c,#0a2d36);--sheet:light-dark(#ffffff,#13202a);--ink:light-dark(#10131a,#e7edf2);
+--mute:light-dark(#566170,#9fb0bf);--line:light-dark(#d5dde5,#2b3d4b);--soft:light-dark(#eef5f7,#182a35);
+--acc:light-dark(#0f4c5c,#5cc2d6);--ok:light-dark(#12733a,#4ade80);--bad:light-dark(#b91c1c,#f87171);
+--warn:light-dark(#fff4d6,#3a2f12);--glass:light-dark(#f7fbfd,#1d2f3b);--glassline:light-dark(#8aa1b1,#6c8597)}
+:root[data-theme=light]{color-scheme:light}:root[data-theme=dark]{color-scheme:dark}
+*{box-sizing:border-box;min-width:0}
+body{margin:0;background:var(--bg);color:var(--ink);font:16px/1.55 "Noto Sans",system-ui,sans-serif;overflow-x:clip}
+.wrap{max-width:1240px;margin:0 auto;padding:clamp(14px,3vw,36px) max(3vw,12px)}
+header{display:flex;flex-wrap:wrap;gap:12px;align-items:flex-end;justify-content:space-between;color:#fff;margin-bottom:18px}
+header small{display:block;opacity:.8;font-size:14px}
+h1{font:700 clamp(24px,3.6vw,38px)/1.08 "Noto Serif",Georgia,serif;margin:2px 0 0;text-wrap:balance;max-width:26ch}
+.lang{display:flex;background:rgba(255,255,255,.14);border-radius:999px;padding:4px}
+.lang button{border:0;background:none;color:#fff;font:600 15px "Noto Sans";padding:8px 16px;border-radius:999px;cursor:pointer;min-height:40px}
+.lang button.on{background:#fff;color:#0f4c5c}
+.sheet{background:var(--sheet);border-radius:18px;box-shadow:0 18px 40px rgba(0,0,0,.25);padding:clamp(16px,2.6vw,30px)}
+.note{font-size:13px;color:var(--mute);margin:0 0 10px}
+.goal{margin:0 0 6px;max-width:70ch}
+.reag{margin:0 0 16px;color:var(--mute);font-size:15px;max-width:70ch}
+.safety{display:flex;gap:12px;align-items:center;flex-wrap:wrap;background:var(--warn);border-radius:12px;padding:12px 14px;margin-bottom:18px}
+.safety p{margin:0;flex:1 1 260px;font-weight:600}
+.safety label{flex-direction:row;align-items:center;gap:8px;color:var(--ink);font-weight:600;cursor:pointer}
+.grid{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1.05fr);gap:clamp(16px,3vw,36px);align-items:start}
+.step{border-top:1px solid var(--line);padding:14px 0}
+.step:first-child{border-top:0;padding-top:0}
+.step.off{opacity:.45;pointer-events:none}
+h2{font:700 19px/1.2 "Noto Serif",Georgia,serif;margin:0 0 6px}
+.hint{color:var(--mute);font-size:15px;margin:0 0 8px}
+label{font-size:14px;color:var(--mute);display:flex;flex-direction:column;gap:4px}
+textarea,select{font:16px "Noto Sans";color:var(--ink);background:var(--sheet);border:1.5px solid var(--line);border-radius:10px;padding:10px 12px;width:100%}
+textarea:focus,select:focus,button:focus-visible{outline:3px solid color-mix(in srgb,var(--acc) 45%,transparent);outline-offset:1px}
+.ok{border-color:var(--ok)!important}.bad{border-color:var(--bad)!important}
+textarea{min-height:76px;resize:vertical}
+.btns{display:flex;flex-wrap:wrap;gap:8px;margin-top:8px}
+.btn{border:0;border-radius:10px;padding:10px 14px;font:600 15px "Noto Sans";cursor:pointer;min-height:44px;background:var(--acc);color:light-dark(#fff,#08202a)}
+.btn.done{background:var(--soft);color:var(--ok)}
+.btn:disabled{opacity:.45;cursor:not-allowed}.btn.done:disabled{opacity:1}
+.msg{margin-top:8px;font-size:15px;min-height:1.4em}
+.msg.ok{color:var(--ok)}.msg.bad{color:var(--bad)}
+.board{position:sticky;top:12px}
+.seg{display:flex;background:var(--soft);border-radius:10px;padding:4px;gap:4px;margin-bottom:10px}
+.seg button{flex:1;border:0;background:none;color:var(--ink);font:600 14px "Noto Sans";padding:8px 10px;border-radius:8px;cursor:pointer;min-height:40px}
+.seg button.on{background:var(--sheet);box-shadow:0 1px 4px rgba(0,0,0,.15)}
+.seg button:disabled{opacity:.4;cursor:default}
+.rackbox{background:var(--soft);border-radius:16px;padding:10px}
+.rackbox svg{display:block;width:100%;height:auto}
+.mag{transition:transform 1.2s ease}
+.glow{animation:glow 1.4s ease-in-out 2;transform-box:fill-box}
+@keyframes glow{50%{fill:#f97316}}
+.flame{animation:flick .25s ease-in-out infinite alternate;transform-box:fill-box;transform-origin:bottom center}
+@keyframes flick{to{transform:scaleY(1.12) scaleX(.94)}}
+@media(prefers-reduced-motion:reduce){.mag{transition:none}.glow,.flame{animation:none}}
+.scroll{overflow-x:auto}
+.seg{display:flex;background:var(--soft);border-radius:10px;padding:4px;gap:4px;margin-bottom:10px;flex-wrap:wrap}
+.seg button{flex:1;border:0;background:none;color:var(--ink);font:600 14px "Noto Sans";padding:8px 10px;border-radius:8px;cursor:pointer;min-height:40px}
+.seg button.on{background:var(--sheet);box-shadow:0 1px 4px rgba(0,0,0,.15)}
+.brown{transition:opacity 2s ease}.pk{transition:fill 1.6s ease}.ca{transition:transform 4s ease-in-out,opacity 6s ease;transform-box:fill-box;transform-origin:center}.water{animation:fall2 .6s linear infinite}@keyframes fall2{from{transform:translateY(-10px);opacity:.9}to{transform:translateY(30px);opacity:.2}}.eq input{width:44px;padding:6px;text-align:center;font:600 16px "Noto Sans";border:1.5px solid var(--line);border-radius:8px;background:var(--sheet);color:var(--ink)}
+.tray{display:flex;flex-wrap:wrap;gap:8px;margin-top:10px}
+.tray small{width:100%;font-weight:700;color:var(--mute);font-size:13px;margin-top:4px}
+.chip{border:2px solid var(--line);background:var(--sheet);color:var(--ink);border-radius:999px;padding:6px 12px;font:600 14px "Noto Sans";cursor:pointer;min-height:40px}
+.chip.sel{border-color:var(--acc);background:var(--soft)}.chip.done{color:var(--ok)}.chip:disabled{opacity:.4;cursor:default}
+.scroll{overflow-x:auto}td select{padding:6px;font-size:13px}td input{width:70px;padding:6px;text-align:right;font:600 15px "Noto Sans";color:var(--ink);background:var(--sheet);border:1.5px solid var(--line);border-radius:8px}
+.two{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:0 18px}@media(max-width:600px){.two{grid-template-columns:minmax(0,1fr)}}
+.bub{animation:rise var(--d) linear infinite;animation-delay:var(--dl);opacity:0}
+@keyframes rise{0%{transform:translateY(0);opacity:0}10%{opacity:.95}100%{transform:translateY(-80px);opacity:0}}
+.smoke{animation:smoke 2.6s ease-out infinite;opacity:0}
+@keyframes smoke{0%{transform:translateY(0) scale(.6);opacity:0}20%{opacity:.6}100%{transform:translateY(-70px) scale(1.4);opacity:0}}
+@media(prefers-reduced-motion:reduce){.bub,.smoke{animation:none;opacity:.6}}
+table{width:100%;border-collapse:collapse;font-size:14px}
+th,td{padding:5px;border-bottom:1px solid var(--line);text-align:left;vertical-align:middle}
+th{font-size:13px;color:var(--mute);font-weight:600}
+td:first-child{font-weight:600;font-size:14px}
+td select{padding:6px;font-size:13px}
+.eq{display:flex;flex-wrap:wrap;align-items:center;gap:8px;font:600 17px "Noto Sans";margin-bottom:10px}
+.eq select{width:auto;padding:6px 8px;font:600 15px "Noto Sans"}
+.q{margin-bottom:10px}
+.toblue{animation:toblue 3.2s ease forwards}@keyframes toblue{from{fill:rgba(200,228,242,.55)}to{fill:#4f9cf5}}
+.shrink{animation:shrink 4.5s ease forwards;transform-box:fill-box;transform-origin:center bottom}@keyframes shrink{to{transform:scale(.15);opacity:.2}}
+.fade{animation:fade 2.6s ease forwards}@keyframes fade{to{opacity:0}}
+.stir{animation:stir .5s ease-in-out 5;transform-box:fill-box;transform-origin:top center}@keyframes stir{50%{transform:rotate(9deg)}}
+@media(max-width:860px){.grid{grid-template-columns:minmax(0,1fr)}.board{position:static;order:-1}}
+</style>
+</head>
+<body>
+<div class="wrap">
+<header>
+  <div><small data-i="lab"></small><h1 data-i="title"></h1></div>
+  <div class="lang" role="group" aria-label="Тіл"><button id="l-kk" class="on">Қазақша</button><button id="l-ru">Русский</button></div>
+</header>
+<div class="sheet">
+  <p class="note" data-i="demo"></p>
+  <p class="goal" data-i="goal"></p>
+  <p class="reag" data-i="reag"></p>
+  <div class="safety">
+    <svg width="34" height="34" viewBox="0 0 34 34" aria-hidden="true"><path d="M17 3 32 30H2Z" fill="#f59e0b"/><rect x="15.5" y="11" width="3" height="11" rx="1.5" fill="#fff"/><circle cx="17" cy="26" r="1.8" fill="#fff"/></svg>
+    <p data-i="safe"></p>
+    <label><input type="checkbox" id="goggles" style="width:22px;height:22px"><span data-i="safeok"></span></label>
+  </div>
+  <div class="grid">
+    <div>
+      <section class="step" id="st1"><h2 data-i="e1"></h2><p class="hint" data-i="e1h"></p>
+        <div class="btns"><button class="btn" data-b="c1" data-i="bc1"></button><button class="btn" data-b="c2" data-i="bc2"></button><button class="btn" data-b="c3" data-i="bc3"></button></div>
+        <div class="msg" id="m1" aria-live="polite"></div></section>
+      <section class="step" id="st2"><h2 data-i="e2"></h2><p class="hint" data-i="e2h"></p>
+        <div class="btns"><button class="btn" data-b="h2o2" data-i="bh2o2"></button><button class="btn" data-b="spl" data-i="bspl"></button></div>
+        <div class="msg" id="m2" aria-live="polite"></div></section>
+      <section class="step" id="st3"><h2 data-i="s3"></h2><p class="hint" data-i="s3h"></p>
+        <div id="qs"></div>
+        <div id="eqs" style="margin-top:12px"></div>
+        <div class="btns"><button class="btn" id="chk" data-i="check"></button></div>
+        <div class="msg" id="m3" aria-live="polite"></div></section>
+      <section class="step" id="st4"><h2 data-i="s4"></h2>
+        <div class="q"><label><span data-i="q1"></span><textarea id="a1"></textarea></label></div>
+        <div class="btns"><button class="btn" id="send" data-i="send"></button></div>
+        <div class="msg" id="m4" aria-live="polite"></div></section>
+    </div>
+    <div class="board"><div class="rackbox"><svg id="scene" viewBox="0 0 560 430" aria-label="scene"></svg></div></div>
+  </div>
+</div>
+</div>
+<script>
+{
+const T={
+kk:{lab:"10-сынып · 2-зертханалық жұмыс",title:"Химиялық реакция жылдамдығына әртүрлі өршіткілер әсерінің тиімділігін зерттеу",demo:"Үлгі нұсқа: тіркелу және жұмысты мұғалімге жіберу толық сайтта қосылады.",
+goal:"Мақсаты: сутек пероксидінің айырылу жылдамдығына мыс (II) сульфатының, аммоний гидроксидінің және олардың қоспасының әсерін салыстыру.",
+reag:"Реактивтер: мыс (II) сульфатының, аммоний гидроксидінің, сутек пероксидінің 10%-дық ерітінділері. Құрал-жабдықтар: 250 мл-лік және 100 мл-лік, 25 мл-лік өлшегіш цилиндрлер.",
+safe:"Сутек пероксиді мен аммиак ерітіндісімен абай бол: қорғау көзілдірігін ки, иіскеме.",safeok:"Ережені оқыдым",
+e1:"Цилиндрлерді дайындау",e1h:"Көлемі 250 мл үш цилиндр ал. Біріншісіне мыс (II) сульфатының 50 мл ерітіндісін, екіншісіне аммоний гидроксидінің 50 мл ерітіндісін, үшіншісіне мыс (II) сульфаты мен аммоний гидроксидінің ерітінділерінің әрқайсысынан 25 мл-ден құй.",
+bc1:"1-ге 50 мл CuSO₄",bc2:"2-ге 50 мл NH₄OH",bc3:"3-ке 25 мл CuSO₄ + 25 мл NH₄OH",c3m:"Үшінші цилиндрдегі ерітінді қою көк түске боялды — мыстың аммиакты кешені түзілді.",
+e2:"Тәжірибе",e2h:"Үш цилиндрге де сутек пероксидінің 10 мл-ін қос. Үш цилиндрдегі оттектің бөліну жылдамдығына көңіл аудар. Бөлінген газды бықсыған шырпымен тексер.",
+bh2o2:"Үшеуіне 10 мл H₂O₂ қосу",bspl:"3-ке бықсыған шырпы жақындату",go:"Оттек бөлінуде — көбіктің биіктігін салыстыр…",gdone:"1-де газ баяу бөлінді, 2-де бөлінбеді дерлік, 3-те өте қарқынды көбіктенді.",splm:"Бықсыған шырпы жарқырап тұтанды — бөлінген газ оттек.",
+s3:"Бақылаулар мен теңдеу",s3h:"Бақылауыңды таңда да, теңдеудегі коэффициенттерді қой (1 болса, бос қалдыруға болады).",
+qs:[["Оттек қай цилиндрде ең жылдам бөлінді?",["—","3-де (CuSO₄ + NH₄OH)","1-де (CuSO₄)","2-де (NH₄OH)"],"1"],["Қай цилиндрде реакция ең баяу жүрді?",["—","2-де (NH₄OH)","1-де (CuSO₄)","3-те"],"1"],["Бөлінген газды қалай анықтадың?",["—","Бықсыған шырпы тұтанды — оттек","Шырпы сөнді — көмірқышқыл газы","Қыш етті — сутек"],"1"],["Өршіткі (катализатор) дегеніміз —",["—","Реакцияны жылдамдатып, өзі жұмсалмайтын зат","Реакцияда толық жұмсалатын зат","Реакцияны тоқтататын зат"],"1"],["Тәжірибеден қандай қорытынды шығады?",["—","Өршіткілердің қоспасы (мыстың аммиакты кешені) жеке өршіткілерден әлдеқайда тиімді","Барлық өршіткі бірдей әсер етеді","Өршіткі жылдамдыққа әсер етпейді"],"1"]],
+check:"Тексеру",ok:"Барлығы дұрыс! Мыс (II) иондары мен аммиактан түзілген кешен сутек пероксидінің айырылуын жеке компоненттерден әлдеқайда күшті жылдамдатады.",bad:"Қате жауаптар саны: ",
+eqm:"Сутек пероксидінің айырылуы:",
+s4:"Қорытынды",q1:"Үш цилиндрдегі оттектің бөліну жылдамдығын салыстырып, өршіткілердің тиімділігі туралы қорытынды жаса.",
+send:"Мұғалімге жіберу",sent:"Үлгіде жіберу әлі жұмыс істемейді. Толық сайтта жұмыс мұғалімнің бетіне түседі.",empty:"Алдымен сұраққа жауап бер."},
+ru:{lab:"10 класс · Лабораторная работа №2",title:"Исследование эффективности влияния различных катализаторов на скорость химической реакции",demo:"Демо-версия: регистрация и отправка работы учителю появятся в полной версии сайта.",
+goal:"Цель: сравнить влияние сульфата меди (II), гидроксида аммония и их смеси на скорость разложения пероксида водорода.",
+reag:"Реактивы: 10%-ные растворы сульфата меди (II), гидроксида аммония, пероксида водорода. Оборудование: мерные цилиндры на 250 мл, 100 мл и 25 мл.",
+safe:"Осторожно с пероксидом водорода и раствором аммиака: надень защитные очки, не нюхай.",safeok:"Правила прочитаны",
+e1:"Подготовка цилиндров",e1h:"Возьми три цилиндра объёмом 250 мл. В первый налей 50 мл раствора сульфата меди (II), во второй — 50 мл раствора гидроксида аммония, в третий — по 25 мл растворов сульфата меди (II) и гидроксида аммония.",
+bc1:"В 1-й 50 мл CuSO₄",bc2:"Во 2-й 50 мл NH₄OH",bc3:"В 3-й 25 мл CuSO₄ + 25 мл NH₄OH",c3m:"Раствор в третьем цилиндре окрасился в интенсивно синий цвет — образовался аммиачный комплекс меди.",
+e2:"Опыт",e2h:"Добавь во все три цилиндра по 10 мл пероксида водорода. Обрати внимание на скорость выделения кислорода в трёх цилиндрах. Проверь газ тлеющей лучинкой.",
+bh2o2:"Добавить по 10 мл H₂O₂",bspl:"Поднести тлеющую лучинку к 3-му",go:"Выделяется кислород — сравни высоту пены…",gdone:"В 1-м газ выделялся медленно, во 2-м почти не выделялся, в 3-м — очень бурное вспенивание.",splm:"Тлеющая лучинка ярко вспыхнула — выделившийся газ кислород.",
+s3:"Наблюдения и уравнение",s3h:"Выбери наблюдения и расставь коэффициенты (если 1, поле можно оставить пустым).",
+qs:[["В каком цилиндре кислород выделялся быстрее всего?",["—","В 3-м (CuSO₄ + NH₄OH)","В 1-м (CuSO₄)","Во 2-м (NH₄OH)"],"1"],["В каком цилиндре реакция шла медленнее всего?",["—","Во 2-м (NH₄OH)","В 1-м (CuSO₄)","В 3-м"],"1"],["Как ты определил выделившийся газ?",["—","Тлеющая лучинка вспыхнула — кислород","Лучинка погасла — углекислый газ","Хлопок — водород"],"1"],["Катализатор — это",["—","Вещество, ускоряющее реакцию и не расходующееся","Вещество, полностью расходующееся в реакции","Вещество, останавливающее реакцию"],"1"],["Какой вывод следует из опыта?",["—","Смесь катализаторов (аммиачный комплекс меди) намного эффективнее отдельных катализаторов","Все катализаторы действуют одинаково","Катализатор не влияет на скорость"],"1"]],
+check:"Проверить",ok:"Всё верно! Комплекс ионов меди (II) с аммиаком ускоряет разложение пероксида водорода гораздо сильнее, чем отдельные компоненты.",bad:"Неверных ответов: ",
+eqm:"Разложение пероксида водорода:",
+s4:"Вывод",q1:"Сравни скорость выделения кислорода в трёх цилиндрах и сделай вывод об эффективности катализаторов.",
+send:"Отправить учителю",sent:"В демо-версии отправка пока не работает. В полной версии работа попадёт на страницу учителя.",empty:"Сначала ответь на вопрос."}};
+let lang="kk",ok=false,tt=0,run=false;const S={c1:0,c2:0,c3:0,h2o2:0,spl:0};const qv={},ev={};
+const RATE=[5,0.6,24],COL=["rgba(147,197,253,.75)","rgba(200,228,242,.55)","#1d4ed8"];
+const $=id=>document.getElementById(id),t=k=>T[lang][k];
+function bub(x,W,y,n,dur,h){let s="";for(let k=0;k<n;k++){const cx=x+6+(k*11)%(W-12),d=(dur*(.8+(k%5)/10)).toFixed(2);s+=`<circle class="bub" cx="${cx}" cy="${y-(k*13)%Math.max(h-10,1)}" r="${1.5+(k%3)}" fill="#fff" stroke="#9fb7c7" style="--d:${d}s;--dl:${(-k*dur/n).toFixed(2)}s"/>`}return s}
+function cyl(i){const x=105+i*140,W=56,TOP=60,BOT=370,sc=(BOT-TOP)/250;const has=S["c"+(i+1)];const vol=has?50+(S.h2o2?10:0):0,lh=vol*sc;
+  const foam=S.h2o2?Math.min(RATE[i]*tt,180):0;
+  let h=`<g clip-path="url(#k${i})"><rect x="${x}" y="${TOP}" width="${W}" height="${BOT-TOP}" fill="var(--glass)"/>`;
+  if(has)h+=`<rect x="${x}" y="${BOT-lh}" width="${W}" height="${lh}" style="fill:${COL[i]}"/>`;
+  if(foam>1){const fy=BOT-lh-foam;h+=`<rect x="${x}" y="${fy}" width="${W}" height="${foam}" fill="${i===2?"#bfdbfe":"#eef6fb"}"/>`;for(let k=0;k<Math.floor(foam/6);k++)h+=`<circle cx="${x+5+(k*13)%(W-10)}" cy="${fy+4+(k*7)%Math.max(foam-6,1)}" r="${3+k%3}" fill="#fff" stroke="#cbd5e1" stroke-width=".8"/>`}
+  if(S.h2o2&&has&&RATE[i]>1)h+=bub(x,W,BOT-6,i===2?20:8,i===2?.7:1.8,lh);
+  h+=`</g>`;
+  for(let v=50;v<=250;v+=50){const y=BOT-v*sc;h+=`<line x1="${x}" y1="${y}" x2="${x+12}" y2="${y}" stroke="var(--glassline)" stroke-width="1.5"/><text x="${x-4}" y="${y+4}" text-anchor="end" font-size="10" fill="var(--mute)">${v}</text>`}
+  h+=`<path d="M${x} ${TOP-6}V${BOT}h${W}V${TOP-6}" fill="none" stroke="var(--glassline)" stroke-width="2.4"/><path d="M${x-14} ${BOT+2}h${W+28}l-6 10h-${W+16}z" fill="var(--glassline)"/>`;
+  h+=`<text x="${x+W/2}" y="${BOT+36}" text-anchor="middle" font-size="13" font-weight="700" fill="var(--ink)">${i+1} · ${["CuSO₄","NH₄OH","CuSO₄+NH₄OH"][i]}</text>`;
+  if(i===2&&S.spl){const sx=x+W/2;h+=`<line x1="${sx+60}" y1="${TOP-50}" x2="${sx+4}" y2="${TOP-14}" stroke="#a16207" stroke-width="5" stroke-linecap="round"/><path class="flame" d="M${sx+2} ${TOP-40}c-10 10-11 20-5 28h12c6-8 5-18-7-28z" fill="#fde047" stroke="#f97316" stroke-width="2"/>`}
+  return`<clipPath id="k${i}"><rect x="${x}" y="${TOP}" width="${W}" height="${BOT-TOP}"/></clipPath>`+h}
+function render(){$("scene").innerHTML=cyl(0)+cyl(1)+cyl(2)}
+function opts(arr,v){return arr.map((s,i)=>`<option value="${i||""}" ${String(v||"")===String(i||"")?"selected":""}>${s}</option>`).join("")}
+const E=[[["k0","2"],"H₂O₂ → ",["k1","2"],"H₂O + ",["k2","1"],"O₂↑"]];
+function renderQ(){$("qs").innerHTML=t("qs").map((q,i)=>`<label style="margin-top:6px"><span>${q[0]}</span><select data-q="${i}">${opts(q[1],qv[i])}</select></label>`).join("");
+  $("eqs").innerHTML=E.map(e=>`<div class="eq"><small style="width:100%;font-size:13px;color:var(--mute);font-weight:600">${t("eqm")}</small>${e.map(p=>typeof p==="string"?p:`<input id="${p[0]}" data-a="${p[1]}" inputmode="numeric" value="${ev[p[0]]||""}">`).join("")}</div>`).join("")}
+function renderSteps(){const g=$("goggles").checked;$("st1").classList.toggle("off",!g);$("st2").classList.toggle("off",!(g&&S.c1&&S.c2&&S.c3));
+  document.querySelectorAll("[data-b]").forEach(b=>{const k=b.dataset.b;let en=true;if(k==="spl")en=S.h2o2&&!run;b.disabled=!!S[k]||!en;b.classList.toggle("done",!!S[k])});
+  $("st3").classList.toggle("off",!S.spl);$("st4").classList.toggle("off",!ok)}
+function applyLang(){document.documentElement.lang=lang;
+  document.querySelectorAll("[data-i]").forEach(el=>{const v=T[lang][el.dataset.i];if(typeof v==="string")el.textContent=v});
+  $("l-kk").classList.toggle("on",lang==="kk");$("l-ru").classList.toggle("on",lang==="ru");
+  document.querySelectorAll(".msg").forEach(m=>m.textContent="");render();renderQ();renderSteps()}
+function msg(id,text,okk){const m=$(id);m.textContent=text;m.className="msg "+(okk?"ok":"bad")}
+$("l-kk").onclick=()=>{lang="kk";applyLang()};$("l-ru").onclick=()=>{lang="ru";applyLang()};
+$("goggles").onchange=renderSteps;
+document.querySelector(".grid").addEventListener("click",e=>{const b=e.target.closest("[data-b]");if(!b||b.disabled)return;const k=b.dataset.b;S[k]=1;
+  if(k==="c3")msg("m1",t("c3m"),true);
+  if(k==="h2o2"){run=true;msg("m2",t("go"),true);const iv=setInterval(()=>{tt+=0.5;render();if(tt>=8){clearInterval(iv);run=false;msg("m2",t("gdone"),true);renderSteps()}},250)}
+  if(k==="spl")msg("m2",t("splm"),true);
+  render();renderSteps()});
+document.querySelector(".grid").addEventListener("change",e=>{const s=e.target;if(s.dataset.q!=null){qv[s.dataset.q]=s.value;s.className=""}});
+$("eqs").addEventListener("input",e=>{const el=e.target;if(el.id)ev[el.id]=el.value;el.style.borderColor=""});
+$("chk").onclick=()=>{let bad=0;document.querySelectorAll("[data-q]").forEach(s=>{const g=s.value===t("qs")[s.dataset.q][2];s.className=g?"ok":"bad";if(!g)bad++});
+  document.querySelectorAll("#eqs input").forEach(el=>{const v=el.value.trim(),a=el.dataset.a,g=v===a||(a==="1"&&v==="");el.style.borderColor=g?"var(--ok)":"var(--bad)";if(!g)bad++});
+  ok=!bad;renderSteps();ok?msg("m3",t("ok"),true):msg("m3",t("bad")+bad+".",false)};
+$("send").onclick=()=>{const f=$("a1").value.trim();msg("m4",f?t("sent"):t("empty"),!!f)};
+applyLang();
+}
+</script>
+<script src="../embed.js"></script>
+</body>
+</html>

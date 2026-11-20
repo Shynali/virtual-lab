@@ -1,0 +1,218 @@
+<!DOCTYPE html>
+<html lang="kk">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Нәруыздардың денатурациясы</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans:wght@400;600;700&family=Noto+Serif:wght@600;700&display=swap" rel="stylesheet">
+<style>
+/* VOICE: calm school lab workbook, clear and encouraging (grade 7)
+   IDEA: a workbench sheet — two twin tubes, acid and alkali, each with an aluminium granule
+   PICTURE: both tubes starting slowly, then fizzing hard once the oxide film is gone: aluminium reacts with both
+   COLOUR and TYPE: white sheet on deep lab-teal; the universal-indicator rainbow; Noto Serif + Noto Sans
+   LAYOUT: steps left, scene right (sticky) with view switch; stacks on phones */
+:root{color-scheme:light dark;
+--bg:light-dark(#0f4c5c,#0a2d36);--sheet:light-dark(#ffffff,#13202a);--ink:light-dark(#10131a,#e7edf2);
+--mute:light-dark(#566170,#9fb0bf);--line:light-dark(#d5dde5,#2b3d4b);--soft:light-dark(#eef5f7,#182a35);
+--acc:light-dark(#0f4c5c,#5cc2d6);--ok:light-dark(#12733a,#4ade80);--bad:light-dark(#b91c1c,#f87171);
+--warn:light-dark(#fff4d6,#3a2f12);--glass:light-dark(#f7fbfd,#1d2f3b);--glassline:light-dark(#8aa1b1,#6c8597)}
+:root[data-theme=light]{color-scheme:light}:root[data-theme=dark]{color-scheme:dark}
+*{box-sizing:border-box;min-width:0}
+body{margin:0;background:var(--bg);color:var(--ink);font:16px/1.55 "Noto Sans",system-ui,sans-serif;overflow-x:clip}
+.wrap{max-width:1240px;margin:0 auto;padding:clamp(14px,3vw,36px) max(3vw,12px)}
+header{display:flex;flex-wrap:wrap;gap:12px;align-items:flex-end;justify-content:space-between;color:#fff;margin-bottom:18px}
+header small{display:block;opacity:.8;font-size:14px}
+h1{font:700 clamp(24px,3.6vw,38px)/1.08 "Noto Serif",Georgia,serif;margin:2px 0 0;text-wrap:balance;max-width:26ch}
+.lang{display:flex;background:rgba(255,255,255,.14);border-radius:999px;padding:4px}
+.lang button{border:0;background:none;color:#fff;font:600 15px "Noto Sans";padding:8px 16px;border-radius:999px;cursor:pointer;min-height:40px}
+.lang button.on{background:#fff;color:#0f4c5c}
+.sheet{background:var(--sheet);border-radius:18px;box-shadow:0 18px 40px rgba(0,0,0,.25);padding:clamp(16px,2.6vw,30px)}
+.note{font-size:13px;color:var(--mute);margin:0 0 10px}
+.goal{margin:0 0 6px;max-width:70ch}
+.reag{margin:0 0 16px;color:var(--mute);font-size:15px;max-width:70ch}
+.safety{display:flex;gap:12px;align-items:center;flex-wrap:wrap;background:var(--warn);border-radius:12px;padding:12px 14px;margin-bottom:18px}
+.safety p{margin:0;flex:1 1 260px;font-weight:600}
+.safety label{flex-direction:row;align-items:center;gap:8px;color:var(--ink);font-weight:600;cursor:pointer}
+.grid{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1.05fr);gap:clamp(16px,3vw,36px);align-items:start}
+.step{border-top:1px solid var(--line);padding:14px 0}
+.step:first-child{border-top:0;padding-top:0}
+.step.off{opacity:.45;pointer-events:none}
+h2{font:700 19px/1.2 "Noto Serif",Georgia,serif;margin:0 0 6px}
+.hint{color:var(--mute);font-size:15px;margin:0 0 8px}
+label{font-size:14px;color:var(--mute);display:flex;flex-direction:column;gap:4px}
+textarea,select{font:16px "Noto Sans";color:var(--ink);background:var(--sheet);border:1.5px solid var(--line);border-radius:10px;padding:10px 12px;width:100%}
+textarea:focus,select:focus,button:focus-visible{outline:3px solid color-mix(in srgb,var(--acc) 45%,transparent);outline-offset:1px}
+.ok{border-color:var(--ok)!important}.bad{border-color:var(--bad)!important}
+textarea{min-height:76px;resize:vertical}
+.btns{display:flex;flex-wrap:wrap;gap:8px;margin-top:8px}
+.btn{border:0;border-radius:10px;padding:10px 14px;font:600 15px "Noto Sans";cursor:pointer;min-height:44px;background:var(--acc);color:light-dark(#fff,#08202a)}
+.btn.done{background:var(--soft);color:var(--ok)}
+.btn:disabled{opacity:.45;cursor:not-allowed}.btn.done:disabled{opacity:1}
+.msg{margin-top:8px;font-size:15px;min-height:1.4em}
+.msg.ok{color:var(--ok)}.msg.bad{color:var(--bad)}
+.board{position:sticky;top:12px}
+.seg{display:flex;background:var(--soft);border-radius:10px;padding:4px;gap:4px;margin-bottom:10px}
+.seg button{flex:1;border:0;background:none;color:var(--ink);font:600 14px "Noto Sans";padding:8px 10px;border-radius:8px;cursor:pointer;min-height:40px}
+.seg button.on{background:var(--sheet);box-shadow:0 1px 4px rgba(0,0,0,.15)}
+.seg button:disabled{opacity:.4;cursor:default}
+.rackbox{background:var(--soft);border-radius:16px;padding:10px}
+.rackbox svg{display:block;width:100%;height:auto}
+.mag{transition:transform 1.2s ease}
+.glow{animation:glow 1.4s ease-in-out 2;transform-box:fill-box}
+@keyframes glow{50%{fill:#f97316}}
+.flame{animation:flick .25s ease-in-out infinite alternate;transform-box:fill-box;transform-origin:bottom center}
+@keyframes flick{to{transform:scaleY(1.12) scaleX(.94)}}
+@media(prefers-reduced-motion:reduce){.mag{transition:none}.glow,.flame{animation:none}}
+.scroll{overflow-x:auto}
+.seg{display:flex;background:var(--soft);border-radius:10px;padding:4px;gap:4px;margin-bottom:10px;flex-wrap:wrap}
+.seg button{flex:1;border:0;background:none;color:var(--ink);font:600 14px "Noto Sans";padding:8px 10px;border-radius:8px;cursor:pointer;min-height:40px}
+.seg button.on{background:var(--sheet);box-shadow:0 1px 4px rgba(0,0,0,.15)}
+.brown{transition:opacity 2s ease}.pk{transition:fill 1.6s ease}.ca{transition:transform 4s ease-in-out,opacity 6s ease;transform-box:fill-box;transform-origin:center}.water{animation:fall2 .6s linear infinite}@keyframes fall2{from{transform:translateY(-10px);opacity:.9}to{transform:translateY(30px);opacity:.2}}.eq input{width:44px;padding:6px;text-align:center;font:600 16px "Noto Sans";border:1.5px solid var(--line);border-radius:8px;background:var(--sheet);color:var(--ink)}
+.tray{display:flex;flex-wrap:wrap;gap:8px;margin-top:10px}
+.tray small{width:100%;font-weight:700;color:var(--mute);font-size:13px;margin-top:4px}
+.chip{border:2px solid var(--line);background:var(--sheet);color:var(--ink);border-radius:999px;padding:6px 12px;font:600 14px "Noto Sans";cursor:pointer;min-height:40px}
+.chip.sel{border-color:var(--acc);background:var(--soft)}.chip.done{color:var(--ok)}.chip:disabled{opacity:.4;cursor:default}
+.scroll{overflow-x:auto}td select{padding:6px;font-size:13px}td input{width:70px;padding:6px;text-align:right;font:600 15px "Noto Sans";color:var(--ink);background:var(--sheet);border:1.5px solid var(--line);border-radius:8px}
+.two{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:0 18px}@media(max-width:600px){.two{grid-template-columns:minmax(0,1fr)}}
+.bub{animation:rise var(--d) linear infinite;animation-delay:var(--dl);opacity:0}
+@keyframes rise{0%{transform:translateY(0);opacity:0}10%{opacity:.95}100%{transform:translateY(-80px);opacity:0}}
+.smoke{animation:smoke 2.6s ease-out infinite;opacity:0}
+@keyframes smoke{0%{transform:translateY(0) scale(.6);opacity:0}20%{opacity:.6}100%{transform:translateY(-70px) scale(1.4);opacity:0}}
+@media(prefers-reduced-motion:reduce){.bub,.smoke{animation:none;opacity:.6}}
+table{width:100%;border-collapse:collapse;font-size:14px}
+th,td{padding:5px;border-bottom:1px solid var(--line);text-align:left;vertical-align:middle}
+th{font-size:13px;color:var(--mute);font-weight:600}
+td:first-child{font-weight:600;font-size:14px}
+td select{padding:6px;font-size:13px}
+.eq{display:flex;flex-wrap:wrap;align-items:center;gap:8px;font:600 17px "Noto Sans";margin-bottom:10px}
+.eq select{width:auto;padding:6px 8px;font:600 15px "Noto Sans"}
+.q{margin-bottom:10px}
+.toblue{animation:toblue 3.2s ease forwards}@keyframes toblue{from{fill:rgba(200,228,242,.55)}to{fill:#4f9cf5}}
+.shrink{animation:shrink 4.5s ease forwards;transform-box:fill-box;transform-origin:center bottom}@keyframes shrink{to{transform:scale(.15);opacity:.2}}
+.fade{animation:fade 2.6s ease forwards}@keyframes fade{to{opacity:0}}
+.stir{animation:stir .5s ease-in-out 5;transform-box:fill-box;transform-origin:top center}@keyframes stir{50%{transform:rotate(9deg)}}
+@media(max-width:860px){.grid{grid-template-columns:minmax(0,1fr)}.board{position:static;order:-1}}
+</style>
+</head>
+<body>
+<div class="wrap">
+<header>
+  <div><small data-i="lab"></small><h1 data-i="title"></h1></div>
+  <div class="lang" role="group" aria-label="Тіл"><button id="l-kk" class="on">Қазақша</button><button id="l-ru">Русский</button></div>
+</header>
+<div class="sheet">
+  <p class="note" data-i="demo"></p>
+  <p class="goal" data-i="goal"></p>
+  <p class="reag" data-i="reag"></p>
+  <div class="safety">
+    <svg width="34" height="34" viewBox="0 0 34 34" aria-hidden="true"><path d="M17 3 32 30H2Z" fill="#f59e0b"/><rect x="15.5" y="11" width="3" height="11" rx="1.5" fill="#fff"/><circle cx="17" cy="26" r="1.8" fill="#fff"/></svg>
+    <p data-i="safe"></p>
+    <label><input type="checkbox" id="goggles" style="width:22px;height:22px"><span data-i="safeok"></span></label>
+  </div>
+  <div class="grid">
+    <div>
+      <section class="step" id="st1"><h2 data-i="e1"></h2><p class="hint" data-i="e1h"></p>
+        <div class="btns"><button class="btn" data-b="prot" data-i="bprot"></button></div>
+        <div class="btns"><button class="btn" data-b="cu" data-i="bcu"></button><button class="btn" data-b="pb" data-i="bpb"></button><button class="btn" data-b="ac" data-i="bac"></button></div>
+        <div class="btns"><button class="btn" data-b="stir" data-i="bstir"></button></div>
+        <div class="msg" id="m1" aria-live="polite"></div></section>
+      <section class="step" id="st2"><h2 data-i="e2"></h2><p class="hint" data-i="e2h"></p>
+        <div class="btns"><button class="btn" data-b="prot4" data-i="bprot4"></button><button class="btn" data-b="heat" data-i="bheat"></button><button class="btn" data-b="water" data-i="bwater"></button></div>
+        <div class="msg" id="m2" aria-live="polite"></div></section>
+      <section class="step" id="st3"><h2 data-i="s3"></h2><p class="hint" data-i="s3h"></p>
+        <div id="qs"></div>
+        <div class="btns"><button class="btn" id="chk" data-i="check"></button></div>
+        <div class="msg" id="m3" aria-live="polite"></div></section>
+      <section class="step" id="st4"><h2 data-i="s4"></h2>
+        <div class="q"><label><span data-i="q1"></span><textarea id="a1"></textarea></label></div>
+        <div class="q"><label><span data-i="q2"></span><textarea id="a2"></textarea></label></div>
+        <div class="q"><label><span data-i="q3"></span><textarea id="a3"></textarea></label></div>
+        <div class="btns"><button class="btn" id="send" data-i="send"></button></div>
+        <div class="msg" id="m4" aria-live="polite"></div></section>
+    </div>
+    <div class="board"><div class="rackbox"><svg id="scene" viewBox="0 0 560 420" aria-label="scene"></svg></div></div>
+  </div>
+</div>
+</div>
+<script>
+{
+const T={
+kk:{lab:"9-сынып · 17-зертханалық жұмыс",title:"Нәруыздардың денатурациясы",demo:"Үлгі нұсқа: тіркелу және жұмысты мұғалімге жіберу толық сайтта қосылады.",
+goal:"Мақсаты: ауыр металдар тұздарының, қышқылдың және қыздырудың нәруызға әсерін бақылап, денатурация құбылысын түсіндіру.",
+reag:"Реактивтер: жұмыртқа нәруызының ерітіндісі, мыс (II) сульфаты, қорғасын нитраты, сірке қышқылының ерітінділері, су. Құрал-жабдықтар: сынауықтар, сынауықтарға арналған тұрғы, спиртшам, шыны таяқшалар.",
+safe:"Қыздырғыш құралдармен, қышқылдармен және сілтілермен жұмыс істеу ережесін сақта: қорғау көзілдірігін ки. Қорғасын тұздары улы!",safeok:"Ережені оқыдым",
+e1:"1-тәжірибе",e1h:"Үш сынауыққа 2 мл-ден нәруыз ерітіндісін құй. Біріншісіне 0,5 мл мыс (II) сульфаты, екіншісіне 0,5 мл қорғасын нитраты, үшіншісіне 0,5 мл сірке қышқылының ерітінділерін қосып, шыны таяқшамен араластыр.",
+bprot:"Үш сынауыққа 2 мл-ден нәруыз құю",bcu:"1-ге 0,5 мл CuSO₄",bpb:"2-ге 0,5 мл Pb(NO₃)₂",bac:"3-ке 0,5 мл CH₃COOH",bstir:"Шыны таяқшамен араластыру",
+prm:"Нәруыз ерітіндісі — сәл бұлыңғыр, түссіз сұйықтық.",addm:"Ерітінді лайланды…",stirm:"Үш сынауықта да ақ (1-сінде көгілдір) үлпек тұнба түзілді — нәруыз ұйыды.",
+e2:"2-тәжірибе",e2h:"Сынауыққа 2 мл нәруыз ерітіндісін құй. Оны спиртшамның жалынында абайлап қыздыр. Содан кейін сынауықты салқындатып, оған 5–7 мл су құйып араластыр.",
+bprot4:"2 мл нәруыз құю",bheat:"Абайлап қыздыру",bwater:"Салқындатып, 6 мл су құйып араластыру",heat1:"Қыздырылуда…",heat2:"Нәруыз ақ түсті қатты массаға айналды (ұйыды).",waterm:"Су құйып араластырсақ та, ұйыған нәруыз ерімейді.",
+s3:"Сұрақтар",s3h:"Бақылауыңа сүйеніп, жауапты таңда.",
+qs:[["Нәруызға тұз және қышқыл ерітінділерін қосқанда не байқадың?",["—","Тұнба түзілді — нәруыз ұйыды","Газ бөлінді","Өзгеріс болған жоқ"],"1"],["Мыс (II) сульфаты қосылған сынауықтағы тұнбаның түсі:",["—","Көгілдір","Қызыл","Қара"],"1"],["Қыздыру нәруыз құрылысына қалай әсер етеді?",["—","Кеңістіктік құрылымын бұзады","Пептидтік байланыстарды түзеді","Ешқандай әсер етпейді"],"1"],["Нәруыздың ұюы қалай аталады?",["—","Денатурация","Гидролиз","Полимерлену"],"1"],["Ұйыған нәруыз суда неге ерімейді?",["—","Оның құрылымы қайтымсыз бұзылды","Су суық болды","Нәруыз буланып кетті"],"1"],["Ауыр металдардың тұздары (Cu, Pb) неге улы?",["—","Ағзадағы нәруыздарды денатурациялайды","Тек иісі жағымсыз","Суда ерімейді"],"1"]],
+check:"Тексеру",ok:"Барлығы дұрыс! Ауыр металдар тұздары, қышқылдар және қыздыру нәруыздың кеңістіктік құрылымын бұзады — бұл денатурация. Қыздырудан болған денатурация қайтымсыз.",bad:"Қате жауаптар саны: ",
+s4:"Қорытынды (оқулықтағы сұрақтар)",q1:"Нәруызға тұз және қышқыл ерітінділерін қосқанда не байқадың? Байқаған құбылыстарды сипатта.",q2:"Қыздыру нәруыз құрылысына қалай әсер етеді?",q3:"Нәруыздың ұюы қалай аталады? Ұйыған нәруыз суда неге ерімейді?",
+send:"Мұғалімге жіберу",sent:"Үлгіде жіберу әлі жұмыс істемейді. Толық сайтта жұмыс мұғалімнің бетіне түседі.",empty:"Алдымен барлық сұрақтарға жауап бер."},
+ru:{lab:"9 класс · Лабораторная работа №17",title:"Денатурация белков",demo:"Демо-версия: регистрация и отправка работы учителю появятся в полной версии сайта.",
+goal:"Цель: пронаблюдать действие солей тяжёлых металлов, кислоты и нагревания на белок и объяснить явление денатурации.",
+reag:"Реактивы: раствор яичного белка, растворы сульфата меди (II), нитрата свинца, уксусной кислоты, вода. Оборудование: пробирки, штатив для пробирок, спиртовка, стеклянные палочки.",
+safe:"Соблюдай правила работы с нагревательными приборами, кислотами и щелочами: надень защитные очки. Соли свинца ядовиты!",safeok:"Правила прочитаны",
+e1:"Опыт 1",e1h:"Налей в три пробирки по 2 мл раствора белка. В первую добавь 0,5 мл сульфата меди (II), во вторую — 0,5 мл нитрата свинца, в третью — 0,5 мл уксусной кислоты и перемешай стеклянной палочкой.",
+bprot:"Налить по 2 мл белка в три пробирки",bcu:"В 1-ю 0,5 мл CuSO₄",bpb:"Во 2-ю 0,5 мл Pb(NO₃)₂",bac:"В 3-ю 0,5 мл CH₃COOH",bstir:"Перемешать стеклянной палочкой",
+prm:"Раствор белка — слегка мутная бесцветная жидкость.",addm:"Раствор помутнел…",stirm:"Во всех трёх пробирках выпал белый (в 1-й голубоватый) хлопьевидный осадок — белок свернулся.",
+e2:"Опыт 2",e2h:"Налей в пробирку 2 мл раствора белка. Осторожно нагрей её в пламени спиртовки. Затем охлади пробирку, налей 5–7 мл воды и перемешай.",
+bprot4:"Налить 2 мл белка",bheat:"Осторожно нагреть",bwater:"Охладить, налить 6 мл воды и перемешать",heat1:"Нагревание…",heat2:"Белок превратился в белую плотную массу (свернулся).",waterm:"Даже после добавления воды и перемешивания свернувшийся белок не растворяется.",
+s3:"Вопросы",s3h:"Опираясь на наблюдения, выбери ответ.",
+qs:[["Что ты наблюдал при добавлении растворов солей и кислоты к белку?",["—","Выпал осадок — белок свернулся","Выделился газ","Изменений не было"],"1"],["Цвет осадка в пробирке с сульфатом меди (II):",["—","Голубоватый","Красный","Чёрный"],"1"],["Как нагревание влияет на структуру белка?",["—","Разрушает его пространственную структуру","Образует пептидные связи","Никак не влияет"],"1"],["Как называется свёртывание белка?",["—","Денатурация","Гидролиз","Полимеризация"],"1"],["Почему свернувшийся белок не растворяется в воде?",["—","Его структура необратимо разрушена","Вода была холодной","Белок испарился"],"1"],["Почему соли тяжёлых металлов (Cu, Pb) ядовиты?",["—","Они денатурируют белки организма","У них только неприятный запах","Они не растворяются в воде"],"1"]],
+check:"Проверить",ok:"Всё верно! Соли тяжёлых металлов, кислоты и нагревание разрушают пространственную структуру белка — это денатурация. Денатурация при нагревании необратима.",bad:"Неверных ответов: ",
+s4:"Вывод (вопросы учебника)",q1:"Что ты наблюдал при добавлении к белку растворов солей и кислоты? Опиши наблюдаемые явления.",q2:"Как нагревание влияет на структуру белка?",q3:"Как называется свёртывание белка? Почему свернувшийся белок не растворяется в воде?",
+send:"Отправить учителю",sent:"В демо-версии отправка пока не работает. В полной версии работа попадёт на страницу учителя.",empty:"Сначала ответь на все вопросы."}};
+let lang="kk",ok=false,stirring=false,heating=false;const S={prot:0,cu:0,pb:0,ac:0,stir:0,prot4:0,heat:0,water:0};const qv={};
+const $=id=>document.getElementById(id),t=k=>T[lang][k];
+const PROT="rgba(246,241,222,.85)";
+function flakes(x,W,y,col,n){let s="";for(let k=0;k<n;k++){const cx=x+8+(k*17)%(W-16),cy=y-(k*7)%26;s+=`<path d="M${cx} ${cy}q4-5 8 0q3 4-1 6q-5 3-8-1z" fill="${col}" stroke="rgba(0,0,0,.15)"/>`}return s}
+function tube(i){const x=55+i*125,W=60,TOP=90,BOT=290;let h=`<clipPath id="c${i}"><rect x="${x}" y="${TOP}" width="${W}" height="${BOT-TOP}" rx="${W/2}"/><rect x="${x}" y="${TOP}" width="${W}" height="${(BOT-TOP)/2}"/></clipPath><g clip-path="url(#c${i})"><rect x="${x}" y="${TOP}" width="${W}" height="${BOT-TOP}" fill="var(--glass)"/>`;
+  const add=[S.cu,S.pb,S.ac][i];
+  if(i<3&&S.prot){const lh=add?84:70;h+=`<rect x="${x}" y="${BOT-lh}" width="${W}" height="${lh}" fill="${PROT}"/>`;
+    if(add&&!S.stir)h+=`<rect x="${x}" y="${BOT-lh}" width="${W}" height="${lh}" fill="${i===0?"#bfdbfe":"#f8fafc"}" opacity="${stirring?.5:.75}"/>`;
+    if(add&&(S.stir||stirring))h+=flakes(x,W,BOT-8,i===0?"#93c5fd":"#ffffff",14)}
+  if(i===3&&S.prot4){const lh=S.water?180:70;h+=`<rect x="${x}" y="${BOT-lh}" width="${W}" height="${lh}" fill="${S.water?"rgba(200,228,242,.55)":PROT}"/>`;
+    if(heating)h+=`<rect class="fade" x="${x}" y="${BOT-70}" width="${W}" height="70" fill="${PROT}" style="animation-direction:reverse"/>`;
+    if(S.heat&&!heating)h+=S.water?flakes(x,W,BOT-6,"#ffffff",12)+flakes(x,W,BOT-40,"#ffffff",6):`<rect x="${x}" y="${BOT-70}" width="${W}" height="70" fill="#ffffff"/><path d="M${x+10} ${BOT-50}q10-8 20 0t20 0" stroke="#e5e7eb" stroke-width="3" fill="none"/>`}
+  h+=`</g><path d="M${x} ${TOP-8}V${BOT-W/2}a${W/2} ${W/2} 0 0 0 ${W} 0V${TOP-8}" fill="none" stroke="var(--glassline)" stroke-width="2.4"/><rect x="${x-5}" y="${TOP-12}" width="${W+10}" height="7" rx="3" fill="var(--glassline)"/>`;
+  if(i<3&&stirring&&add)h+=`<g class="stir"><rect x="${x+W/2-3}" y="${TOP-45}" width="6" height="${BOT-TOP+25}" rx="3" fill="rgba(180,210,225,.8)" stroke="var(--glassline)"/></g>`;
+  if(i===3&&heating){const cx=x+W/2;h+=`<rect x="${x-6}" y="130" width="${W+12}" height="12" rx="4" fill="#b45309"/><rect x="${x+W+6}" y="132" width="40" height="8" rx="3" fill="#92400e"/>`;
+    h+=`<path class="flame" d="M${cx} 284c-16 20-18 38-10 50h20c8-12 6-30-10-50z" fill="#f97316" opacity=".9"/><path class="flame" d="M${cx} 302c-8 12-9 21-4 32h8c5-11 4-20-4-32z" fill="#fde047"/>`;
+    h+=`<rect x="${cx-3}" y="330" width="6" height="10" fill="#57534e"/><path d="M${cx-34} 382l8-40h52l8 40z" fill="rgba(200,228,242,.6)" stroke="var(--glassline)" stroke-width="2"/><rect x="${cx-10}" y="336" width="20" height="8" rx="2" fill="#a8a29e"/>`}
+  const lab=["CuSO₄","Pb(NO₃)₂","CH₃COOH","t°"][i];
+  h+=`<text x="${x+W/2}" y="${i===3&&heating?62:BOT+26}" text-anchor="middle" font-size="13" font-weight="700" fill="var(--ink)">${i+1} · ${lab}</text>`;return h}
+function render(){let h=`<rect x="30" y="185" width="500" height="10" rx="4" style="fill:light-dark(#b7c4cd,#3a4b57)" opacity=".7"/>`;for(let i=0;i<4;i++)h+=tube(i);$("scene").innerHTML=h}
+function opts(arr,v){return arr.map((s,i)=>`<option value="${i||""}" ${String(v||"")===String(i||"")?"selected":""}>${s}</option>`).join("")}
+function renderQ(){$("qs").innerHTML=t("qs").map((q,i)=>`<label style="margin-top:6px"><span>${q[0]}</span><select data-q="${i}">${opts(q[1],qv[i])}</select></label>`).join("")}
+function renderSteps(){const g=$("goggles").checked;$("st1").classList.toggle("off",!g);$("st2").classList.toggle("off",!g);
+  document.querySelectorAll("[data-b]").forEach(b=>{const k=b.dataset.b;let done=!!S[k],en=true;
+    if(k==="cu"||k==="pb"||k==="ac")en=!!S.prot;if(k==="stir"){en=S.cu&&S.pb&&S.ac&&!stirring;done=!!S.stir}
+    if(k==="heat"){en=!!S.prot4&&!heating;done=S.heat||heating}if(k==="water")en=S.heat&&!heating;
+    b.disabled=!!done||!en;b.classList.toggle("done",!!done)});
+  $("st3").classList.toggle("off",!(S.stir&&S.water));$("st4").classList.toggle("off",!ok)}
+function applyLang(){document.documentElement.lang=lang;
+  document.querySelectorAll("[data-i]").forEach(el=>{const v=T[lang][el.dataset.i];if(typeof v==="string")el.textContent=v});
+  $("l-kk").classList.toggle("on",lang==="kk");$("l-ru").classList.toggle("on",lang==="ru");
+  document.querySelectorAll(".msg").forEach(m=>m.textContent="");render();renderQ();renderSteps()}
+function msg(id,text,okk){const m=$(id);m.textContent=text;m.className="msg "+(okk?"ok":"bad")}
+$("l-kk").onclick=()=>{lang="kk";applyLang()};$("l-ru").onclick=()=>{lang="ru";applyLang()};
+$("goggles").onchange=renderSteps;
+document.querySelector(".grid").addEventListener("click",e=>{const b=e.target.closest("[data-b]");if(!b||b.disabled)return;const k=b.dataset.b;
+  if(k==="stir"){stirring=true;render();renderSteps();setTimeout(()=>{stirring=false;S.stir=1;render();renderSteps();msg("m1",t("stirm"),true)},2600);return}
+  if(k==="heat"){heating=true;render();renderSteps();msg("m2",t("heat1"),true);setTimeout(()=>{heating=false;S.heat=1;render();renderSteps();msg("m2",t("heat2"),true)},3200);return}
+  S[k]=1;render();renderSteps();
+  if(k==="prot")msg("m1",t("prm"),true);if(k==="cu"||k==="pb"||k==="ac")msg("m1",t("addm"),true);if(k==="prot4")msg("m2",t("prm"),true);if(k==="water")msg("m2",t("waterm"),true)});
+document.querySelector("#qs").addEventListener("change",e=>{const s=e.target;if(s.dataset.q!=null){qv[s.dataset.q]=s.value;s.className=""}});
+$("chk").onclick=()=>{let bad=0;document.querySelectorAll("[data-q]").forEach(s=>{const g=s.value===t("qs")[s.dataset.q][2];s.className=g?"ok":"bad";if(!g)bad++});
+  ok=!bad;renderSteps();ok?msg("m3",t("ok"),true):msg("m3",t("bad")+bad+".",false)};
+$("send").onclick=()=>{const f=["a1","a2","a3"].every(id=>$(id).value.trim());msg("m4",f?t("sent"):t("empty"),!!f)};
+applyLang();
+}
+</script>
+<script src="../embed.js"></script>
+</body>
+</html>

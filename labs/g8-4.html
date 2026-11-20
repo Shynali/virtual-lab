@@ -1,0 +1,290 @@
+<!DOCTYPE html>
+<html lang="kk">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Экзо және эндо реакциялар</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans:wght@400;600;700&family=Noto+Serif:wght@600;700&display=swap" rel="stylesheet">
+<style>
+/* VOICE: calm school lab workbook, clear and encouraging
+   IDEA: a workbench sheet — four test tubes, each with a thermometer, glowing warm or frosting cold
+   PICTURE: tubes with live thermometers; orange glow for heat released, blue frost for heat absorbed
+   COLOUR and TYPE: white sheet on deep lab-teal; warm orange and cold blue as the two signals; Noto Serif + Noto Sans
+   LAYOUT: steps left, tubes right (sticky); stacks on phones as title, tubes, steps */
+:root{color-scheme:light dark;
+--bg:light-dark(#0f4c5c,#0a2d36);--sheet:light-dark(#ffffff,#13202a);--ink:light-dark(#10131a,#e7edf2);
+--mute:light-dark(#566170,#9fb0bf);--line:light-dark(#d5dde5,#2b3d4b);--soft:light-dark(#eef5f7,#182a35);
+--acc:light-dark(#0f4c5c,#5cc2d6);--ok:light-dark(#12733a,#4ade80);--bad:light-dark(#b91c1c,#f87171);
+--warn:light-dark(#fff4d6,#3a2f12);--glass:light-dark(#f7fbfd,#1d2f3b);--glassline:light-dark(#8aa1b1,#6c8597);
+--hot:#f97316;--cold:#38bdf8}
+:root[data-theme=light]{color-scheme:light}:root[data-theme=dark]{color-scheme:dark}
+*{box-sizing:border-box;min-width:0}
+body{margin:0;background:var(--bg);color:var(--ink);font:16px/1.55 "Noto Sans",system-ui,sans-serif;overflow-x:clip}
+.wrap{max-width:1240px;margin:0 auto;padding:clamp(14px,3vw,36px) max(3vw,12px)}
+header{display:flex;flex-wrap:wrap;gap:12px;align-items:flex-end;justify-content:space-between;color:#fff;margin-bottom:18px}
+header small{display:block;opacity:.8;font-size:14px}
+h1{font:700 clamp(24px,3.6vw,38px)/1.08 "Noto Serif",Georgia,serif;margin:2px 0 0;text-wrap:balance;max-width:24ch}
+.lang{display:flex;background:rgba(255,255,255,.14);border-radius:999px;padding:4px}
+.lang button{border:0;background:none;color:#fff;font:600 15px "Noto Sans";padding:8px 16px;border-radius:999px;cursor:pointer;min-height:40px}
+.lang button.on{background:#fff;color:#0f4c5c}
+.sheet{background:var(--sheet);border-radius:18px;box-shadow:0 18px 40px rgba(0,0,0,.25);padding:clamp(16px,2.6vw,30px)}
+.note{font-size:13px;color:var(--mute);margin:0 0 10px}
+.goal{margin:0 0 6px;max-width:70ch}
+.reag{margin:0 0 16px;color:var(--mute);font-size:15px;max-width:70ch}
+.safety{display:flex;gap:12px;align-items:center;flex-wrap:wrap;background:var(--warn);border-radius:12px;padding:12px 14px;margin-bottom:18px}
+.safety p{margin:0;flex:1 1 260px;font-weight:600}
+.safety label{flex-direction:row;align-items:center;gap:8px;color:var(--ink);font-weight:600;cursor:pointer}
+.safety input{width:22px;height:22px}
+.grid{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1.05fr);gap:clamp(16px,3vw,36px);align-items:start}
+.step{border-top:1px solid var(--line);padding:16px 0}
+.step:first-child{border-top:0;padding-top:0}
+.step.off{opacity:.45;pointer-events:none}
+h2{font:700 20px/1.2 "Noto Serif",Georgia,serif;margin:0 0 6px}
+.hint{color:var(--mute);font-size:15px;margin:0 0 12px}
+label{font-size:14px;color:var(--mute);display:flex;flex-direction:column;gap:4px}
+input,textarea,select{font:16px "Noto Sans";color:var(--ink);background:var(--sheet);border:1.5px solid var(--line);border-radius:10px;padding:10px 12px;width:100%}
+input:focus,textarea:focus,select:focus,button:focus-visible{outline:3px solid color-mix(in srgb,var(--acc) 45%,transparent);outline-offset:1px}
+.ok{border-color:var(--ok)!important}.bad{border-color:var(--bad)!important}
+textarea{min-height:76px;resize:vertical}
+.btns{display:flex;flex-wrap:wrap;gap:10px;margin-top:12px}
+.btn{border:0;border-radius:10px;padding:11px 18px;font:600 15px "Noto Sans";cursor:pointer;min-height:44px;background:var(--acc);color:light-dark(#fff,#08202a)}
+.btn:disabled{opacity:.45;cursor:not-allowed}
+.msg{margin-top:10px;font-size:15px;min-height:1.5em}
+.msg.ok{color:var(--ok)}.msg.bad{color:var(--bad)}
+.list{margin:0 0 4px;padding-left:20px;font-size:15px}
+.list li{margin:2px 0}
+.list li.done{color:var(--ok)}
+.board{position:sticky;top:12px}
+.rackbox{background:var(--soft);border-radius:16px;padding:10px}
+.rackbox svg{display:block;width:100%;height:auto}
+.tube{cursor:pointer}
+.liq{transition:height .8s ease,y .8s ease}
+.merc{transition:height .3s linear,y .3s linear}
+.glow{transition:opacity 1.5s ease}
+.bub{animation:rise var(--d) linear infinite;animation-delay:var(--dl);opacity:0}
+@keyframes rise{0%{transform:translateY(0);opacity:0}10%{opacity:.95}100%{transform:translateY(-70px);opacity:0}}
+.xtal{transition:opacity 3s ease}
+@media(prefers-reduced-motion:reduce){.bub{animation:none;opacity:.8}}
+.legend{display:flex;gap:16px;flex-wrap:wrap;justify-content:center;margin-top:10px;font-size:14px;color:var(--mute)}
+.legend i{display:inline-block;width:14px;height:14px;border-radius:50%;vertical-align:-2px;margin-right:6px}
+table{width:100%;border-collapse:collapse;font-size:15px}
+th,td{padding:6px;border-bottom:1px solid var(--line);text-align:left;vertical-align:middle}
+th{font-size:13px;color:var(--mute);font-weight:600}
+td.n{text-align:right;white-space:nowrap}
+td input{max-width:84px;padding:8px;text-align:right}
+td select{padding:8px}
+.eq{display:flex;flex-wrap:wrap;align-items:center;gap:6px;font:600 16px "Noto Serif",serif;margin-bottom:12px;padding-bottom:10px;border-bottom:1px dashed var(--line)}
+.eq b{font:700 13px "Noto Sans";color:var(--mute);width:100%}
+.eq input{width:46px;padding:6px;text-align:center;font:600 16px "Noto Sans"}
+.eq select{width:auto;padding:6px 8px;font:600 15px "Noto Sans"}
+.q{margin-bottom:10px}
+@media(max-width:860px){.grid{grid-template-columns:minmax(0,1fr)}.board{position:static;order:-1}}
+@media(max-width:600px){.stack thead{display:none}.stack tr{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:6px;padding-block:10px}.stack td{border:0;padding:0}.stack td:first-child{grid-column:1/-1;font-weight:600}td input{max-width:none}}
+</style>
+</head>
+<body>
+<div class="wrap">
+<header>
+  <div><small data-i="lab"></small><h1 data-i="title"></h1></div>
+  <div class="lang" role="group" aria-label="Тіл"><button id="l-kk" class="on">Қазақша</button><button id="l-ru">Русский</button></div>
+</header>
+<div class="sheet">
+  <p class="note" data-i="demo"></p>
+  <p class="goal" data-i="goal"></p>
+  <p class="reag" data-i="reag"></p>
+  <div class="safety">
+    <svg width="34" height="34" viewBox="0 0 34 34" aria-hidden="true"><path d="M17 3 32 30H2Z" fill="#f59e0b"/><rect x="15.5" y="11" width="3" height="11" rx="1.5" fill="#fff"/><circle cx="17" cy="26" r="1.8" fill="#fff"/></svg>
+    <p data-i="safe"></p>
+    <label><input type="checkbox" id="goggles"><span data-i="safeok"></span></label>
+  </div>
+  <div class="grid">
+    <div>
+      <section class="step" id="st1">
+        <h2 data-i="s1"></h2>
+        <p class="hint" data-i="s1h"></p>
+        <ol class="list" id="tasks"></ol>
+        <div class="msg" id="m1" aria-live="polite"></div>
+      </section>
+      <section class="step" id="st2">
+        <h2 data-i="s2"></h2>
+        <p class="hint" data-i="s2h"></p>
+        <table class="stack"><thead><tr><th>№</th><th class="n" data-i="ct"></th><th data-i="cf"></th><th data-i="cy"></th></tr></thead><tbody id="tbl"></tbody></table>
+        <div class="btns"><button class="btn" id="chk2" data-i="check"></button></div>
+        <div class="msg" id="m2" aria-live="polite"></div>
+      </section>
+      <section class="step" id="st3">
+        <h2 data-i="s3"></h2>
+        <p class="hint" data-i="s3h"></p>
+        <div id="eqs"></div>
+        <div class="btns"><button class="btn" id="chk3" data-i="check"></button></div>
+        <div class="msg" id="m3" aria-live="polite"></div>
+      </section>
+      <section class="step" id="st4">
+        <h2 data-i="s4"></h2>
+        <div class="q"><label><span data-i="q1"></span><textarea id="a1"></textarea></label></div>
+        <div class="q"><label><span data-i="q2"></span><textarea id="a2"></textarea></label></div>
+        <div class="btns"><button class="btn" id="send" data-i="send"></button></div>
+        <div class="msg" id="m4" aria-live="polite"></div>
+      </section>
+    </div>
+    <div class="board">
+      <div class="rackbox"><svg id="rack" viewBox="0 0 560 400" aria-label="tubes"></svg></div>
+      <div class="legend"><span><i style="background:var(--hot)"></i><span data-i="lhot"></span></span><span><i style="background:var(--cold)"></i><span data-i="lcold"></span></span></div>
+    </div>
+  </div>
+</div>
+</div>
+<script>
+{
+const T={
+kk:{lab:"4-зертханалық тәжірибе",title:"Энергияның өзгеруімен жүретін химиялық реакциялар",demo:"Үлгі нұсқа: тіркелу және жұмысты мұғалімге жіберу толық сайтта қосылады.",
+goal:"Мақсаты: реакция кезінде жылу бөлінетінін немесе сіңірілетінін бақылап, реакцияларды экзотермиялық және эндотермиялық деп жіктеу.",
+reag:"Реактивтер: натрий карбонаты — 1 г, сұйылтылған сірке қышқылы — 3 мл, калий хлориді — 2 г, лимон қышқылы — 3 мл, натрий гидрокарбонаты — 1 г, магний — 1 г, сұйылтылған күкірт қышқылы — 3 мл; 4 сынауық, тұрғы.",
+safe:"Қышқыл және сілті ерітінділерімен жұмыс жасау барысында сақ болыңдар. Қорғау көзілдірігін киген жөн.",safeok:"Көзілдірікті кидім",
+s1:"1-қадам. Реакцияларды жүргіз",s1h:"Сынауықты басса, оған екінші зат қосылады. Әр сынауықтағы термометрді бақыла: температура өзгергенше күт.",
+tasks:["Натрий карбонатын сірке қышқылының сұйылтылған ерітіндісімен әрекеттестір","Калий хлоридін суда еріт","Лимон қышқылы мен натрий гидрокарбонатын әрекеттестір","Магний мен сұйылтылған күкірт қышқылын әрекеттестір"],
+alldone:"Барлық төрт тәжірибе жүргізілді. Термометрлердің көрсеткішін кестеге жаз.",
+s2:"2-қадам. Бақылауыңды жаз",s2h:"Бастапқы температура 20 °C. Термометрдің соңғы көрсеткішін жаз, сынауық жылынды ма, суыды ма, соны және реакция типін таңда.",
+ct:"Соңғы t, °C",cf:"Сынауық",cy:"Реакция типі",fopt:["—","Жылынды","Суыды"],yopt:["—","Экзотермиялық","Эндотермиялық"],
+check:"Тексеру",ok2:"Барлығы дұрыс! Жылу бөлінсе экзотермиялық, сіңірілсе эндотермиялық.",bad2:"Мына сынауықтарда қате бар: ",
+s3:"3-қадам. Теңдеулер",s3h:"Коэффициенттерді жаз (1 болса да) және жылу бөліне ме (+Q), сіңіріле ме (−Q), соны таңда.",
+e1:"1. Натрий карбонаты + сірке қышқылы",e2:"2. Калий хлоридінің еруі (физикалық процесс)",e3:"3. Лимон қышқылы + натрий гидрокарбонаты",e4:"4. Магний + күкірт қышқылы",
+ok3:"Теңдеулер дұрыс!",bad3:"Мына теңдеулерде қате бар: ",
+s4:"4-қадам. Зертхана журналы",q1:"Бақылауларыңды салыстыр: қай реакцияларда жылу бөлінді, қайсысында сіңірілді? Оны қалай білдің?",q2:"Қорытынды",
+send:"Мұғалімге жіберу",sent:"Үлгіде жіберу әлі жұмыс істемейді. Толық сайтта жұмыс мұғалімнің бетіне түседі.",empty:"Алдымен журналдың барлық сұрағына жауап бер.",
+lhot:"жылу бөлінеді",lcold:"жылу сіңіріледі",tap:"басу",water:"су"},
+ru:{lab:"Лабораторный опыт №4",title:"Химические реакции, идущие с изменением энергии",demo:"Демо-версия: регистрация и отправка работы учителю появятся в полной версии сайта.",
+goal:"Цель: пронаблюдать, выделяется или поглощается теплота при реакции, и классифицировать реакции на экзотермические и эндотермические.",
+reag:"Реактивы: карбонат натрия — 1 г, разбавленная уксусная кислота — 3 мл, хлорид калия — 2 г, лимонная кислота — 3 мл, гидрокарбонат натрия — 1 г, магний — 1 г, разбавленная серная кислота — 3 мл; 4 пробирки, штатив.",
+safe:"Будьте осторожны при работе с растворами кислот и щелочей. Надень защитные очки.",safeok:"Очки надеты",
+s1:"Шаг 1. Проведи реакции",s1h:"Нажми на пробирку, чтобы добавить второе вещество. Следи за термометром в каждой пробирке и дождись изменения температуры.",
+tasks:["Подействуй на карбонат натрия разбавленной уксусной кислотой","Раствори хлорид калия в воде","Проведи реакцию лимонной кислоты с гидрокарбонатом натрия","Проведи реакцию магния с разбавленной серной кислотой"],
+alldone:"Все четыре опыта проведены. Запиши показания термометров в таблицу.",
+s2:"Шаг 2. Запиши наблюдения",s2h:"Начальная температура 20 °C. Запиши конечное показание термометра, выбери, нагрелась или охладилась пробирка, и тип реакции.",
+ct:"Конечная t, °C",cf:"Пробирка",cy:"Тип реакции",fopt:["—","Нагрелась","Охладилась"],yopt:["—","Экзотермическая","Эндотермическая"],
+check:"Проверить",ok2:"Всё верно! Если теплота выделяется — реакция экзотермическая, если поглощается — эндотермическая.",bad2:"Ошибки в пробирках: ",
+s3:"Шаг 3. Уравнения",s3h:"Расставь коэффициенты (пиши и 1) и выбери, выделяется (+Q) или поглощается (−Q) теплота.",
+e1:"1. Карбонат натрия + уксусная кислота",e2:"2. Растворение хлорида калия (физический процесс)",e3:"3. Лимонная кислота + гидрокарбонат натрия",e4:"4. Магний + серная кислота",
+ok3:"Уравнения верны!",bad3:"Ошибки в уравнениях: ",
+s4:"Шаг 4. Лабораторный журнал",q1:"Сравни наблюдения: в каких реакциях теплота выделилась, а в каких поглотилась? Как ты это определил?",q2:"Вывод",
+send:"Отправить учителю",sent:"В демо-версии отправка пока не работает. В полной версии работа попадёт на страницу учителя.",empty:"Сначала ответь на все вопросы журнала.",
+lhot:"теплота выделяется",lcold:"теплота поглощается",tap:"нажми",water:"вода"}};
+// tube data: solid label, liquid label, final temperature, gas?, solid colour
+const TB=[
+ {s:"Na₂CO₃",l:"CH₃COOH",f:24,gas:10,sc:"#f4f4f4",lc:"rgba(220,235,245,.55)"},
+ {s:"KCl",l:"H₂O",f:15,gas:0,sc:"#ffffff",lc:"rgba(205,228,245,.5)"},
+ {s:"NaHCO₃",l:"лимон",f:12,gas:14,sc:"#fafafa",lc:"rgba(240,240,205,.55)"},
+ {s:"Mg",l:"H₂SO₄",f:35,gas:16,sc:"#c9ced3",lc:"rgba(215,232,242,.55)"}];
+let lang="kk";const st=TB.map(()=>({on:false,t:20}));let done2=false,done3=false;
+const $=id=>document.getElementById(id),t=k=>T[lang][k];
+const X=[48,178,308,438],W=56,TOP=96,BOT=330,LIQ=96;
+const fmt=x=>x.toFixed(1).replace(".",",");
+function mercH(tmp){return Math.max(4,(tmp-0)/40*120)}
+function tubeSVG(i){
+  const d=TB[i],s=st[i],x=X[i],cx=x+W/2,lh=s.on?LIQ:LIQ*.6,diff=s.t-20,hot=diff>0;
+  const glow=Math.min(1,Math.abs(diff)/12);
+  let h=`<g class="tube" data-i="${i}">`;
+  h+=`<ellipse id="gl${i}" class="glow" cx="${cx}" cy="${BOT-40}" rx="${W*.95}" ry="70" fill="${hot?"var(--hot)":"var(--cold)"}" opacity="${s.on?glow*.35:0}" filter="url(#blur)"/>`;
+  h+=`<clipPath id="c${i}"><rect x="${x}" y="${TOP}" width="${W}" height="${BOT-TOP}" rx="${W/2}"/><rect x="${x}" y="${TOP}" width="${W}" height="${(BOT-TOP)/2}"/></clipPath>`;
+  h+=`<g clip-path="url(#c${i})"><rect x="${x}" y="${TOP}" width="${W}" height="${BOT-TOP}" fill="var(--glass)"/>`;
+  if(i===1||s.on)h+=`<rect class="liq" x="${x}" y="${BOT-lh}" width="${W}" height="${lh}" fill="${d.lc}"/>`;
+  // solid
+  if(i===3){[[x+16,BOT-12],[x+30,BOT-10],[x+42,BOT-14],[x+24,BOT-22]].forEach(([a,b])=>h+=`<rect x="${a-6}" y="${b-3}" width="12" height="5" rx="1.5" fill="${d.sc}" stroke="#8a9299" transform="rotate(${(a*7)%40-20} ${a} ${b})"/>`)}
+  else{const op=i===1&&s.on?0:1;h+=`<g class="xtal" opacity="${op}">`;for(let k=0;k<14;k++){const a=x+10+(k*29)%36,b=BOT-8-((k*17)%16);h+=`<circle cx="${a}" cy="${b}" r="${2.6+(k%3)}" fill="${d.sc}" stroke="#aab5bd" stroke-width=".8"/>`}h+=`</g>`}
+  if(s.on&&d.gas){for(let k=0;k<d.gas;k++){const bx=x+10+(k*31)%38,dur=(1.2+((k*7)%6)/5).toFixed(2),dl=(-k*0.17).toFixed(2);h+=`<circle class="bub" cx="${bx}" cy="${BOT-24}" r="${2+(k%3)}" fill="#fff" stroke="#9fb7c7" style="--d:${dur}s;--dl:${dl}s"/>`}}
+  // frost specks for cold
+  if(s.on&&diff<-3){for(let k=0;k<10;k++){const a=x+4+(k*23)%(W-8),b=BOT-60+((k*41)%60);h+=`<circle cx="${a}" cy="${b}" r="1.6" fill="#fff" opacity=".8"/>`}}
+  h+=`</g>`;
+  h+=`<path d="M${x} ${TOP-8}V${BOT-W/2}a${W/2} ${W/2} 0 0 0 ${W} 0V${TOP-8}" fill="none" stroke="var(--glassline)" stroke-width="2.5"/>`;
+  h+=`<rect x="${x-5}" y="${TOP-12}" width="${W+10}" height="7" rx="3" fill="var(--glassline)"/>`;
+  // thermometer
+  const tx=x+W-16,ty0=TOP-70,tyb=BOT-34,mh=mercH(s.t);
+  h+=`<rect x="${tx-4}" y="${ty0}" width="8" height="${tyb-ty0}" rx="4" fill="var(--sheet)" stroke="var(--glassline)"/>`;
+  h+=`<rect id="mc${i}" class="merc" x="${tx-1.8}" y="${tyb-mh}" width="3.6" height="${mh}" fill="#ef4444"/>`;
+  h+=`<circle cx="${tx}" cy="${tyb}" r="6" fill="#ef4444" stroke="var(--glassline)"/>`;
+  for(let c=0;c<=40;c+=10){const y=tyb-c/40*120;h+=`<line x1="${tx-4}" x2="${tx-8}" y1="${y}" y2="${y}" stroke="var(--mute)"/>`}
+  // readout
+  h+=`<rect id="rb${i}" x="${cx-34}" y="8" width="68" height="26" rx="8" fill="${s.on?(diff>0.5?"var(--hot)":diff<-0.5?"var(--cold)":"var(--soft)"):"var(--soft)"}"/>`;
+  h+=`<text id="rt${i}" x="${cx}" y="26" text-anchor="middle" font-size="14" font-weight="700" fill="${s.on&&Math.abs(diff)>0.5?"#fff":"var(--ink)"}">${fmt(s.t)} °C</text>`;
+  h+=`<text x="${cx}" y="${BOT+28}" text-anchor="middle" font-size="14" font-weight="700" fill="var(--ink)">${i+1}</text>`;
+  h+=`<text x="${cx}" y="${BOT+46}" text-anchor="middle" font-size="12" fill="var(--mute)">${d.s} + ${d.l==="лимон"?(lang==="kk"?"лимон қ.":"лимон. к."):d.l==="H₂O"?t("water"):d.l}</text>`;
+  if(!s.on)h+=`<text x="${cx}" y="${TOP+40}" text-anchor="middle" font-size="12" font-weight="600" fill="var(--acc)">${t("tap")}</text>`;
+  return h+`</g>`;
+}
+function upd(i){const s=st[i],diff=s.t-20,mh=mercH(s.t),tyb=BOT-34,m=$("mc"+i);if(!m)return;
+  m.setAttribute("y",tyb-mh);m.setAttribute("height",mh);$("rt"+i).textContent=fmt(s.t)+" °C";
+  const big=Math.abs(diff)>0.5;$("rb"+i).setAttribute("fill",big?(diff>0?"var(--hot)":"var(--cold)"):"var(--soft)");$("rt"+i).setAttribute("fill",big?"#fff":"var(--ink)");
+  const g=$("gl"+i);g.setAttribute("fill",diff>0?"var(--hot)":"var(--cold)");g.setAttribute("opacity",Math.min(1,Math.abs(diff)/12)*.35)}
+function renderRack(){
+  let h=`<defs><filter id="blur" x="-50%" y="-50%" width="200%" height="200%"><feGaussianBlur stdDeviation="12"/></filter></defs>`;
+  h+=`<rect x="24" y="${BOT-70}" width="512" height="12" rx="4" style="fill:light-dark(#b7c4cd,#3a4b57)" opacity=".7"/>`;
+  for(let i=0;i<4;i++)h+=tubeSVG(i);
+  $("rack").innerHTML=h;
+}
+function renderTasks(){$("tasks").innerHTML=t("tasks").map((s,i)=>`<li class="${st[i].on?"done":""}">${s}</li>`).join("")}
+const tbv=TB.map(()=>({t:"",f:"",y:""}));
+function opts(arr,v){return arr.map((s,i)=>`<option value="${i||""}" ${String(v)===String(i||"")?"selected":""}>${s}</option>`).join("")}
+function renderTable(){$("tbl").innerHTML=TB.map((d,i)=>`<tr><td>${i+1}. ${d.s}</td><td class="n"><input data-k="t" data-r="${i}" inputmode="decimal" value="${tbv[i].t}"></td><td><select data-k="f" data-r="${i}">${opts(t("fopt"),tbv[i].f)}</select></td><td><select data-k="y" data-r="${i}">${opts(t("yopt"),tbv[i].y)}</select></td></tr>`).join("")}
+const eqv={};
+const Q=v=>`<select data-q="${v}"><option value="">±Q</option><option value="+">+ Q</option><option value="-">− Q</option></select>`;
+function inp(id){return `<input id="${id}" inputmode="numeric" value="${eqv[id]||""}" aria-label="k">`}
+function renderEqs(){
+  $("eqs").innerHTML=
+  `<div class="eq"><b>${t("e1")}</b>Na₂CO₃ + ${inp("a")}CH₃COOH → ${inp("b")}CH₃COONa + H₂O + CO₂↑ ${Q(1)}</div>`+
+  `<div class="eq"><b>${t("e2")}</b>KCl (қ) → K⁺ + Cl⁻ ${Q(2)}</div>`+
+  `<div class="eq"><b>${t("e3")}</b>H₃C₆H₅O₇ + ${inp("c")}NaHCO₃ → Na₃C₆H₅O₇ + ${inp("d")}H₂O + ${inp("e")}CO₂↑ ${Q(3)}</div>`+
+  `<div class="eq"><b>${t("e4")}</b>Mg + H₂SO₄ → <select id="salt"><option value="">?</option><option>MgSO₄</option><option>Mg₂SO₄</option><option>Mg(SO₄)₂</option></select> + H₂↑ ${Q(4)}</div>`;
+  document.querySelectorAll("#eqs select[data-q]").forEach(s=>{if(eqv["q"+s.dataset.q])s.value=eqv["q"+s.dataset.q]});
+  if(eqv.salt)$("salt").value=eqv.salt;
+}
+function renderSteps(){
+  const g=$("goggles").checked,all=st.every(s=>s.on&&Math.abs(s.t-TB[st.indexOf(s)].f)<0.05);
+  $("st1").classList.toggle("off",!g);$("st2").classList.toggle("off",!all);$("st3").classList.toggle("off",!done2);$("st4").classList.toggle("off",!done3);
+}
+function applyLang(){
+  document.documentElement.lang=lang;
+  document.querySelectorAll("[data-i]").forEach(el=>{const v=T[lang][el.dataset.i];if(typeof v==="string")el.textContent=v});
+  $("l-kk").classList.toggle("on",lang==="kk");$("l-ru").classList.toggle("on",lang==="ru");
+  document.querySelectorAll(".msg").forEach(m=>m.textContent="");
+  renderRack();renderTasks();renderTable();renderEqs();renderSteps();
+}
+function msg(id,text,ok){const m=$(id);m.textContent=text;m.className="msg "+(ok?"ok":"bad")}
+
+$("l-kk").onclick=()=>{lang="kk";applyLang()};$("l-ru").onclick=()=>{lang="ru";applyLang()};
+$("goggles").onchange=renderSteps;
+$("rack").addEventListener("click",e=>{
+  const g=e.target.closest(".tube");if(!g||!$("goggles").checked)return;const i=Number(g.dataset.i),s=st[i];if(s.on)return;
+  s.on=true;renderRack();renderTasks();
+  const t0=performance.now(),dur=4000,f=TB[i].f;
+  const tick=now=>{const k=Math.min(1,(now-t0)/dur),e2=1-Math.pow(1-k,2);s.t=20+(f-20)*e2;upd(i);
+    if(k<1)requestAnimationFrame(tick);else{s.t=f;renderRack();renderSteps();if(st.every((x,j)=>x.on&&x.t===TB[j].f))msg("m1",t("alldone"),true)}};
+  requestAnimationFrame(tick);
+});
+$("tbl").addEventListener("input",e=>{const r=e.target.dataset.r;if(r==null)return;tbv[r][e.target.dataset.k]=e.target.value;e.target.classList.remove("ok","bad")});
+$("tbl").addEventListener("change",e=>{const r=e.target.dataset.r;if(r==null)return;tbv[r][e.target.dataset.k]=e.target.value;e.target.classList.remove("ok","bad")});
+$("chk2").onclick=()=>{
+  const bad=[];
+  TB.forEach((d,i)=>{const row=$("tbl").rows[i],[ti,fs,ys]=row.querySelectorAll("input,select");const hot=d.f>20;
+    const tOk=tbv[i].t!==""&&Math.abs(Number(String(tbv[i].t).replace(",","."))-d.f)<=0.5,fOk=tbv[i].f===(hot?"1":"2"),yOk=tbv[i].y===(hot?"1":"2");
+    ti.classList.add(tOk?"ok":"bad");fs.classList.add(fOk?"ok":"bad");ys.classList.add(yOk?"ok":"bad");if(!(tOk&&fOk&&yOk))bad.push(i+1)});
+  done2=!bad.length;renderSteps();done2?msg("m2",t("ok2"),true):msg("m2",t("bad2")+bad.join(", ")+".",false);
+};
+$("eqs").addEventListener("input",e=>{const el=e.target;if(el.dataset.q)eqv["q"+el.dataset.q]=el.value;else if(el.id)eqv[el.id]=el.value;el.classList.remove("ok","bad")});
+$("eqs").addEventListener("change",e=>{const el=e.target;if(el.dataset.q)eqv["q"+el.dataset.q]=el.value;else if(el.id)eqv[el.id]=el.value});
+$("chk3").onclick=()=>{
+  const want={a:"2",b:"2",c:"3",d:"3",e:"3"},bad=new Set();
+  const mark=(el,ok,n)=>{el.classList.remove("ok","bad");el.classList.add(ok?"ok":"bad");if(!ok)bad.add(n)};
+  mark($("a"),$("a").value.trim()==="2",1);mark($("b"),$("b").value.trim()==="2",1);
+  ["c","d","e"].forEach(k=>mark($(k),$(k).value.trim()===want[k],3));
+  mark($("salt"),$("salt").value==="MgSO₄",4);
+  const qw={1:"+",2:"-",3:"-",4:"+"};document.querySelectorAll("#eqs select[data-q]").forEach(s=>mark(s,s.value===qw[s.dataset.q],Number(s.dataset.q)));
+  done3=!bad.size;renderSteps();done3?msg("m3",t("ok3"),true):msg("m3",t("bad3")+[...bad].sort().join(", ")+".",false);
+};
+$("send").onclick=()=>{const f=["a1","a2"].every(id=>$(id).value.trim());msg("m4",f?t("sent"):t("empty"),f)};
+applyLang();
+}
+</script>
+<script src="../embed.js"></script>
+</body>
+</html>
