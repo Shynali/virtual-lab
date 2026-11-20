@@ -312,6 +312,7 @@
     if (!S.tab) S.tab = isAdmin ? "requests" : "unchecked";
     var names = { requests: t("tRequests"), unchecked: t("tUnchecked"), students: t("tStudents"), teachers: t("tTeachers"), schools: t("tSchools"), classes: t("tClasses"), profile: t("tProfile") };
     $app.innerHTML = demoBanner() + '<div class="tabs" role="tablist">' + tabs.map(function (k) { return '<button role="tab" data-tab="' + k + '" class="' + (S.tab === k ? "on" : "") + '">' + esc(names[k]) + '<span class="cnt" id="cnt-' + k + '" hidden></span></button>'; }).join("") + '</div><div id="pane"></div>';
+    var onTab = document.querySelector(".tabs .on"); if (onTab && onTab.scrollIntoView) onTab.scrollIntoView({ inline: "center", block: "nearest" });
     document.querySelector(".tabs").onclick = function (ev) { var b = ev.target.closest("[data-tab]"); if (b) { S.tab = b.dataset.tab; viewStaff(); } };
     var pane = document.getElementById("pane");
     pane.innerHTML = '<p class="mute">…</p>';
