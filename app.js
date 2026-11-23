@@ -33,6 +33,8 @@
       approve: "Рұқсат беру", reject: "Бас тарту", block: "Бұғаттау", unblock: "Бұғаттан шығару", newSchoolBadge: "жаңа мектеп", schoolFix: "Мектеп атауын түзету (қажет болса)",
       noRequests: "Жаңа өтінім жоқ.", stApproved: "белсенді", stBlocked: "бұғатталған", stRejected: "бас тартылған", stPending: "күтуде",
       addSchool: "Мектеп қосу", rename: "Атын өзгерту", schoolInUse: "Бұл мектепте пайдаланушылар бар — жою мүмкін емес.", tCount: "мұғалім", sCount: "оқушы",
+      guestT: "Тіркелмей шолу", guestBtn: "Қонақ ретінде кіру", guestNote: "Барлық 60 зертхананы ашып, тәжірибе жасап көре аласыз. Қонақ режимінде нәтиже сақталмайды және мұғалімге жіберілмейді.",
+      guestBanner: "Қонақ режимі: зертханаларды шолуға және тәжірибе жасап көруге болады, бірақ жұмыс сақталмайды және мұғалімге жіберілмейді. Толық мүмкіндік үшін тіркеліңіз.", guest: "Қонақ", guestRole: "шолу режимі", guestNoSend: "Қонақ режимінде жұмыс мұғалімге жіберілмейді. Жіберу үшін оқушы ретінде тіркеліңіз.", guestLabs: "Зертханалық жұмыстар", review: "Шолу",
       profName: "Аты-жөнім (оқушыларға көрінеді)", admin: "Бас админ", teacher: "Мұғалім", student: "Оқушы", answers: "Жауаптары", subject: "Химия",
       errors: { badLogin: "Логин дұрыс емес: латын әріптері, сандар, «.», «_», «-», 3–30 таңба.", badPass: "Құпиясөз кемінде 6 таңба болуы керек.", loginTaken: "Бұл логин бос емес, басқасын ойлап табыңыз.",
         badName: "Аты мен тегін толтырыңыз.", noClasses: "Кемінде бір сыныпты белгілеңіз.", badSchool: "Мектепті таңдаңыз.", badTeacher: "Мұғалімді таңдаңыз.", badClass: "Сыныпты таңдаңыз.",
@@ -63,6 +65,8 @@
       approve: "Одобрить", reject: "Отклонить", block: "Заблокировать", unblock: "Разблокировать", newSchoolBadge: "новая школа", schoolFix: "Исправить название школы (если нужно)",
       noRequests: "Новых заявок нет.", stApproved: "активен", stBlocked: "заблокирован", stRejected: "отклонён", stPending: "ожидает",
       addSchool: "Добавить школу", rename: "Переименовать", schoolInUse: "В этой школе есть пользователи — удалить нельзя.", tCount: "учит.", sCount: "уч.",
+      guestT: "Просмотр без регистрации", guestBtn: "Войти как гость", guestNote: "Можно открыть все 60 лабораторных работ и провести опыты. В гостевом режиме результаты не сохраняются и не отправляются учителю.",
+      guestBanner: "Гостевой режим: можно просматривать работы и проводить опыты, но результаты не сохраняются и не отправляются учителю. Для полного доступа зарегистрируйтесь.", guest: "Гость", guestRole: "режим просмотра", guestNoSend: "В гостевом режиме работа не отправляется учителю. Чтобы отправлять работы, зарегистрируйтесь как ученик.", guestLabs: "Лабораторные работы", review: "Просмотр",
       profName: "Моё имя (видно ученикам)", admin: "Главный админ", teacher: "Учитель", student: "Ученик", answers: "Ответы", subject: "Химия",
       errors: { badLogin: "Неверный логин: латинские буквы, цифры, «.», «_», «-», 3–30 символов.", badPass: "Пароль должен быть не короче 6 символов.", loginTaken: "Этот логин занят, придумайте другой.",
         badName: "Заполните имя и фамилию.", noClasses: "Отметьте хотя бы один класс.", badSchool: "Выберите школу.", badTeacher: "Выберите учителя.", badClass: "Выберите класс.",
@@ -73,7 +77,7 @@
   };
 
   /* ---------- күй ---------- */
-  var S = { lang: lsGet("vl_lang") || "kk", token: lsGet("vl_token") || "", user: null, view: "login", tab: "", lab: null, subs: [], students: [], admin: null, cls: "" };
+  var S = { lang: lsGet("vl_lang") || "kk", token: lsGet("vl_token") || "", user: null, view: "login", tab: "", lab: null, subs: [], students: [], admin: null, cls: "", guestGrade: 8 };
   var $app = document.getElementById("app");
   function t(k) { return T[S.lang][k]; }
   function e(k) { return T[S.lang].errors[k] || T[S.lang].errors.unknown; }
@@ -133,8 +137,9 @@
     var lo = document.getElementById("logout"), who = document.getElementById("who");
     lo.hidden = !S.user; lo.textContent = t("logout");
     if (S.user) {
-      var role = t(S.user.role === "admin" ? "admin" : S.user.role === "teacher" ? "teacher" : "student");
+      var role = t(S.user.role === "admin" ? "admin" : S.user.role === "teacher" ? "teacher" : S.user.role === "guest" ? "guestRole" : "student");
       var extra = S.user.role === "student" ? " · " + S.user.cls : (S.user.school ? " · " + S.user.school : "");
+      if (S.user.role === "guest") { who.innerHTML = "<b>" + esc(t("guest")) + "</b><br>" + esc(role); return; }
       who.innerHTML = "<b>" + esc(fullName(S.user) || S.user.login) + "</b><br>" + esc(role + extra);
     } else who.innerHTML = "";
   }
@@ -149,6 +154,7 @@
       if (S.view === "pending") return viewPending();
       return viewLogin();
     }
+    if (S.user.role === "guest") return S.lab ? viewLab() : viewGuestHome();
     if (S.user.mustChange) return viewMustChange();
     if (S.user.role === "student") return S.lab ? viewLab() : viewStudentHome();
     return viewStaff();
@@ -163,7 +169,9 @@
       "<label>" + esc(t("lPass")) + '<input id="pw" type="password" autocomplete="current-password" required></label>' +
       '<button class="btn" id="bLogin">' + esc(t("login")) + "</button></form>" + msgHtml("mLogin") +
       '<p class="mute">' + esc(t("forgot")) + "</p>" +
-      "<h3>" + esc(t("noAcc")) + '</h3><div class="btns"><button class="btn ghost" id="goSt">' + esc(t("regStudent")) + '</button><button class="btn ghost" id="goT">' + esc(t("regTeacher")) + "</button></div></div>";
+      "<h3>" + esc(t("noAcc")) + '</h3><div class="btns"><button class="btn ghost" id="goSt">' + esc(t("regStudent")) + '</button><button class="btn ghost" id="goT">' + esc(t("regTeacher")) + "</button></div>" +
+      '<div class="guestbox"><h3>' + esc(t("guestT")) + '</h3><p class="mute">' + esc(t("guestNote")) + '</p><button class="btn" id="goG">' + esc(t("guestBtn")) + "</button></div></div>";
+    document.getElementById("goG").onclick = function () { S.user = { role: "guest", first: "", last: "", login: "" }; S.lab = null; S.subs = []; S.subsLoaded = true; render(); window.scrollTo(0, 0); };
     document.getElementById("fLogin").onsubmit = function (ev) {
       ev.preventDefault(); var b = document.getElementById("bLogin"); busy(b, 1);
       api("login", { login: val("lg"), pass: document.getElementById("pw").value }).then(function (r) {
@@ -279,11 +287,24 @@
     loadSubs().then(function () { if (!S.lab && S.user && S.user.role === "student" && document.getElementById("labs")) draw(); });
     document.getElementById("labs").onclick = function (ev) { var b = ev.target.closest("[data-lab]"); if (b) { S.lab = b.dataset.lab; render(); window.scrollTo(0, 0); } };
   }
+  function viewGuestHome() {
+    var g = S.guestGrade, list = LABS.filter(function (l) { return l.grade === g; });
+    $app.innerHTML = '<div class="demo">' + esc(t("guestBanner")) + '</div><div class="btns" style="margin:-4px 0 14px"><button class="btn small" id="gSt">' + esc(t("regStudent")) + '</button><button class="btn ghost small" id="gT">' + esc(t("regTeacher")) + "</button></div>" +
+      "<h1>" + esc(t("guestLabs")) + '</h1><div class="tabs" role="tablist">' + GRADES.map(function (x) { return '<button role="tab" data-g="' + x + '" class="' + (x === g ? "on" : "") + '">' + esc(x + t("grade")) + "</button>"; }).join("") + "</div>" +
+      '<div class="labs" id="labs">' + list.map(function (l) {
+        return '<button class="lab" data-lab="' + esc(l.id) + '"><span class="n">' + esc(l.n + "-" + t("lab")) + '</span><span class="t">' + esc(l[S.lang]) + '</span><span class="badge sent">' + esc(t("review")) + "</span></button>";
+      }).join("") + "</div>";
+    document.querySelector(".tabs").onclick = function (ev) { var b = ev.target.closest("[data-g]"); if (b) { S.guestGrade = +b.dataset.g; viewGuestHome(); } };
+    document.getElementById("labs").onclick = function (ev) { var b = ev.target.closest("[data-lab]"); if (b) { S.lab = b.dataset.lab; render(); window.scrollTo(0, 0); } };
+    document.getElementById("gSt").onclick = function () { S.user = null; S.view = "regStudent"; render(); };
+    document.getElementById("gT").onclick = function () { S.user = null; S.view = "regTeacher"; render(); };
+  }
   var frameListener = null;
   function viewLab() {
     var l = labById(S.lab); if (!l) { S.lab = null; return render(); }
     var s = subOf(l.id);
-    $app.innerHTML = '<div class="labbar"><button class="btn ghost small" id="bk">' + esc(t("backLabs")) + "</button><b>" + esc(l.n + "-" + t("lab") + " · " + l[S.lang]) + "</b></div>" +
+    var isGuest = S.user.role === "guest";
+    $app.innerHTML = (isGuest ? '<div class="demo">' + esc(t("guestBanner")) + "</div>" : "") + '<div class="labbar"><button class="btn ghost small" id="bk">' + esc(t("backLabs")) + "</button><b>" + esc(l.n + "-" + t("lab") + " · " + l[S.lang]) + "</b></div>" +
       (s && s.feedback ? '<div class="fbbox"><b>' + esc(t("fbT")) + ":</b> " + esc(s.feedback) + '<div class="mute">' + esc(fmtDate(s.feedbackAt)) + "</div></div>" : "") +
       (s ? '<p class="mute">' + esc(t("sentAt")) + ": " + esc(fmtDate(s.submittedAt)) + "</p>" : "") +
       '<iframe class="frame" id="frame" title="' + esc(l[S.lang]) + '" src="labs/' + esc(l.id) + ".html?embed=1&lang=" + S.lang + '"></iframe>';
@@ -295,6 +316,7 @@
       var d = ev.data || {};
       if (d.type === "labHeight") fr.style.height = Math.max(600, d.h + 20) + "px";
       if (d.type === "labReady" && s && s.answers && s.answers.length) fr.contentWindow.postMessage({ type: "labPrefill", answers: s.answers }, "*");
+      if (d.type === "labSubmit" && isGuest) { fr.contentWindow.postMessage({ type: "labResult", ok: false, text: t("guestNoSend") }, "*"); return; }
       if (d.type === "labSubmit") {
         api("submit", { labId: l.id, answers: d.answers }).then(function (r) {
           fr.contentWindow.postMessage({ type: "labResult", ok: !!r.ok, text: r.ok ? "" : e(r.error) }, "*");
@@ -471,7 +493,8 @@
     if (fr && S.lab) { header(); fr.contentWindow.postMessage({ type: "labLang", lang: l }, "*"); return; }
     render();
   }
-  document.getElementById("logout").onclick = function () { api("logout").then(logoutLocal); };
+  document.getElementById("logout").onclick = function () { if (S.user && S.user.role === "guest") return logoutLocal(); api("logout").then(logoutLocal); };
+  if (!S.token && /(^|[?&])guest=1(&|$)/.test(location.search.slice(1))) { S.user = { role: "guest", first: "", last: "", login: "" }; S.subsLoaded = true; }
   if (S.token) {
     $app.innerHTML = '<p class="mute">…</p>';
     api("me").then(function (r) { if (r.ok) { S.user = r.user; } else { S.token = ""; lsSet("vl_token", null); } render(); });
