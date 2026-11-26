@@ -6,7 +6,7 @@
   var DEMO_ADMIN = { login: "admin", pass: "admin123" };
   var LETTERS = ["А", "Ә", "Б", "В", "Г", "Ғ", "Д", "Е"];
   var GRADES = [7, 8, 9, 10, 11];
-  var VER = "780498e6";
+  var VER = "00ba125d";
   var LABS = window.LABS || [];
   var GUEST_LABS = ["g7-2", "g7-3", "g7-6", "g7-7", "g7-10", "g8-3", "g8-4", "g8-7", "g8-8", "g8-9", "g9-1", "g9-3", "g9-4", "g9-6", "g9-17", "g10-2", "g10-4", "g10-5", "g10-8", "g10-9", "g11-3", "g11-7", "g11-8", "g11-12", "g11-13"];
 
@@ -152,6 +152,7 @@
 
   /* ---------- маршрутизация ---------- */
   function render() {
+    document.body.classList.remove("labfull");
     header();
     if (!S.user) {
       if (S.view === "regStudent") return viewRegStudent();
@@ -309,8 +310,15 @@
     document.getElementById("gT").onclick = function () { S.user = null; S.view = "regTeacher"; render(); };
   }
   var frameListener = null;
+  /* Телефонда зертхана экранды толық алып, өз ішінде айналады (мәзір мен тақта дірілдемейді) */
+  function phone() { return window.innerWidth <= 860; }
+  function fitFrame() {
+    var fr = document.getElementById("frame"); if (!fr) return;
+    if (phone()) fr.style.height = window.innerHeight + "px";
+  }
+  window.addEventListener("resize", fitFrame);
   function syncScroll() {
-    var fr = document.getElementById("frame"); if (!fr || !fr.contentWindow) return;
+    var fr = document.getElementById("frame"); if (!fr || !fr.contentWindow || phone()) return;
     fr.contentWindow.postMessage({ type: "labScroll", y: -fr.getBoundingClientRect().top, vh: window.innerHeight }, "*");
   }
   window.addEventListener("scroll", syncScroll, { passive: true });
@@ -326,12 +334,18 @@
       '<iframe class="frame" id="frame" title="' + esc(l[S.lang]) + '" src="labs/' + esc(l.id) + ".html?embed=1&lang=" + S.lang + "&v=" + VER + '"></iframe>';
     document.getElementById("bk").onclick = function () { S.lab = null; render(); };
     var fr = document.getElementById("frame");
+    /* телефонда бет зертхана терезесінің астынан әрі айналмасын (подвал жасырылады) */
+    document.body.classList.add("labfull");
     if (frameListener) window.removeEventListener("message", frameListener);
     frameListener = function (ev) {
       if (ev.source !== fr.contentWindow) return;
       var d = ev.data || {};
-      if (d.type === "labHeight") { fr.style.height = Math.max(400, d.h) + "px"; syncScroll(); }
-      if (d.type === "labReady") syncScroll();
+      if (d.type === "labHeight") { if (phone()) fitFrame(); else { fr.style.height = Math.max(400, d.h) + "px"; syncScroll(); } }
+      if (d.type === "labReady") {
+        syncScroll();
+        if (phone()) { fitFrame(); if (!(s && s.feedback)) window.scrollTo(0, fr.getBoundingClientRect().top + window.scrollY); }
+      }
+      if (d.type === "labScrollBy" && typeof d.dy === "number") window.scrollBy(0, d.dy);
       if (d.type === "labReady" && s && s.answers && s.answers.length) fr.contentWindow.postMessage({ type: "labPrefill", answers: s.answers }, "*");
       if (d.type === "labSubmit" && isGuest) { fr.contentWindow.postMessage({ type: "labResult", ok: false, text: t("guestNoSend") }, "*"); return; }
       if (d.type === "labSubmit") {
