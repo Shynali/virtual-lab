@@ -32,7 +32,8 @@
 
   function init() {
     var css = document.createElement("style");
-    css.textContent = ".note,.lang{display:none!important}body{background:transparent!important}.wrap{padding:8px!important}" +
+    css.textContent = ".note,.lang{display:none!important}body{background:transparent!important}.wrap{padding:0!important;max-width:none!important}" +
+      ":root{color-scheme:light!important}.wrap>header{display:none!important}.sheet{box-shadow:none!important;border:1px solid var(--line);padding:clamp(12px,2.2vw,26px)!important}" +
       ".board{position:relative!important;top:auto!important;order:0;z-index:5;transform-origin:top center;transition:box-shadow .2s}" +
       "@media(max-width:860px){.board{order:-1}}.board.floating{box-shadow:0 10px 28px rgba(0,0,0,.28);border-radius:14px}";
     document.head.appendChild(css);

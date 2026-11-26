@@ -20,14 +20,14 @@ header{display:flex;flex-wrap:wrap;gap:12px;align-items:center;justify-content:s
 .hright{display:flex;gap:10px;align-items:center;flex-wrap:wrap}
 .who{font-size:14px;opacity:.9;text-align:right}
 .lang{display:flex;background:rgba(255,255,255,.14);border-radius:999px;padding:4px}
-.lang button{border:0;background:none;color:#fff;font:600 14px "Noto Sans";padding:7px 14px;border-radius:999px;cursor:pointer;min-height:38px}
+.lang button{border:0;background:none;color:#fff;font:600 14px "Noto Sans",Arial,sans-serif;padding:7px 14px;border-radius:999px;cursor:pointer;min-height:38px}
 .lang button.on{background:#fff;color:#0f4c5c}
-.hbtn{border:1.5px solid rgba(255,255,255,.5);background:none;color:#fff;font:600 14px "Noto Sans";padding:7px 14px;border-radius:999px;cursor:pointer;min-height:38px}
+.hbtn{border:1.5px solid rgba(255,255,255,.5);background:none;color:#fff;font:600 14px "Noto Sans",Arial,sans-serif;padding:7px 14px;border-radius:999px;cursor:pointer;min-height:38px}
 .sheet{background:var(--sheet);border-radius:18px;box-shadow:0 18px 40px rgba(0,0,0,.25);padding:clamp(16px,2.6vw,30px)}
 .demo{background:var(--warn);border-radius:12px;padding:10px 14px;margin-bottom:14px;font-size:14px}
 h1{font:700 clamp(22px,3vw,32px)/1.15 "Noto Serif",Georgia,serif;margin:0 0 6px}
 h2{font:700 20px/1.2 "Noto Serif",Georgia,serif;margin:18px 0 8px}
-h3{font:700 16px/1.3 "Noto Sans";margin:14px 0 6px}
+h3{font:700 16px/1.3 "Noto Sans",Arial,sans-serif;margin:14px 0 6px}
 .mute{color:var(--mute);font-size:14px}
 .auth{max-width:560px;margin:0 auto}
 .entry{display:grid;grid-template-columns:minmax(0,1.1fr) minmax(0,1fr);gap:18px;align-items:start}
@@ -39,11 +39,11 @@ h3{font:700 16px/1.3 "Noto Sans";margin:14px 0 6px}
 .btn.back{display:inline-flex;margin-bottom:12px;border:1px solid var(--line)}
 @media(max-width:760px){.entry{grid-template-columns:minmax(0,1fr)}}
 label{display:flex;flex-direction:column;gap:4px;font-size:14px;color:var(--mute);margin-bottom:10px}
-input,select,textarea{font:16px "Noto Sans";color:var(--ink);background:#fff;border:1.5px solid var(--line);border-radius:10px;padding:10px 12px;width:100%}
+input,select,textarea{font:16px "Noto Sans",Arial,sans-serif;color:var(--ink);background:#fff;border:1.5px solid var(--line);border-radius:10px;padding:10px 12px;width:100%}
 input:focus,select:focus,textarea:focus,button:focus-visible{outline:3px solid rgba(15,76,92,.35);outline-offset:1px}
 textarea{min-height:80px;resize:vertical}
 .row{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:0 14px}
-.btn{border:0;border-radius:10px;padding:11px 18px;font:600 15px "Noto Sans";cursor:pointer;min-height:44px;background:var(--acc);color:#fff}
+.btn{border:0;border-radius:10px;padding:11px 18px;font:600 15px "Noto Sans",Arial,sans-serif;cursor:pointer;min-height:44px;background:var(--acc);color:#fff}
 .btn.ghost{background:var(--soft);color:var(--ink)}
 .btn.small{padding:7px 12px;min-height:36px;font-size:14px}
 .btn.danger{background:#fee2e2;color:var(--bad)}
@@ -52,25 +52,26 @@ textarea{min-height:80px;resize:vertical}
 .btns{display:flex;flex-wrap:wrap;gap:8px;margin-top:8px}
 .foot{color:#cfe3e6;font-size:13px;line-height:1.5;text-align:center;padding:18px 8px 6px}.foot b{color:#fff}.foot a{color:#fff}
 .guestbox{margin-top:22px;padding:16px 18px;border-radius:14px;background:var(--soft,#eef5f7)}.guestbox h3{margin:0 0 4px}.guestbox p{margin:0 0 10px}
-.link{background:none;border:0;color:var(--acc);font:600 15px "Noto Sans";cursor:pointer;padding:6px 0;text-decoration:underline}
+.link{background:none;border:0;color:var(--acc);font:600 15px "Noto Sans",Arial,sans-serif;cursor:pointer;padding:6px 0;text-decoration:underline}
 .msg{margin:10px 0;font-size:15px;min-height:1.4em}.msg.ok{color:var(--ok)}.msg.bad{color:var(--bad)}
 .classes{display:grid;grid-template-columns:auto repeat(8,minmax(0,1fr));gap:6px;align-items:center;margin:6px 0 12px}
 .classes b{font-size:14px}
 .classes label{margin:0;flex-direction:row;justify-content:center;align-items:center;gap:0;background:var(--soft);border-radius:8px;padding:6px 0;color:var(--ink);font-weight:600;cursor:pointer}
 .classes input{width:16px;height:16px;margin-right:4px}
 .tabs{display:flex;gap:6px;flex-wrap:wrap;border-bottom:1px solid var(--line);margin-bottom:14px}
-.tabs button{border:0;background:none;font:600 15px "Noto Sans";padding:10px 14px;cursor:pointer;color:var(--mute);border-bottom:3px solid transparent;min-height:44px}
+.tabs button{border:0;background:none;font:600 15px "Noto Sans",Arial,sans-serif;padding:10px 14px;cursor:pointer;color:var(--mute);border-bottom:3px solid transparent;min-height:44px}
 .tabs button.on{color:var(--acc);border-bottom-color:var(--acc)}
 .tabs .cnt{background:var(--new);color:#fff;border-radius:999px;padding:1px 7px;font-size:12px;margin-left:4px}
 .labs{display:grid;grid-template-columns:repeat(auto-fill,minmax(250px,1fr));gap:12px}
 .lab{border:1.5px solid var(--line);border-radius:14px;padding:14px;cursor:pointer;background:#fff;text-align:left;font:inherit;color:inherit;display:flex;flex-direction:column;gap:8px;min-height:120px}
 .lab:hover{border-color:var(--acc)}
-.lab .n{font:700 13px "Noto Sans";color:var(--mute)}
+.lab .n{font:700 13px "Noto Sans",Arial,sans-serif;color:var(--mute)}
 .lab .t{font-weight:600;line-height:1.3}
-.badge{display:inline-block;font:600 12px "Noto Sans";padding:3px 9px;border-radius:999px;background:var(--soft);color:var(--mute);margin-top:auto;align-self:flex-start}
+.badge{display:inline-block;font:600 12px "Noto Sans",Arial,sans-serif;padding:3px 9px;border-radius:999px;background:var(--soft);color:var(--mute);margin-top:auto;align-self:flex-start}
 .badge.sent{background:#dbeafe;color:#1d4ed8}.badge.fb{background:#dcfce7;color:var(--ok)}.badge.new{background:#fef3c7;color:#92400e}
 .labbar{display:flex;align-items:center;gap:12px;flex-wrap:wrap;margin-bottom:10px}
-.frame{width:100%;border:0;border-radius:14px;display:block;min-height:600px;background:var(--bg)}
+.labbar b{font:700 clamp(18px,2.2vw,24px)/1.25 "Noto Serif",Georgia,serif;color:var(--ink)}
+.frame{width:100%;border:0;border-radius:18px;display:block;min-height:400px;background:transparent}
 .fbbox{background:#ecfdf5;border:1.5px solid #86efac;border-radius:14px;padding:12px 14px;margin-bottom:12px}
 .fbbox b{color:var(--ok)}
 .tbl{width:100%;border-collapse:collapse;font-size:15px}
@@ -101,9 +102,9 @@ textarea{min-height:80px;resize:vertical}
 <div class="sheet" id="app"><p class="mute">…</p></div>
 <footer class="foot" id="appFoot"></footer>
 </div>
-<script src="config.js?v=9b3d16f0"></script>
-<script src="core.js?v=9b3d16f0"></script>
-<script src="labs.js?v=9b3d16f0"></script>
-<script src="app.js?v=9b3d16f0"></script>
+<script src="config.js?v=780498e6"></script>
+<script src="core.js?v=780498e6"></script>
+<script src="labs.js?v=780498e6"></script>
+<script src="app.js?v=780498e6"></script>
 </body>
 </html>

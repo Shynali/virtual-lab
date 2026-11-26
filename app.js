@@ -6,7 +6,7 @@
   var DEMO_ADMIN = { login: "admin", pass: "admin123" };
   var LETTERS = ["А", "Ә", "Б", "В", "Г", "Ғ", "Д", "Е"];
   var GRADES = [7, 8, 9, 10, 11];
-  var VER = "9b3d16f0";
+  var VER = "780498e6";
   var LABS = window.LABS || [];
   var GUEST_LABS = ["g7-2", "g7-3", "g7-6", "g7-7", "g7-10", "g8-3", "g8-4", "g8-7", "g8-8", "g8-9", "g9-1", "g9-3", "g9-4", "g9-6", "g9-17", "g10-2", "g10-4", "g10-5", "g10-8", "g10-9", "g11-3", "g11-7", "g11-8", "g11-12", "g11-13"];
 

@@ -25,7 +25,7 @@ header{display:flex;flex-wrap:wrap;gap:12px;align-items:flex-end;justify-content
 header small{display:block;opacity:.8;font-size:14px}
 h1{font:700 clamp(24px,3.6vw,38px)/1.08 "Noto Serif",Georgia,serif;margin:2px 0 0;text-wrap:balance;max-width:26ch}
 .lang{display:flex;background:rgba(255,255,255,.14);border-radius:999px;padding:4px}
-.lang button{border:0;background:none;color:#fff;font:600 15px "Noto Sans";padding:8px 16px;border-radius:999px;cursor:pointer;min-height:40px}
+.lang button{border:0;background:none;color:#fff;font:600 15px "Noto Sans",Arial,sans-serif;padding:8px 16px;border-radius:999px;cursor:pointer;min-height:40px}
 .lang button.on{background:#fff;color:#0f4c5c}
 .sheet{background:var(--sheet);border-radius:18px;box-shadow:0 18px 40px rgba(0,0,0,.25);padding:clamp(16px,2.6vw,30px)}
 .note{font-size:13px;color:var(--mute);margin:0 0 10px}
@@ -41,19 +41,19 @@ h1{font:700 clamp(24px,3.6vw,38px)/1.08 "Noto Serif",Georgia,serif;margin:2px 0 
 h2{font:700 19px/1.2 "Noto Serif",Georgia,serif;margin:0 0 6px}
 .hint{color:var(--mute);font-size:15px;margin:0 0 8px}
 label{font-size:14px;color:var(--mute);display:flex;flex-direction:column;gap:4px}
-textarea,select{font:16px "Noto Sans";color:var(--ink);background:var(--sheet);border:1.5px solid var(--line);border-radius:10px;padding:10px 12px;width:100%}
+textarea,select{font:16px "Noto Sans",Arial,sans-serif;color:var(--ink);background:var(--sheet);border:1.5px solid var(--line);border-radius:10px;padding:10px 12px;width:100%}
 textarea:focus,select:focus,button:focus-visible{outline:3px solid color-mix(in srgb,var(--acc) 45%,transparent);outline-offset:1px}
 .ok{border-color:var(--ok)!important}.bad{border-color:var(--bad)!important}
 textarea{min-height:76px;resize:vertical}
 .btns{display:flex;flex-wrap:wrap;gap:8px;margin-top:8px}
-.btn{border:0;border-radius:10px;padding:10px 14px;font:600 15px "Noto Sans";cursor:pointer;min-height:44px;background:var(--acc);color:light-dark(#fff,#08202a)}
+.btn{border:0;border-radius:10px;padding:10px 14px;font:600 15px "Noto Sans",Arial,sans-serif;cursor:pointer;min-height:44px;background:var(--acc);color:light-dark(#fff,#08202a)}
 .btn.done{background:var(--soft);color:var(--ok)}
 .btn:disabled{opacity:.45;cursor:not-allowed}.btn.done:disabled{opacity:1}
 .msg{margin-top:8px;font-size:15px;min-height:1.4em}
 .msg.ok{color:var(--ok)}.msg.bad{color:var(--bad)}
 .board{position:sticky;top:12px}
 .seg{display:flex;background:var(--soft);border-radius:10px;padding:4px;gap:4px;margin-bottom:10px}
-.seg button{flex:1;border:0;background:none;color:var(--ink);font:600 14px "Noto Sans";padding:8px 10px;border-radius:8px;cursor:pointer;min-height:40px}
+.seg button{flex:1;border:0;background:none;color:var(--ink);font:600 14px "Noto Sans",Arial,sans-serif;padding:8px 10px;border-radius:8px;cursor:pointer;min-height:40px}
 .seg button.on{background:var(--sheet);box-shadow:0 1px 4px rgba(0,0,0,.15)}
 .seg button:disabled{opacity:.4;cursor:default}
 .rackbox{background:var(--soft);border-radius:16px;padding:10px}
@@ -76,10 +76,11 @@ th,td{padding:5px;border-bottom:1px solid var(--line);text-align:left;vertical-a
 th{font-size:13px;color:var(--mute);font-weight:600}
 td:first-child{font-weight:600;font-size:14px;width:130px}
 td select{padding:6px;font-size:13px}
-.eq{display:flex;flex-wrap:wrap;align-items:center;gap:8px;font:600 17px "Noto Sans";margin-bottom:10px}
-.eq select{width:auto;padding:6px 8px;font:600 15px "Noto Sans"}
+.eq{display:flex;flex-wrap:wrap;align-items:center;gap:8px;font:600 17px "Noto Sans",Arial,sans-serif;margin-bottom:10px}
+.eq select{width:auto;padding:6px 8px;font:600 15px "Noto Sans",Arial,sans-serif}
 .q{margin-bottom:10px}
 @media(max-width:860px){.grid{grid-template-columns:minmax(0,1fr)}.board{position:static;order:-1}}
+@media(max-width:600px){table{min-width:0!important;table-layout:fixed}td select{width:100%;max-width:100%}}
 </style>
 </head>
 <body>
@@ -196,6 +197,6 @@ $("send").onclick=()=>{const f=["a1","a2"].every(id=>$(id).value.trim());msg("m4
 applyLang();
 }
 </script>
-<script src="../embed.js?v=9b3d16f0"></script>
+<script src="../embed.js?v=780498e6"></script>
 </body>
 </html>
