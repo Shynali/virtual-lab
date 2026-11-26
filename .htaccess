@@ -9,3 +9,8 @@ Options -Indexes
 <IfModule mod_headers.c>
   Header always set Strict-Transport-Security "max-age=31536000"
 </IfModule>
+<IfModule mod_headers.c>
+  <FilesMatch "\.(html|php)$">
+    Header set Cache-Control "no-cache"
+  </FilesMatch>
+</IfModule>
