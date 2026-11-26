@@ -6,7 +6,7 @@
   var DEMO_ADMIN = { login: "admin", pass: "admin123" };
   var LETTERS = ["А", "Ә", "Б", "В", "Г", "Ғ", "Д", "Е"];
   var GRADES = [7, 8, 9, 10, 11];
-  var VER = "91c6775c";
+  var VER = "9b3d16f0";
   var LABS = window.LABS || [];
   var GUEST_LABS = ["g7-2", "g7-3", "g7-6", "g7-7", "g7-10", "g8-3", "g8-4", "g8-7", "g8-8", "g8-9", "g9-1", "g9-3", "g9-4", "g9-6", "g9-17", "g10-2", "g10-4", "g10-5", "g10-8", "g10-9", "g11-3", "g11-7", "g11-8", "g11-12", "g11-13"];
 
@@ -193,7 +193,7 @@
 
   /* ---------- оқушы тіркелуі ---------- */
   function viewRegStudent() {
-    $app.innerHTML = demoBanner() + '<div class="auth"><button class="link" id="bk">' + esc(t("back")) + "</button><h1>" + esc(t("stRegT")) + "</h1>" +
+    $app.innerHTML = demoBanner() + '<div class="auth"><button class="btn ghost small back" id="bk">' + esc(t("back")) + "</button><h1>" + esc(t("stRegT")) + "</h1>" +
       '<form id="fSt"><label>' + esc(t("lSchool")) + '<select id="sch" required><option value="">…</option></select></label>' +
       '<p class="mute" id="noT" hidden>' + esc(t("noTeachers")) + "</p>" +
       '<div class="row"><label>' + esc(t("lTeacher")) + '<select id="tch" required disabled></select></label><label>' + esc(t("lClass")) + '<select id="cls" required disabled></select></label></div>' +
@@ -236,7 +236,7 @@
 
   /* ---------- мұғалім тіркелуі ---------- */
   function viewRegTeacher() {
-    $app.innerHTML = demoBanner() + '<div class="auth"><button class="link" id="bk">' + esc(t("back")) + "</button><h1>" + esc(t("tRegT")) + "</h1>" +
+    $app.innerHTML = demoBanner() + '<div class="auth"><button class="btn ghost small back" id="bk">' + esc(t("back")) + "</button><h1>" + esc(t("tRegT")) + "</h1>" +
       '<form id="fT"><div class="row"><label>' + esc(t("lLast")) + '<input id="ln" required autocomplete="family-name"></label><label>' + esc(t("lFirst")) + '<input id="fn" required autocomplete="given-name"></label></div>' +
       "<label>" + esc(t("lSchool")) + '<select id="sch" required><option value="">…</option></select></label>' +
       '<label id="nsWrap" hidden>' + esc(t("lNewSchool")) + '<input id="ns" maxlength="120"></label>' +
@@ -297,13 +297,14 @@
   }
   function viewGuestHome() {
     var g = S.guestGrade, list = LABS.filter(function (l) { return l.grade === g && GUEST_LABS.indexOf(l.id) >= 0; });
-    $app.innerHTML = '<div class="demo">' + esc(t("guestBanner")) + '</div><div class="btns" style="margin:-4px 0 14px"><button class="btn small" id="gSt">' + esc(t("regStudent")) + '</button><button class="btn ghost small" id="gT">' + esc(t("regTeacher")) + "</button></div>" +
+    $app.innerHTML = '<button class="btn ghost small back" id="bk">' + esc(t("back")) + '</button><div class="demo">' + esc(t("guestBanner")) + '</div><div class="btns" style="margin:-4px 0 14px"><button class="btn small" id="gSt">' + esc(t("regStudent")) + '</button><button class="btn ghost small" id="gT">' + esc(t("regTeacher")) + "</button></div>" +
       "<h1>" + esc(t("guestHome")) + '</h1><p class="mute">' + esc(t("guestPick")) + '</p><div class="tabs" role="tablist">' + GRADES.map(function (x) { return '<button role="tab" data-g="' + x + '" class="' + (x === g ? "on" : "") + '">' + esc(x + t("grade")) + "</button>"; }).join("") + "</div>" +
       '<div class="labs" id="labs">' + list.map(function (l) {
         return '<button class="lab" data-lab="' + esc(l.id) + '"><span class="n">' + esc(l.n + "-" + t("lab")) + '</span><span class="t">' + esc(l[S.lang]) + '</span><span class="badge sent">' + esc(t("review")) + "</span></button>";
       }).join("") + "</div>";
     document.querySelector(".tabs").onclick = function (ev) { var b = ev.target.closest("[data-g]"); if (b) { S.guestGrade = +b.dataset.g; viewGuestHome(); } };
     document.getElementById("labs").onclick = function (ev) { var b = ev.target.closest("[data-lab]"); if (b) { S.lab = b.dataset.lab; render(); window.scrollTo(0, 0); } };
+    document.getElementById("bk").onclick = function () { S.user = null; S.lab = null; S.view = "login"; render(); };
     document.getElementById("gSt").onclick = function () { S.user = null; S.view = "regStudent"; render(); };
     document.getElementById("gT").onclick = function () { S.user = null; S.view = "regTeacher"; render(); };
   }
