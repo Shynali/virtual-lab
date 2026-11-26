@@ -6,7 +6,7 @@
   var DEMO_ADMIN = { login: "admin", pass: "admin123" };
   var LETTERS = ["А", "Ә", "Б", "В", "Г", "Ғ", "Д", "Е"];
   var GRADES = [7, 8, 9, 10, 11];
-  var VER = "00ba125d";
+  var VER = "8f2d9835";
   var LABS = window.LABS || [];
   var GUEST_LABS = ["g7-2", "g7-3", "g7-6", "g7-7", "g7-10", "g8-3", "g8-4", "g8-7", "g8-8", "g8-9", "g9-1", "g9-3", "g9-4", "g9-6", "g9-17", "g10-2", "g10-4", "g10-5", "g10-8", "g10-9", "g11-3", "g11-7", "g11-8", "g11-12", "g11-13"];
 
@@ -151,9 +151,47 @@
   function demoBanner() { return DEMO ? '<div class="demo">' + esc(t("demo")) + "</div>" : ""; }
 
   /* ---------- маршрутизация ---------- */
+  /* ---------- браузердің «←/→» батырмалары: әр бөлімнің өз мекенжайы (#...) бар ---------- */
+  var popping = false, routed = false;
+  function routeNow() {
+    if (!S.user) return S.view === "regStudent" ? "register-student" : S.view === "regTeacher" ? "register-teacher" : S.view === "pending" ? "pending" : "";
+    if (S.user.role === "guest") return S.lab ? "lab-" + S.lab : "guest-" + S.guestGrade;
+    if (S.user.mustChange) return "password";
+    if (S.user.role === "student") return S.lab ? "lab-" + S.lab : "labs";
+    return S.tab ? "tab-" + S.tab : "";
+  }
+  function syncRoute() {
+    var h = routeNow(), cur = location.hash.replace(/^#/, "");
+    if (h === cur && routed) return;
+    var q = location.search.replace(/([?&])guest=1(&|$)/, "$1").replace(/[?&]$/, "");
+    var url = location.pathname + q + (h ? "#" + h : "");
+    try { if (!routed || popping || h === cur) history.replaceState(null, "", url); else history.pushState(null, "", url); } catch (e) {}
+    routed = true;
+  }
+  function guestUser() { S.user = { role: "guest", first: "", last: "", login: "" }; S.subs = []; S.subsLoaded = true; }
+  function applyHash(h) {
+    var m, lab = (m = /^lab-(g\d+-\d+)$/.exec(h)) ? m[1] : null, g = (m = /^guest-(\d+)$/.exec(h)) ? +m[1] : null;
+    var regView = h === "register-student" ? "regStudent" : h === "register-teacher" ? "regTeacher" : h === "pending" ? "pending" : "login";
+    if (!S.user || S.user.role === "guest") {
+      if (g !== null || (lab && GUEST_LABS.indexOf(lab) >= 0)) {
+        if (!S.user) guestUser();
+        if (g !== null && GRADES.indexOf(g) >= 0) { S.guestGrade = g; S.lab = null; }
+        if (lab) { S.lab = lab; S.guestGrade = labById(lab) ? labById(lab).grade : S.guestGrade; }
+      } else { S.user = null; S.lab = null; S.view = regView; }
+    } else if (S.user.role === "student") {
+      S.lab = lab && labById(lab) ? lab : null;
+    } else if ((m = /^tab-(\w+)$/.exec(h))) S.tab = m[1];
+  }
+  window.addEventListener("popstate", function () {
+    popping = true; applyHash(location.hash.replace(/^#/, "")); render(); popping = false; window.scrollTo(0, 0);
+  });
   function render() {
     document.body.classList.remove("labfull");
     header();
+    renderView();
+    syncRoute();
+  }
+  function renderView() {
     if (!S.user) {
       if (S.view === "regStudent") return viewRegStudent();
       if (S.view === "regTeacher") return viewRegTeacher();
@@ -180,7 +218,7 @@
       '<section class="ecard ereg"><h2>' + esc(t("regT")) + '</h2><p class="mute">' + esc(t("regNote")) + '</p><div class="btns"><button class="btn ghost" id="goSt">' + esc(t("regStudent")) + '</button><button class="btn ghost" id="goT">' + esc(t("regTeacher")) + "</button></div></section>" +
       '<section class="ecard eguest"><h2><svg width="26" height="26" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="8" r="4" fill="none" stroke="currentColor" stroke-width="2"/><path d="M4 21c1.5-4 4.5-6 8-6s6.5 2 8 6" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>' + esc(t("guestT")) + "</h2><p>" + esc(t("guestNote")) + '</p><button class="btn light" id="goG">' + esc(t("guestBtn")) + "</button></section>" +
       "</div></div>";
-    document.getElementById("goG").onclick = function () { S.user = { role: "guest", first: "", last: "", login: "" }; S.lab = null; S.subs = []; S.subsLoaded = true; render(); window.scrollTo(0, 0); };
+    document.getElementById("goG").onclick = function () { guestUser(); S.lab = null; render(); window.scrollTo(0, 0); };
     document.getElementById("fLogin").onsubmit = function (ev) {
       ev.preventDefault(); var b = document.getElementById("bLogin"); busy(b, 1);
       api("login", { login: val("lg"), pass: document.getElementById("pw").value }).then(function (r) {
@@ -303,7 +341,7 @@
       '<div class="labs" id="labs">' + list.map(function (l) {
         return '<button class="lab" data-lab="' + esc(l.id) + '"><span class="n">' + esc(l.n + "-" + t("lab")) + '</span><span class="t">' + esc(l[S.lang]) + '</span><span class="badge sent">' + esc(t("review")) + "</span></button>";
       }).join("") + "</div>";
-    document.querySelector(".tabs").onclick = function (ev) { var b = ev.target.closest("[data-g]"); if (b) { S.guestGrade = +b.dataset.g; viewGuestHome(); } };
+    document.querySelector(".tabs").onclick = function (ev) { var b = ev.target.closest("[data-g]"); if (b) { S.guestGrade = +b.dataset.g; viewGuestHome(); syncRoute(); } };
     document.getElementById("labs").onclick = function (ev) { var b = ev.target.closest("[data-lab]"); if (b) { S.lab = b.dataset.lab; render(); window.scrollTo(0, 0); } };
     document.getElementById("bk").onclick = function () { S.user = null; S.lab = null; S.view = "login"; render(); };
     document.getElementById("gSt").onclick = function () { S.user = null; S.view = "regStudent"; render(); };
@@ -362,11 +400,11 @@
   function viewStaff() {
     var isAdmin = S.user.role === "admin";
     var tabs = isAdmin ? ["requests", "unchecked", "students", "teachers", "schools", "classes", "profile"] : ["unchecked", "students", "classes", "profile"];
-    if (!S.tab) S.tab = isAdmin ? "requests" : "unchecked";
+    if (tabs.indexOf(S.tab) < 0) S.tab = isAdmin ? "requests" : "unchecked";
     var names = { requests: t("tRequests"), unchecked: t("tUnchecked"), students: t("tStudents"), teachers: t("tTeachers"), schools: t("tSchools"), classes: t("tClasses"), profile: t("tProfile") };
     $app.innerHTML = demoBanner() + '<div class="tabs" role="tablist">' + tabs.map(function (k) { return '<button role="tab" data-tab="' + k + '" class="' + (S.tab === k ? "on" : "") + '">' + esc(names[k]) + '<span class="cnt" id="cnt-' + k + '" hidden></span></button>'; }).join("") + '</div><div id="pane"></div>';
     var onTab = document.querySelector(".tabs .on"); if (onTab && onTab.scrollIntoView) onTab.scrollIntoView({ inline: "center", block: "nearest" });
-    document.querySelector(".tabs").onclick = function (ev) { var b = ev.target.closest("[data-tab]"); if (b) { S.tab = b.dataset.tab; viewStaff(); } };
+    document.querySelector(".tabs").onclick = function (ev) { var b = ev.target.closest("[data-tab]"); if (b) { S.tab = b.dataset.tab; viewStaff(); syncRoute(); } };
     var pane = document.getElementById("pane");
     pane.innerHTML = '<p class="mute">…</p>';
     var need = [];
@@ -525,9 +563,13 @@
     render();
   }
   document.getElementById("logout").onclick = function () { if (S.user && S.user.role === "guest") return logoutLocal(); api("logout").then(logoutLocal); };
-  if (!S.token && /(^|[?&])guest=1(&|$)/.test(location.search.slice(1))) { S.user = { role: "guest", first: "", last: "", login: "" }; S.subsLoaded = true; }
+  var startHash = location.hash.replace(/^#/, "");
+  if (!S.token && /(^|[?&])guest=1(&|$)/.test(location.search.slice(1))) guestUser();
   if (S.token) {
     $app.innerHTML = '<p class="mute">…</p>';
-    api("me").then(function (r) { if (r.ok) { S.user = r.user; } else { S.token = ""; lsSet("vl_token", null); } render(); });
-  } else render();
+    api("me").then(function (r) {
+      if (r.ok) { S.user = r.user; if (startHash) applyHash(startHash); } else { S.token = ""; lsSet("vl_token", null); }
+      render();
+    });
+  } else { if (startHash) applyHash(startHash); render(); }
 })();
