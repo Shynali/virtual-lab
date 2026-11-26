@@ -7,6 +7,7 @@
   var LETTERS = ["А", "Ә", "Б", "В", "Г", "Ғ", "Д", "Е"];
   var GRADES = [7, 8, 9, 10, 11];
   var LABS = window.LABS || [];
+  var GUEST_LABS = ["g7-2", "g7-3", "g7-6", "g7-7", "g7-10", "g8-3", "g8-4", "g8-7", "g8-8", "g8-9", "g9-1", "g9-3", "g9-4", "g9-6", "g9-17", "g10-2", "g10-4", "g10-5", "g10-8", "g10-9", "g11-3", "g11-7", "g11-8", "g11-12", "g11-13"];
 
   /* ---------- мәтіндер ---------- */
   var T = {
@@ -33,8 +34,9 @@
       approve: "Рұқсат беру", reject: "Бас тарту", block: "Бұғаттау", unblock: "Бұғаттан шығару", newSchoolBadge: "жаңа мектеп", schoolFix: "Мектеп атауын түзету (қажет болса)",
       noRequests: "Жаңа өтінім жоқ.", stApproved: "белсенді", stBlocked: "бұғатталған", stRejected: "бас тартылған", stPending: "күтуде",
       addSchool: "Мектеп қосу", rename: "Атын өзгерту", schoolInUse: "Бұл мектепте пайдаланушылар бар — жою мүмкін емес.", tCount: "мұғалім", sCount: "оқушы",
-      guestT: "Тіркелмей шолу", guestBtn: "Қонақ ретінде кіру", guestNote: "Барлық 60 зертхананы ашып, тәжірибе жасап көре аласыз. Қонақ режимінде нәтиже сақталмайды және мұғалімге жіберілмейді.",
-      guestBanner: "Қонақ режимі: зертханаларды шолуға және тәжірибе жасап көруге болады, бірақ жұмыс сақталмайды және мұғалімге жіберілмейді. Толық мүмкіндік үшін тіркеліңіз.", guest: "Қонақ", guestRole: "шолу режимі", guestNoSend: "Қонақ режимінде жұмыс мұғалімге жіберілмейді. Жіберу үшін оқушы ретінде тіркеліңіз.", guestLabs: "Зертханалық жұмыстар", review: "Шолу",
+      foot: "Автор: <b>Тойбазарова Араилым</b>, химия пәнінің мұғалімі · Байзақ ауданы · 2026", footGuest: "Қонақ ретінде шолу",
+      guestT: "Тіркелмей шолу", guestBtn: "Қонақ ретінде кіру", guestNote: "Әр сыныптан таңдалған 5 зертхананы ашып, тәжірибе жасап көре аласыз. Қонақ режимінде нәтиже сақталмайды және мұғалімге жіберілмейді.",
+      guestBanner: "Қонақ режимі: зертханаларды шолуға және тәжірибе жасап көруге болады, бірақ жұмыс сақталмайды және мұғалімге жіберілмейді. Толық мүмкіндік үшін тіркеліңіз.", guest: "Қонақ", guestRole: "шолу режимі", guestNoSend: "Қонақ режимінде жұмыс мұғалімге жіберілмейді. Жіберу үшін оқушы ретінде тіркеліңіз.", guestLabs: "Зертханалық жұмыстар", guestPick: "Әр сыныптан таңдалған 5 зертхана. Барлық 60 зертхана тіркелген оқушыларға ашық.", review: "Шолу",
       profName: "Аты-жөнім (оқушыларға көрінеді)", admin: "Бас админ", teacher: "Мұғалім", student: "Оқушы", answers: "Жауаптары", subject: "Химия",
       errors: { badLogin: "Логин дұрыс емес: латын әріптері, сандар, «.», «_», «-», 3–30 таңба.", badPass: "Құпиясөз кемінде 6 таңба болуы керек.", loginTaken: "Бұл логин бос емес, басқасын ойлап табыңыз.",
         badName: "Аты мен тегін толтырыңыз.", noClasses: "Кемінде бір сыныпты белгілеңіз.", badSchool: "Мектепті таңдаңыз.", badTeacher: "Мұғалімді таңдаңыз.", badClass: "Сыныпты таңдаңыз.",
@@ -65,8 +67,9 @@
       approve: "Одобрить", reject: "Отклонить", block: "Заблокировать", unblock: "Разблокировать", newSchoolBadge: "новая школа", schoolFix: "Исправить название школы (если нужно)",
       noRequests: "Новых заявок нет.", stApproved: "активен", stBlocked: "заблокирован", stRejected: "отклонён", stPending: "ожидает",
       addSchool: "Добавить школу", rename: "Переименовать", schoolInUse: "В этой школе есть пользователи — удалить нельзя.", tCount: "учит.", sCount: "уч.",
-      guestT: "Просмотр без регистрации", guestBtn: "Войти как гость", guestNote: "Можно открыть все 60 лабораторных работ и провести опыты. В гостевом режиме результаты не сохраняются и не отправляются учителю.",
-      guestBanner: "Гостевой режим: можно просматривать работы и проводить опыты, но результаты не сохраняются и не отправляются учителю. Для полного доступа зарегистрируйтесь.", guest: "Гость", guestRole: "режим просмотра", guestNoSend: "В гостевом режиме работа не отправляется учителю. Чтобы отправлять работы, зарегистрируйтесь как ученик.", guestLabs: "Лабораторные работы", review: "Просмотр",
+      foot: "Автор: <b>Тойбазарова Араилым</b>, учитель химии · Байзакский район · 2026", footGuest: "Просмотр гостем",
+      guestT: "Просмотр без регистрации", guestBtn: "Войти как гость", guestNote: "Можно открыть по 5 избранных работ для каждого класса и провести опыты. В гостевом режиме результаты не сохраняются и не отправляются учителю.",
+      guestBanner: "Гостевой режим: можно просматривать работы и проводить опыты, но результаты не сохраняются и не отправляются учителю. Для полного доступа зарегистрируйтесь.", guest: "Гость", guestRole: "режим просмотра", guestNoSend: "В гостевом режиме работа не отправляется учителю. Чтобы отправлять работы, зарегистрируйтесь как ученик.", guestLabs: "Лабораторные работы", guestPick: "По 5 избранных работ для каждого класса. Все 60 работ доступны зарегистрированным ученикам.", review: "Просмотр",
       profName: "Моё имя (видно ученикам)", admin: "Главный админ", teacher: "Учитель", student: "Ученик", answers: "Ответы", subject: "Химия",
       errors: { badLogin: "Неверный логин: латинские буквы, цифры, «.», «_», «-», 3–30 символов.", badPass: "Пароль должен быть не короче 6 символов.", loginTaken: "Этот логин занят, придумайте другой.",
         badName: "Заполните имя и фамилию.", noClasses: "Отметьте хотя бы один класс.", badSchool: "Выберите школу.", badTeacher: "Выберите учителя.", badClass: "Выберите класс.",
@@ -132,6 +135,7 @@
     document.getElementById("appSub").textContent = t("sub");
     document.title = t("title");
     document.documentElement.lang = S.lang;
+    var ft = document.getElementById("appFoot"); if (ft) ft.innerHTML = t("foot");
     document.getElementById("l-kk").classList.toggle("on", S.lang === "kk");
     document.getElementById("l-ru").classList.toggle("on", S.lang === "ru");
     var lo = document.getElementById("logout"), who = document.getElementById("who");
@@ -288,9 +292,9 @@
     document.getElementById("labs").onclick = function (ev) { var b = ev.target.closest("[data-lab]"); if (b) { S.lab = b.dataset.lab; render(); window.scrollTo(0, 0); } };
   }
   function viewGuestHome() {
-    var g = S.guestGrade, list = LABS.filter(function (l) { return l.grade === g; });
+    var g = S.guestGrade, list = LABS.filter(function (l) { return l.grade === g && GUEST_LABS.indexOf(l.id) >= 0; });
     $app.innerHTML = '<div class="demo">' + esc(t("guestBanner")) + '</div><div class="btns" style="margin:-4px 0 14px"><button class="btn small" id="gSt">' + esc(t("regStudent")) + '</button><button class="btn ghost small" id="gT">' + esc(t("regTeacher")) + "</button></div>" +
-      "<h1>" + esc(t("guestLabs")) + '</h1><div class="tabs" role="tablist">' + GRADES.map(function (x) { return '<button role="tab" data-g="' + x + '" class="' + (x === g ? "on" : "") + '">' + esc(x + t("grade")) + "</button>"; }).join("") + "</div>" +
+      "<h1>" + esc(t("guestLabs")) + '</h1><p class="mute">' + esc(t("guestPick")) + '</p><div class="tabs" role="tablist">' + GRADES.map(function (x) { return '<button role="tab" data-g="' + x + '" class="' + (x === g ? "on" : "") + '">' + esc(x + t("grade")) + "</button>"; }).join("") + "</div>" +
       '<div class="labs" id="labs">' + list.map(function (l) {
         return '<button class="lab" data-lab="' + esc(l.id) + '"><span class="n">' + esc(l.n + "-" + t("lab")) + '</span><span class="t">' + esc(l[S.lang]) + '</span><span class="badge sent">' + esc(t("review")) + "</span></button>";
       }).join("") + "</div>";
@@ -300,10 +304,17 @@
     document.getElementById("gT").onclick = function () { S.user = null; S.view = "regTeacher"; render(); };
   }
   var frameListener = null;
+  function syncScroll() {
+    var fr = document.getElementById("frame"); if (!fr || !fr.contentWindow) return;
+    fr.contentWindow.postMessage({ type: "labScroll", y: -fr.getBoundingClientRect().top, vh: window.innerHeight }, "*");
+  }
+  window.addEventListener("scroll", syncScroll, { passive: true });
+  window.addEventListener("resize", syncScroll);
   function viewLab() {
     var l = labById(S.lab); if (!l) { S.lab = null; return render(); }
     var s = subOf(l.id);
     var isGuest = S.user.role === "guest";
+    if (isGuest && GUEST_LABS.indexOf(l.id) < 0) { S.lab = null; return render(); }
     $app.innerHTML = (isGuest ? '<div class="demo">' + esc(t("guestBanner")) + "</div>" : "") + '<div class="labbar"><button class="btn ghost small" id="bk">' + esc(t("backLabs")) + "</button><b>" + esc(l.n + "-" + t("lab") + " · " + l[S.lang]) + "</b></div>" +
       (s && s.feedback ? '<div class="fbbox"><b>' + esc(t("fbT")) + ":</b> " + esc(s.feedback) + '<div class="mute">' + esc(fmtDate(s.feedbackAt)) + "</div></div>" : "") +
       (s ? '<p class="mute">' + esc(t("sentAt")) + ": " + esc(fmtDate(s.submittedAt)) + "</p>" : "") +
@@ -314,7 +325,8 @@
     frameListener = function (ev) {
       if (ev.source !== fr.contentWindow) return;
       var d = ev.data || {};
-      if (d.type === "labHeight") fr.style.height = Math.max(600, d.h + 20) + "px";
+      if (d.type === "labHeight") { fr.style.height = Math.max(400, d.h) + "px"; syncScroll(); }
+      if (d.type === "labReady") syncScroll();
       if (d.type === "labReady" && s && s.answers && s.answers.length) fr.contentWindow.postMessage({ type: "labPrefill", answers: s.answers }, "*");
       if (d.type === "labSubmit" && isGuest) { fr.contentWindow.postMessage({ type: "labResult", ok: false, text: t("guestNoSend") }, "*"); return; }
       if (d.type === "labSubmit") {

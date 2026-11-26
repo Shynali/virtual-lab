@@ -32,7 +32,9 @@
 
   function init() {
     var css = document.createElement("style");
-    css.textContent = ".note,.lang{display:none!important}body{background:transparent!important}.wrap{padding:8px!important}";
+    css.textContent = ".note,.lang{display:none!important}body{background:transparent!important}.wrap{padding:8px!important}" +
+      ".board{position:relative!important;top:auto!important;order:0;z-index:5;transform-origin:top center;transition:box-shadow .2s}" +
+      "@media(max-width:860px){.board{order:-1}}.board.floating{box-shadow:0 10px 28px rgba(0,0,0,.28);border-radius:14px}";
     document.head.appendChild(css);
     var old = document.getElementById("send");
     if (old) {
@@ -52,14 +54,33 @@
         var b = document.getElementById("send"); if (b) { b.disabled = false; if (d.ok) b.textContent = L[lang].resend; }
         show(d.ok ? L[lang].sent : (d.text || L[lang].fail), !!d.ok);
       }
+      if (d.type === "labScroll") { view.y = +d.y || 0; view.vh = +d.vh || window.innerHeight; place(); }
       if (d.type === "labLang") setLang(d.lang === "ru" ? "ru" : "kk");
       if (d.type === "labPrefill" && Array.isArray(d.answers)) {
         var tas = document.querySelectorAll("textarea");
         d.answers.forEach(function (x, i) { if (tas[i] && !tas[i].value) tas[i].value = x.a || ""; });
       }
     });
-    var last = 0;
-    function report() { var h = Math.ceil(document.documentElement.scrollHeight); if (Math.abs(h - last) > 4) { last = h; post({ type: "labHeight", h: h }); } }
+    /* Тәжірибе тақтасын экранда ұстау: сайт бетін айналдырғанда тақта жоғарыда тұрып қалады */
+    var view = { y: 0, vh: 800 }, board = document.querySelector(".grid > .board"), grid = document.querySelector(".grid");
+    function docTop(el) { var t = 0; while (el) { t += el.offsetTop; el = el.offsetParent; } return t; }
+    function place() {
+      if (!board || !grid) return;
+      var top = docTop(board), h = board.offsetHeight, end = docTop(grid) + grid.offsetHeight;
+      var wide = window.innerWidth > 860, s = 1, shift = 0, room;
+      if (wide) {
+        room = end - top - h; shift = Math.min(Math.max(view.y + 12 - top, 0), Math.max(room, 0));
+      } else if (view.y > top + h * 0.6) {
+        s = Math.min(1, (view.vh * 0.42) / h); room = end - top - h * s;
+        shift = Math.min(Math.max(view.y + 6 - top, 0), Math.max(room, 0));
+      }
+      board.style.transform = shift > 0 ? "translateY(" + Math.round(shift) + "px)" + (s < 1 ? " scale(" + s.toFixed(3) + ")" : "") : "";
+      board.classList.toggle("floating", shift > 0 && (!wide || s < 1));
+    }
+    window.addEventListener("resize", place);
+    /* Биіктікті тек мазмұн бойынша өлшейміз (iframe-нің өз биіктігін емес), сондықтан бет өздігінен ұзармайды */
+    var last = 0, root = document.querySelector(".wrap") || document.body;
+    function report() { var r = root.getBoundingClientRect(), h = Math.ceil(r.bottom + window.scrollY + 12); if (Math.abs(h - last) > 4) { last = h; post({ type: "labHeight", h: h }); } }
     if (window.ResizeObserver) new ResizeObserver(report).observe(document.body);
     setInterval(report, 800); report();
     post({ type: "labReady" });
