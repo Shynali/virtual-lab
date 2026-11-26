@@ -35,7 +35,7 @@
       noRequests: "Жаңа өтінім жоқ.", stApproved: "белсенді", stBlocked: "бұғатталған", stRejected: "бас тартылған", stPending: "күтуде",
       addSchool: "Мектеп қосу", rename: "Атын өзгерту", schoolInUse: "Бұл мектепте пайдаланушылар бар — жою мүмкін емес.", tCount: "мұғалім", sCount: "оқушы",
       foot: "Автор: <b>Тойбазарова Араилым</b>, химия пәнінің мұғалімі · Байзақ ауданы · 2026", footGuest: "Қонақ ретінде шолу",
-      guestT: "Тіркелмей шолу", guestBtn: "Қонақ ретінде кіру", guestNote: "Әр сыныптан таңдалған 5 зертхананы ашып, тәжірибе жасап көре аласыз. Қонақ режимінде нәтиже сақталмайды және мұғалімге жіберілмейді.",
+      guestT: "Қонақ", regT: "Тіркелу", regNote: "Оқушы мектебін, мұғалімін және сыныбын таңдап тіркеледі. Мұғалімді бас админ растайды.", guestHome: "Қонақ бөлімі", guestBtn: "Қонақ ретінде кіру", guestNote: "Әр сыныптан таңдалған 5 зертхананы ашып, тәжірибе жасап көре аласыз. Қонақ режимінде нәтиже сақталмайды және мұғалімге жіберілмейді.",
       guestBanner: "Қонақ режимі: зертханаларды шолуға және тәжірибе жасап көруге болады, бірақ жұмыс сақталмайды және мұғалімге жіберілмейді. Толық мүмкіндік үшін тіркеліңіз.", guest: "Қонақ", guestRole: "шолу режимі", guestNoSend: "Қонақ режимінде жұмыс мұғалімге жіберілмейді. Жіберу үшін оқушы ретінде тіркеліңіз.", guestLabs: "Зертханалық жұмыстар", guestPick: "Әр сыныптан таңдалған 5 зертхана. Барлық 60 зертхана тіркелген оқушыларға ашық.", review: "Шолу",
       profName: "Аты-жөнім (оқушыларға көрінеді)", admin: "Бас админ", teacher: "Мұғалім", student: "Оқушы", answers: "Жауаптары", subject: "Химия",
       errors: { badLogin: "Логин дұрыс емес: латын әріптері, сандар, «.», «_», «-», 3–30 таңба.", badPass: "Құпиясөз кемінде 6 таңба болуы керек.", loginTaken: "Бұл логин бос емес, басқасын ойлап табыңыз.",
@@ -68,7 +68,7 @@
       noRequests: "Новых заявок нет.", stApproved: "активен", stBlocked: "заблокирован", stRejected: "отклонён", stPending: "ожидает",
       addSchool: "Добавить школу", rename: "Переименовать", schoolInUse: "В этой школе есть пользователи — удалить нельзя.", tCount: "учит.", sCount: "уч.",
       foot: "Автор: <b>Тойбазарова Араилым</b>, учитель химии · Байзакский район · 2026", footGuest: "Просмотр гостем",
-      guestT: "Просмотр без регистрации", guestBtn: "Войти как гость", guestNote: "Можно открыть по 5 избранных работ для каждого класса и провести опыты. В гостевом режиме результаты не сохраняются и не отправляются учителю.",
+      guestT: "Гость", regT: "Регистрация", regNote: "Ученик выбирает школу, учителя и класс. Учителя подтверждает главный админ.", guestHome: "Гостевой раздел", guestBtn: "Войти как гость", guestNote: "Можно открыть по 5 избранных работ для каждого класса и провести опыты. В гостевом режиме результаты не сохраняются и не отправляются учителю.",
       guestBanner: "Гостевой режим: можно просматривать работы и проводить опыты, но результаты не сохраняются и не отправляются учителю. Для полного доступа зарегистрируйтесь.", guest: "Гость", guestRole: "режим просмотра", guestNoSend: "В гостевом режиме работа не отправляется учителю. Чтобы отправлять работы, зарегистрируйтесь как ученик.", guestLabs: "Лабораторные работы", guestPick: "По 5 избранных работ для каждого класса. Все 60 работ доступны зарегистрированным ученикам.", review: "Просмотр",
       profName: "Моё имя (видно ученикам)", admin: "Главный админ", teacher: "Учитель", student: "Ученик", answers: "Ответы", subject: "Химия",
       errors: { badLogin: "Неверный логин: латинские буквы, цифры, «.», «_», «-», 3–30 символов.", badPass: "Пароль должен быть не короче 6 символов.", loginTaken: "Этот логин занят, придумайте другой.",
@@ -168,13 +168,16 @@
 
   /* ---------- кіру ---------- */
   function viewLogin() {
-    $app.innerHTML = demoBanner() + '<div class="auth"><h1>' + esc(t("loginT")) + "</h1>" +
+    $app.innerHTML = demoBanner() + '<div class="entry">' +
+      '<section class="ecard elogin"><h1>' + esc(t("loginT")) + "</h1>" +
       '<form id="fLogin"><label>' + esc(t("lLogin")) + '<input id="lg" autocomplete="username" autocapitalize="none" spellcheck="false" required></label>' +
       "<label>" + esc(t("lPass")) + '<input id="pw" type="password" autocomplete="current-password" required></label>' +
       '<button class="btn" id="bLogin">' + esc(t("login")) + "</button></form>" + msgHtml("mLogin") +
-      '<p class="mute">' + esc(t("forgot")) + "</p>" +
-      "<h3>" + esc(t("noAcc")) + '</h3><div class="btns"><button class="btn ghost" id="goSt">' + esc(t("regStudent")) + '</button><button class="btn ghost" id="goT">' + esc(t("regTeacher")) + "</button></div>" +
-      '<div class="guestbox"><h3>' + esc(t("guestT")) + '</h3><p class="mute">' + esc(t("guestNote")) + '</p><button class="btn" id="goG">' + esc(t("guestBtn")) + "</button></div></div>";
+      '<p class="mute">' + esc(t("forgot")) + "</p></section>" +
+      '<div class="eside">' +
+      '<section class="ecard ereg"><h2>' + esc(t("regT")) + '</h2><p class="mute">' + esc(t("regNote")) + '</p><div class="btns"><button class="btn ghost" id="goSt">' + esc(t("regStudent")) + '</button><button class="btn ghost" id="goT">' + esc(t("regTeacher")) + "</button></div></section>" +
+      '<section class="ecard eguest"><h2><svg width="26" height="26" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="8" r="4" fill="none" stroke="currentColor" stroke-width="2"/><path d="M4 21c1.5-4 4.5-6 8-6s6.5 2 8 6" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>' + esc(t("guestT")) + "</h2><p>" + esc(t("guestNote")) + '</p><button class="btn light" id="goG">' + esc(t("guestBtn")) + "</button></section>" +
+      "</div></div>";
     document.getElementById("goG").onclick = function () { S.user = { role: "guest", first: "", last: "", login: "" }; S.lab = null; S.subs = []; S.subsLoaded = true; render(); window.scrollTo(0, 0); };
     document.getElementById("fLogin").onsubmit = function (ev) {
       ev.preventDefault(); var b = document.getElementById("bLogin"); busy(b, 1);
@@ -294,7 +297,7 @@
   function viewGuestHome() {
     var g = S.guestGrade, list = LABS.filter(function (l) { return l.grade === g && GUEST_LABS.indexOf(l.id) >= 0; });
     $app.innerHTML = '<div class="demo">' + esc(t("guestBanner")) + '</div><div class="btns" style="margin:-4px 0 14px"><button class="btn small" id="gSt">' + esc(t("regStudent")) + '</button><button class="btn ghost small" id="gT">' + esc(t("regTeacher")) + "</button></div>" +
-      "<h1>" + esc(t("guestLabs")) + '</h1><p class="mute">' + esc(t("guestPick")) + '</p><div class="tabs" role="tablist">' + GRADES.map(function (x) { return '<button role="tab" data-g="' + x + '" class="' + (x === g ? "on" : "") + '">' + esc(x + t("grade")) + "</button>"; }).join("") + "</div>" +
+      "<h1>" + esc(t("guestHome")) + '</h1><p class="mute">' + esc(t("guestPick")) + '</p><div class="tabs" role="tablist">' + GRADES.map(function (x) { return '<button role="tab" data-g="' + x + '" class="' + (x === g ? "on" : "") + '">' + esc(x + t("grade")) + "</button>"; }).join("") + "</div>" +
       '<div class="labs" id="labs">' + list.map(function (l) {
         return '<button class="lab" data-lab="' + esc(l.id) + '"><span class="n">' + esc(l.n + "-" + t("lab")) + '</span><span class="t">' + esc(l[S.lang]) + '</span><span class="badge sent">' + esc(t("review")) + "</span></button>";
       }).join("") + "</div>";
